@@ -8,7 +8,6 @@ src/public
 /__deploy
 /src/node_modules
 /mongo/mongo
-/yarn.lock
 /src/client/css
 /src/client/lib
 /src/client/app
