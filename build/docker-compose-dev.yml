@@ -1,0 +1,27 @@
+# this is to set up mongo for local developement / debugging
+version: "2"
+services:
+    mongo:
+        image: mongo:3.6.18
+        container_name: mongo-dev
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: secret
+        ports:
+            - 27017:27017
+        volumes:
+            - /home/vagrant/mongodev/data:/data/db:rw        
+            - /home/vagrant/mongodev/logs:/var/logs:rw        
+    mongo-express:
+        image: mongo-express:0.54.0
+        container_name: mongoexpress-dev
+        restart: unless-stopped
+        ports:
+        - 49002:8081
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+            ME_CONFIG_MONGODB_ADMINPASSWORD: secret
+            ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+
+            

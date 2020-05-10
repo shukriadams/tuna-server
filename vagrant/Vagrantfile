@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+
+  #.................................................................
+  # VM config
+  #.................................................................
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.synced_folder "./..", "/vagrant"
+  config.vm.provision :shell, path: "provision.sh"
+  config.vm.provider :virtualbox do |v|
+     v.customize ["modifyvm", :id, "--memory", 1048]
+     v.name = "tuna"
+  end
+
+
+  #.................................................................
+  # DEV AND DEBUGGING
+  #.................................................................
+  config.vm.network "forwarded_port", guest: 48005, host: 48005 # nginx
+  config.vm.network "forwarded_port", guest: 48004, host: 48004 # node via grunt/command line
+  config.vm.network "forwarded_port", guest: 3127,  host: 3127  # oauth gobo
+  config.vm.network "forwarded_port", guest: 48003, host: 9222  # node debugger
+  config.vm.network "forwarded_port", guest: 48002, host: 48002 # node via dev container
+  config.vm.network "forwarded_port", guest: 49000, host: 49000 # redis
+  config.vm.network "forwarded_port", guest: 27017, host: 49001 # mongo
+  config.vm.network "forwarded_port", guest: 49002, host: 49002 # mongo admin
+
+
+  #.................................................................
+  # testmount ports
+  #.................................................................
+  config.vm.network "forwarded_port", guest: 58002, host: 58002 # node
+  config.vm.network "forwarded_port", guest: 59001, host: 59001 # mongo
+  config.vm.network "forwarded_port", guest: 59000, host: 59000 # redis
+
+end

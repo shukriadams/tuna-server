@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg3728"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="burger.svg">
+  <defs
+     id="defs3722" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="400"
+     inkscape:cy="560"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="915"
+     inkscape:window-height="839"
+     inkscape:window-x="767"
+     inkscape:window-y="58"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3725">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-161.53336)">
+    <g
+       transform="matrix(0.89738789,0,0,0.89738789,4.1791515,169.48671)"
+       id="g3806">
+      <g
+         id="g3804">
+        <path
+           inkscape:connector-curvature="0"
+           d="M 536.846,23.491 H 20.135 C 9.015,23.491 0,32.506 0,43.62 v 107.37 c 0,11.12 9.015,20.128 20.135,20.128 h 516.711 c 11.121,0 20.135,-9.015 20.135,-20.128 V 43.626 c -0.006,-11.12 -9.014,-20.135 -20.135,-20.135 z"
+           id="path3798" />
+        <path
+           inkscape:connector-curvature="0"
+           d="M 536.846,204.68 H 20.135 C 9.015,204.68 0,213.694 0,224.809 v 107.369 c 0,11.12 9.015,20.129 20.135,20.129 h 516.711 c 11.121,0 20.135,-9.015 20.135,-20.129 V 224.809 c -0.006,-11.121 -9.014,-20.129 -20.135,-20.129 z"
+           id="path3800" />
+        <path
+           inkscape:connector-curvature="0"
+           d="M 536.846,385.862 H 20.135 C 9.015,385.862 0,394.877 0,405.991 V 513.36 c 0,11.12 9.015,20.129 20.135,20.129 h 516.711 c 11.121,0 20.135,-9.015 20.135,-20.129 V 405.991 c -0.006,-11.114 -9.014,-20.129 -20.135,-20.129 z"
+           id="path3802" />
+      </g>
+    </g>
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3808" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3810" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3812" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3814" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3816" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3818" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3820" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3822" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3824" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3826" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3828" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3830" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3832" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3834" />
+    <g
+       transform="matrix(0.23052749,0,0,0.23052749,4.1791515,165.15193)"
+       id="g3836" />
+  </g>
+</svg>

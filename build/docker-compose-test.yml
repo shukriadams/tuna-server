@@ -1,0 +1,32 @@
+# this is for test mounting built images on your local dev env. container names should not clash
+# with dev resources
+version: "2"
+services:
+    mongo:
+        image: mongo:3.6.18
+        container_name: mongo-test
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: secret
+        volumes:
+            - /home/vagrant/mongotest/data:/data/db:rw        
+            - /home/vagrant/mongotest/logs:/var/logs:rw        
+    tuna:
+        image: shukriadams/tuna:latest
+        container_name: tuna-test
+        restart: unless-stopped
+        depends_on:
+            - mongo
+        volumes:
+            - ./logs:/usr/tuna/__logs/:rw
+            - ./data:/usr/tuna/data
+            # mount on local dev settings
+            - ./../src/.env:/usr/tuna/.env
+        environment:
+            # connecting as root is only guaranteed method, mongo is pure garbage
+            mongoConnectionString: "mongodb://admin:secret@mongo:27017"
+            mongoDBName: "tuna"
+        ports:
+        - "58002:48004"
+  

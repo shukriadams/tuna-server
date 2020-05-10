@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="css/style{{minModifier}}.css" type="text/css">
+        <link rel='shortcut icon' type='image/x-icon' href='media/img/favicon.png'/>
+        <meta http-equiv="content-type" name="description" content="cloudplayer">
+        <meta http-equiv="content-type" name="keywords" content="music, music player, mp3, dropbox, streaming, audio">
+        <title></title>
+    </head>
+    <body>
+
+        <div id="root">
+            <div class="main-loadingMessage">
+                <img src="media/img/loader.gif">
+            </div>
+        </div>
+
+        <!-- jplayer will consume this element -->
+        <div id="player"></div>
+
+        {{#if isJSBundled}}
+            <script src="lib/system.js"></script>
+            <script src="app/bundle{{minModifier}}.js"></script>
+            <script src="app/config{{minModifier}}.js"></script>
+        {{else}}
+            <script src="lib/system.js"></script>
+            <script src="app/config.js"></script>
+            <script src="app/bundle.js"></script>
+            <script>System.import('app/main/main')</script>
+        {{/if}}
+    </body>
+</html>
