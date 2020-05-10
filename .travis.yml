@@ -1,0 +1,14 @@
+# Required env vars to push to docker hub
+# - DOCKER_PASS
+# - DOCKER_USER
+
+services:
+  - docker
+
+jobs:
+  include:
+    - stage: release
+      if: tag IS present
+      script:
+      - cd build
+      - sh ./build.sh --ci --dockerpush

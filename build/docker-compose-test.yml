@@ -13,7 +13,7 @@ services:
             - /home/vagrant/mongotest/data:/data/db:rw        
             - /home/vagrant/mongotest/logs:/var/logs:rw        
     tuna:
-        image: shukriadams/tuna:latest
+        image: shukriadams/tuna-server:latest
         container_name: tuna-test
         restart: unless-stopped
         depends_on:

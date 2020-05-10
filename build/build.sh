@@ -2,10 +2,12 @@
 # when running locally, force clean jspm build with "--jspm"
 CI=0
 JSPM=0
+DOCKERPUSH=0
 while [ -n "$1" ]; do 
     case "$1" in
     --ci) CI=1 ;;
     --jspm) JSPM=1 ;;
+    --dockerpush) DOCKERPUSH=1 ;;
     esac 
     shift
 done
@@ -50,7 +52,13 @@ tar -czvf node/.stage.tar.gz .stage &&
 # build 3: Build the final container, using the zip. We do this in a subfolder so we can limit the size of the docker build context,
 # else docker will pass in everything in current folder 
 cd node
-docker build -t shukriadams/tuna . &&
+docker build -t shukriadams/tuna-server . &&
 cd -
+
+if [ $DOCKERPUSH -eq 1 ]; then
+    TAG=$(git describe --tags --abbrev=0) &&
+    docker login -u $DOCKER_USER -p $DOCKER_PASS &&
+    docker push shukriadams/tuna-server:$TAG 
+fi
 
 echo "Build complete"
