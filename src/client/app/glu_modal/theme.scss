@@ -1,0 +1,18 @@
+@import './../gloo/gloo';
+.glu_modal {
+    z-index: 3 // required to allow mask to float above page, as this the masks' parent
+}
+
+.glu_modal-inner {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 4; // must be higher than mask
+}
+
+.glu_modal-close {
+    right: 0;
+    top: 0;
+    z-index: 5;  // must be higher than inner
+}

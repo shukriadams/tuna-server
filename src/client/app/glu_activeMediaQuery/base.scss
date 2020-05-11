@@ -1,0 +1,38 @@
+@import './../gloo/gloo';
+
+.glu_activeMediaQuery {
+    display: none;
+    height: 0;
+    overflow: hidden;
+    width: 0;
+}
+
+.glu_activeMediaQuery:after {
+    content: " ";
+    display: none;
+    height: 0;
+    overflow: hidden;
+    width: 0;
+}
+
+$glu_activeMediaQuery-small: "only screen and (max-width: #{$glu_mediaQuery-smallScreen})" !default;
+$glu_activeMediaQuery-medium: "only screen and (min-width: #{$glu_mediaQuery-smallScreen}) and (max-width: #{$glu_mediaQuery-mediumScreen})" !default;
+$glu_activeMediaQuery-large: "only screen and (min-width: #{$glu_mediaQuery-largeScreen})" !default;
+
+@media #{$glu_activeMediaQuery-small} {
+    .glu_activeMediaQuery:after {
+        content: "small";
+    }
+}
+
+@media #{$glu_activeMediaQuery-medium} {
+    .glu_activeMediaQuery:after {
+        content: "medium";
+    }
+}
+
+@media #{$glu_activeMediaQuery-large} {
+    .glu_activeMediaQuery:after {
+        content: "large";
+    }
+}

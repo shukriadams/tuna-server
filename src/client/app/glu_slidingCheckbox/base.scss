@@ -1,0 +1,23 @@
+@import './../gloo/gloo';
+
+.glu_slidingCheckbox {
+    position: relative;
+
+    &:after {
+        position: absolute;
+    }
+
+    &:before {
+        position: absolute;
+    }
+}
+
+.glu_slidingCheckbox-label {
+    display: block;
+    cursor: pointer;
+    position: absolute;
+}
+
+.glu_slidingCheckbox-checkbox {
+    visibility: hidden;
+}

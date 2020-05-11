@@ -10,7 +10,6 @@ src/public
 /mongo/mongo
 /src/client/css
 /src/client/lib
-/src/client/app
 /src/dist
 /src/client/icons-src/output
 /src/client/app/vc

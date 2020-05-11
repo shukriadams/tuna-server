@@ -1,0 +1,18 @@
+@import './../gloo/gloo';
+
+.glu_featurePriceMatrix {
+    .glu_textIntro {
+        text-align: center;
+    }
+}
+
+.glu_featurePriceMatrix-headItem {
+    &.glu_featurePriceMatrix-headItem--active {
+        .glu_featurePriceMatri-headItemInner {
+            @media #{$glu_mediaQuery-belowSmall} {
+                background-color: gray;
+                color: white;
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/mixins';
+@import './../main/settings';
+
+.glu_slidingCheckbox {
+    @include button; // yes, button
+
+    &:before {
+        top: 5px;
+    }
+
+    &:after {
+        color: $white;
+        top: 5px;
+    }
+
+    &.glu_slidingCheckbox--selected {
+        background-color: $rust;
+    }
+}
+
+.glu_slidingCheckbox-label {
+    height: 29px;
+}

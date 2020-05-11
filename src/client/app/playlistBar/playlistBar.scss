@@ -1,0 +1,61 @@
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../gloo/gloo';
+
+.playlistBar {
+    height: $layout-playlistBarHeight;
+    padding-top: 8px;
+}
+
+.playlistBar-currentLiteral {
+    @media #{$glu_mediaQuery-belowSmall}{
+        display: none;
+    }
+}
+
+.playlistBar-newPlaylist {
+    color: $white;
+}
+
+.playlistBar-playlistsContainer {
+    display: inline-block;
+    float: right;
+    text-align: right;
+    width: 100px;
+}
+
+.playlistBar-openListsDialog {
+    color: $white;
+    cursor: pointer;
+}
+
+.playlistBar-new{
+    color: $white;
+}
+
+.playlistBar-currentPlaylist {
+    display: inline-block;
+    width: calc(100% - 100px);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.playlistBar-currentPlaylistName {
+
+}
+
+.playlistBar-updatePlaylist {
+    color: $white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.playlistBar-unloadPlaylist {
+    color: $white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.playlistBar-clearQueue {
+    color: $white;
+}

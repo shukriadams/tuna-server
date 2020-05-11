@@ -1,0 +1,10 @@
+@import './../main/settings';
+@import './../type/type';
+
+.deleteProfile {
+    max-width: $layout-maxWidth;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: $layout-universalGutter;
+    padding-right: $layout-universalGutter;
+}

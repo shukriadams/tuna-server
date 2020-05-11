@@ -1,0 +1,14 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+@import './../type/type';
+
+.glu_multiColumnText {
+    @include type-bodyLarge;
+    padding: $layout-verticalModuleRhythm $layout-universalGutter;
+}
+
+.glu_multiColumnText-gridScaffold {
+    @include glu_grid-element;
+    max-width: $layout-maxWidth;
+    padding-bottom: $layout-verticalTextRhythm;
+}

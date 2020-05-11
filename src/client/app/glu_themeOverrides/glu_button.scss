@@ -1,0 +1,10 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/mixins';
+@import './../type/type';
+
+.glu_button {
+    @include button;
+    @include type-subText;
+    height: $buttonHeight;
+}

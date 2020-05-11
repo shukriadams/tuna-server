@@ -1,0 +1,111 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+@import './../main/mixins';
+@import './../type/type';
+
+@mixin cellBorder {
+    border-bottom: 1px dotted $silver;
+}
+
+$cellPadding: 20px;
+$laneWidth: 300px;
+
+.glu_featurePriceMatrix {
+    @include type-bodyLarge;
+     padding: $layout-verticalModuleRhythm $layout-universalGutter;
+
+    .glu_button {
+         @include button;
+    }
+}
+
+.glu_featurePriceMatrix-gridScaffold {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $layout-maxWidth;
+}
+
+.glu_featurePriceMatrix-headItemInner {
+    padding: $cellPadding;
+}
+
+.glu_featurePriceMatrix-ctaInner,
+.glu_featurePriceMatrix-cellInner {
+    background-color: $silver;
+    padding: $cellPadding;
+}
+
+.glu_featurePriceMatrix-headItemInner {
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        color: $rust;
+    }
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        border-bottom: 1px $white dashed;
+    }
+}
+
+.glu_featurePriceMatrix-cellInner {
+    border-bottom: 1px $white dashed;
+    color: $white;
+}
+
+.glu_featurePriceMatrix-headItem {
+    font-weight: bold;
+    padding-right: 1px;
+    max-width: $laneWidth;
+    width: $laneWidth;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        padding-bottom: 16px;
+    }
+
+    &.glu_featurePriceMatrix-headItem--active {
+        .glu_featurePriceMatrix-headItemInner {
+            @media #{$glu_mediaQuery-belowSmall} {
+                background-color: transparent;
+                border-bottom: 3px solid $rust;
+                color: inherit;
+            }
+        }
+    }
+}
+
+.glu_featurePriceMatrix-rowLead {
+    border-bottom: 1px dashed $silver;
+    padding: $cellPadding;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        min-width: 210px;
+    }
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        width: 50%;
+    }
+}
+
+.glu_featurePriceMatrix-cell {
+    padding-right: 1px;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        max-width: $laneWidth;
+        width: $laneWidth;
+    }
+    @media #{$glu_mediaQuery-belowSmall} {
+        width: 50%;
+    }
+}
+
+.glu_featurePriceMatrix-cta {
+    padding-right: 1px;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        max-width: $laneWidth;
+        width: $laneWidth;
+    }
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        width: 50%;
+    }
+}

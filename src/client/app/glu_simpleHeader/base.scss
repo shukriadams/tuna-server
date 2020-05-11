@@ -1,0 +1,139 @@
+@import './../gloo/gloo';
+
+.glu_simpleHeader {
+    @include gloo-browser(user-select, none);
+
+    @media #{$glu_mediaQuery-aboveSmall}{
+        vertical-align: middle;
+    }
+
+    /* docks menu to top of window */
+    &.glu_simpleHeader--dockTop {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+
+    /* menu open */
+    &.glu_simpleHeader--open {
+        @media #{$glu_mediaQuery-belowSmall} {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .glu_simpleHeader-menu {
+            @media #{$glu_mediaQuery-belowSmall} {
+                max-height: 100%;
+            }
+        }
+
+        .glu_simpleHeader-logoTitleWrapper {
+            @media #{$glu_mediaQuery-belowSmall} {
+                display: none;
+            }
+        }
+    }
+}
+
+.glu_simpleHeader-gridScaffold {
+    height: 100%;
+    /* all scaffold elements must control position of children */
+    position: relative;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        text-align: right;
+    }
+}
+
+.glu_simpleHeader-logoTitleWrapper {
+    @include gloo-browser(transform, translateY(-50%));
+    position: absolute;
+    top: 50%;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        left: 0;
+    }
+}
+
+.glu_simpleHeader-logo {
+    display: inline-block;
+}
+
+.glu_simpleHeader-title {
+    @include gloo-browser(transform, translateY(-50%));
+    display: inline-block;
+    position: absolute;
+    text-decoration: none;
+    top: 50%;
+    white-space: nowrap;
+}
+
+.glu_simpleHeader-menu {
+    list-style: none;
+    padding: 0;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        max-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        display: inline-block;
+        height: 100%;
+        padding: 0;
+        position: relative;
+        margin: 0;
+        right: 0;
+        top: 0;
+    }
+}
+
+.glu_simpleHeader-menuToggle {
+    cursor: pointer;
+    position: absolute;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        display: none;
+    }
+}
+
+.glu_simpleHeader-menuItem {
+    position: relative;
+    white-space: nowrap;
+    margin: 0;
+    overflow-y: hidden;
+
+    @media #{$glu_mediaQuery-aboveSmall}{
+        display: inline-block;
+        height: 100%;
+        text-align: center;
+    }
+}
+
+.glu_simpleHeader-searchWrapper {
+    display: inline-block;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+.glu_simpleHeader-menuItemLink {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+
+    @media #{$glu_mediaQuery-aboveSmall}{
+        height: 100%;
+    }
+
+    &.glu_simpleHeader-menuItemLink--active {
+        cursor: default;
+        pointer-events: none;
+    }
+}

@@ -1,0 +1,12 @@
+// this is where you override the layout of components which assume they own the page, and now need to adapt to a gallery
+.kitchenSink {
+    .layout-sticky{
+        left: 0;
+        position: absolute;
+        top: 0;
+    }
+
+    .playingStrip.playingStrip--minimal {
+        position: static;
+    }
+}

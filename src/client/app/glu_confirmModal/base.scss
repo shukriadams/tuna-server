@@ -1,0 +1,16 @@
+@import './../gloo/gloo';
+
+.glu_confirmModal{
+    .glu_modal-inner {
+        @include gloo-browser(transform, translateY(-50%));
+        top: 50%;
+    }
+}
+
+.glu_confirmModal-message{
+    overflow: hidden;
+}
+
+.glu_confirmModal-buttons{
+    text-align: center;
+}

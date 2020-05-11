@@ -1,0 +1,12 @@
+@import './../gloo/gloo';
+
+.glu_textIntroWithIconRow-item {
+    svg {
+        max-height: 50px;
+        max-width: 50px;
+    }
+}
+
+.glu_textIntroWithIconRow-header{
+    text-align: center;
+}

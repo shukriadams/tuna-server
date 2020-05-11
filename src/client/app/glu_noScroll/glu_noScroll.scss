@@ -1,0 +1,6 @@
+body {
+    &.glu_noScroll--locked {
+        overflow: hidden;
+        height: 100%;
+    }
+}

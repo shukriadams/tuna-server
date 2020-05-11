@@ -1,0 +1,14 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+@import './../type/type';
+@import './../main/main-colorPalette';
+
+.queue-gridScaffold {
+    @include glu_grid-element;
+    max-width: $layout-maxWidth;
+}
+
+.queue-empty {
+    padding-top: $layout-universalGutter * 3;
+    text-align: center;
+}

@@ -1,0 +1,198 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+
+.playerControls {
+    @include gloo-browser(user-select, none);
+    position: relative;
+    text-align: center;
+
+
+    // locked is a temporary thing, usually when waiting for a song to load
+    // this is a modifier override
+    // scss-lint:disable NestingDepth SelectorDepth
+    &.playerControls--locked {
+        .playerControls-controlLink {
+            cursor: not-allowed;
+        }
+    }
+
+    // disabled is for when playing is impossible, such as empty queue
+    // this is a modifier override
+    // scss-lint:disable ModifierRelatedToParent NestingDepth SelectorDepth
+    &.playerControls--disabled {
+        .icon-stop,
+        .icon-play,
+        .icon-forward,
+        .icon-rewind {
+            color: $coral;
+        }
+    }
+
+    &.playerControls--small {
+        .playerControls-repeatContainer{
+            display: none;
+        }
+
+        .playerControls-searchContainer{
+            display: none;
+        }
+    }
+}
+
+.playerControls-mainControls {
+    display: table;
+    height: 54px;
+    width: 100%;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        padding-top: 14px;
+    }
+}
+
+.playerControls-controlContainer {
+    display: table-cell;
+    height: 100%;
+    position: relative;
+    vertical-align: middle;
+    width: 16.6%;
+
+
+}
+
+.playerControls-controlLink {
+    @include gloo_transition('fill', .5s, ease-in, .5s);
+    cursor: pointer;
+
+    svg {
+        height: 22px;
+        width: 22px;
+    }
+
+    path, polygon, rect {
+        fill: $white;
+    }
+
+    &:active {
+        path, polygon {
+            @include gloo_transition('fill', .5s);
+            opacity: .7;
+        }
+    }
+
+    // this is a modifier override
+    // scss-lint:disable NestingDepth SelectorDepth
+    &.playerControls-controlLink--inactive {
+        pointer-events: none;
+
+        .playerControls-controlLink {
+            cursor: default;
+        }
+
+        path, polygon, rect {
+            fill: $coral;
+        }
+
+        &:hover {
+            background-color: inherit;
+        }
+    }
+}
+
+.playerControls-singleLoop {
+    background-color: $coral;
+    border-radius: 50%;
+    color: $white;
+    cursor: pointer;
+    font-size: 12px;
+    height: 15px;
+    left: 46%;
+    padding-top: 1px;
+    pointer-events: none;
+    position: absolute;
+    top: 46%;
+    width: 15px;
+    z-index: 1;
+}
+
+.playerControls-volumeWrapper {
+    background-color: $mineShaft;
+    border-radius: 4px;
+    display: none;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+
+    &.playerControls-volumeWrapper--show {
+        display: block;
+    }
+}
+
+.playerControls-volumeLabel {
+    font-size: 12px;
+    position: relative;
+    top: 6px;
+}
+
+.playerControls-volumeInner {
+    height: 100%;
+    padding: 0 30px;
+    position: relative;
+    width: 100%;
+}
+
+.playerControls-closeVolume {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+
+.playerControls-closeVolumeIcon {
+    font-size: 12px;
+}
+
+.playerControls-repeat {
+    &.playerControls-repeat--off {
+        path, polygon {
+            fill: $coral;
+        }
+    }
+}
+
+.playerControls-repeatHolder {
+    display: inline-block;
+    position: relative;
+}
+
+// needed to override nouislider
+// scss-lint:disable ImportantRule ComponentFileCheck
+.playerControls-volumeSlider {
+    @include gloo-browser(transform, translateY(-50%));
+    height: 6px !important; // needed to override slider
+    left: 1px;
+    top: 36%;
+
+    &.noUi-connect {
+        background: $rust !important;
+    }
+
+    &.noUi-target {
+        border: none !important;
+    }
+
+    .noUi-handle {
+        height: 24px !important;
+        top: -10px !important;
+        width: 24px !important;
+
+        // needed to override nouislider
+        // scss-lint:disable NestingDepth SelectorDepth
+        &::before,
+        &::after {
+            content: none !important;
+        }
+    }
+}

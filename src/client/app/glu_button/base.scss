@@ -1,0 +1,25 @@
+@import './../gloo/gloo';
+
+.glu_button {
+    border: none; // needed on "button" elements
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: none;
+    white-space: nowrap;
+
+    &.glu_button--responsive {
+        display: block;
+        width: 100%;
+
+        @media #{$glu_mediaQuery-aboveSmall} {
+            display: inline-block;
+            width: inherit;
+        }
+    }
+
+    &.glu_button--disabled {
+        pointer-events: none;
+    }
+}

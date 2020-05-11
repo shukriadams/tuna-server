@@ -1,0 +1,44 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+@import './../main/main-colorPalette';
+@import './../main/mixins';
+@import './../type/type';
+
+$modalGap: 30px;
+
+.glu_modal-inner {
+    padding: 0;
+    top: $layout-headerHeight; //aligns it with bottom of header
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        top: 0; // on mobile, modal must fill entire screen
+    }
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        bottom: $layout-universalGutter * 2;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: $layout-maxWidth;
+    }
+}
+
+.glu_modal-close{
+    path, polygon {
+        fill: $rust;
+    }
+}
+
+.glu_modal-content {
+    @include verticalScrollBox;
+    position: relative; // vertical scrollbox is absolute, reset it here
+}
+
+.glu_modal-close {
+    right : $layout-universalGutter * 2;
+    top: $layout-universalGutter;
+}
+
+.glu_mask {
+    background-color: rgba($dustyGrey, .8);
+}
+

@@ -1,0 +1,19 @@
+@import './../main/settings';
+@import './../main/main-colorPalette';
+
+.modal {
+    .glu_modal-content {
+        height: calc(100% - 46px); // 46px = height of title
+    }
+}
+
+.modal-title {
+    background-color: $mineShaft;
+    color: $white;
+    margin: 0;
+    padding: $layout-universalGutter;
+}
+
+.modal-content {
+    padding: $layout-universalGutter;
+}

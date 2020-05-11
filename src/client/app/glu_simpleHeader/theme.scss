@@ -1,0 +1,83 @@
+@import './../gloo/gloo';
+
+.glu_simpleHeader {
+    background-color: grey;
+    color: #ffffff;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        height: 62px;
+    }
+
+    @media #{$glu_mediaQuery-aboveSmall}{
+        height: 54px;
+    }
+
+    /* docks menu to top of window */
+    &.glu_simpleHeader--dockTop {
+        z-index: 1;
+    }
+}
+
+
+.glu_simpleHeader-menuItemLink--active {
+    &::before {
+        @media #{$glu_mediaQuery-belowSmall} {
+            background-color: white;
+            bottom: 0;
+            content: ' ';
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 8px;
+        }
+    }
+}
+
+.glu_simpleHeader-logoTitleWrapper {
+    padding-left: 20px;
+}
+
+.glu_simpleHeader-title {
+    color: #ffffff;
+    padding-left: 8px;
+}
+
+.glu_simpleHeader-menuItemLink {
+    color: #ffffff;
+    padding-top: 16px;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        border-top: white 1px solid;
+        padding: 24px 0;
+    }
+}
+
+.glu_simpleHeader-menuItem{
+    padding: 0;
+
+    @media #{$glu_mediaQuery-aboveSmall}{
+        border-left: 1px solid #ffffff;
+    }
+
+    &:hover {
+        color: orange;
+    }
+}
+
+.glu_simpleHeader-logo {
+    @media #{$glu_mediaQuery-aboveSmall}{
+        left: 32px;
+    }
+}
+
+.glu_simpleHeader-menuToggle {
+    right: 12px;
+    top: 12px;
+
+    svg {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+

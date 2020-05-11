@@ -1,0 +1,32 @@
+- a purely style component, has no control or functionality of its own, but suuports visual requirements of other controls
+- used to display lists of songs, a key feature of this app
+
+primary characterstics
+
+- list items must display songs, but also letters, albums and artists, basically, anything that can be listed
+- rows must support optional line numbers
+- rows have optional add, remove and more icons. Some icons are visible only on hover. icons can be on left or right of
+  row.
+- supports small status icons like "playing now" "on playlist", "loved", etc.
+- list rows alternate in color
+- some rows can act as dividers, these can never have state
+- has horizontal scrolling within a fixed parent container
+- has an optional sticky header item which is always displayed at the top of the list
+- has a popout filter field
+- draggable items, including to first and last position
+- rows can swivel to display a message, then swivel back
+- rows can swivel in by rendering flat-on, then swiveling in, and this effect cascades down the list
+- row has a context menu that is opened by clicking a more icon on its right side
+- rows must be selectable, and group selectable
+
+states
+- hover
+- system selected(active)
+- user selected(active)
+
+
+uses
+- queue
+- playlist
+- song browser
+- song search results

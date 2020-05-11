@@ -1,0 +1,82 @@
+/*
+Set base HTML elements and fonts here
+*/
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../type/type';
+@import './settings';
+
+@import url('http://fonts.googleapis.com/css?family=Lato');
+//@import url(http://fonts.googleapis.com/css?family=Raleway);
+@import url('http://fonts.googleapis.com/css?family=Work+Sans');
+@import url('http://fonts.googleapis.com/css?family=Source+Sans+Pro:900');
+
+@import 'roboto';
+
+body {
+    @include type-body;
+    color: $meanShaft;
+    font-family: 'Roboto Condensed', sans-serif;
+    letter-spacing: -.06em;
+    margin: 0;
+    padding: 0;
+}
+
+*,
+*::before,
+*::after {
+    @include gloo-browser(box-sizing, border-box);
+}
+
+a {
+    color: $rust;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+        @include gloo-transition(color, .5s);
+        color: $coral;
+    }
+}
+
+h1 {
+    @include type-h1Layout;
+    margin: 0;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        //text-align: center;
+    }
+}
+
+h2 {
+    @include type-h2;
+}
+
+input, select {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+// scss-lint:disable QualifyingElement
+// basic element change
+input[type="text"],
+input[type="password"] {
+    border-radius: 2px;
+    border-style: none;
+}
+
+ul,
+ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    margin: 0;
+}
+
+// icon svgs
+i svg {
+    height: 30px;
+    width: 30px;
+}

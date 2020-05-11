@@ -1,0 +1,33 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+@import './../main/main-colorPalette';
+@import './../main/mixins';
+
+.glu_confirmModal{
+    .glu_mask{
+        background-color: rgba($dustyGrey, .8);
+    }
+
+    .glu_modal-inner{
+        background-color: $dustyGrey;
+        max-width: 300px;
+        max-height: 250px;
+    }
+
+    .glu_modal-content {
+        padding: $layout-universalGutter;
+    }
+
+    .glu_button {
+        @include button;
+    }
+
+    .glu_button:first-of-type {
+        margin-right: $layout-universalGutter
+    }
+
+    .glu_button:last-of-type {
+        margin-left: $layout-universalGutter
+    }
+}
+

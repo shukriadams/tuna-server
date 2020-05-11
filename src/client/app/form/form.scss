@@ -1,0 +1,104 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../type/type';
+
+$formElementStandardFontSize: 18px;
+$formElementInputFieldPadding: 16px;
+
+@mixin formInputField {
+    // give fields an inner dropshadow to give them some depth + separation from surrounding page
+    @include gloo-browser(box-shadow, inset 0 1px 2px $dustyGrey);
+    border: none; // gets rid of the extra margin and noise around elements
+    font-size: $formElementStandardFontSize;
+    height: $inputElementHeight;
+    padding: 8px;
+    width: 100%;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        max-width: $layout-narrowModulesMaxWidth;
+    }
+}
+
+.form {
+    padding-bottom: 64px;
+    padding-top: 32px;
+}
+
+.form-row {
+    padding-bottom: $formElementInputFieldPadding;
+    padding-top: $formElementInputFieldPadding;
+    min-height: 27px; // force the row to be visible even when empty, useful for error message holders and general spacing
+
+
+}
+
+.form-description {
+    color: $dustyGrey;
+}
+
+/* list of info on form, ul / li in box form*/
+.form-infoblocks {
+    border-radius: 5px;
+    border: 1px dashed gray;
+}
+
+.form-infoblock {
+    padding: $formElementInputFieldPadding * 2;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        display: inline-block;
+    }
+
+    &:not(:first-of-type){
+        @media #{$glu_mediaQuery-aboveSmall} {
+            border-left: 1px dashed gray;
+        }
+        @media #{$glu_mediaQuery-belowSmall} {
+            border-top: 1px dashed gray;
+        }
+    }
+}
+
+/*
+dont like chaining element+classnames but really want to make sure this isn't used with other types
+*/
+
+.form-divider {
+    @include type-h2;
+    border-bottom: 2px solid $silver;
+    color: $mineShaft;
+    margin-bottom: $layout-universalGutter;
+    padding-bottom: $layout-universalGutter;
+    padding-top: $layout-universalGutter * 4;
+}
+
+hr.form-divider {
+    height: 2px;
+    background-color: $silver; // hr is therefore meant to be used on seashell background, with minimal contrast so as to be visually tiring
+    border: none;
+    padding: 0;
+}
+
+.form-label {
+    @include type-label;
+    display: block;
+    padding-top: $formElementInputFieldPadding;
+}
+
+.form-textField {
+    @include formInputField;
+    margin-top: $layout-universalGutter;
+    position: relative;
+    top: 1px;    // align the input relative to button
+}
+
+.form-select {
+    @include formInputField;
+    position: relative;
+    top: 3px;    // align the select menu relative to button
+}
+
+.form-error {
+    color: $guardsManRed;
+}

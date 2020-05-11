@@ -1,0 +1,29 @@
+@import './../gloo/gloo';
+
+.glu_modal {
+    bottom: 0;
+    display: none;
+    left: 0;
+    padding: 40px;
+    position: fixed;
+    right: 0;
+    top: 0;
+
+    &.glu_modal--show {
+        display: block;
+    }
+}
+
+.glu_modal-inner {
+    position: absolute;
+    overflow: hidden;
+}
+
+.glu_modal-close {
+    position: absolute;
+}
+
+.glu_modal-content {
+    height: 100%;
+    position: relative;
+}

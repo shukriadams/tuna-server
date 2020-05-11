@@ -1,0 +1,27 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../type/type';
+
+.settings-gridScaffold {
+    @include glu_grid-element;
+    max-width: $layout-maxWidth;
+    padding: 0 $layout-verticalModuleRhythm $layout-verticalTextRhythm $layout-universalGutter;
+
+    .form-infoblocks {
+        padding: 6px;
+    }
+}
+
+.settings-sectionHeader {
+    @include type-h2;
+    padding: 6px 0;
+}
+
+.settings-sectionLine {
+    padding: 6px 0
+}
+
+.settings-email {
+    @include type-emphasis;
+}

@@ -1,0 +1,9 @@
+// add gloo's default settings first
+@import './../gloo/gloo';
+
+.main-loadingMessage {
+    @include gloo-browser(transform, translate(-50%, -50%));
+    left: 50%;
+    position: absolute;
+    top: 50%;
+}
