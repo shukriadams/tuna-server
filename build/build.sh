@@ -63,7 +63,7 @@ cd -
 if [ $DOCKERPUSH -eq 1 ]; then
     TAG=$(git describe --tags --abbrev=0) &&
     docker login -u $DOCKER_USER -p $DOCKER_PASS &&
-    docker tag shukriadams/tuna-server:latest shukriadams/tuna-server:$TAG 
+    docker tag shukriadams/tuna-server:latest shukriadams/tuna-server:$TAG &&
     docker push shukriadams/tuna-server:$TAG 
 fi
 
