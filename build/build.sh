@@ -18,7 +18,7 @@ done
 
 # to make it easier to test builds without hammering JSPM, flushing is done only when JSPM flag is toggled
 if [ $JSPM -eq 1 ]; then
-    sudo rm -rf .clone &&
+    sudo rm -rf .clone 
 fi
 
 mkdir -p .clone &&    
