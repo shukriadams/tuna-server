@@ -1,0 +1,73 @@
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../main/mixins';
+
+$functionsWidth: 270px;
+
+.playlistsDialog {
+    .glu_mask {
+        background-color: $silverTranslucent;
+    }
+
+    .glu_modal-inner{
+        background-color: $seaShell;
+    }
+
+    .glu_button{
+        margin-right: 8px;
+    }
+
+    .form-textField {
+        position: absolute;
+        top: -2px;
+        max-width: 300px;
+    }
+}
+
+.playlistsDialog-playlists {
+    padding: $layout-universalGutter 0;
+}
+
+.playlists-empty {
+    padding: 16px 0;
+}
+
+.playlistsDialog-playlist {
+    @include listStyle;
+    color: $doveGray;
+    padding-top: 10px;
+    position: relative;
+
+    .glu_button {
+        @include button-small;
+    }
+}
+
+.playlistsDialog-name {
+    display: inline-block;
+    width: calc(100% - #{$functionsWidth});
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.playlistsDialog-functions {
+    display: inline-block;
+    height: 36px;
+    padding-right: 24px;
+    position: relative;
+    text-align: right;
+    vertical-align: middle;
+    width: $functionsWidth;
+}
+
+.playlistsDialog-toggleExpandedFunctions{
+    cursor: pointer;
+    position: absolute;
+    top: -2px;
+    right: 0;
+}
+
+.playlistsDialog-count {
+    width: 28px;
+    display: inline-block;
+}

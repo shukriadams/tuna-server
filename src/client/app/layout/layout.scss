@@ -1,0 +1,36 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+@import './../main/main-colorPalette';
+
+.layout {
+    background-color: $seaShell;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: $layout-headerHeight;
+    position: relative;
+
+    &.layout--fullSizePlayer {
+        padding-top: $layout-playStripHeight + $layout-headerHeight + $layout-playlistBarHeight;
+
+        @media #{$glu_mediaQuery-belowSmall} {
+            padding-top: $layout-playStripHeightBelowSmall + $layout-headerHeight  + $layout-playlistBarHeight;
+        }
+    }
+}
+
+.layout-sticky {
+    @include gloo-browser(box-shadow, 0 0 7px 0 $nero);
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.layout-content {
+    padding-bottom: $layout-verticalModuleRhythm; // this finishes the vertical layout flow on a page, modules have top padding only. this makes consistency easier
+    flex: 1;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+
+    }
+}

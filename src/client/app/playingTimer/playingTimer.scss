@@ -1,0 +1,18 @@
+@import './../gloo/gloo';
+@import './../type/type';
+@import './../main/main-colorPalette';
+
+.playingTimer {
+    @include type-timer;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+}
+
+.playingTimer-time {
+    color: $white;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        padding: 2px 0;
+    }
+}

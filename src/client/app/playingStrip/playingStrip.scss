@@ -1,0 +1,181 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+
+@mixin item {
+    @media #{$glu_mediaQuery-aboveSmall} {
+        display: table-cell;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+    &:not(:last-of-type) {
+        @media #{$glu_mediaQuery-aboveSmall} {
+            border-right: 1px solid $coral;
+        }
+    }
+}
+
+@mixin disableControl {
+    @include gloo-browser(pointer-events, none);
+    color: $coral;
+    cursor: default;
+
+    path, polygon, rect {
+        fill: $coral;
+    }
+}
+
+.playingStrip {
+    background-color: $rust;
+    overflow: hidden;
+    pointer-events: none; // minimal mode this floats over underling elements, but is transparent. pointer events therefore disabled, but re-enabled on child
+    position: relative;
+
+    &.playingStrip--minimal {
+        background-color: inherit;
+        height: $layout-headerHeight;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+
+        @media #{$glu_mediaQuery-belowSmall} {
+            display: none;
+        }
+
+        .playingStrip-miniScaffold {
+            height: 100%;
+            position: absolute;
+            right: 159px;
+            width: auto;
+        }
+
+        .playingStrip-controls {
+            @media #{$glu_mediaQuery-aboveSmall} {
+                min-width: 200px;
+                max-width: 200px;
+                width: 200px;
+            }
+        }
+
+        .playingStrip-info {
+            display: none;
+        }
+
+        .playingStrip-playlistBar {
+            display: none;
+        }
+
+        .playingStrip-progress {
+            display: none;
+        }
+
+        .playingStrip-timer {
+            display: none;
+        }
+    }
+
+    // enabled when no song is in playlist, most controls must be disabled
+    &.playingStrip--noSong {
+        .playingTimer {
+            @include disableControl;
+        }
+
+        .playerControls-previous{
+            @include disableControl;
+        }
+
+        .playerControls-play {
+            @include disableControl;
+        }
+
+        .playerControls-next{
+            @include disableControl;
+        }
+    }
+}
+
+.playingStrip-gridScaffold {
+    max-width: $layout-maxWidth;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 $layout-universalGutter;
+    position: relative;
+}
+
+.playingStrip-miniScaffold {
+    display: table;
+    height: $layout-playStripHeight;
+    pointer-events: auto;
+    width: 100%;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        height: $layout-playStripHeightBelowSmall;
+    }
+}
+
+/* this is the only cell that has dynamic width, and its width needs to be tightly clamped or it will overflow only its
+siblings and obscure them */
+.playingStrip-info {
+    @include item;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        max-width: 168px;
+        overflow: hidden;
+    }
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        display: inline-block;
+        padding: 8px 0;
+    }
+}
+
+.playingStrip-playlistBar {
+    border-top: 1px solid $coral;
+    pointer-events: auto;
+}
+
+.playingStrip-timer {
+    @include item;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        min-width: 60px;
+        max-width: 60px;
+        width: 60px;
+    }
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        position: absolute;
+        right: 18px;
+        top: $layout-universalGutter;
+    }
+}
+
+.playingStrip-controls {
+    @include item;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        background-color: $rust;
+        min-width: 300px;
+        max-width: 300px;
+        width: 300px;
+    }
+}
+
+.playingStrip-progress {
+    @include item;
+    padding: 0 10px;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        min-width: 144px;
+        max-width: 144px;
+        width: 154px;
+    }
+
+    @media #{$glu_mediaQuery-aboveMedium} {
+        min-width: 214px;
+        max-width: 214px;
+        width: 214px;
+    }
+}

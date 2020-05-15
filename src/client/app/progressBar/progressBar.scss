@@ -1,0 +1,16 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+
+.progressBar-total {
+    background-color: $coral;
+    cursor: pointer;
+    display: block;
+    height: 5px;
+    width: 100%;
+}
+
+.progressBar-progress {
+    background-color: $white;
+    display: inline-block;
+    height: 100%;
+}

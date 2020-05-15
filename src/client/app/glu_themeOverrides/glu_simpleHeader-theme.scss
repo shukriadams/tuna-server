@@ -1,0 +1,105 @@
+@import './../main/settings';
+@import './../main/mixins';
+@import './../type/type';
+@import './../main/main-colorPalette';
+@import './../gloo/gloo';
+
+$menuItemBorderColor: lighten($mineShaft, 10%);
+
+.glu_simpleHeader {
+    background-color: $mineShaft;
+    height: $layout-headerHeight;
+
+    .glu_button {
+        @include button;
+        @include type-menu;
+
+        @media#{$glu_mediaQuery-aboveSmall}{
+            border-bottom: solid 1px $coral;
+            height: inherit;
+            padding: $layout-universalGutter*2 20px 0 20px;
+        }
+
+        @media #{$glu_mediaQuery-belowSmall} {
+            height: 100%;
+            padding: $layout-universalGutter*3 $layout-universalGutter;
+            text-align: left;
+        }
+    }
+}
+
+.glu_simpleHeader-logoTitleWrapper {
+    padding-left: $layout-universalGutter;
+}
+
+.glu_simpleHeader-title {
+    color: $white;
+    &:hover {
+        color: $white;
+    }
+}
+
+.glu_simpleHeader-menuToggle {
+    right: $layout-universalGutter;
+}
+
+.glu_simpleHeader-gridScaffold {
+    @include glu_grid-element;
+    // need to re-apply max width because header is position fixed and ignores layout container max width
+    max-width: $layout-maxWidth;
+}
+
+.glu_simpleHeader-menuItem {
+    @include gloo-transition(background-color, .2s);
+    border: none;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        height: 78px;
+    }
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        border-left-color: $menuItemBorderColor;
+    }
+
+    &:hover {
+        @include gloo-transition(background-color, .5s);
+        background-color: $menuItemBorderColor;
+    }
+}
+
+.glu_simpleHeader-menuItemLink {
+    @include type-menu;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        border-top-color: $menuItemBorderColor;
+        padding-left: $layout-universalGutter;
+        padding-right: $layout-universalGutter;
+    }
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    &.glu_simpleHeader-menuItemLink--active {
+        background-color: $rust;
+    }
+}
+
+.glu_simpleHeader-title {
+    @include type-logo;
+}
+
+.glu_simpleHeader-searchWrapper {
+    padding: 0 $layout-universalGutter;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        right: $layout-universalGutter * 6;
+        top: $layout-universalGutter;
+    }
+}
+
+.glu_simpleHeader-search {
+    height: $layout-universalGutter * 5;
+    padding: $layout-universalGutter;
+}

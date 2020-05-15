@@ -1,0 +1,41 @@
+
+//
+// scss-lint:disable VariableNamedToComponent
+$masterPage-centralColumnMaxWidth: 500px;
+
+// width of "standard" module
+$layout-maxWidth: 1024px;
+
+//
+$buttonHeight: 35px;
+
+// width of narrow module (forms and other things that look weird if too wide)
+$layout-narrowModulesMaxWidth: 500px;
+
+// Use for module padding and large vertical rhythm units
+$layout-verticalModuleRhythm: 80px;
+
+// use for vertical gaps between text items and other small things inside modules
+$layout-verticalTextRhythm: 16px;
+
+// use this as standard gutter on all modules
+$layout-universalGutter: 8px;
+
+// opacity of all tags, could be extended to others. Gives a soft look, non-critical content, text will not be read that
+// often, the placement of the text combined with color is information enough
+$tagOpacity: 0.4;
+
+/* all input fields and buttons have same height so they can finally fucking line up horizontally */
+$inputElementHeight: 35px;
+
+/* height for all standard rows in lists that have anything to do with songs */
+$listRowHeight: $layout-universalGutter * 6;
+
+/* used on song lists with non-songs*/
+$songRowBrowserLeftPad: 68px;
+
+$layout-headerHeight: 54px;
+
+$layout-playStripHeight: 60px;
+$layout-playlistBarHeight: 40px;
+$layout-playStripHeightBelowSmall : 120px;

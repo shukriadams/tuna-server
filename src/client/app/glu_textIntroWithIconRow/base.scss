@@ -1,0 +1,11 @@
+@import './../gloo/gloo';
+
+.glu_textIntroWithIconRow-item {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        display: block;
+    }
+}

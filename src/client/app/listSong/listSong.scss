@@ -1,0 +1,254 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../main/mixins';
+@import './../type/type';
+
+/*
+    All text, icons etc inside a row must implement this mixin. we use it to manage vertical
+    alignment in a standard way so we can add different types of row content without cludging
+    their alignment in different ways
+*/
+@mixin rowContent ($isClickableSVGContainer : false){
+    //@include gloo-browser(transform, translateY(-50%));
+    display: table-cell;
+    position: relative;
+    vertical-align: middle;
+
+    svg {
+        position: relative;
+    }
+}
+
+@mixin rowContentInteractive{
+    &:hover {
+        path, polygon {
+            @include gloo-transition(fill, .1s);
+            fill: lighten($rust, 10%);
+        }
+    }
+}
+
+$smallSectionWidth: 32px;
+
+@mixin smallSection {
+    max-width: $smallSectionWidth;
+    min-width: $smallSectionWidth;
+    width: $smallSectionWidth;
+}
+
+.listSong {
+    @include gloo-transition(all, .2s);
+    @include gloo-browser(transition-property, (background-color, transform));
+    @include gloo-browser(user-select, none);
+    @include songListColorScheme;
+    @include listStyle;
+
+    display: table;
+    padding: 0 $layout-universalGutter 0 $layout-universalGutter; // don't use padding to vertical center content
+    position: relative;
+    table-layout: fixed;
+    width: 100%;
+
+    svg {
+        position: relative;
+    }
+
+    path, polygon {
+        fill: $rust;
+    }
+
+    &:hover {
+        path, polygon {
+            @include gloo-transition(fill, .1s);
+            fill: coral;
+        }
+    }
+
+    // flipped content, made visible by applying the flip class. Note the flip contains a single piece
+    // of plain text only, nothing else
+    &::after {
+        @include gloo-browser(transform, rotateX(90deg));
+        @include gloo-transition(transform, .05s);
+        background-color: $rust;
+        bottom: 0;
+        color: $white;
+        content: attr(data-fliptext);
+        left: 0;
+        padding-top: $layout-universalGutter * 2; // used to position the text content
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+        z-index: 1;
+    }
+
+    // apply to items being dragged over
+    // scss-lint:disable ModifierRelatedToParent
+    &.listSong--draggedUnder {
+        border-bottom: $rust solid 2px;
+    }
+
+    // apply to the first item on list if an item is dragged past its top
+    &.listSong--draggedPast {
+        border-top: $rust solid 2px;
+    }
+
+    &.listSong--active {
+        color: $rust;
+    }
+
+    &.listSong--selected {
+        background-color: $coral;
+        color: $white;
+
+        path, polygon {
+           fill: $white;
+        }
+    }
+
+    // Shows flip text.
+    &.listSong--flipped {
+        &::after {
+            @include gloo-browser(transform, rotateX(0deg));
+            @include gloo-transition(transform, .1s);
+        }
+    }
+}
+
+/* holds a single function icon, normally plus or minus */
+.listSong-function {
+    @include rowContent(true);
+    @include smallSection;
+    text-align: center;
+
+    &.listSong-function--interactive {
+        cursor: pointer;
+        @include rowContentInteractive;
+    }
+}
+
+.listSong-functionIcon {
+    color: $rust;
+    font-size: 18px;
+    position: absolute;
+    top: 12px;
+    font-weight: bold;
+}
+
+/*
+    every row must have a lead, it has space for ONE icon
+*/
+.listSong-lead {
+    @include rowContent;
+    @include type-subText;
+    @include smallSection;
+    padding-left: 4px;
+}
+
+.listSong-dynamicContent {
+    @include rowContent;
+    overflow: hidden;
+    width: 100%;
+}
+
+.listSong-titleWrapper {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.listSong-song {
+    padding-right: $layout-universalGutter;
+    white-space: nowrap;
+}
+
+.listSong-artist {
+    @include type-subText;
+    padding-left: $layout-universalGutter;
+    white-space: nowrap;
+}
+
+.listSong-album {
+    @include type-subText;
+    opacity: .5;
+    padding-left: $layout-universalGutter;
+    white-space: nowrap;
+}
+
+/* Scaffold element in row that contains the more icon. Always rendered, even when empty, as its part of standard row layout */
+.listSong-more {
+    @include rowContent(true);
+    @include rowContentInteractive;
+    @include smallSection;
+    padding-left: 8px;
+    text-align: center;
+}
+
+/*
+    Rendered only when icon is displayed. Should not be necessary, but retarded react svg component doesn't let us access the
+    svg or span wrapper directly so we need to use yet another wrapper.
+*/
+.listSong-moreIcon {
+    color: $rust;
+    cursor: pointer;
+
+    // all child contents are inject by react-svg, which don't respect dom structure. the cannot be crawled to find parent elements,
+    // and therefore break vc.isDescendentOf(). Therefore we prevent them raising any click events, we don't need it anyway
+    > * {
+        pointer-events: none;
+    }
+}
+
+.listSong-tags {
+    @include type-subText;
+    text-align: left;
+
+    @media #{$glu_mediaQuery-aboveSmall} {
+        @include gloo-browser(transform, translateY(-50%));
+        display: inline-block;
+        padding: 0 $layout-universalGutter;
+        position: absolute;
+        right: 0;
+        top: 50%;
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Tags in playlist - only the text and color change.
+    Tags must be <LI> elements inside an <OL> parent.
+    We use ::after so we can embed the tag text in css, letting our  markup render only a fragment of the classname
+----------------------------------------------------------------------------------------------------------------------*/
+@mixin tag ($content, $tagColor) {
+    display: inline-block;
+
+    &::after {
+        @include type-tiny;
+        color: $tagColor;
+        content: $content;
+
+        @media #{$glu_mediaQuery-aboveSmall} {
+            padding: $layout-universalGutter / 2;
+            margin: $layout-universalGutter / 2;
+        }
+    }
+}
+
+.listSong-tagPlaying {
+    @include tag('Playing', $rust);
+}
+
+.listSong-tagInQueue {
+    @include tag('In queue', $dustyGrey);
+}
+
+.listSong-tagPlaylist {
+    @include tag('Playlist', $breakerBay);
+}
+
+.listSong-tagLoved {
+    @include tag('Loved', $rust);
+}
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+
+

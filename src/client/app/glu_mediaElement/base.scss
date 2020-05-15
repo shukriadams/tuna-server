@@ -1,0 +1,30 @@
+@import './../gloo/gloo';
+
+.glu_mediaElement {
+    overflow: hidden;
+    position: relative;
+}
+
+.glu_mediaElement-media {
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+
+    .glu_picture-image,
+    .glu_video {
+        transform: translate(-50%,-50%);
+        left: 50%;
+        max-width: none;
+        min-height: 100%;
+        min-width: 100%;
+        position: absolute;
+        top: 50%;
+    }
+}
+
+.glu_mediaElement-text {
+    transform: translate(-50%,-50%);
+    left: 50%;
+    position: absolute;
+    top: 50%;
+}

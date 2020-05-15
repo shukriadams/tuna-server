@@ -1,0 +1,11 @@
+@import './../gloo/gloo';
+
+.glu_mediaElement-text {
+    color: #ffffff;
+}
+
+/* set max height on this element to throttle height of module */
+.glu_mediaElement-media {
+    height: 400px; // required by firefox, max-height is not enough
+    max-height: 400px;
+}

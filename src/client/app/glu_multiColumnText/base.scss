@@ -1,0 +1,28 @@
+@import './../gloo/gloo';
+
+.glu_multiColumnText {
+    @include glu_grid-grid();
+}
+
+.glu_multiColumnText-columns--2 {
+    columns: 2;
+}
+
+.glu_multiColumnText-columns--3 {
+    columns: 3;
+}
+
+.glu_multiColumnText-columns--4 {
+    columns: 4;
+}
+
+.glu_multiColumnText-columns--2,
+.glu_multiColumnText-columns--3,
+.glu_multiColumnText-columns--4 {
+    column-gap: 40px;
+    text-align: justify;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        columns: 1;
+    }
+}

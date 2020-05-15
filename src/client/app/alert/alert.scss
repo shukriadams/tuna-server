@@ -1,0 +1,17 @@
+@import './../main/main-colorPalette';
+
+.alert {
+    background-color: $silver;
+    cursor: pointer;
+    left: 50%;
+    padding: 8px;
+    position: fixed;
+    top: 10px;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.alert--error {
+    background-color: $guardsManRed;
+    color: $seaShell;
+}

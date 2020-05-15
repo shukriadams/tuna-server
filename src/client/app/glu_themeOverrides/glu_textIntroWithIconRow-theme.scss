@@ -1,0 +1,15 @@
+@import './../main/settings';
+
+.glu_textIntroWithIconRow {
+    padding: $layout-verticalModuleRhythm 0;
+}
+
+.glu_textIntroWithIconRow-gridScaffold {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $layout-maxWidth;
+}
+
+.glu_textIntroWithIconRow-item{
+    padding: 0 10px 60px 10px;
+}

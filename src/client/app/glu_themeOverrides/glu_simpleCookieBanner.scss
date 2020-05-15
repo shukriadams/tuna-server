@@ -1,0 +1,31 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+@import './../main/main-colorPalette';
+
+.glu_simpleCookieBanner {
+    bottom: 0;
+    box-shadow: inherit;
+    top: initial;
+
+    .glu_button {
+        right: $layout-universalGutter;
+        top: $layout-universalGutter;
+    }
+}
+
+.glu_simpleCookieBanner-content {
+    padding-right: 112px; // space for button and extra so text doesn't touch button
+}
+
+.glu_simpleCookieBanner-gridScaffold {
+    height: 50px;
+    padding: $layout-universalGutter;
+    max-width: $layout-maxWidth;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        height: 90px;
+    }
+}
+

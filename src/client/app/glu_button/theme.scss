@@ -1,0 +1,26 @@
+@import './../gloo/gloo';
+
+.glu_button {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 10px 20px;
+
+    &.glu_button--disabled {
+        @include gloo-animation(glu_button_disabled, 1.5s, infinite, ease-in-out);
+    }
+
+    @include gloo-keyframe(glu_button_disabled) {
+        0%,
+        80%,
+        100% {
+            opacity: .9;
+        }
+
+        40% {
+            opacity: .4;
+        }
+    };
+}
+
+
+

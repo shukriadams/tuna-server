@@ -1,0 +1,76 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../type/type';
+
+// default button style
+@mixin button {
+    @include gloo-transition(background-color, .2s);
+    background-color: $rust;
+    height: 35px;
+
+    &:hover {
+        @include gloo-transition(background-color, .5s);
+        color: $white;
+        background-color: $coral;
+    }
+}
+
+@mixin button-small {
+    @include type-tiny;
+    height: 28px;
+    font-size:11px;
+    padding: 8px 8px;
+}
+
+/**
+ * Makes an element vertically scrollable within its parent.
+ * WARNING : Requires that parent has attributes
+ *  {
+ *      height: someValue;
+ *      position: relative ;
+ *  }
+ *
+ * as the vertical scrollable box will no longer has a fixed height.
+ */
+@mixin verticalScrollBox {
+    height: 100%;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+
+    // this is a modifier override
+    // scss-lint:disable VendorPrefix
+    &::-webkit-scrollbar {
+        width: 1em;
+    }
+
+    // this is a modifier override
+    // scss-lint:disable VendorPrefix
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba($black, .3);
+    }
+
+    // this is a modifier override
+    // scss-lint:disable VendorPrefix
+    &::-webkit-scrollbar-thumb {
+        background-color: $rust;
+        outline: 1px solid $mineShaft;
+    }
+}
+
+/**
+ * The song list style is used be several implementors. This is the common style for all of them.
+ */
+@mixin songListColorScheme {
+    color: $doveGray;
+
+    &:hover {
+        color: $rust;
+    }
+}
+
+@mixin listStyle {
+    border-bottom: 1px solid $white;
+    height: $listRowHeight;
+}

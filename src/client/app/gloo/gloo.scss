@@ -1,0 +1,217 @@
+// contains code from Foundation by ZURB
+// foundation.zurb.com
+// Licensed under MIT Open Source
+
+/*
+Simple utility for converting pixels to ems
+*/
+$gloo-baseFontSize: 15px !default;
+// This is the default html and body font-size for the base rem value.
+$rem-base: 16px !default;
+
+@function gloo-toEm($target, $context: $gloo-baseFontSize) {
+    @if $target == 0 { @return 0 }
+    @return $target / $context + 0em;
+}
+
+
+
+// IMPORT ONCE
+// We use this to prevent styles from being loaded multiple times for components that rely on other components.
+$modules: () !default;
+
+// STRIP UNIT
+// It strips the unit of measure and returns it
+@function gloo-stripUnit($num) {
+    @return $num / ($num * 0 + 1);
+}
+
+
+@function gloo-convert-to-rem($value, $base-value: $rem-base) {
+  $value: gloo-strip-unit($value) / gloo-strip-unit($base-value) * 1rem;
+  @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+// RANGES
+// We use these functions to define ranges for various things, like media queries.
+@function gloo-lower-bound($range) {
+  @if length($range) <= 0 {
+    @return 0;
+  }
+  @return nth($range, 1);
+}
+
+@function gloo-upper-bound($range) {
+  @if length($range) < 2 {
+    @return 999999999999;
+  }
+  @return nth($range, 2);
+}
+
+
+@function gloo-remCalc($values, $base-value: $rem-base) {
+  $max: length($values);
+
+  @if $max == 1 { @return gloo-convertToRem(nth($values, 1), $base-value); }
+
+  $remValues: ();
+  @for $i from 1 through $max {
+    $remValues: append($remValues, gloo-convertToRem(nth($values, $i), $base-value));
+  }
+  @return $remValues;
+}
+
+
+// cross browser transform
+@mixin gloo-transform($effect){
+  -webkit-transform: $effect;
+  -ms-transform: $effect;
+  transform: $effect;
+}
+
+
+// cross browser transition
+@mixin gloo-transition($property, $duration, $function:ease, $delay:0s){
+  -webkit-transition: $property $duration $function $delay;
+  -moz-transition: $property $duration $function $delay;
+  -o-transition: $property $duration $function $delay;
+  transition: $property $duration $function $delay;
+}
+
+
+// cross browser background size
+@mixin gloo-backgroundSize($size){
+    -webkit-background-size: $size;
+    -moz-background-size: $size;
+    -o-background-size: $size;
+    background-size: $size;
+}
+
+
+@mixin gloo-exports($name) {
+    // Import from global scope
+    $modules: $modules;
+    // Check if a module is already on the list
+    $module_index: index($modules, $name);
+    @if (($module_index == null) or ($module_index == false)) {
+        $modules: append($modules, $name);
+        @content;
+    }
+}
+
+/**
+ *
+ */
+@mixin gloo-browser($prefixProperty, $prefixValue) {
+    @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
+        #{$vendor}#{$prefixProperty}: #{$prefixValue};
+    }
+}
+
+// http://stackoverflow.com/questions/20150621/sass-mixin-for-animation-keyframe-which-includes-multiple-stages-and-transform-p
+/*    How to use :
+    
+    .mySelector {
+        @include gloo-animation(myAnimationName, 1.5s, infinite, ease-in-out);
+    }
+    
+    @include gloo-keyframe(myAnimationName) {
+        0% {
+            opacity: .0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    };
+    
+*/  
+
+@mixin gloo-keyframe($animationName) {
+    $browser: null;
+
+    @-webkit-keyframes #{$animationName} {
+        $browser: '-webkit-' !global;
+        @content;
+    }
+
+    @-moz-keyframes #{$animationName} {
+        $browser: '-moz-' !global;
+        @content;
+    }
+
+    @-o-keyframes #{$animationName} {
+        $browser: '-o-' !global;
+        @content;
+    }
+
+    @keyframes #{$animationName} {
+        $browser: '' !global;
+        @content;
+    }
+}
+
+@mixin gloo-animation($property, $duration, $function:infinite, $effect:linear) {
+    -webkit-animation: $property $duration $function $effect;
+    -moz-animation: $property $duration $function $effect;
+    -o-animation: $property $duration $function $effect;
+    animation: $property $duration $function $effect;
+}
+
+/****************************************************************************************************
+Media query
+****************************************************************************************************/
+
+$glu_mediaQuery-smallScreen: 768px !default;
+$glu_mediaQuery-mediumScreen: 1280px !default;
+$glu_mediaQuery-largeScreen: 1440px !default;
+
+$glu_mediaQuery-belowSmall: "only screen and (max-width: #{$glu_mediaQuery-smallScreen})" !default;
+$glu_mediaQuery-aboveSmall: "only screen and (min-width: #{$glu_mediaQuery-smallScreen})" !default;
+$glu_mediaQuery-belowMedium: "only screen and (max-width: #{$glu_mediaQuery-mediumScreen})" !default;
+$glu_mediaQuery-aboveMedium: "only screen and (min-width: #{$glu_mediaQuery-mediumScreen})" !default;
+$glu_mediaQuery-belowLarge: "only screen and (max-width: #{$glu_mediaQuery-largeScreen})" !default;
+$glu_mediaQuery-aboveLarge: "only screen and (min-width: #{$glu_mediaQuery-largeScreen})" !default;
+
+/****************************************************************************************************
+Grid
+****************************************************************************************************/
+
+/**
+ * Simple grid parent, columns are evenly proportioned
+ * $width : full|inline
+ * $columns : integer, nr of columns in grid
+ */
+@mixin glu_grid-element {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/**
+ * Apply this to the root element of any element to start its grid behaviour.
+ * Once started children can be made columns or rows
+ * width : max-width behaviour (full, wide, narrow)
+ */
+@mixin glu_grid-grid($columns: 0){
+    @include glu_grid-element;
+    display: grid;
+    grid-gap: 0px;
+    padding: 0px; 
+
+    @if $columns != 0{
+        grid-template-columns: repeat(#{$columns}, 1fr);
+    }
+}
+
+/**
+ * Apply to child of glu_grid-grid() to give it column behaviour
+ * Column: the index of this column
+ * Columns : the total number of columns the column shares a layout with
+ */
+@mixin glu_grid-column($column, $columns){
+    @media #{$glu_mediaQuery-aboveSmall}{
+        grid-column: #{$column} / #{$columns};
+        grid-row: 1;
+    }
+}

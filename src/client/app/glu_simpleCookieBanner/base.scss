@@ -1,0 +1,18 @@
+@import './../gloo/gloo';
+
+.glu_simpleCookieBanner {
+    .glu_button {
+        position: absolute;
+    }
+}
+
+.glu_simpleCookieBanner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.glu_simpleCookieBanner-gridScaffold {
+    position: relative;
+}

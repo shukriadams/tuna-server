@@ -1,0 +1,107 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../main/mixins';
+
+/*
+    Position set by script.
+*/
+.listContextMenu {
+    @include gloo-browser(box-shadow, -4px 8px 12px 4px rgba($codGray, .5));
+    background-color: $seaShell;
+    color: $white;
+    min-height: 80px;
+    min-width: 220px;
+    padding: $layout-universalGutter;
+    position: absolute;
+
+    // assume that text fields in context menu are always placed next to a button, so width cannot be the normal 100%
+    // as this will shove the button out of their container row
+    .form-textField {
+        width: auto;
+    }
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        top: 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .glu_button {
+        width: 100%;
+    }
+
+}
+
+.listContextMenu-subMenu {
+    @include gloo-browser(box-shadow, -10px 8px 12px 4px rgba($codGray, .5));
+    background-color: $seaShell;
+    bottom: -($layout-universalGutter / 2);
+    display: none;
+    min-width: 220px;
+    padding: $layout-universalGutter;
+    position: absolute;
+    right: calc(#{$layout-universalGutter} + 100%);
+
+    &.listContextMenu-subMenu--topAligned {
+        bottom: inherit;
+        top: $layout-universalGutter / 2;
+    }
+
+    &.listContextMenu-subMenu--show {
+        display: block;
+    }
+}
+
+.listContextMenu-scaffold {
+    position: relative;
+}
+
+.listContextMenu-close {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+
+    svg {
+        height: 12px;
+        width: 12px;
+    }
+}
+
+@mixin menuRow {
+    position: relative; // used to anchor submenus
+    white-space: nowrap;
+
+    &:not(:last-of-type){
+        border-bottom: $white 1px solid;
+    }
+
+    svg {
+        height: 12px;
+        left: $layout-universalGutter/2;
+        position: absolute;
+        top: 11px;
+        width: 12px;
+
+        * {
+            fill: $rust;
+        }
+    }
+}
+
+.listContextMenu-function {
+    @include menuRow;
+    padding-left: $layout-universalGutter * 3;
+}
+
+.listContextMenu-subFunction {
+    @include menuRow;
+}
+
+.listContextMenu-functionLink {
+    display: block;
+    min-height: 38px;
+    padding-top: $layout-universalGutter;
+}

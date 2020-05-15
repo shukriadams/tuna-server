@@ -1,0 +1,33 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../main/mixins';
+@import './../type/type';
+
+// need a div wrapper around ul so we can put and position context menus in it. contenxt menus are not <li>
+.list {
+    position: relative;
+
+    // don't forget, parent must have height to give the list height now
+    &.list--scrollable {
+        height: 100%;
+
+        .list-list {
+            @include verticalScrollBox;
+        }
+    }
+}
+
+/*
+    Must be <UL> element
+*/
+.list-list {
+
+    // common properties for all rows go here
+    & > * {
+    }
+
+
+}
+
+

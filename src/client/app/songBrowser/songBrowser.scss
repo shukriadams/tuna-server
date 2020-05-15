@@ -1,0 +1,142 @@
+@import './../gloo/gloo';
+@import './../main/main-colorPalette';
+@import './../main/settings';
+@import './../main/mixins';
+@import './../type/type';
+
+/* unlike regular song rows which contain complex data and functions, letter and band names are basically just anchors,
+   and the anchor must fill the entire <li> element */
+@mixin songBrowserRow {
+    @include gloo-browser(user-select, none);
+    display: block;
+    height: 100%;
+    padding: 14px $layout-universalGutter 0 $songRowBrowserLeftPad;
+}
+
+$headerHeight: $layout-universalGutter * 13;
+
+.songBrowser {
+    .glu_mask{
+        display: none;
+    }
+
+    .glu_modal-inner {
+        background-color: $seaShell;
+        top: 0;
+        bottom :0;
+        margin: 0;
+        max-width: none;
+    }
+
+    .glu_modal-content {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: $layout-maxWidth;
+        padding: $layout-universalGutter*2 $layout-universalGutter;
+    }
+
+    .glu_modal-close {
+        display: none;
+    }
+}
+
+.songBrowser-close {
+    position: absolute;
+    right: 10px;
+    top: 16px;
+    cursor: pointer;
+
+    path, polygon {
+        fill: $rust;
+    }
+}
+
+
+/* song browser is dedicated scrollable - it MUST be put inside an element with defined height */
+.songBrowser-scaffold {
+    height: calc(100% - #{$headerHeight});// height of header
+    position: relative;
+
+    .songBrowser-list:first-of-type{
+        height: 100%;
+    }
+
+    .songBrowser-list:last-of-type{
+        display: block;
+    }
+}
+
+.songBrowser-header {
+    height: $headerHeight;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.songBrowser-headerTitle {
+    @include type-h2;
+}
+
+.songBrowser-frame {
+    height: 100%;
+    position: relative;
+}
+
+.songBrowser-list {
+    @include verticalScrollBox;
+    display: none;
+    height: calc(100% - #{$listRowHeight});
+}
+
+.songBrowser-item {
+    @include songListColorScheme;
+    height: $listRowHeight;
+}
+
+.songBrowser-itemBack {
+    background-color: $seaShell;
+    left: 0;
+    height: $listRowHeight;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+
+    svg {
+        height: $layout-universalGutter*2;
+        left: $layout-universalGutter;
+        position: absolute;
+        top: $layout-universalGutter*2;
+        width: $layout-universalGutter*2;
+    }
+
+    path, polygon {
+        fill: $rust;
+    }
+}
+
+/* hidden underneath .songBrowser-itemBack, pushes list down so list doesn't get hidden underneath .songBrowser-itemBack */
+.songBrowser-itemBackPad {
+    height: $listRowHeight;
+}
+
+.songBrowser-itemLink {
+    @include songBrowserRow;
+}
+
+.songBrowser-itemBackLink {
+    @include songBrowserRow;
+    @include type-h2;
+    padding: 11px 0 0 $songRowBrowserLeftPad;
+}
+
+.songBrowser-backLetter {
+    text-transform: uppercase;
+}
+
+.songBrowser-search {
+    height: $layout-universalGutter * 5;
+    margin-left: $layout-universalGutter;
+    padding: $layout-universalGutter;
+    min-width: 180px;
+    text-align: center;
+}

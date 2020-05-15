@@ -1,0 +1,29 @@
+@import './../../main/main-colorPalette';
+@import './../../main/settings';
+
+.presenter {
+    background: $seaShell;
+    border: 1px dashed $silver;
+    margin: 40px auto 60px auto;
+    min-height: 20px;
+    padding: 2px;
+    position: relative;
+    width: 90%;
+
+    &.presenter--standardMargin {
+        .presenter-content {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: $layout-maxWidth;
+        }
+    }
+}
+
+.presenter-title {
+    background-color: $dustyGrey;
+    color: #ffffff;
+    left: -1px;
+    padding: 8px 40px;
+    position: absolute;
+    top: -35px;
+}

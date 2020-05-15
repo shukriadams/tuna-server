@@ -1,0 +1,21 @@
+@import './../gloo/gloo';
+
+.glu_simpleCookieBanner {
+    z-index: 1;
+    background-color: white;
+
+    .glu_button {
+        width: 100px;
+        right: 0;
+        top: 0;
+    }
+}
+
+.glu_simpleCookieBanner-gridScaffold {
+    height: 70px;
+    position: relative;
+}
+
+.glu_simpleCookieBanner-content {
+    padding-right: 100px;
+}

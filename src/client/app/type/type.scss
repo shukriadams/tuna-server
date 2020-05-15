@@ -1,0 +1,98 @@
+@import './../gloo/gloo';
+@import './../main/settings';
+
+/* tdo : NO LAYOUT PADDING IN HERE, this is for RAW type only!!*/
+
+// used in logo exclusively
+@mixin type-logo {
+    font-size: 38px;
+    font-weight: 900;
+}
+
+// general everything
+@mixin type-body {
+    font-size: 16px;
+}
+
+//
+@mixin type-subText {
+    font-size: 14px;
+}
+
+/*
+    the smallest allowed font on the site, use sparingly, this is for text like playlist tags. The content itself will
+    not be easy to read, and must be augmented with color or something else to ease reading.
+*/
+@mixin type-tiny {
+    font-size: 12px;
+}
+
+// used in menus only
+@mixin type-menu {
+    font-size: 18px;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        font-size: 28px;
+    }
+}
+
+
+/**
+ * General h1.
+ */
+@mixin type-h1 {
+    font-size: 40px;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        font-size: 24px;
+    }
+}
+
+
+/**
+ *  h1 with layout padding
+ *  use at top of page, in heros etc. should be only one instance per page to avoid yell fatigue.
+ */
+@mixin type-h1Layout {
+    @include type-h1;
+    padding: $layout-universalGutter * 5 0;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        padding: $layout-verticalTextRhythm 0;
+    }
+}
+
+/* use for labels in form heirarchy*/
+@mixin type-label {
+    font-size: 18px;
+}
+
+@mixin type-emphasis {
+    font-weight: bold;
+    font-style: italic;
+}
+
+// general h2
+@mixin type-h2 {
+    font-size: 26px;
+}
+
+/* h2 with lots of punch */
+@mixin type-h2Strong {
+    @include type-h2;
+    font-style: italic;
+    font-weight: bold;
+}
+
+// general body text, but for punchier, louder blocks of text
+@mixin type-bodyLarge {
+    font-size: 20px;
+}
+
+// used on timer which needs to be extra large on mobile. this is a special case
+@mixin type-timer {
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        font-size: 30px;
+    }
+}

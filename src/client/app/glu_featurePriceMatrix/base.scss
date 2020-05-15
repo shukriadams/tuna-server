@@ -1,0 +1,107 @@
+/**
+ * This component behaves as a full table on desktop, and collapses to a two column table on mobile. The first column is
+ * the rowLead, and the 2nd is whatever column is active.
+ * The active column is set by clicking on a headItem cell - the index from that cell matches with a column to make it
+ * active.
+ */
+
+ @import './../gloo/gloo';
+
+/* used on desktop only, this is outer table. We don't need it on mobile because we shift table responsibility down to
+   -head and -row elements
+*/
+.glu_featurePriceMatrix-tableWrap {
+    @media #{$glu_mediaQuery-aboveSmall}{
+        @include gloo-browser(transform, translateX(-50%));
+        display: table;
+        left: 50%;
+        position: relative;
+    }
+}
+
+
+/* structurally, these row types are identical. We define them as separate to make it easier to style*/
+.glu_featurePriceMatrix-head,
+.glu_featurePriceMatrix-row,
+.glu_featurePriceMatrix-ctas {
+    display: table-row;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        display: table;
+        width: 100%;
+    }
+}
+
+
+/*
+ Clickable on mobile, triggers active column set. Should be styled as CTA so user knows it clickable.
+*/
+.glu_featurePriceMatrix-headItem {
+    display: table-cell;
+    text-align: center;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        cursor: pointer;
+    }
+
+    &.glu_featurePriceMatrix-headItem--active {
+        @media #{$glu_mediaQuery-belowSmall}{
+            cursor: default;
+        }
+    }
+}
+
+
+.glu_featurePriceMatrix-rowLead {
+    display: table-cell;
+    text-align: center;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        width: 50%;
+    }
+}
+
+
+/* cell and cta cell are identical */
+.glu_featurePriceMatrix-cell,
+.glu_featurePriceMatrix-cta {
+    display: table-cell;
+    text-align: center;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        display: none;
+        text-align: center;
+        width: 50%;
+    }
+
+    &.glu_featurePriceMatrix-cell--active {
+        display: table-cell;
+    }
+}
+
+
+.glu_featurePriceMatrix-cta {
+
+    &.glu_featurePriceMatrix-cta--active {
+        display: table-cell;
+    }
+}
+
+
+/* offsets the cta row by 1 cell, placed under feature row title cells */
+.glu_featurePriceMatrix-ctaEmptyCell {
+    display: table-cell;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        width: 50%;
+    }
+}
+
+
+.glu_featurePriceMatrix-headEmptyCell {
+    display: table-cell;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        display: none;
+    }
+}
