@@ -35,7 +35,7 @@ The following docker-compose script will set up everything you need to run a Tun
                 - ./mongo/data:/data/db:rw        
                 - ./mongo/logs:/var/logs:rw        
         tuna:
-            image: shukriadams/tuna:latest
+            image: shukriadams/tuna-server:latest
             container_name: tuna-server
             restart: unless-stopped
             depends_on:
