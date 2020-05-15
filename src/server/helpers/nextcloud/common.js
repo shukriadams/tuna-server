@@ -24,7 +24,7 @@ module.exports = {
     },
 
     getOauthUrl (authTokenId){
-        return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
+        return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
     },
 
     async downloadAsString(accessToken, path){
