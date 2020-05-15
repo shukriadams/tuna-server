@@ -155,7 +155,6 @@ module.exports = {
                 const db = await mongoHelper.getCollection('profiles'),
                     writeRecord = denormalize(record)
 
-                console.log('upt', writeRecord, record)
                 db.collection.updateOne({ _id : writeRecord._id }, { $set: writeRecord }, (err) => {
                     if (err)
                         return reject(new Exception({ inner: { err } }))
