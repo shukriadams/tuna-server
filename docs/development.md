@@ -34,6 +34,11 @@ To start the dev environment with debugging enabled, sass watching, server resta
     cd /src
     npm run dev
 
+Force app to wait for debugger with
+
+    npm run dev -- --brk
+    npm run dev -- --break
+
 View at http://localhost:48004
 
 Visual Studio Code debug config is committed with project source, so if you start with the above you can debug immediately.

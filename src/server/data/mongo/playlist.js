@@ -24,7 +24,7 @@ function denormalize(obj, isCreate){
     for (let prop in obj)
         clone[prop] = obj[prop]
 
-    if (!obj.id)
+    if (obj.id)
         clone._id = new ObjectID(obj.id)
 
     delete clone.id

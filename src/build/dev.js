@@ -79,8 +79,11 @@ function startExpress(){
 
     let env = Object.create( process.env );
     env.mode = 'debug';
+    const breakSwitch = process.argv.includes('--brk') || process.argv.includes('--break') ? '-brk' : '';
+    if (breakSwitch)
+        console.log(`BREAK enabled - attach debugger to continue`)
 
-    _expressProcess = spawn('node', ['--inspect=0.0.0.0:48003', 'index'], { cwd : process.cwd(), env });
+    _expressProcess = spawn('node', [`--inspect${breakSwitch}=0.0.0.0:48003`, 'index'], { cwd : process.cwd(), env });
 
     _expressProcess.stdout.on('data', function (data) {
         console.log(data.toString('utf8'));

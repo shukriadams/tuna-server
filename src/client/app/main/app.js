@@ -31,7 +31,7 @@ import appSettings from './../appSettings/appSettings'
 import ajax from './../ajax/asyncAjax'
 import player from './../player/player' // importing the player here is enough to initialize it
 import socketHelper from './../helpers/socketio' // importing triggers binding
-import { clearSession, songsSet, playListSetAll } from './../actions/actions'
+import { clearSession } from './../actions/actions'
 import { PROFILE, IMPORT } from './../routes/routes'
 import storeWatchers from './../store/storeWatchers'
 import contentHelper from './../helpers/contentHelper'
@@ -78,23 +78,15 @@ import contentHelper from './../helpers/contentHelper'
         storeWatchers()
 
         // check if session is valid
-        const session = Store.getState().session || {},
-            songsHash = session.songsHash,
+        const 
+            session = Store.getState().session || {},
+            hash = session.hash,
             token = session.token
 
         // always check session on app load. session can be expired, or state can have changed
-        const result = await ajax.anon(`${appSettings.serverUrl}/v1/session/isvalid?token=${token}&songsHash=${songsHash}`)
-        if (!result.code){
-            // auth token no longer value
-            if (!result.payload.isValid)
-                clearSession()
-            else if (!result.payload.songsAreValid){
-                let content = await contentHelper.fetch('songs,playlists,profile')
-                songsSet(content.songs)
-                playListSetAll(content.playlists)                       
-            }
-        }
-
+        const result = await ajax.anon(`${appSettings.serverUrl}/v1/session/isvalid?token=${token}&hash=${hash}`)
+        if (!result.code && !result.payload.isValid)
+            await contentHelper.fetch('songs,playlists,profile')
     })
 
 })()

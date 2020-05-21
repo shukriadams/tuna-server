@@ -6,7 +6,7 @@ import pubsub from './../pubsub/pubsub'
 import history from './../history/history'
 import { sessionSet } from './../actions/actions'
 import { IMPORT } from './../routes/routes'
-import sessionHelper from './../helpers/sessionHelper'
+import contentHelper from './../helpers/contentHelper'
 import appSettings from './../appSettings/appSettings'
 
 class View extends React.Component {
@@ -27,8 +27,7 @@ class View extends React.Component {
     }
 
     async onDropboxAdded(){
-        const session = await sessionHelper.fetch()
-        sessionSet(session.session)
+        await contentHelper.fetchSession()
         history.push(`/${IMPORT}`)
     }
 

@@ -41,7 +41,8 @@ module.exports = {
         profile.password = password
         profile.created = new Date().getTime()
         profile.isPasswordChangeForced = true
-        
+        profile.hash = profile.created.toString()
+
         this._processPassword(profile)
 
         profile = await dataCache.create(profile)
@@ -95,6 +96,8 @@ module.exports = {
 
         this._processPassword(profile)
         
+        profile.hash = new Date().getTime().toString()
+
         await dataCache.update(profile)
     },
 
@@ -280,19 +283,21 @@ module.exports = {
     /**
      *
      */
-    async removeDropbox (profileId){
+    async deleteSource(profileId){
         songsLogic = songsLogic || require(_$+'logic/songs')
+        let playlistsLogic = require(_$+'logic/playlists')
 
         let profile = await dataCache.getById(profileId)
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 
-        delete profile.sources[constants.SOURCES_DROPBOX]
+        profile.sources = {}
 
         await dataCache.update(profile)
 
         // delete all songs
         await songsLogic.deleteAll(profile.id)
+        await playlistsLogic.deleteAll(profile.id)
     },
 
 
@@ -309,7 +314,8 @@ module.exports = {
             crypto = require('crypto')
 
         profile.salt = randomstring.generate(settings.passwordLength)
-
+        profile.isPasswordChangeForced = false
+        
         let sha512 = crypto.createHmac('sha512', profile.salt)
         sha512.update(profile.password)
         profile.hash = sha512.digest('hex')

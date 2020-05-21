@@ -108,16 +108,32 @@ module.exports = {
         app.get('/v1/profile/delete', async function (req, res) {
             try {
                 let authToken = await authHelper.authenticate(req),
-                    key = req.query.key;
+                    key = req.query.key
             
-                await profileLogic.processDeleteAccount(authToken.profileId, key);
+                await profileLogic.processDeleteAccount(authToken.profileId, key)
             
-                jsonHelper.returnPayload(res);
+                jsonHelper.returnPayload(res)
 
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });    
+        })   
+
+        app.delete('/v1/profile/source', async function (req, res) {
+            try {
+                let authToken = await authHelper.authenticate(req)
+            
+                await profileLogic.deleteSource(authToken.profileId);
+            
+                let session = await contentHelper.build(authToken.profileId, authToken.id, 'songs,playlists,profile')
+                jsonHelper.returnPayload(res, session)
+
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })  
+
+        
 
     }
 }

@@ -31,7 +31,6 @@ const
     // use this to log the user out
     clearSession = () => store.dispatch({ type: 'CLEAR_SESSION' }),
     removeLastfm = () => store.dispatch({ type: 'REMOVE_LASTFM' }),
-    songsSet = songs => store.dispatch({ type: 'SET_SONGS', songs : songs }),
 
     // search
     search = search => store.dispatch({ type: 'SEARCH_CHANGED', search }),
@@ -100,7 +99,6 @@ export {
     setDraggedOverItem,
     clearDraggedOverItem,
     sessionSet,
-    songsSet,
     removeLastfm,
     clearSession,
     volumeSet,

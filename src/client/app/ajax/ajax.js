@@ -36,8 +36,8 @@ export default class {
         this._do(url, true, 'POST', success, error, data)
     }
 
-    deleteAuth(url, data, success, error){
-        this._do(url, true, 'DELETE', success, error, data)
+    deleteAuth(url, success, error){
+        this._do(url, true, 'DELETE', success, error)
     }
 
     /**

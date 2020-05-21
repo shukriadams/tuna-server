@@ -24,7 +24,10 @@ module.exports = {
     },
 
     getOauthUrl (authTokenId){
-        return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
+        if (settings.musicSourceSandboxMode)
+            return urljoin(settings.siteUrl, `v1/dev/nextcloudAuthenticate?state=${authTokenId}_TARGETPAGE`)
+        else
+            return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
     },
 
     async downloadAsString(accessToken, path){
@@ -173,16 +176,19 @@ module.exports = {
     },
 
     async swapCodeForToken(profileId, code){
-        let tokenSwap = await httputils.postUrlString(
-            `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`,  
-            `grant_type=authorization_code&code=${code}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`
-        )
+        let url = `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`
+        if (settings.musicSourceSandboxMode){
+            url = urljoin(settings.siteUrl, 'v1/dev/nextcloudTokenSwap')
+            console.log(`SANDBOX enabled - token will be swapped locally`)
+        }
 
-        let profile = await profileLogic.getById(profileId),
+        const
+            tokenSwap = await httputils.postUrlString(url, `grant_type=authorization_code&code=${code}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`),
+            profile = await profileLogic.getById(profileId),
             swapResult = jsonHelper.parse(tokenSwap.body)
 
         if (swapResult.error)
-            throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION })
+            throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, inner : swapResult.error })
 
         profile.sources[constants.SOURCES_NEXTCLOUD] = Object.assign(profile.sources[constants.SOURCES_NEXTCLOUD] || {}, NextCloudSource.new())
         profile.sources[constants.SOURCES_NEXTCLOUD].accessToken = swapResult.access_token

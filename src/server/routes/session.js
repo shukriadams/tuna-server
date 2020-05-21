@@ -47,21 +47,6 @@ module.exports = {
             }
         });
 
-        
-        /**
-         * Gets session data for the current user
-         */    
-        app.get('/v1/session', async function (req, res) {
-            try {
-                let authToken = await authHelper.authenticate(req);
-                let content = await contentHelper.build(authToken.profileId, authToken.id, 'playlists,profile');
-                jsonHelper.returnPayload(res, content);
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
-        });
-
 
         /**
          * tests if a session is valid. this is done on client load, and a relog is forced if this returns false
@@ -79,7 +64,7 @@ module.exports = {
                     isValid = !!profile
 
                     // confirm songs
-                    songsAreValid = await profileLogic.songsHashValid(tokenRecord.profileId, req.query.songsHash || '')
+                    songsAreValid = await profileLogic.songsHashValid(tokenRecord.profileId, req.query.hash || '')
                 }
                 
 

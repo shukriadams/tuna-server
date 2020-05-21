@@ -143,18 +143,17 @@ module.exports = {
 
 
     /**
-     * Why are we fething song this long-ass way?
+     * 
      */
     async  _getById(songId, profileId){
-        let songs = await songsCache.getAll(profileId);
+        // we fetch all songs for user because content is cached at the user level
+        const songs = await songsCache.getAll(profileId)
         if (!songs.length)
-            return null;
+            return null
 
-        let song = songs.find(function(element){
-            return element.id === songId;
-        });
+        const song = songs.find(song => song.id === songId)
 
-        return song;
+        return song
     },
 
 
@@ -176,18 +175,18 @@ module.exports = {
      *
      */
     async persistSong(songRawJson, profileId){
-        let songJson = JsonHelper.parse(songRawJson);
+        let songJson = JsonHelper.parse(songRawJson)
 
         // we check ownership implicitly by fetching song id in scope of current profile
-        let song = await this._getById(songJson.id, profileId);
+        let song = await this._getById(songJson.id, profileId)
         if (!song)
-           throw new Exception({ code : constants.ERROR_INVALID_SONG });
+           throw new Exception({ code : constants.ERROR_INVALID_SONG })
 
         for (let property in song)
-            song[property] = songJson[property];
+            song[property] = songJson[property]
 
-        await songsCache.update(song);
-        return song;
+        await songsCache.update(song)
+        return song
     },
 
 
@@ -202,7 +201,7 @@ module.exports = {
             profile = await profileLogic.getById(profileId),
             song = await this._getById(songId, profileId),
             source = sourceProvider.get(),
-            url = await source.getFileLink(profile.sources, song.path, authTokenId);
+            url = await source.getFileLink(profile.sources, song.path, authTokenId)
 
         return url;
     }

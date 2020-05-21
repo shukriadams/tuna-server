@@ -131,59 +131,52 @@ class Importer {
                     name = (item.name || '').trim(),
                     album = (item.album || '').trim(),
                     artist = (item.artist || '').trim(),
+                    tags = (item.genres || '').split(',').filter(r => !!r.length),
                     duration = parseInt(item.duration) || 0,
                     fileSize = Math.floor(parseInt(item.size) || 0)
     
                 this.importCounter ++
     
-                // if songs missing required values, skiå
+                // if songs missing required values, skip
                 if (!itemPath || !name || !album || !artist)
                     // todo : log warning out to user
                     return this._processNextSong.call(this)
     
-                // we reinsert files that already exist. At the db level everything is wiped. It's faster than doing
-                // updates of existing files.
-                let nameKey = `${name}:${album}:${artist}`,
-                    now = new Date().getTime()
+                this.songKeysToImport.push(`${name}:${album}:${artist}`)
     
-                this.songKeysToImport.push(nameKey)
-    
-                let file = this.existingSongs.find((song) => song.path === itemPath || song.nameKey === nameKey)
-    
+                let now = new Date().getTime(),
+                    file = this.existingSongs.find(song => song.path === itemPath)
+                
                 // file doesn't exist, treat as new
                 if (!file){
                     file = Song.new()
                     file.imported = now
+                    file.name = name
+                    file.album = album
+                    file.artist = artist
                     this.insertQueue.push(file)
                 }
     
                 const fileChanged = 
-                    file.name != name ||
-                    file.nameKey != nameKey ||
-                    file.extension != extension ||
-                    file.size != fileSize ||
-                    file.artist != artist ||
-                    file.album != album ||
-                    file.path != itemPath ||
-                    file.duration != duration
+                    file.extension !== extension ||
+                    file.size !== fileSize ||
+                    file.path !== itemPath ||
+                    !this.areArraysIdentical(file.tags, tags) ||
+                    file.duration !== duration
     
                 // if file exists and has changed, add to update list
-                if (file.imported != now && fileChanged){
+                if (file.imported !== now && fileChanged){
                     file.updated = now
                     this.updateQueue.push(file)
                 }
 
-                file.name = name
                 file.profileId = this.profileId
-                file.nameKey = nameKey
                 file.extension = extension
                 file.size = fileSize
-                file.artist = artist
-                file.album = album
                 file.path = itemPath
                 file.duration = duration
                 file.plays = file.plays || 0
-                file.tags = file.tags || []
+                file.tags = tags
 
                 // update progress every nth second
                 if (this.authTokenId)
@@ -223,6 +216,33 @@ class Importer {
         this._onDone = callback
     }
 
+    areArraysIdentical(array1, array2){
+        if (array1.length !== array2.length)
+            return false;
+    
+        if (!array1 && array2 || array1 && !array2)
+            return false;
+    
+        for (var i = 0 ; i < array1.length ; i ++){
+            var item1 = array1[i];
+            var item2 = array2[i];
+    
+            if (item1 && !item2 || !item1 && item2)
+                return false;
+    
+            for (var property in item1){
+                if (!item1.hasOwnProperty(property) || !item2.hasOwnProperty(property))
+                    continue;
+    
+                if (item1[property] !== item2[property])
+                    return false;
+            }
+    
+        }
+    
+        return true
+    }
+
     /**
      * Called after the last song in this.songsFromIndices is processed. Writes in-memory data to database,
      * cleans out orphan songs etc.
@@ -237,11 +257,10 @@ class Importer {
             
             // insert new songs
             const total = this.insertQueue.length
-        
             while (this.insertQueue.length){
                 // insert a block of songs at a time
                 await songsLogic.createMany(this.insertQueue.splice(0, this.settings.importInsertBlockSize))
-                
+
                 if (this.authTokenId)
                     debounce(`import.progress.${this.profileId}`, this.settings.debounceInterval, async () => {
                         this.socketHelper.send(this.authTokenId, 'import.progress', 
@@ -261,7 +280,7 @@ class Importer {
                     debounce(`import.progress.${this.profileId}`, this.settings.debounceInterval, async () => {
                         this.socketHelper.send(this.authTokenId, 'import.progress', {
                             text : `Updating existing songs`,
-                            percent : Math.floor(((this.insertQueue.length - this.updateQueue.length + i) / this.updateQueue.length) * 100)
+                            percent : Math.floor((i / this.updateQueue.length) * 100)
                         })
                     })
             }
@@ -270,10 +289,12 @@ class Importer {
     
             // remove orphaned songs
             let songsToDelete = []
-            for (const song of allSongs)
-                if (!this.songKeysToImport.find(nameKey=> nameKey === song.nameKey))
+            for (const song of allSongs){
+                const songKey = `${song.name}:${song.album}:${song.artist}`
+                if (!this.songKeysToImport.find(nameKey => nameKey === songKey))
                     songsToDelete.push(song)
-        
+            }
+
             for (let i = 0 ; i < songsToDelete.length ; i ++){
                 const song = songsToDelete[i]
                 await songsLogic.delete(song)
@@ -282,7 +303,7 @@ class Importer {
                     debounce(`import.progress.${this.profileId}`, this.settings.debounceInterval, async () => {
                         this.socketHelper.send(this.authTokenId, 'import.progress', {
                             text : `Cleaning out old songs`,
-                            percent : Math.floor(((songsToDelete.length - songsToDelete.length + i) / songsToDelete.length) * 100)
+                            percent : Math.floor((i / songsToDelete.length) * 100)
                         })
                     })
             }

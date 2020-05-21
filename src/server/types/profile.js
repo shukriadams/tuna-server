@@ -8,7 +8,7 @@ module.exports = {
             identifier: null,
             email: null,
             salt : null,
-            hash : null,
+            hash : null, // unique string written each time profile is updated. used to hash it
             passwordResetKey: null,
             isPasswordChangeForced : false,            
             scrobbleToken : null,

@@ -19,8 +19,8 @@ module.exports = {
         app.get('/v1/content/:requestedContent', async function(req, res){
             try {
                 const 
-                    authToken = await authHelper.authenticate(req)
-                    requestedContent = req.params.requestedContent.split(',')
+                    authToken = await authHelper.authenticate(req),
+                    requestedContent = req.params.requestedContent.split(','),
                     content = await contentHelper.build(authToken.profileId, authToken.id,  requestedContent)
 
                 jsonHelper.returnPayload(res, content)

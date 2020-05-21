@@ -2,13 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Ajax from './../ajax/ajax'
 import appSettings from './../appSettings/appSettings'
-import { playStop, clearSession , removeLastfm } from './../actions/actions'
+import { playStop, clearSession , removeLastfm, sessionSet, } from './../actions/actions'
 import { Link } from 'react-router-dom'
 import { View as Button } from './../glu_button/index'
 import { View as GluSlidingCheckbox } from './../glu_slidingCheckbox/index'
 import { Label, Divider, Row, Description } from './../form/form'
 import { View as GluConfirmModal } from './../glu_confirmModal/index'
-import { sessionSet } from './../actions/actions'
 import history from './../history/history'
 
 class View extends React.Component {
@@ -123,10 +122,12 @@ class View extends React.Component {
     }
 
     onDropboxDisconnectAccept(){
-        new Ajax().auth(`${appSettings.serverUrl}/v1/dropbox/delete`, (response)=>{
+        new Ajax().deleteAuth(`${appSettings.serverUrl}/v1/profile/source`, (response) =>{
             this.setState({ showConfirmDropboxDisconnect : false })
-            if (!response.code)
-                return sessionSet(response.payload.session)
+            if (!response.code){
+                sessionSet(response.payload)
+                return
+            }
                 
             throw response.message
         })

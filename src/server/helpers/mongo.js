@@ -39,7 +39,7 @@ module.exports = {
                     const db = client.db(settings.mongoDBName)
 
                     db.collection(`${settings.mongoCollectionPrefix}profiles`).createIndex( { 'identifier': 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}profiles_unique` })
-                    db.collection(`${settings.mongoCollectionPrefix}songs`).createIndex( { 'nameKey': 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}songs_unique` })
+                    db.collection(`${settings.mongoCollectionPrefix}songs`).createIndex( { 'path': 1 }, { unique: true, name : `${settings.mongoCollectionPrefix}songs_unique` })
                     db.collection(`${settings.mongoCollectionPrefix}authTokens`).createIndex( { 'context': 1, 'profileId' : 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}authTokens_unique` })
 
                     client.close()

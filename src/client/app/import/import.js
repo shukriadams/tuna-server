@@ -4,7 +4,7 @@
 import React from 'react'
 import Ajax from './../ajax/ajax'
 import appSettings from './../appSettings/appSettings'
-import { songsSet, playListSetAll, sessionSet, alertSet } from './../actions/actions'
+import { sessionSet, alertSet } from './../actions/actions'
 import contentHelper from './../helpers/contentHelper';
 import history from './../history/history'
 import pubsub from './../pubsub/pubsub'
@@ -22,7 +22,7 @@ export default class extends React.Component {
 
         new Ajax().postAuth(`${appSettings.serverUrl}/v1/songs/import`, {}, response => {
             if (!response.code)
-                sessionSet(response.payload.session)
+                sessionSet(response.payload)
             else 
                 alertSet(response)
         })
@@ -45,10 +45,7 @@ export default class extends React.Component {
 
                 this.setState({ stage : 3 })
 
-                const content = await contentHelper.fetch('songs,playlists,profile')
-                sessionSet(content.session)
-                songsSet(content.songs)
-                playListSetAll(content.playlists)
+                await contentHelper.fetch('songs,playlists,profile')
                 history.push('/')
 
             } else {

@@ -25,7 +25,7 @@ function denormalize(obj){
     for (let prop in obj)
         clone[prop] = obj[prop]
 
-    if (!obj.id)
+    if (obj.id)
         clone._id = new ObjectID(obj.id)
 
     delete clone.id
@@ -51,7 +51,7 @@ module.exports = {
 
                 db.collection.insertMany( insertRecords, err => {
                     if (err)
-                        return reject(new Exception({ inner: { err } }))
+                        return reject(err)
 
                     db.done()
                     resolve(insertRecords.length)

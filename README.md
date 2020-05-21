@@ -16,6 +16,13 @@ Tuna lets you stream your music to any modern browser. It is open source and sel
 Tuna uses Oauth to access to your music on your storage platform. Both Dropbox and Nextcloud allow you to set up apps which can grant access, and you'll need to set one up first. Fortunately the process is relatively straightforward. 
 
 - [Dropbox](https://www.dropbox.com/developers/apps/create)
+
+#### NextCloud
+
+When setting up your Oauth app in Nextcloud, you'll need to specify a callback URL. Use
+
+    https://yourtunaurl.com/v1/oauth/nextcloud
+
 - [Nextcloud](later)
 
 ### Server 
@@ -44,7 +51,7 @@ The following docker-compose script will set up everything you need to run a Tun
                 - ./tuna:/usr/tuna/data/:rw
             environment:
                 mongoConnectionString: "mongodb://admin:yourPasswordHere@mongo:27017"
-                siteUrl: "https://yoururl.com"
+                siteUrl: "https://yourtunaurl.com"
 
                 # Allowed values are : nextcloud|dropbox
                 musicSource : nextcloud 
@@ -61,12 +68,12 @@ The following docker-compose script will set up everything you need to run a Tun
             ports:
             - "48004:48004"
 
+Change "yourPasswordHere" to something better. Note that this setup isn't ideal for security as it passwords are stored in clear text, and you're connecting to Mongo as root, but it's "good enough" to get started.
+
 Before starting you should create the local tuna folder and set its permission
 
     mkdir tuna
     chown 1000 -R tuna
-
-Change "yourPasswordHere" to something better. Note that this setup isn't ideal for security as it passwords are stored in clear text, and you're connecting to Mongo as root, but it's "good enough" to get started.
 
 ### Indexing music
 

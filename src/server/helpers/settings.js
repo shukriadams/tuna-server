@@ -22,6 +22,7 @@ let
         passwordLength : 12,
         daemonInterval : '* * * * *',
         maxSessionsPerUser : 3,
+        
         // this should always be true on production. Disable on dev systems for faster app start
         enableCrossProcessScripts : true,
 
@@ -128,9 +129,8 @@ for (let property in settings){
         settings[property] = false
     
     // parse env integers
-    const intTest = parseInt(settings[property])
-    if (!isNaN(intTest))
-        settings[property] = intTest
+    if (Number.isInteger(settings[property]))
+        settings[property] = parseInt(settings[property])
 }
 
 module.exports = settings
