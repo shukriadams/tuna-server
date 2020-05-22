@@ -7,7 +7,7 @@ let flip = function(listId, songIdsToFlip){
     for (let i = 0 ; i < songIdsToFlip.length ; i ++){
 
         let songId = songIdsToFlip[i],
-            songRow = list.querySelector(`[data-songid="${songId}"]`)
+            songRow = list.querySelector(`[data-songid="${songId}"]`);
 
         ((songRow, i)=>{
             setTimeout(()=>{
