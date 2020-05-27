@@ -9,6 +9,7 @@ import { View as GluSlidingCheckbox } from './../glu_slidingCheckbox/index'
 import { Label, Divider, Row, Description } from './../form/form'
 import { View as GluConfirmModal } from './../glu_confirmModal/index'
 import history from './../history/history'
+import store from './../store/store'
 
 class View extends React.Component {
 
@@ -55,7 +56,7 @@ class View extends React.Component {
     }
 
     onLastFmConnectAccept(){
-        window.location = this.props.lastfmOauthUrl
+        window.location = '/v1/oauth/lastfm/start'
     }
 
     onLastFmConnectReject(){
@@ -114,7 +115,8 @@ class View extends React.Component {
     }
 
     onDropboxConnectAccept(){
-        window.location = this.props.sourceOauthUrl.replace('TARGETPAGE', 'profile') // todo : profile must be url const
+        const session = store.getState().session || {}
+        window.location = `/v1/oauth/source/start?origin=profile&token=${session.token}`
     }
 
     onDropboxConnectReject(){
@@ -214,7 +216,7 @@ class View extends React.Component {
                     {
                         !this.props.isSourceConnected &&
                             <Row>
-                                You need to connect {appSettings.sourceLabel} first 
+                                You cannot import musis from {appSettings.sourceLabel} until you enable the connection
                             </Row>
                     }
 
@@ -291,8 +293,6 @@ export default connect(
             newEmail : session.newEmail,
             isSourceConnected : session.isSourceConnected,
             isScrobbling : session.isScrobbling,
-            lastfmOauthUrl : session.lastfmOauthUrl,
-            sourceOauthUrl : session.sourceOauthUrl
         }
     }
 )(View)

@@ -3,11 +3,13 @@
  * redirects to local pages to complete oauth flow.
  */
 const     
+    authHelper = require(_$+'helpers/authentication'),
+    lastFmHelper = require(_$+'helpers/lastfm'),
+    sourceProvider = require(_$+'helpers/sourceProvider'),
     constants = require(_$+'types/constants'),
     Exception = require(_$+'types/exception'),
     dropboxHelper = require(_$+'helpers/dropbox/common'),
     nextCloudHelper = require(_$+'helpers/nextcloud/common'),
-    lastFmHelper = require(_$+'helpers/lastfm'),
     authTokenLogic = require(_$+'logic/authToken'),
     jsonHelper = require(_$+'helpers/json')
 
@@ -22,6 +24,30 @@ module.exports = {
     authTokenLogic,
 
     bind(app){
+
+
+        /**
+         * Starts music source oauth flow
+         */
+        app.get('/v1/oauth/source/start', async (req, res)=>{
+            let authToken = await authHelper.authenticateTokenString(req.query.token),
+                url = sourceProvider.get().getOauthUrl(authToken.id)
+
+            if (req.query.origin)
+                url = url.replace('TARGETPAGE', req.query.origin)
+
+            res.redirect(url)
+        })
+
+
+        /**
+         * Starts last fm oauth flow
+         */
+        app.get('/v1/oauth/lastfm/start', async (req, res)=>{
+            const authToken = await authHelper.authenticateTokenString(req.query.token)
+            res.redirect(lastFmHelper.getOauthUrl(authToken.id))
+        })
+
 
         /**
          * Receives auth code from nextcloud. this must be exchanged for a token.

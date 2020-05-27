@@ -8,6 +8,7 @@ import { sessionSet } from './../actions/actions'
 import { IMPORT } from './../routes/routes'
 import contentHelper from './../helpers/contentHelper'
 import appSettings from './../appSettings/appSettings'
+import store from './../store/store'
 
 class View extends React.Component {
 
@@ -33,7 +34,8 @@ class View extends React.Component {
 
     render(){
 
-        let dropboxPrompt = ('')
+        let dropboxPrompt = (''),
+            session = store.getState().session || {}
 
         if (this.props.showDropboxPrompt)
             dropboxPrompt = (
@@ -45,7 +47,7 @@ class View extends React.Component {
                     where you can do that.
                 </p>
                 <p>
-                    <a className={`glu_button`} href={this.props.sourceOauthUrl.replace('TARGETPAGE', 'import')}>Connect</a>
+                    <a className={`glu_button`} href={`/v1/oauth/source/start?origin=import&token=${session.token}`}>Connect</a>
                 </p>
             </Fragment>)
 
@@ -73,8 +75,7 @@ export default connect(
 
         return {
             showPlayer : session.isSourceConnected,
-            showDropboxPrompt: !session.isSourceConnected,
-            sourceOauthUrl : session.sourceOauthUrl || ''
+            showDropboxPrompt: !session.isSourceConnected
         }
     }
 

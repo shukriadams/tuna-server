@@ -30,9 +30,10 @@ module.exports = {
             return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
     },
 
-    async downloadAsString(accessToken, path){
+    async downloadJsonStatus(accessToken, path){
+        const url = settings.musicSourceSandboxMode ? `${settings.siteUrl}/v1/dev/nextcloud/readStatus` : urljoin(settings.nextCloudHost, path)
         const response = await httputils.downloadString ({ 
-            url : urljoin(settings.nextCloudHost, path), 
+            url, 
             headers : {
                 'Authorization' : `Bearer ${accessToken}`
             }});

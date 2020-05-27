@@ -2,6 +2,7 @@ const
     httputils = require('madscience-httputils'),
     ImporterBase = require(_$+'helpers/importerBase'),
     nextCloudCommon = require(_$+'helpers/nextcloud/common'),
+    settings = require(_$+'helpers/settings'),
     constants = require(_$+'types/constants'),
     Exception = require(_$+'types/exception'),
     xmlHelper = require(_$+'helpers/xml')
@@ -35,7 +36,7 @@ class Importer extends ImporterBase {
 
         const 
             options = {
-                method: 'SEARCH',
+                method: settings.musicSourceSandboxMode ? 'POST' : 'SEARCH',
                 headers: {
                     'Content-Type': 'application/xml',
                     'Authorization' : `Bearer ${source.accessToken}`
@@ -68,8 +69,8 @@ class Importer extends ImporterBase {
                 </d:basicsearch>
                 </d:searchrequest>`
 
-
-        const result = await this.httputils.post(`${this.settings.nextCloudHost}/remote.php/dav`, body, options)
+        const url = settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/dev/nextcloud/findIndices` : `${this.settings.nextCloudHost}/remote.php/dav`,
+            result = await this.httputils.post(url, body, options)
         // todo : handle server call timing out
 
         // auth failure : This should not happen - we should have explicitly checked tokens just before this. Log explicit because
@@ -133,21 +134,27 @@ class Importer extends ImporterBase {
      * Reads data from remote index files, into temp local array
      */
     async _readIndices(){
-        const s = await this._getSource(),
+        const 
+            s = await this._getSource(),
             source = s.source
 
-        for (const index of source.indexes){
-            const indexRaw = await httputils.downloadString ({ 
-                url : `${this.settings.nextCloudHost}${index.path}`, 
+        if (!source.indexes.length)
+            return
+        
+        const 
+            index = source.indexes[0],
+            url = this.settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/dev/nextcloud/readIndex` : `${this.settings.nextCloudHost}${index.path}`,
+            indexRaw = await httputils.downloadString ({ 
+                url, 
                 headers : {
                     'Authorization' : `Bearer ${source.accessToken}`
                 }})
 
-            const indexDoc = await xmlHelper.toDoc(indexRaw.body)
-            for (let i = 0 ; i < indexDoc.items.item.count() ; i ++)
-                this.songsFromIndices.push(indexDoc.items.item.at(i).attributes())
-        }
-    }
+        const indexDoc = await xmlHelper.toDoc(indexRaw.body)
+        this.indexHash = indexDoc.items.attributes().hash
+        for (let i = 0 ; i < indexDoc.items.item.count() ; i ++)
+            this.songsFromIndices.push(indexDoc.items.item.at(i).attributes())
+}
 
 }
 

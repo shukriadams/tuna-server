@@ -53,8 +53,7 @@ module.exports = {
          */    
         app.get('/v1/session/isvalid', async function (req, res) {
             try {
-                let tokenRecord = await authTokenLogic.getById(req.query.token || '')
-                    songsAreValid = false
+                let tokenRecord = await authTokenLogic.getById(req.query.token || ''),
                     isValid = false
         
                 // confirm both token and profile, token might be orphaned cache instance
@@ -64,11 +63,12 @@ module.exports = {
                     isValid = !!profile
 
                     // confirm songs
-                    songsAreValid = await profileLogic.songsHashValid(tokenRecord.profileId, req.query.hash || '')
+                    if (isValid)
+                        isValid = await profileLogic.songsHashValid(tokenRecord.profileId, req.query.hash || '')
                 }
                 
 
-                jsonHelper.returnPayload(res, { isValid , songsAreValid })
+                jsonHelper.returnPayload(res, { isValid })
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }

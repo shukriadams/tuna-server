@@ -22,12 +22,12 @@ module.exports = {
         app.post('/v1/playlists', async function (req, res) {
             try {
                 const authToken = await authHelper.authenticate(req),
-                    playlist = req.body;
+                    playlist = req.body
             
                 if (playlist.id)
-                    await playlistLogic.update(playlist);
+                    await playlistLogic.update(playlist)
                 else
-                    await playlistLogic.create(playlist, authToken.profileId);
+                    await playlistLogic.create(playlist, authToken.profileId)
             
                 const content = await contentHelper.build(authToken.profileId, authToken.id, 'playlists')
 
@@ -35,7 +35,7 @@ module.exports = {
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
+        })
 
 
         /**
@@ -55,7 +55,7 @@ module.exports = {
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
+        })
 
     }
 }

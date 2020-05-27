@@ -1,6 +1,7 @@
 const 
     Dropbox = require('dropbox'),
     request = require('request'),
+    fs = require('fs'),
     urljoin = require('urljoin'),
     settings = require(_$+'helpers/settings'),
     logger = require('winston-wrapper').instance(settings.logPath),
@@ -46,17 +47,21 @@ module.exports = {
     /**
      * Downloads a file from dropbox as a string. This should be used for accessing Tuna xml and json index files
      */
-    async downloadAsString(accessToken, path){
-        return new Promise((resolve, reject)=>{
+    async downloadJsonStatus(accessToken, path){
+        return new Promise(async(resolve, reject)=>{
             try {
-                const dropbox = new Dropbox({ accessToken })
-
-                dropbox.filesDownload({ path })
-                    .then(data => {
-                        resolve(new Buffer(data.fileBinary, 'binary').toString('utf8'))
-                    }).catch(err => {
-                        reject(err)
-                    })
+                if (settings.musicSourceSandboxMode){
+                    const json = await fs.promises.readFile(_$+'/reference/.tuna.json')
+                    resolve(json)
+                } else {
+                    const dropbox = new Dropbox({ accessToken })
+                    dropbox.filesDownload({ path })
+                        .then(data => {
+                            resolve(new Buffer(data.fileBinary, 'binary').toString('utf8'))
+                        }).catch(err => {
+                            reject(err)
+                        })
+                }
         
             } catch(ex){
                 reject(ex)

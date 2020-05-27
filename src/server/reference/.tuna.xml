@@ -1,0 +1,29 @@
+<!-- sandbox index - this will be returned when tuna calls itself in sandbox mode. This list can contain any songs and any paths, as sandbox mode streaming always returns the same result regardless of path -->
+<?xml version="1.0"?>
+<items date="1585783930856">
+    <item album="HoPiKo (Original game soundtrack)" artist="2x-4b" name="Forgotten" path="D:/songs/2x-4b - Forgotten.mp3"/>
+    <item album="Stratospheric Cannon Symphony" artist="Dan Terminus" name="Digital Onslaught" path="D:/songs/Dan Terminus - Digital Onslaught.mp3"/>
+    <item album="Dream" artist="Kalax" name="Dream" path="D:/songs/Kalax - Dream.mp3"/>
+    <item album="Kiile" artist="Kiile" name="Constellation" path="D:/songs/Kiile - Constellation.mp3"/>
+    <item album="Magnatron" artist="Miami Beach Force" name="Hard To Catch" path="D:/songs/Miami Beach Force - Hard To Catch.mp3"/>
+    <item album="Streetwalker" artist="NightStop" name="Streetwalker" path="D:/songs/NightStop - Streetwalker.mp3"/>
+    <item album="Ascension" artist="Occams Laser" name="Deficient Justice" path="D:/songs/Occams Laser - Deficient Justice.mp3"/>
+    <item album="Deeper" artist="Orax" name="A New Day" path="D:/songs/ORAX - A New Day.mp3"/>
+    <item album="Act 1" artist="September 87" name="Meet Me at the Dance" path="D:/songs/September 87 - Meet Me at the Dance.mp3"/>
+    <item album="Act 1" artist="September 87" name="Ride All Night" path="D:/songs/September 87 - Ride All Night.mp3"/>
+    <item album="EP II" artist="Turboslash" name="Memory Reset" path="D:/songs/Turboslash - Memory Reset.mp3"/>
+    <item album="Trans AM" artist="VHS Dreams" name="Nightdrive" path="D:/songs/VHS Dreams - Nightdrive.mp3"/>
+    <item album="Hologram" artist="Vogel" name="Dreamwaves" path="D:/songs/Vogel - Dreamwaves.mp3"/>
+    <item album="Imperivm" artist="Vogel" name="Imperivm" path="D:/songs/Vogel - IMPERIVM.mp3"/>
+    <item album="This means war" artist="Volkor X" name="Run Away" path="D:/songs/Volkor X - Run Away.mp3"/>
+    <item album="66 Mhz" artist="Waveshaper" name="66 Mhz" path="D:/songs/Waveshaper - 66 Mhz.mp3"/>
+    <item album="Solar drifter" artist="Waveshaper" name="Fight Against Time" path="D:/songs/Waveshaper - Fight Against Time.mp3"/>
+    <item album="Station Nova" artist="Waveshaper" name="Future Vision" path="D:/songs/Waveshaper - Future Vision.mp3"/>
+    <item album="Wice" artist="Wice" name="Aliens" path="D:/songs/Wice - Aliens.mp3"/>
+    <item album="Atlas prime" artist="Wice" name="Arrival" path="D:/songs/wice - arrival.mp3"/>
+    <item album="Atlas Prime" artist="Wice" name="Atlas Prime" path="D:/songs/Wice - Atlas Prime.mp3"/>
+    <item album="2017 Singles" artist="Wice" name="Dream Rider" path="D:/songs/Wice - Dream Rider.mp3"/>
+    <item album="Wice" artist="Wice" name="Further" path="D:/songs/Wice - Further.mp3"/>
+    <item album="Wice" artist="Wice" name="Nebula" path="D:/songs/Wice - Nebula.mp3"/>
+    <item album="2017 singles" artist="Wice" name="Planet City" path="D:/songs/Wice - Planet City.mp3"/>
+</items>

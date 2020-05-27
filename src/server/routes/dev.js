@@ -2,6 +2,7 @@
  * 
  */
 const 
+    fs = require('fs'),
     settings = require(_$+'helpers/settings'),
     jsonHelper = require(_$+'helpers/json')
 
@@ -80,7 +81,68 @@ module.exports = {
                 jsonHelper.returnException(res, ex)
             }
         })
+        
+        /**
+         * Returns sandbox index result - this doesn't point to an actual index file, querying the actual fule in sandbox mode will always return placeholder index data (see
+         * '/v1/dev/nextcloud/readIndex' below)
+         */
+        app.post('/v1/dev/nextcloud/findIndices', async (req, res) =>{
+            try {
 
+                res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
+                    <d:response>
+                        <d:href>/remote.php/dav/files/admin/test/another/.tuna.xml</d:href>
+                        <d:propstat>
+                            <d:prop>
+                                <oc:fileid>62599</oc:fileid>
+                            </d:prop>
+                            <d:status>HTTP/1.1 200 OK</d:status>
+                        </d:propstat>
+                    </d:response>
+                    <d:response>
+                        <d:href>/remote.php/dav/files/placeholderContent/.tuna.xml</d:href>
+                        <d:propstat>
+                            <d:prop>
+                                <oc:fileid>62565</oc:fileid>
+                            </d:prop>
+                            <d:status>HTTP/1.1 200 OK</d:status>
+                        </d:propstat>
+                    </d:response>
+                </d:multistatus>`)
+
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
+
+        
+        /**
+         * Reads sandbox version of .tuna.json. This is not used in dropbox mode, which loads the file directly.
+         */
+        app.get('/v1/dev/nextcloud/readStatus', async (req, res) =>{
+            try {
+                let fileData = fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
+                res.send(fileData)
+
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
+
+
+        /**
+         * Reads sandbox version of .tuna.xml
+         */
+        app.get('/v1/dev/nextcloud/readIndex', async (req, res) =>{
+            try {
+                let fileData = await fs.promises.readFile(_$+'reference/.tuna.xml', 'utf8')
+                res.send(fileData)
+
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
+        
 
         /**
          * Fakes 1st stage of Oauth flow for lastfm.

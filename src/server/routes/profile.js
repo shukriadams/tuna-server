@@ -40,27 +40,27 @@ module.exports = {
          */    
         app.get('/v1/profile/requestPassword', async function (req, res) {
             try {
-                const route = 'profile/requestPassword';
+                const route = 'profile/requestPassword'
                 await bruteForce.process({
                     request : req,
                     route : route,
                     threshold : settings.bruteForceThreshold,
                     period : settings.bruteForcePeriod,
                     cooldown : settings.bruteForceCooldown
-                });
+                })
 
-                const email = decodeURIComponent(req.query.email || '');
+                const email = decodeURIComponent(req.query.email || '')
         
-                await profileLogic.requestPasswordReset(settings.masterUsername, email);
+                await profileLogic.requestPasswordReset(settings.masterUsername, email)
                 
-                await bruteForce.clear({ request : req, route : route });
+                await bruteForce.clear({ request : req, route : route })
 
                 jsonHelper.returnPayload(res)
 
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
+        })
 
 
         /**
@@ -73,7 +73,7 @@ module.exports = {
                     currentPassword = req.query.currentPassword,
                     authToken = null,
                     profileId = null,
-                    password = req.query.password;
+                    password = req.query.password
 
                 await bruteForce.process({
                     request : req,
@@ -81,24 +81,24 @@ module.exports = {
                     threshold : settings.bruteForceThreshold,
                     period : settings.bruteForcePeriod,
                     cooldown : settings.bruteForceCooldown
-                });
+                })
             
                 // if no key set, assume user is logged in and trying for change password; enforce auth
                 if (!key){
-                    authToken = await authHelper.authenticate(req);
-                    profileId = authToken.profileId;
+                    authToken = await authHelper.authenticate(req)
+                    profileId = authToken.profileId
                 }
 
-                await profileLogic.resetPassword(key, password, currentPassword, profileId);
+                await profileLogic.resetPassword(key, password, currentPassword, profileId)
             
-                await bruteForce.clear({ request : req, route : route });
+                await bruteForce.clear({ request : req, route : route })
             
                 jsonHelper.returnPayload(res)
 
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
+        })
 
 
         /**
@@ -123,7 +123,7 @@ module.exports = {
             try {
                 let authToken = await authHelper.authenticate(req)
             
-                await profileLogic.deleteSource(authToken.profileId);
+                await profileLogic.deleteSource(authToken.profileId)
             
                 let session = await contentHelper.build(authToken.profileId, authToken.id, 'songs,playlists,profile')
                 jsonHelper.returnPayload(res, session)
@@ -132,7 +132,6 @@ module.exports = {
                 jsonHelper.returnException(res, ex)
             }
         })  
-
         
 
     }

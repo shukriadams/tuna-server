@@ -21,18 +21,18 @@ module.exports = {
          */    
         app.get('/v1/lastfm/delete', async function (req, res) {
             try {
-                const authToken = await authHelper.authenticate(req);
+                const authToken = await authHelper.authenticate(req)
 
-                await profileLogic.removeLastfm(authToken.profileId);
+                await profileLogic.removeLastfm(authToken.profileId)
 
-                const session = await contentHelper.build(authToken.profileId, authToken.id, 'profile');
+                const session = await contentHelper.build(authToken.profileId, authToken.id, 'profile')
 
-                jsonHelper.returnPayload(res, session);
+                jsonHelper.returnPayload(res, session)
                 
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
+        })
 
 
         /**
@@ -41,19 +41,19 @@ module.exports = {
         app.get('/v1/lastfm/scrobble', async function (req, res) {
             try {
 
-                let authToken = await authHelper.authenticate(req);
+                let authToken = await authHelper.authenticate(req)
            
                 await songsLogic.scrobble(
                     authToken.profileId, 
                     req.query.song, 
-                    req.query.songDuration);
+                    req.query.songDuration)
 
-                jsonHelper.returnPayload(res);
+                jsonHelper.returnPayload(res)
 
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
+        })
 
     }
 }

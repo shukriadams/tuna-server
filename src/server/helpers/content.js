@@ -1,8 +1,6 @@
 const
     crypto = require('crypto'),
-    lastFmHelper = require(_$+'helpers/lastfm'),
     settings = require(_$+'helpers/settings'),
-    sourceProvider = require(_$+'helpers/sourceProvider'),
     playlistsLogic = require(_$+'logic/playlists'),
     profileLogic = require(_$+'logic/profiles'),
     Exception = require(_$+'types/exception'),
@@ -46,8 +44,6 @@ module.exports = {
             session.email = profile.email
             session.profileId  = profile.id
             session.isSourceConnected = !!source
-            session.sourceOauthUrl = sourceProvider.get().getOauthUrl(authTokenId)
-            session.lastfmOauthUrl = lastFmHelper.getOauthUrl(authTokenId)
             session.token = authTokenId
             session.isScrobbling = profile.scrobbleToken !== null
         }

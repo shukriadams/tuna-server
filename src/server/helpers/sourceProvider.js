@@ -19,12 +19,8 @@ module.exports = {
         if(settings.musicSource === constants.SOURCES_DROPBOX)
             return dropboxImporter
 
-        if(settings.musicSource === constants.SOURCES_NEXTCLOUD){
-            if (settings.musicSourceSandboxMode)
-                return nextcloudSandboxImporter
-            else
-                return nextcloudImporter
-        }
+        if(settings.musicSource === constants.SOURCES_NEXTCLOUD)
+            return nextcloudImporter
 
         throw new Exception({ log: `Invalid setup - source ${settings.musicSource} could not be matched to an importer` })
     },
