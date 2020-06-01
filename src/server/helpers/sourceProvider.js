@@ -5,7 +5,6 @@ const
     nextcloud = require(_$+'helpers/nextcloud/common'),
     dropboxImporter = require(_$+'helpers/dropbox/importer'),
     nextcloudImporter = require(_$+'helpers/nextcloud/importer'),
-    nextcloudSandboxImporter = require(_$+'helpers/nextcloud/importerSandbox'),
     constants = require(_$+'types/constants')
 
 module.exports = {
