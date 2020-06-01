@@ -42,9 +42,6 @@ let
         dataFolder :'./data',
         logPath :'./data/logs',
 
-        // allows binding of dev routes. Dev routes allow internal simulating of external oauth flows. 
-        enableDevRoutes : false,
-
         // if true loads js from bundle file. If false, main.js will load first
         // which will cascade load all other files.
         isJSBundled : true,

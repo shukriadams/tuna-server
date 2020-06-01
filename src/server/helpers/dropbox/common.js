@@ -77,7 +77,7 @@ module.exports = {
 
     getOauthUrl (authTokenId){
         if (settings.dropboxDevOauthToken)
-            return urljoin(settings.siteUrl, `/v1/dev/dropboxAuthenticate?&state=${authTokenId}_TARGETPAGE`)
+            return urljoin(settings.siteUrl, `/v1/sandbox/dropboxAuthenticate?&state=${authTokenId}_TARGETPAGE`)
         else
             return `https://www.dropbox.com/oauth2/authorize?&response_type=code&client_id=${settings.dropboxAppId}&redirect_uri=${settings.siteUrl}/api/catch/dropbox&state=${authTokenId}_TARGETPAGE`
     },
@@ -198,7 +198,7 @@ module.exports = {
                 let profileLogic = require(_$+'logic/profiles'),
                     profile = await profileLogic.getById(profileId),
                     options = {
-                        url : settings.dropboxDevOauthToken ? urljoin(settings.siteUrl, '/v1/dev/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
+                        url : settings.dropboxDevOauthToken ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
                         method : 'POST',
                         form : {
                             code : token,

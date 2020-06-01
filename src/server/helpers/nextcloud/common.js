@@ -25,13 +25,13 @@ module.exports = {
 
     getOauthUrl (authTokenId){
         if (settings.musicSourceSandboxMode)
-            return urljoin(settings.siteUrl, `v1/dev/nextcloudAuthenticate?state=${authTokenId}_TARGETPAGE`)
+            return urljoin(settings.siteUrl, `v1/sandbox/nextcloudAuthenticate?state=${authTokenId}_TARGETPAGE`)
         else
             return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
     },
 
     async downloadJsonStatus(accessToken, path){
-        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/dev/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path)
+        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path)
         const response = await httputils.downloadString ({ 
             url, 
             headers : {
@@ -54,7 +54,7 @@ module.exports = {
             try {
                 const 
                     body = '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:permissions/></d:prop></d:propfind>',
-                    url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/dev/nextcloud/find/.tuna.xml`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
+                    url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/.tuna.xml`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
                     method = settings.musicSourceSandboxMode ? 'POST' : 'PROPFIND',
                     lookup = await httputils.post(url, body, { 
                         method,
@@ -80,7 +80,7 @@ module.exports = {
         // refresh token
         let 
             body = `grant_type=refresh_token&refresh_token=${source.refreshToken}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`,
-            url = settings.musicSourceSandboxMode ? '/v1/dev/nextcloud/refresh' : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
+            url = settings.musicSourceSandboxMode ? '/v1/sandbox/nextcloud/refresh' : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
             response = await httputils.postUrlString(url, body),
             content = null
         
@@ -150,7 +150,7 @@ module.exports = {
                     </d:basicsearch>
                 </d:searchrequest>`
 
-        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/dev/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
+        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
             result = await this.httputils.post(url, body, options)
             // todo : handle server call timing out
 
@@ -186,7 +186,7 @@ module.exports = {
     async swapCodeForToken(profileId, code){
         let url = `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`
         if (settings.musicSourceSandboxMode){
-            url = urljoin(settings.siteUrl, 'v1/dev/nextcloudTokenSwap')
+            url = urljoin(settings.siteUrl, 'v1/sandbox/nextcloudTokenSwap')
             console.log(`SANDBOX enabled - token will be swapped locally`)
         }
 
@@ -229,7 +229,7 @@ module.exports = {
 
         // ensure tokens are up-to-date before doing an API call
         await this.ensureTokensAreUpdated(profileId)
-        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, '/v1/dev/nextcloud/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
+        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/nextcloud/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
 
         // stream media from nextcloud back
         try {

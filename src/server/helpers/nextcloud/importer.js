@@ -70,7 +70,7 @@ class Importer extends ImporterBase {
                     </d:basicsearch>
                 </d:searchrequest>`
 
-        const url = settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/dev/nextcloud/find/.tuna.xml` : `${this.settings.nextCloudHost}/remote.php/dav`,
+        const url = settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/sandbox/nextcloud/find/.tuna.xml` : `${this.settings.nextCloudHost}/remote.php/dav`,
             result = await this.httputils.post(url, body, options)
         // todo : handle server call timing out
 
@@ -144,7 +144,7 @@ class Importer extends ImporterBase {
         
         const 
             index = source.indexes[0],
-            url = this.settings.musicSourceSandboxMode ? urljoin(this.settings.siteUrl, `/v1/dev/nextcloud/getfile/.tuna.xml`) : `${this.settings.nextCloudHost}${index.path}`,
+            url = this.settings.musicSourceSandboxMode ? urljoin(this.settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.xml`) : `${this.settings.nextCloudHost}${index.path}`,
             indexRaw = await httputils.downloadString ({ 
                 url, 
                 headers : {

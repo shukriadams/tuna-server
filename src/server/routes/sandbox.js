@@ -14,14 +14,14 @@ module.exports = {
     bind(app){
 
         // prevent binding of dev routes if not explicitly enabled in settings
-        if (!settings.enableDevRoutes)
+        if (!settings.musicSourceSandboxMode)
             return
 
 
         /**
          * Fakes 1st stage of Oauth flow for dropbox.
          */    
-        app.get('/v1/dev/dropboxAuthenticate', async function (req, res) {
+        app.get('/v1/sandbox/dropboxAuthenticate', async function (req, res) {
             try {
                 let state = req.query.state || ''
             
@@ -35,7 +35,7 @@ module.exports = {
         /**
          * Fakes 2nd stage of Oauth flow for dropbox.
          */    
-        app.post('/v1/dev/dropboxTokenSwap', async function (req, res) {
+        app.post('/v1/sandbox/dropboxTokenSwap', async function (req, res) {
             try {
                 res.send({
                     access_token: 'placeholder', 
@@ -54,7 +54,7 @@ module.exports = {
         /**
          * Fakes 1st stage of Oauth flow for nextcloud.
          */    
-        app.get('/v1/dev/nextcloudAuthenticate', async function (req, res) {
+        app.get('/v1/sandbox/nextcloudAuthenticate', async function (req, res) {
             try {
                 const state = req.query.state || ''
 
@@ -68,7 +68,7 @@ module.exports = {
         /**
          * Fakes 2nd stage of Oauth flow for nextcloud.
          */    
-        app.post('/v1/dev/nextcloudTokenSwap', async function (req, res) {
+        app.post('/v1/sandbox/nextcloudTokenSwap', async function (req, res) {
             try {
 
                 res.send({
@@ -85,9 +85,9 @@ module.exports = {
         
         /**
          * Returns sandbox index result - this doesn't point to an actual index file, querying the actual fule in sandbox mode will always return placeholder index data (see
-         * '/v1/dev/nextcloud/readIndex' below)
+         * '/v1/sandbox/nextcloud/readIndex' below)
          */
-        app.post('/v1/dev/nextcloud/findIndices', async (req, res) =>{
+        app.post('/v1/sandbox/nextcloud/findIndices', async (req, res) =>{
             try {
 
                 res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
@@ -120,7 +120,7 @@ module.exports = {
         /**
          * simulates search/find api
          */
-        app.get('/v1/dev/nextcloud/getfile/:file', async (req, res) =>{
+        app.get('/v1/sandbox/nextcloud/getfile/:file', async (req, res) =>{
             try {
                 let fileData = null
 
@@ -142,7 +142,7 @@ module.exports = {
         /**
          * simulates search api, always returns single result
          */
-        app.post('/v1/dev/nextcloud/find/:query', async (req, res) =>{
+        app.post('/v1/sandbox/nextcloud/find/:query', async (req, res) =>{
             try {
                 res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
                 <d:response>
@@ -165,7 +165,7 @@ module.exports = {
         /**
          * streams a random file
          */
-        app.get('/v1/dev/nextcloud/stream', async (req, res) =>{
+        app.get('/v1/sandbox/nextcloud/stream', async (req, res) =>{
             try {
                 const files = await fsUtils.readFilesUnderDir(_$+'reference/music', true, '.mp3')
                 if (!files.length)
@@ -188,7 +188,7 @@ module.exports = {
         /**
          * Fakes token refresh. 
          */
-        app.post('/v1/dev/nextcloud/refresh', async (req, res) =>{
+        app.post('/v1/sandbox/nextcloud/refresh', async (req, res) =>{
             try {
                 
                 res.json({
@@ -208,7 +208,7 @@ module.exports = {
         /**
          * Fakes 1st stage of Oauth flow for lastfm.
          */
-        app.get('/v1/dev/lastfmAuthenticate', async function (req, res) {
+        app.get('/v1/sandbox/lastfmAuthenticate', async function (req, res) {
             try {
         
                 const authToken = req.query.session
@@ -224,7 +224,7 @@ module.exports = {
         /**
          * Fakes 2nd stage of Oauth flow for lastfm.
          */  
-        app.post('/v1/dev/lastfmTokenSwap', async function (req, res) {
+        app.post('/v1/sandbox/lastfmTokenSwap', async function (req, res) {
             try {
             
                 res.send(
