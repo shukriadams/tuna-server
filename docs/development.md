@@ -77,3 +77,10 @@ Open in browser from host machine
 
     http://localhost:58002
 
+## Sandbox Mode
+
+Tuna can be run on sandbox mode, whereby it simulates Dropbox, Nextcloud and any other service it interacts with. Use this to develop and test on locally without having to interact with those platforms. This is particularly useful for services like developer-unfriendly platforms like Nextcloud, which offers no convenient way to get dev auth tokens.
+
+### Music
+
+To stream music in sandbox box, add any mp3 songs to /src/server/reference/music. Random songs will be streamed back.

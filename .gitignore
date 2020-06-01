@@ -27,6 +27,7 @@ src/.scss-linters
 /docker/.images
 /src/client/bundle
 /src/yarn-error.log
+/src/server/reference/music
 /src/client/lib-dev
 /src/__logs
 /docker/node/.deployKeys

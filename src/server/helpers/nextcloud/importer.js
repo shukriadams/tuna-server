@@ -1,5 +1,6 @@
 const 
     httputils = require('madscience-httputils'),
+    urljoin = require('urljoin'),
     ImporterBase = require(_$+'helpers/importerBase'),
     nextCloudCommon = require(_$+'helpers/nextcloud/common'),
     settings = require(_$+'helpers/settings'),
@@ -66,10 +67,10 @@ class Importer extends ImporterBase {
                             </d:like>
                         </d:where>
                         <d:orderby/>
-                </d:basicsearch>
+                    </d:basicsearch>
                 </d:searchrequest>`
 
-        const url = settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/dev/nextcloud/findIndices` : `${this.settings.nextCloudHost}/remote.php/dav`,
+        const url = settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/dev/nextcloud/find/.tuna.xml` : `${this.settings.nextCloudHost}/remote.php/dav`,
             result = await this.httputils.post(url, body, options)
         // todo : handle server call timing out
 
@@ -143,7 +144,7 @@ class Importer extends ImporterBase {
         
         const 
             index = source.indexes[0],
-            url = this.settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/dev/nextcloud/readIndex` : `${this.settings.nextCloudHost}${index.path}`,
+            url = this.settings.musicSourceSandboxMode ? urljoin(this.settings.siteUrl, `/v1/dev/nextcloud/getfile/.tuna.xml`) : `${this.settings.nextCloudHost}${index.path}`,
             indexRaw = await httputils.downloadString ({ 
                 url, 
                 headers : {
@@ -154,7 +155,7 @@ class Importer extends ImporterBase {
         this.indexHash = indexDoc.items.attributes().hash
         for (let i = 0 ; i < indexDoc.items.item.count() ; i ++)
             this.songsFromIndices.push(indexDoc.items.item.at(i).attributes())
-}
+    }
 
 }
 

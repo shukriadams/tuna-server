@@ -28,9 +28,6 @@ module.exports = {
         // todo : harden json parse
         const lastIndexData = jsonHelper.parse( await sourceCommon.downloadJsonStatus(source.accessToken, searchResults[0]) )
 
-        if (lastIndexData.date < source.indexImportDate)
-            return false
-
-        return true
+        return source.indexImportDate > lastIndexData.date
     }
 }

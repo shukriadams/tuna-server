@@ -31,7 +31,7 @@ module.exports = {
     },
 
     async downloadJsonStatus(accessToken, path){
-        const url = settings.musicSourceSandboxMode ? `${settings.siteUrl}/v1/dev/nextcloud/readStatus` : urljoin(settings.nextCloudHost, path)
+        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/dev/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path)
         const response = await httputils.downloadString ({ 
             url, 
             headers : {
@@ -52,12 +52,15 @@ module.exports = {
         // If we suspect token has not expired and we're not going to force an update anyway, do a pre-emptive simple properties lookup on a fake file to test token 
         if (!hasExpired){
             try {
-                const body = '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:permissions/></d:prop></d:propfind>'
-                const lookup = await httputils.post(urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`), body, { 
-                    method : 'PROPFIND',
-                    headers : {
-                        'Authorization' : `Bearer ${source.accessToken}`
-                    }})
+                const 
+                    body = '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:permissions/></d:prop></d:propfind>',
+                    url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/dev/nextcloud/find/.tuna.xml`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
+                    method = settings.musicSourceSandboxMode ? 'POST' : 'PROPFIND',
+                    lookup = await httputils.post(url, body, { 
+                        method,
+                        headers : {
+                            'Authorization' : `Bearer ${source.accessToken}`
+                        }})
 
                 if (lookup.raw.statusCode === 401)
                     hasExpired  = true
@@ -74,8 +77,11 @@ module.exports = {
         if (!hasExpired)
             return
 
-        let body = `grant_type=refresh_token&refresh_token=${source.refreshToken}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`,
-            response = await httputils.postUrlString(urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),body),
+        // refresh token
+        let 
+            body = `grant_type=refresh_token&refresh_token=${source.refreshToken}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`,
+            url = settings.musicSourceSandboxMode ? '/v1/dev/nextcloud/refresh' : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
+            response = await httputils.postUrlString(url, body),
             content = null
         
         if (typeof response.body === 'string')
@@ -111,7 +117,7 @@ module.exports = {
             accessToken = source.accessToken,
             nextCloudUserId = source.userId,
             options = {
-                method: 'SEARCH',
+                method: settings.musicSourceSandboxMode ? 'POST' : 'SEARCH',
                 headers: {
                     'Content-Type': 'application/xml',
                     'Authorization' : `Bearer ${accessToken}`
@@ -144,8 +150,9 @@ module.exports = {
                     </d:basicsearch>
                 </d:searchrequest>`
 
-        const result = await this.httputils.post(`${settings.nextCloudHost}/remote.php/dav`, body, options)
-        // todo : handle server call timing out
+        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/dev/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
+            result = await this.httputils.post(url, body, options)
+            // todo : handle server call timing out
 
         // auth failure : This should not happen - we should have explicitly checked tokens just before this. Log explicit because
         // we will want to know if this is happening
@@ -204,16 +211,14 @@ module.exports = {
 
     /**
      * streams the media item @path on nextcloud server
+     * @profileId : string, profile id media will be streamed for. Must have valid nextcloud integration
      * @mediaPath : the relative path of the asset to fetch.
-     * @nextCloudUserName : username on the nextcloud server to fetch from
-     * @bearerToken : access token to gain access to @nextCloudUserName's file
      * @res : NodeJS response object to stream media back on
      */
      async streamMedia (profileId, mediaPath, res){
-        // always ensure tokens are up-to-date before doing an API call
-        await this.ensureTokensAreUpdated(profileId)
 
-        let profile = await profileLogic.getById(profileId),
+        const
+            profile = await profileLogic.getById(profileId),
             source = profile.sources[constants.SOURCES_NEXTCLOUD]
 
         if (source.status !== constants.SOURCE_CONNECTION_STATUS_WORKING)
@@ -222,18 +227,24 @@ module.exports = {
                 params: constants.SOURCES_NEXTCLOUD
             })
 
+        // ensure tokens are up-to-date before doing an API call
+        await this.ensureTokensAreUpdated(profileId)
+        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, '/v1/dev/nextcloud/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
+
+        // stream media from nextcloud back
         try {
             request.get({ 
-                url : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath), 
+                url, 
                 headers : {
                     'Authorization' : `Bearer ${source.accessToken}`
                 }}).pipe(res)
     
         } catch (ex){
             throw new Exception({
-                log : 'Unexpected error fetching media to stream',
+                log : 'Unexpected error fetching media stream',
                 inner : {
                     ex,
+                    profileId,
                     mediaPath
                 }
             })
