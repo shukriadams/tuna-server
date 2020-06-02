@@ -4,6 +4,7 @@
 const 
     fs = require('fs'),
     fsUtils = require('madscience-fsUtils'),
+    urljoin = require('urljoin'),
     settings = require(_$+'helpers/settings'),
     jsonHelper = require(_$+'helpers/json')
 
@@ -50,7 +51,82 @@ module.exports = {
         })
 
 
+        /**
+         * simulates search api, always returns single result, equal to the file name being searched for
+         */
+        app.post('/v1/sandbox/dropbox/find/:query', async (req, res) =>{
+            try {
+                res.json({
+                    matches : [{
+                        metadata : {
+                            path_display: req.params.query,
+                        }
+                    }]
+                })
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
+
+
+        app.post('/v1/sandbox/dropbox/getTemporaryPath/:path', async (req, res)=>{
+            try {
+                const files = await fsUtils.readFilesUnderDir(_$+'reference/music', false, '.mp3')
+                if (!files.length)
+                    return jsonHelper.returnException(res, 'No local streamable files found - add mp3s to /src/reference/music folder')
+
+                const filename = files[Math.floor(Math.random() * files.length)]
+
+                res.json({
+                    link : urljoin(settings.siteUrl, `/v1/sandbox/dropbox/stream/${filename}`)
+                })
+
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
         
+
+        /**
+         * streams a random file
+         */
+        app.get('/v1/sandbox/dropbox/stream/:file', async (req, res) =>{
+            try {
+                const readStream = fs.createReadStream(path.join(_$+'reference/music', req.params.file))
+
+                // This will wait until we know the readable stream is actually valid before piping
+                readStream.on('open', function () {
+                    // This just pipes the read stream to the response object (which goes to the client)
+                    readStream.pipe(res);
+                });
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
+
+
+        /**
+         * simulates search/find api
+         */
+        app.post('/v1/sandbox/dropbox/getfile/:file', async (req, res) =>{
+            try {
+                let fileData = null
+
+                if (req.params.file.includes('tuna.json'))
+                    fileData = await fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
+                else if (req.params.file.includes('tuna.xml'))
+                    fileData = await fs.promises.readFile(_$+'reference/.tuna.xml', 'utf8')
+                else
+                    throw `cannot sandbox get ${req.params.file}`
+
+                res.send(fileData)
+
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
+
+
         /**
          * Fakes 1st stage of Oauth flow for nextcloud.
          */    
@@ -82,39 +158,6 @@ module.exports = {
                 jsonHelper.returnException(res, ex)
             }
         })
-        
-        /**
-         * Returns sandbox index result - this doesn't point to an actual index file, querying the actual fule in sandbox mode will always return placeholder index data (see
-         * '/v1/sandbox/nextcloud/readIndex' below)
-         */
-        app.post('/v1/sandbox/nextcloud/findIndices', async (req, res) =>{
-            try {
-
-                res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
-                    <d:response>
-                        <d:href>/remote.php/dav/files/admin/test/another/.tuna.xml</d:href>
-                        <d:propstat>
-                            <d:prop>
-                                <oc:fileid>62599</oc:fileid>
-                            </d:prop>
-                            <d:status>HTTP/1.1 200 OK</d:status>
-                        </d:propstat>
-                    </d:response>
-                    <d:response>
-                        <d:href>/remote.php/dav/files/placeholderContent/.tuna.xml</d:href>
-                        <d:propstat>
-                            <d:prop>
-                                <oc:fileid>62565</oc:fileid>
-                            </d:prop>
-                            <d:status>HTTP/1.1 200 OK</d:status>
-                        </d:propstat>
-                    </d:response>
-                </d:multistatus>`)
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
-        })
 
 
         /**
@@ -125,7 +168,7 @@ module.exports = {
                 let fileData = null
 
                 if (req.params.file === '.tuna.json')
-                    fileData = fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
+                    fileData = await fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
                 else if (req.params.file === '.tuna.xml')
                     fileData = await fs.promises.readFile(_$+'reference/.tuna.xml', 'utf8')
                 else

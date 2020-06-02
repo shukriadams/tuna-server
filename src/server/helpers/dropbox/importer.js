@@ -1,5 +1,4 @@
 const
-    Dropbox = require('dropbox'),
     ImporterBase = require(_$+'helpers/importerBase'),
     common = require(_$+'helpers/dropbox/common'),
     constants = require(_$+'types/constants'),
@@ -22,25 +21,7 @@ module.exports = class extends ImporterBase {
     async _ensureTokens(){
         // dropbox doesn't need this
     }
-    
 
-    async _readFile(accessToken, path){
-        return new Promise((resolve, reject)=>{
-            try {
-                const dropbox = new Dropbox({ accessToken })
-
-                dropbox.filesDownload({ path }).then(function(data){
-                    let decoded = new Buffer(data.fileBinary, 'binary').toString('utf8')
-                    resolve(decoded)
-                }, function(err){
-                    reject(err)
-                })
-            } catch(ex){
-                reject(ex)
-            }
-        })
-
-    }
 
     /**
      * Searches for .tuna.xml files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
@@ -96,7 +77,7 @@ module.exports = class extends ImporterBase {
             throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, public : 'No index found - please run the Tuna indexer in your Dropbox folder' })
 
         // we're taking only the first index here, still no logic for handling multiple
-        let indexData = await this._readFile(source.accessToken, source.indexes[0].path)
+        let indexData = await common.downloadAsString(source.accessToken, source.indexes[0].path) 
         const indexDoc = await xmlHelper.toDoc(indexData)
         
         this.indexHash = indexDoc.items.attributes().hash

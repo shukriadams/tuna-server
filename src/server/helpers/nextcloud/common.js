@@ -30,7 +30,7 @@ module.exports = {
             return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
     },
 
-    async downloadJsonStatus(accessToken, path){
+    async downloadAsString(accessToken, path){
         const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path)
         const response = await httputils.downloadString ({ 
             url, 

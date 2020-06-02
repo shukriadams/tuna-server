@@ -1,8 +1,7 @@
 const 
-    Dropbox = require('dropbox'),
     request = require('request'),
-    fs = require('fs'),
     urljoin = require('urljoin'),
+    httputils = require('madscience-httputils'),
     settings = require(_$+'helpers/settings'),
     logger = require('winston-wrapper').instance(settings.logPath),
     Exception = require(_$+'types/exception'),
@@ -18,24 +17,29 @@ module.exports = {
      */
     async search(source, query){
         
-        return new Promise((resolve, reject)=> {
+        return new Promise(async (resolve, reject)=> {
 
             try {
-                const dropbox = new Dropbox({ accessToken : source.accessToken })
 
-                dropbox.filesSearch({ path : '', query })
-                    .then(async (result) => {
-                        const paths = []
-                        
-                        if (result && result.matches && result.matches.length)
-                            for (let item of result.matches)
-                                paths.push(item.metadata.path_display)
+                const 
+                    body = JSON.stringify({ query, include_highlights : false }),
+                    url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/find/${query}`) : urljoin(`https://api.dropbox.com/2/search_v2`),
+                    result = await httputils.post(url, body, { 
+                        headers : {
+                            'Authorization' : `Bearer ${source.accessToken}`
+                        }})
 
-                        resolve(paths)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
+                if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
+                    return reject(result.body)
+
+                const json = JSON.parse(result.body),
+                    paths = []
+
+                if (json && json.matches && json.matches.length)
+                    for (let item of json.matches)
+                        paths.push(item.metadata.path_display)
+
+                resolve(paths)
 
             } catch (ex) {
                 reject(ex)
@@ -47,22 +51,22 @@ module.exports = {
     /**
      * Downloads a file from dropbox as a string. This should be used for accessing Tuna xml and json index files
      */
-    async downloadJsonStatus(accessToken, path){
+    async downloadAsString(accessToken, path){
         return new Promise(async(resolve, reject)=>{
             try {
-                if (settings.musicSourceSandboxMode){
-                    const json = await fs.promises.readFile(_$+'/reference/.tuna.json')
-                    resolve(json)
-                } else {
-                    const dropbox = new Dropbox({ accessToken })
-                    dropbox.filesDownload({ path })
-                        .then(data => {
-                            resolve(new Buffer(data.fileBinary, 'binary').toString('utf8'))
-                        }).catch(err => {
-                            reject(err)
-                        })
-                }
-        
+
+                const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://api-content.dropbox.com/1/files/auto/${path}`,
+                    body = JSON.stringify({ path }),
+                    result = await httputils.post(url, body, { 
+                        headers : {
+                            'Authorization' : `Bearer ${accessToken}`
+                        }})
+
+                if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
+                    return reject(result.body)
+
+                resolve(result.body)
+
             } catch(ex){
                 reject(ex)
             }
@@ -95,7 +99,7 @@ module.exports = {
      * Gets a temporary link to a file on dropbox. This link is used to stream the file to the browser.
      */
     async getFileLink(sources, path){
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
 
             if (!sources[constants.SOURCES_DROPBOX])
                 return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION}))
@@ -107,19 +111,23 @@ module.exports = {
 
             try {
 
-                const dropbox = new Dropbox({ accessToken })
-
                 // paths must not contain double slashes, this is a temporary workaround
                 // and should be fixed at the indexer side
                 path = path.replace('//', '/')
 
-                dropbox.filesGetTemporaryLink({ path })
-                    .then( data => {
-                        resolve(data.link)
-                    }).catch( err => {
-                        reject(new Exception({ inner : err, log : `path : ${path}` }))
-                    })
+                const 
+                    body = JSON.stringify({ path }),
+                    url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getTemporaryPath/somefile`) : `https://api.dropboxapi.com/2/files/get_temporary_link`,
+                    result = await httputils.post(url, body, { 
+                        headers : {
+                            'Authorization' : `Bearer ${accessToken}`
+                        }})
 
+                if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
+                    return reject(result.body)
+
+                const json = JSON.parse(result.body)
+                resolve(json.link)
             } catch (ex) {
                 reject(ex)
             }
@@ -141,7 +149,7 @@ module.exports = {
         
         let accessToken = source.accessToken
 
-        return new Promise(function(resolve, reject){
+        return new Promise(async (resolve, reject)=>{
 
             // this is currently a known issue, and dropbox deals with the error badly, so try to catch it first
             if (!accessToken)
@@ -151,35 +159,15 @@ module.exports = {
 
             try {
 
-                let dropbox = new Dropbox({ accessToken });
-                                         
                 // even thought Tuna index file is prefixed with '.' we omit that as it seems to confuse dropbox's api
-                dropbox.filesSearch({ path : '', query : settings.indexImportMode === 'remoteTest' ? 'tunatest.xml' : 'tuna.xml' })
-                    .then(function(data){
-                        
-                        logger.info.info(`Dropbox import mode : ${settings.indexImportMode}`)
-
-                        if (data && data.matches && data.matches.length > 0){
-                            let match = data.matches[0],
-                                path = match.metadata.path_display
-
-                            dropbox.filesDownload({ path : path }).then(function(data){
-                                let decoded = new Buffer(data.fileBinary, 'binary').toString('utf8')
-                                resolve(decoded);
-                            }, function(err){
-                                reject(err)
-                            })
-
-                        } else {
-                            logger.info.info(`Dropbox import : No matches found.`);
-                            resolve(null)
-                        }
-
-                    })
-                    .catch(err => {
-                        reject(err);
-                    })
-
+                let hits = this.search(source, 'tuna.xml')
+                if (!hits.length){
+                    logger.info.info(`Dropbox import : No matches found.`)
+                    return resolve(null)
+                }
+                
+                return await this.downloadAsString(accessToken, hits[0])
+                
             } catch (ex) {
                 reject(ex)
             }

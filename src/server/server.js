@@ -41,7 +41,7 @@ module.exports = {
         // generate the master user if it doesn't already exist
         await profilesLogic.autoCreateMaster(settings.masterUsername)
 
-        // do this before route handling!
+        // add middleware before route handling
         express.use(bodyParser.urlencoded({ extended: false }))
         express.use(bodyParser.json())
         

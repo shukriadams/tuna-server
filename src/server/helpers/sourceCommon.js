@@ -26,8 +26,9 @@ module.exports = {
             return false
         
         // todo : harden json parse
-        const lastIndexData = jsonHelper.parse( await sourceCommon.downloadJsonStatus(source.accessToken, searchResults[0]) )
+        let indexData = await sourceCommon.downloadAsString(source.accessToken, searchResults[0])
+        const lastIndexData = jsonHelper.parse( indexData  )
 
-        return source.indexImportDate > lastIndexData.date
+        return source.indexImportDate < lastIndexData.date
     }
 }
