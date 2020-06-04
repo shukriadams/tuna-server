@@ -6,7 +6,7 @@ const
 module.exports = {
     
     _getIdKey(profileId){
-        return 'songs_all_id_' + profileId
+        return `songs_all_id_${profileId}`  
     },
 
     async createMany(songs){

@@ -6,14 +6,14 @@ const
 module.exports = {
 
     _getIdKey(tokenId){
-        return 'authToken_' + tokenId
+        return `authToken_${tokenId}`  
     },
     
     async create(record){
     
-        let authToken = await authTokenData.create(record)
-    
-        let key = this._getIdKey(authToken.id)
+        const authToken = await authTokenData.create(record),
+             key = this._getIdKey(authToken.id)
+
         await cache.add(key, JSON.stringify(authToken))
         return authToken
     },
@@ -29,13 +29,14 @@ module.exports = {
 
     async getById(tokenId){
         // try to get authoken from cache
-        let key = this._getIdKey(tokenId)
-        let authTokenJson = await cache.get(key)
+        const key = this._getIdKey(tokenId),
+            authTokenJson = await cache.get(key),
+            authToken = await authTokenData.getById(tokenId)
+
         if (authTokenJson)
             return JsonHelper.parse(authTokenJson)
     
         // get authtoken from data layer, while caching
-        let authToken = await authTokenData.getById(tokenId)
         await cache.add(key, JSON.stringify(authToken))
         return authToken
     },
