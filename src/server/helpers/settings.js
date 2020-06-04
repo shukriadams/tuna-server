@@ -1,10 +1,13 @@
-const customEnv = require('custom-env')
+const 
+    customEnv = require('custom-env'),
+    constants = require(_$+'types/constants')
+
 
 let 
     process = require('process'),
     settings = {
         // must match a SOURCE_* value from /types/constants
-        musicSource : null,
+        musicSource : constants.SOURCES_DROPBOX,
 
         // base url of your site. Default is for dev environments, you NEED to change this when going live
         siteUrl : 'http://localhost:48004',
