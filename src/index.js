@@ -6,32 +6,34 @@
  */
 
 // set shortcut global for easier module imports. Modules are loaded relative to "server" directory
-global._$ = `${__dirname}/server/`;
+global._$ = `${__dirname}/server/`
 
 const    
-    http = require('http'),
-    https = require('https'),
     tunaServer = require(_$+'server'),
-    settings = require(_$+'helpers/settings'),
-    socketHelper = require(_$+'helpers/socket'),
-    certificateHelper = require(_$+'helpers/certificateHelper'),
-    express = tunaServer.express;
+    settings = require(_$+'helpers/settings');
 
-(async function(){
+(async ()=>{
     try {
-        await tunaServer.start()
 
-        let httpServer
+        let 
+            express = tunaServer.initialize(),
+            httpServer = null
 
         if (settings.useSelfSignedSSL) {
-            const keys = await certificateHelper()
+            const 
+                certificateHelper = require(_$+'helpers/certificateHelper'),
+                https = require('https'),
+                keys = await certificateHelper()
+
             httpServer = https.createServer({ key: keys.serviceKey, cert: keys.certificate }, express)
-        } else
+        } else {
+            const http = require('http')
             httpServer = http.createServer(express)
+        }
 
-        socketHelper.initialize(httpServer)
+        await tunaServer.start(httpServer)
 
-        httpServer.listen(settings.port, function () {
+        httpServer.listen(settings.port, ()=>{
             console.log(`Tuna started, listening on port ${httpServer.address().port}`)
         })
         

@@ -10,17 +10,26 @@ const
     profilesLogic = require(_$+'logic/profiles'),
     interprocess = require(_$+'helpers/interprocess'),
     mongoHelper = require(_$+'helpers/mongo'),
-    sourceProvider = require(_$+'helpers/sourceProvider'),
-    express = Express()
+    socketHelper = require(_$+'helpers/socket'),
+    sourceProvider = require(_$+'helpers/sourceProvider')
+
+let express = null
 
 module.exports = {
-    // export underlying express so we can access it from tests
-    express : express,
 
     /**
-     * Initializes controllers/daemons.
+     * Creates and expose express for script that will be handling server
      */
-    async start (){
+    initialize(){
+        express = Express()
+        return express
+    },
+
+
+    /**
+     * Initializes controllers/daemons. Requires httpServer passed in from script handling server
+     */
+    async start (httpServer){
         
         await fs.ensureDir(settings.dataFolder)
 
@@ -37,6 +46,8 @@ module.exports = {
         mongoHelper.initialize()
 
         daemon.start()
+
+        socketHelper.initialize(httpServer)
 
         // generate the master user if it doesn't already exist
         await profilesLogic.autoCreateMaster(settings.masterUsername)

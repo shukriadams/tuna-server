@@ -1,7 +1,7 @@
 /**
  * Simple scaffold to run mocha tests on an express server instance.
  */
-let path = require('path');
+const path = require('path')
 
 // bind globals for easy module importing
 // I have no idea how this is getting loaded before the files which depend on it.
