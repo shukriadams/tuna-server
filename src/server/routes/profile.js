@@ -1,32 +1,24 @@
-const 
-    jsonHelper = require(_$+'helpers/json'),
-    authHelper = require(_$+'helpers/authentication'),
-    bruteForce = require(_$+'helpers/bruteForce'),
-    profileLogic = require(_$+'logic/profiles'),
-    contentHelper = require(_$+'helpers/content'),
-    settings = require(_$+'helpers/settings')
+const jsonHelper = require(_$+'helpers/json')
 
 module.exports = { 
-    bruteForce,
-
-    authHelper,
-
-    profileLogic,
 
     bind(app){
-
 
         /**
          * Updates a profile
          */    
         app.post('/v1/profile', async function (req, res) {
             try {
-                let authToken = await authHelper.authenticate(req),
+                const
+                    authHelper = require(_$+'helpers/authentication'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    contentHelper = require(_$+'helpers/content'),
+                    authToken = await authHelper.authenticate(req),
                     profileData = Object.assign({ id : authToken.profileId }, req.body)
 
                 await profileLogic.updateProperties(profileData)
 
-                let session = await contentHelper.build(authToken.profileId, authToken.id, 'profile')
+                const session = await contentHelper.build(authToken.profileId, authToken.id, 'profile')
 
                 jsonHelper.returnPayload(res, session)
             } catch(ex){
@@ -40,7 +32,12 @@ module.exports = {
          */    
         app.get('/v1/profile/requestPassword', async function (req, res) {
             try {
-                const route = 'profile/requestPassword'
+                const 
+                    bruteForce = require(_$+'helpers/bruteForce'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    settings = require(_$+'helpers/settings'),
+                    route = 'profile/requestPassword'
+
                 await bruteForce.process({
                     request : req,
                     route : route,
@@ -68,7 +65,12 @@ module.exports = {
          */    
         app.get('/v1/profile/resetPassword', async function (req, res) {
             try {
-                let route = 'profile/resetPassword',
+                const 
+                    authHelper = require(_$+'helpers/authentication'),
+                    bruteForce = require(_$+'helpers/bruteForce'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    settings = require(_$+'helpers/settings'),
+                    route = 'profile/resetPassword',
                     key = req.query.key,
                     currentPassword = req.query.currentPassword,
                     authToken = null,
@@ -107,7 +109,10 @@ module.exports = {
          */
         app.get('/v1/profile/delete', async function (req, res) {
             try {
-                let authToken = await authHelper.authenticate(req),
+                const 
+                    authHelper = require(_$+'helpers/authentication'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    authToken = await authHelper.authenticate(req),
                     key = req.query.key
             
                 await profileLogic.processDeleteAccount(authToken.profileId, key)
@@ -121,11 +126,15 @@ module.exports = {
 
         app.delete('/v1/profile/source', async function (req, res) {
             try {
-                let authToken = await authHelper.authenticate(req)
+                const 
+                    authHelper = require(_$+'helpers/authentication'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    contentHelper = require(_$+'helpers/content'),
+                    authToken = await authHelper.authenticate(req)
             
                 await profileLogic.deleteSource(authToken.profileId)
             
-                let session = await contentHelper.build(authToken.profileId, authToken.id, 'songs,playlists,profile')
+                const session = await contentHelper.build(authToken.profileId, authToken.id, 'songs,playlists,profile')
                 jsonHelper.returnPayload(res, session)
 
             } catch(ex){

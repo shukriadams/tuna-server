@@ -1,14 +1,6 @@
-const 
-    jsonHelper = require(_$+'helpers/json'),
-    authHelper = require(_$+'helpers/authentication'),
-    contentHelper = require(_$+'helpers/content'),
-    profileLogic = require(_$+'logic/profiles')
+const jsonHelper = require(_$+'helpers/json')
 
 module.exports = { 
-    
-    authHelper,
-
-    profileLogic,
 
     bind (app){
 
@@ -17,13 +9,15 @@ module.exports = {
          */    
         app.get('/v1/dropbox/delete', async (req, res) => {
             try {
-
-                const authToken = await authHelper.authenticate(req)
+                const 
+                    authHelper = require(_$+'helpers/authentication'),
+                    contentHelper = require(_$+'helpers/content'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    authToken = await authHelper.authenticate(req)
 
                 await profileLogic.removeDropbox(authToken.profileId)
 
                 const content = await contentHelper.build(authToken.profileId, authToken.id, 'profile')
-
                 jsonHelper.returnPayload(res, content)
 
             } catch(ex){

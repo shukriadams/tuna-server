@@ -2,15 +2,10 @@
  * 
  */
 const 
-    fs = require('fs'),
-    fsUtils = require('madscience-fsUtils'),
-    urljoin = require('urljoin'),
     settings = require(_$+'helpers/settings'),
     jsonHelper = require(_$+'helpers/json')
 
 module.exports = { 
-    
-    settings,
 
     bind(app){
 
@@ -18,14 +13,15 @@ module.exports = {
         if (!settings.musicSourceSandboxMode)
             return
 
-
         /**
          * Fakes 1st stage of Oauth flow for dropbox.
          */    
         app.get('/v1/sandbox/dropboxAuthenticate', async function (req, res) {
             try {
-                let state = req.query.state || ''
-            
+                const 
+                    settings = require(_$+'helpers/settings'),
+                    state = req.query.state || ''
+
                 res.redirect(`${settings.siteUrl}/v1/oauth/dropbox?state=${state}&code=placeholder`)
             } catch(ex){
                 jsonHelper.returnException(res, ex)
@@ -71,7 +67,12 @@ module.exports = {
 
         app.post('/v1/sandbox/dropbox/getTemporaryPath/:path', async (req, res)=>{
             try {
-                const files = await fsUtils.readFilesUnderDir(_$+'reference/music', false, '.mp3')
+                const 
+                    fsUtils = require('madscience-fsUtils'),
+                    urljoin = require('urljoin'),
+                    settings = require(_$+'helpers/settings'),                
+                    files = await fsUtils.readFilesUnderDir(_$+'reference/music', false, '.mp3')
+
                 if (!files.length)
                     return jsonHelper.returnException(res, 'No local streamable files found - add mp3s to /src/reference/music folder')
 
@@ -92,7 +93,9 @@ module.exports = {
          */
         app.get('/v1/sandbox/dropbox/stream/:file', async (req, res) =>{
             try {
-                const readStream = fs.createReadStream(path.join(_$+'reference/music', req.params.file))
+                const 
+                    fs = require('fs'),
+                    readStream = fs.createReadStream(path.join(_$+'reference/music', req.params.file))
 
                 // This will wait until we know the readable stream is actually valid before piping
                 readStream.on('open', function () {
@@ -110,7 +113,9 @@ module.exports = {
          */
         app.post('/v1/sandbox/dropbox/getfile/:file', async (req, res) =>{
             try {
-                let fileData = null
+                let 
+                    fs = require('fs'),
+                    fileData = null
 
                 if (req.params.file.includes('tuna.json'))
                     fileData = await fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
@@ -132,7 +137,9 @@ module.exports = {
          */    
         app.get('/v1/sandbox/nextcloudAuthenticate', async function (req, res) {
             try {
-                const state = req.query.state || ''
+                const 
+                    settings = require(_$+'helpers/settings'),
+                    state = req.query.state || ''
 
                 res.redirect(`${settings.siteUrl}/v1/oauth/nextcloud?state=${state}&code=placeholder`)
             } catch(ex){
@@ -165,7 +172,9 @@ module.exports = {
          */
         app.get('/v1/sandbox/nextcloud/getfile/:file', async (req, res) =>{
             try {
-                let fileData = null
+                let 
+                    fs = require('fs'),
+                    fileData = null
 
                 if (req.params.file === '.tuna.json')
                     fileData = await fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
@@ -210,7 +219,11 @@ module.exports = {
          */
         app.get('/v1/sandbox/nextcloud/stream', async (req, res) =>{
             try {
-                const files = await fsUtils.readFilesUnderDir(_$+'reference/music', true, '.mp3')
+                const 
+                    fs = require('fs'), 
+                    fsUtils = require('madscience-fsUtils'),
+                    files = await fsUtils.readFilesUnderDir(_$+'reference/music', true, '.mp3')
+
                 if (!files.length)
                     return jsonHelper.returnException(res, 'No local streamable files found - add mp3s to /src/reference/music folder')
 
@@ -254,7 +267,9 @@ module.exports = {
         app.get('/v1/sandbox/lastfmAuthenticate', async function (req, res) {
             try {
         
-                const authToken = req.query.session
+                const 
+                    settings = require(_$+'helpers/settings'),
+                    authToken = req.query.session
             
                 res.redirect(`${settings.siteUrl}/v1/oauth/lastfm?token=placeholder&session=${authToken}`)
 

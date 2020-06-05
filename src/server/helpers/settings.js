@@ -1,10 +1,7 @@
 const 
-    customEnv = require('custom-env'),
-    constants = require(_$+'types/constants')
-
-
-let 
-    process = require('process'),
+    customEnv = require('custom-env'),          // 4ms
+    process = require('process'),               // 1ms
+    constants = require(_$+'types/constants'),
     settings = {
         // must match a SOURCE_* value from /types/constants
         musicSource : constants.SOURCES_DROPBOX,
@@ -112,7 +109,7 @@ let
     }
 
 // apply custom .env settings - place an ".env" file in app root folder (where index.js/package.json) is
-customEnv.env()
+customEnv.env() // 5ms
 
 // override defaults with env variables
 for (let property in settings){

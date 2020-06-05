@@ -40,6 +40,8 @@
     "sendgrid": "5.1.0",
     "urljoin": "0.1.5",
     "minimist": "1.2.5",
+    "statman-stopwatch": "2.11.1",    
+    "cache-require-paths": "0.3.0",
     "vcjs": "https://github.com/shukriadams/vcjs.git#2.0.5",
     "madscience-fsUtils": "https://github.com/shukriadams/node-fsUtils.git#0.0.5",
     "timebelt": "https://github.com/shukriadams/timebelt.git#0.1.5",

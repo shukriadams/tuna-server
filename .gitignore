@@ -44,3 +44,4 @@ build/node/.stage.tar.gz
 build/logs
 build/data
 src/data
+src/.cache-require-paths.json

@@ -1,8 +1,3 @@
-const 
-    songsData = require(_$+'data/mongo/songs'),
-    JsonHelper = require(_$+'helpers/json'),
-    cache = require(_$+'helpers/cache')
-
 module.exports = {
     
     _getIdKey(profileId){
@@ -10,10 +5,12 @@ module.exports = {
     },
 
     async createMany(songs){
-        let songsCount = await songsData.createMany(songs)
-
+        const 
+            cache = require(_$+'helpers/cache'),
+            songsData = require(_$+'data/mongo/songs'),
+            songsCount = await songsData.createMany(songs),
         // assumes there is always at least onc song in collection, logic layer ensures this
-        let profileId = songs[0].profileId,
+            profileId = songs[0].profileId,
             key = this._getIdKey(profileId)
 
         await cache.remove(key)
@@ -22,25 +19,31 @@ module.exports = {
 
 
     async getAll(profileId){
-        let key = this._getIdKey(profileId),
+        const 
+            cache = require(_$+'helpers/cache'),
+            JsonHelper = require(_$+'helpers/json'),
+            songsData = require(_$+'data/mongo/songs'),
+            key = this._getIdKey(profileId),
             songsJson = await cache.get(key)
 
         if (songsJson)
             return JsonHelper.parse(songsJson)
 
-        let songs = await songsData.getAll(profileId)
+        const songs = await songsData.getAll(profileId)
         await cache.add(key, JSON.stringify(songs))
         return songs
     },
 
 
     async update(song){
+        const 
+            cache = require(_$+'helpers/cache'),
+            songsData = require(_$+'data/mongo/songs'),
+            key = this._getIdKey(song.profileId)
 
         // update song
         song = await songsData.update(song)
-
-        // wipe user cached songs
-        let key = this._getIdKey(song.profileId)
+        // wipe all user cached songs
         cache.remove(key)
 
         return song
@@ -48,15 +51,23 @@ module.exports = {
 
 
     async deleteAll(profileId){
+        const 
+            cache = require(_$+'helpers/cache'),
+            songsData = require(_$+'data/mongo/songs'),
+            key = this._getIdKey(profileId)
+
         await songsData.deleteAll(profileId)
-        let key = this._getIdKey(profileId)
         await cache.remove(key)
     },
 
     
     async delete(song){
+        const
+            cache = require(_$+'helpers/cache'),
+            songsData = require(_$+'data/mongo/songs'),
+            key = this._getIdKey(song.profileId)
+
         await songsData.delete(song.id)
-        let key = this._getIdKey(song.profileId)
         await cache.remove(key)
     }
 

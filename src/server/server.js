@@ -1,8 +1,8 @@
 const 
-    Express = require('express'),
-    fs = require('fs-extra'),
-    path = require('path'),
-    bodyParser = require('body-parser'),
+    Express = require('express'), // 160ms
+    fs = require('fs-extra'),   // 77ms
+    path = require('path'),     // 0ms
+    bodyParser = require('body-parser'),    // 7ms
     pathingHelper = require(_$+'helpers/pathing'),
     cache = require(_$+'helpers/cache'),
     daemon = require(_$+'helpers/daemon'),

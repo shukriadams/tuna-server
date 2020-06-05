@@ -1,32 +1,22 @@
-const 
-    jsonHelper = require(_$+'helpers/json'),
-    authHelper = require(_$+'helpers/authentication'),
-    contentHelper = require(_$+'helpers/content'),
-    profileLogic = require(_$+'logic/profiles'),
-    songsLogic = require(_$+'logic/songs')
+const jsonHelper = require(_$+'helpers/json')
 
 module.exports = { 
 
-    authHelper,
-
-    profileLogic,
-    
-    songsLogic,
-
     bind(app){
-
 
         /**
          * todo : convert to DELETE
          */    
         app.get('/v1/lastfm/delete', async function (req, res) {
             try {
-                const authToken = await authHelper.authenticate(req)
+                const 
+                    authHelper = require(_$+'helpers/authentication'),
+                    contentHelper = require(_$+'helpers/content'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    authToken = await authHelper.authenticate(req)
 
                 await profileLogic.removeLastfm(authToken.profileId)
-
                 const session = await contentHelper.build(authToken.profileId, authToken.id, 'profile')
-
                 jsonHelper.returnPayload(res, session)
                 
             } catch(ex){
@@ -40,8 +30,10 @@ module.exports = {
          */
         app.get('/v1/lastfm/scrobble', async function (req, res) {
             try {
-
-                let authToken = await authHelper.authenticate(req)
+                const 
+                    authHelper = require(_$+'helpers/authentication'),
+                    songsLogic = require(_$+'logic/songs')
+                    authToken = await authHelper.authenticate(req)
            
                 await songsLogic.scrobble(
                     authToken.profileId, 
