@@ -1,14 +1,3 @@
-const 
-    request = require('request'),
-    urljoin = require('urljoin'),
-    httputils = require('madscience-httputils'),
-    settings = require(_$+'helpers/settings'),
-    logger = require('winston-wrapper').instance(settings.logPath),
-    Exception = require(_$+'types/exception'),
-    constants = require(_$+'types/constants'),
-    DropboxSource = require(_$+'types/dropboxSource'),
-    JsonHelper = require(_$+'helpers/json')
-
 module.exports = {
     
     /**
@@ -16,6 +5,10 @@ module.exports = {
      * 
      */
     async search(source, query){
+        const 
+            urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            settings = require(_$+'helpers/settings')
         
         return new Promise(async (resolve, reject)=> {
 
@@ -52,6 +45,11 @@ module.exports = {
      * Downloads a file from dropbox as a string. This should be used for accessing Tuna xml and json index files
      */
     async downloadAsString(accessToken, path){
+        const 
+            urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            settings = require(_$+'helpers/settings')
+
         return new Promise(async(resolve, reject)=>{
             try {
 
@@ -80,6 +78,10 @@ module.exports = {
 
 
     getOauthUrl (authTokenId){
+        const 
+            urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings')
+
         if (settings.dropboxDevOauthToken)
             return urljoin(settings.siteUrl, `/v1/sandbox/dropboxAuthenticate?&state=${authTokenId}_TARGETPAGE`)
         else
@@ -99,6 +101,13 @@ module.exports = {
      * Gets a temporary link to a file on dropbox. This link is used to stream the file to the browser.
      */
     async getFileLink(sources, path){
+        const 
+            urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            settings = require(_$+'helpers/settings'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants')
+
         return new Promise(async (resolve, reject) => {
 
             if (!sources[constants.SOURCES_DROPBOX])
@@ -147,7 +156,10 @@ module.exports = {
      */
     async getIndexFileContent(source, profileId){
         
-        let accessToken = source.accessToken
+        let accessToken = source.accessToken,
+            settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
+            Exception = require(_$+'types/exception')
 
         return new Promise(async (resolve, reject)=>{
 
@@ -179,6 +191,15 @@ module.exports = {
      * Retrieves a raw token from a dropbox oauth response, verifies it, and stores the result to the profile
      */
     async swapCodeForToken(profileId, token){
+        const 
+            request = require('request'),
+            urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            DropboxSource = require(_$+'types/dropboxSource'),
+            JsonHelper = require(_$+'helpers/json')
+
         return new Promise(async (resolve, reject) => {
 
             try {

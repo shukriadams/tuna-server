@@ -1,29 +1,14 @@
-const
-    urljoin = require('urljoin'),
-    request = require('request'),
-    httputils = require('madscience-httputils'),
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    settings = require(_$+'helpers/settings'),
-    profileLogic = require(_$+'logic/profiles'),
-    xmlHelper = require(_$+'helpers/xml'),
-    jsonHelper = require(_$+'helpers/json'),
-    NextCloudSource = require(_$+'types/nextcloudSource'),
-    timebelt = require('timebelt'),
-    log = require(_$+'logic/log')
-
 module.exports = { 
     
-    // export these for test shimming
-    httputils,
-    log,
-    profileLogic,
-
     getLabel(){
         return 'NextCloud'
     },
 
     getOauthUrl (authTokenId){
+        const
+            urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings')
+
         if (settings.musicSourceSandboxMode)
             return urljoin(settings.siteUrl, `v1/sandbox/nextcloudAuthenticate?state=${authTokenId}_TARGETPAGE`)
         else
@@ -31,12 +16,16 @@ module.exports = {
     },
 
     async downloadAsString(accessToken, path){
-        const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path)
-        const response = await httputils.downloadString ({ 
-            url, 
-            headers : {
-                'Authorization' : `Bearer ${accessToken}`
-            }});
+        const 
+            urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            settings = require(_$+'helpers/settings'),
+            url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path),
+            response = await httputils.downloadString ({ 
+                url, 
+                headers : {
+                    'Authorization' : `Bearer ${accessToken}`
+                }})
 
         return response.body
     },
@@ -45,7 +34,16 @@ module.exports = {
      * Ensures access tokens for a given user have been updated. should be called as often as possible
      */
     async ensureTokensAreUpdated (profileId){
-        let profile = await profileLogic.getById(profileId), 
+        let 
+            urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            settings = require(_$+'helpers/settings'),
+            profileLogic = require(_$+'logic/profiles'),
+            jsonHelper = require(_$+'helpers/json'),
+            timebelt = require('timebelt'),
+            profile = await profileLogic.getById(profileId), 
             source = profile.sources[constants.SOURCES_NEXTCLOUD],
             hasExpired = new Date().getTime() > timebelt.addSeconds(source.tokenDate, source.expiresIn).getTime()
 
@@ -114,6 +112,11 @@ module.exports = {
      */
     async search(source, query) {
         const
+            urljoin = require('urljoin'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            settings = require(_$+'helpers/settings'),
+            xmlHelper = require(_$+'helpers/xml'),
             accessToken = source.accessToken,
             nextCloudUserId = source.userId,
             options = {
@@ -184,6 +187,16 @@ module.exports = {
     },
 
     async swapCodeForToken(profileId, code){
+        const 
+            urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            settings = require(_$+'helpers/settings'),
+            profileLogic = require(_$+'logic/profiles'),
+            jsonHelper = require(_$+'helpers/json'),
+            NextCloudSource = require(_$+'types/nextcloudSource')
+
         let url = `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`
         if (settings.musicSourceSandboxMode){
             url = urljoin(settings.siteUrl, 'v1/sandbox/nextcloudTokenSwap')
@@ -218,6 +231,12 @@ module.exports = {
      async streamMedia (profileId, mediaPath, res){
 
         const
+            urljoin = require('urljoin'),
+            request = require('request'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            settings = require(_$+'helpers/settings'),
+            profileLogic = require(_$+'logic/profiles'),
             profile = await profileLogic.getById(profileId),
             source = profile.sources[constants.SOURCES_NEXTCLOUD]
 
@@ -258,6 +277,10 @@ module.exports = {
      * The media path is returned as base64 string because it's a URL itself
      */
     async getFileLink(sources, path, authToken){
+        const
+            urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings')
+
         return urljoin(settings.siteUrl, `/v1/songs/stream/${authToken}/${new Buffer(path).toString('base64')}`)
     }
 

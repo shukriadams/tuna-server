@@ -1,9 +1,6 @@
 const
     ImporterBase = require(_$+'helpers/importerBase'),
-    common = require(_$+'helpers/dropbox/common'),
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    xmlHelper = require(_$+'helpers/xml')
+    constants = require(_$+'types/constants')
 
 /**
  * Imports song data from nextcloud. This process consists of multiple steps. It exposes which step it's on, 
@@ -28,6 +25,11 @@ module.exports = class extends ImporterBase {
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
+        const
+            common = require(_$+'helpers/dropbox/common'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception')
+
         let s = await this._getSource(),
             profile = s.profile, 
             source = s.source,
@@ -67,6 +69,12 @@ module.exports = class extends ImporterBase {
      * Reads data from remote index files, into temp local array
      */
     async _readIndices(){
+        const
+            common = require(_$+'helpers/dropbox/common'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            xmlHelper = require(_$+'helpers/xml')
+
         let s = await this._getSource(),
             source = s.source
 

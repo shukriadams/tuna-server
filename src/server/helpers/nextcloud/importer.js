@@ -1,12 +1,6 @@
 const 
-    httputils = require('madscience-httputils'),
-    urljoin = require('urljoin'),
     ImporterBase = require(_$+'helpers/importerBase'),
-    nextCloudCommon = require(_$+'helpers/nextcloud/common'),
-    settings = require(_$+'helpers/settings'),
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    xmlHelper = require(_$+'helpers/xml')
+    constants = require(_$+'types/constants')
 
 /**
  * Imports song data from nextcloud. This process consists of multiple steps. It exposes which step it's on, 
@@ -22,6 +16,8 @@ class Importer extends ImporterBase {
     }
 
     async _ensureTokens(){
+        const nextCloudCommon = require(_$+'helpers/nextcloud/common')
+
         nextCloudCommon.ensureTokensAreUpdated(this.profileId)
     }
    
@@ -31,6 +27,12 @@ class Importer extends ImporterBase {
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
+        const 
+            settings = require(_$+'helpers/settings'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            xmlHelper = require(_$+'helpers/xml')
+
         let s = await this._getSource(),
             profile = s.profile, 
             source = s.source
@@ -136,6 +138,9 @@ class Importer extends ImporterBase {
      */
     async _readIndices(){
         const 
+            httputils = require('madscience-httputils'),
+            urljoin = require('urljoin'),
+            xmlHelper = require(_$+'helpers/xml'),
             s = await this._getSource(),
             source = s.source
 
