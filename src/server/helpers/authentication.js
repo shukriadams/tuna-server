@@ -2,14 +2,7 @@
  * Helper for express routes, returns an authToken record if the route call has the correct header on it, 
  * throws an exception if it doesn't.
  */
-const
-    Exception = require(_$+'types/exception'),
-    constants = require(_$+'types/constants'),
-    authTokenLogic = require(_$+'logic/authToken')
-
 module.exports = { 
-    
-    authTokenLogic,
     
     /**
      * Authenticates assuming bearer token in header
@@ -31,6 +24,11 @@ module.exports = {
      * in some other way.
      */
     async authenticateTokenString(token){
+        const
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            authTokenLogic = require(_$+'logic/authToken')
+
         if (!token)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 

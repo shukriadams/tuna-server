@@ -1,12 +1,12 @@
-const 
-    MongoClient = require('mongodb').MongoClient,
-    settings = require(_$+'helpers/settings'),
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception')
-
 module.exports = {
     
     async getCollection(name){
+        const 
+            MongoClient = require('mongodb').MongoClient,
+            settings = require(_$+'helpers/settings'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception')
+
         return new Promise(async (resolve, reject)=>{
             try {
                 MongoClient.connect(settings.mongoConnectionString, (err, client)=>{
@@ -30,6 +30,12 @@ module.exports = {
     },
     
     async initialize(){
+        const 
+            MongoClient = require('mongodb').MongoClient,
+            settings = require(_$+'helpers/settings'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception')
+
         return new Promise(async (resolve, reject)=>{
             try {
                 MongoClient.connect(settings.mongoConnectionString, (err, client)=>{

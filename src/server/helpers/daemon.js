@@ -1,15 +1,17 @@
-let
-    CronJob = require('cron').CronJob,
-    profileLogic = require(_$+'logic/profiles'),
-    settings = require(_$+'helpers/settings'),
-    logger = require('winston-wrapper').instance(settings.logPath),
-    sourceProvider = require(_$+'helpers/sourceProvider'),
-    sourceCommon = require(_$+'helpers/sourceCommon'),
-    busy = false
+
 
 module.exports = {
  
     start : ()=>{
+        
+        let
+            CronJob = require('cron').CronJob,
+            profileLogic = require(_$+'logic/profiles'),
+            settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
+            sourceProvider = require(_$+'helpers/sourceProvider'),
+            sourceCommon = require(_$+'helpers/sourceCommon'),
+            busy = false
 
         new CronJob(settings.daemonInterval, async ()=>{
 

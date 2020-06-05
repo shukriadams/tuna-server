@@ -1,16 +1,14 @@
-const 
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    lastFmHelper = require(_$+'helpers/lastfm'),
-    songsCache = require(_$+'cache/songs'),
-    JsonHelper = require(_$+'helpers/json')
-
 module.exports = {
 
     /**
      *
      */
     async createMany(songs){
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            songsCache = require(_$+'cache/songs')
+
         if (!songs || !songs.length)
             throw new Exception({ 
                 code : constants.ERROR_INVALID_ARGUMENT, 
@@ -25,7 +23,7 @@ module.exports = {
      * Streams a song from a source like nextcloud
      */
     async streamSong(profileId, mediaPath, res){
-        let sourceProvider = require(_$+'helpers/sourceProvider'),
+        const sourceProvider = require(_$+'helpers/sourceProvider'),
             source = sourceProvider.get();
 
         await source.streamMedia(profileId, mediaPath, res);
@@ -36,7 +34,9 @@ module.exports = {
      *
      */
     async update(song){
-        return await songsCache.update(song);
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.update(song)
     },
 
 
@@ -44,7 +44,9 @@ module.exports = {
      *
      */
     async deleteAll(profileId){
-        return await songsCache.deleteAll(profileId);
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.deleteAll(profileId)
     },
 
 
@@ -52,7 +54,9 @@ module.exports = {
      * song : song object to delete.
      */
     async delete(song){
-        return await songsCache.delete(song);
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.delete(song)
     },
 
 
@@ -60,7 +64,9 @@ module.exports = {
      * Gets all user songs, unfiltered
      */
     async getAll(profileId){
-        return await songsCache.getAll(profileId);
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.getAll(profileId)
     },
 
     
@@ -68,18 +74,22 @@ module.exports = {
      *
      */
     async nowPlaying(profileId, songId){
-        let profileLogic = require(_$+'logic/profiles'),
-            profile = await profileLogic.getById(profileId);
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            lastFmHelper = require(_$+'helpers/lastfm'),
+            profileLogic = require(_$+'logic/profiles'),
+            profile = await profileLogic.getById(profileId)
 
         if (!profile)
-            throw new Exception({ code: constants.ERROR_INVALID_USER_OR_SESSION });
+            throw new Exception({ code: constants.ERROR_INVALID_USER_OR_SESSION })
 
-        let song = await this._getById(songId, profileId);
+        const song = await this._getById(songId, profileId)
 
         if (!song)
-            throw new Exception({ code: constants.ERROR_INVALID_SONG });
+            throw new Exception({ code: constants.ERROR_INVALID_SONG })
 
-        return await lastFmHelper.nowPlaying(profile, song);
+        return await lastFmHelper.nowPlaying(profile, song)
     },
 
 
@@ -87,12 +97,16 @@ module.exports = {
      * Move to lastfm helper
      */
     async scrobble(profileId, songId, songDuration){
-        let song = await this._getById(songId, profileId);
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            lastFmHelper = require(_$+'helpers/lastfm'),
+            song = await this._getById(songId, profileId)
 
         if (!song)
             throw { code: 2, message : 'Invalid song'};
 
-        let cacheKey = profileId + '_nowPlaying',
+        let cacheKey = `${profileId}_nowPlaying`,
             nowPlaying = await cache.get(cacheKey);
 
         if (!nowPlaying)
@@ -146,6 +160,8 @@ module.exports = {
      * 
      */
     async  _getById(songId, profileId){
+        const songsCache = require(_$+'cache/songs')
+
         // we fetch all songs for user because content is cached at the user level
         const songs = await songsCache.getAll(profileId)
         if (!songs.length)
@@ -161,6 +177,11 @@ module.exports = {
      *
      */
     async toggleLove(songId, profileId){
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            songsCache = require(_$+'cache/songs')
+
         let song = await this._getById(songId, profileId);
         if (!song)
             throw new Exception({ code : constants.ERROR_INVALID_SONG });
@@ -175,6 +196,12 @@ module.exports = {
      *
      */
     async persistSong(songRawJson, profileId){
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            songsCache = require(_$+'cache/songs'),
+            JsonHelper = require(_$+'helpers/json')
+
         let songJson = JsonHelper.parse(songRawJson)
 
         // we check ownership implicitly by fetching song id in scope of current profile
@@ -203,6 +230,6 @@ module.exports = {
             source = sourceProvider.get(),
             url = await source.getFileLink(profile.sources, song.path, authTokenId)
 
-        return url;
+        return url
     }
-};
+}

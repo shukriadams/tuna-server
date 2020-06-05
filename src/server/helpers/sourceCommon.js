@@ -1,12 +1,14 @@
-const
-    profileLogic = require(_$+'logic/profiles'),
-    settings = require(_$+'helpers/settings'),
-    jsonHelper = require(_$+'helpers/json'),
-    constants = require(_$+'types/constants')
+
 
 module.exports = {
     async isRemoteNewer(profileId, sourceCommon){
-        const profile = await profileLogic.getById(profileId)
+        const
+            profileLogic = require(_$+'logic/profiles'),
+            settings = require(_$+'helpers/settings'),
+            jsonHelper = require(_$+'helpers/json'),
+            constants = require(_$+'types/constants'),
+            profile = await profileLogic.getById(profileId)
+
         if (!profile)
             throw new Exception({
                 code : constants.ERROR_INVALID_USER_OR_SESSION

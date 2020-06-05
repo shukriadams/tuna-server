@@ -1,14 +1,13 @@
-let
-    Exception = require(_$+'types/exception'),
-    constants = require(_$+'types/constants'),
-    AuthToken = require(_$+'types/authToken'),
-    settings = require(_$+'helpers/settings'),
-    cache = require(_$+'cache/authToken')
-
 module.exports = {
 
     async create(profileId, browserUID, userAgent){
-        let authToken = AuthToken.new()
+        const 
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            AuthToken = require(_$+'types/authToken'),
+            settings = require(_$+'helpers/settings'),
+            cache = require(_$+'cache/authToken'),
+            authToken = AuthToken.new()
     
         if (!profileId)
             throw new Exception({code : constants.ERROR_INVALID_ARGUMENT, message: 'missing profileid'})
@@ -43,11 +42,13 @@ module.exports = {
     
     
     async getForProfile(profileId){
+        const cache = require(_$+'cache/authToken')
         return await cache.getForProfile(profileId)
     },
 
 
     async getById(key){
+        const cache = require(_$+'cache/authToken')
         if (!key || key === 'null') // string null check if workaround for shitty stuff that should be properly fixed in frontend
             return null
     
@@ -59,6 +60,7 @@ module.exports = {
      * Deletes all tokens for a user
      */
     async deleteForProfile (profileId){
+        const cache = require(_$+'cache/authToken')
         await cache.deleteForProfile(profileId)
     }
     

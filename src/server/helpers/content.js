@@ -1,20 +1,20 @@
-const
-    crypto = require('crypto'),
-    settings = require(_$+'helpers/settings'),
-    playlistsLogic = require(_$+'logic/playlists'),
-    profileLogic = require(_$+'logic/profiles'),
-    Exception = require(_$+'types/exception'),
-    constants = require(_$+'types/constants'),
-    Session = require(_$+'types/session'),
-    songsLogic = require(_$+'logic/songs')
-
 module.exports = {
 
     /**
      * contentRequired: comma-separatd string
      */
     async build(profileId, authTokenId, contentRequired){
-        const profile = await profileLogic.getById(profileId)
+        const
+            crypto = require('crypto'),
+            settings = require(_$+'helpers/settings'),
+            playlistsLogic = require(_$+'logic/playlists'),
+            profileLogic = require(_$+'logic/profiles'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            Session = require(_$+'types/session'),
+            songsLogic = require(_$+'logic/songs'),
+            profile = await profileLogic.getById(profileId)
+
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 

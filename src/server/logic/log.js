@@ -11,14 +11,15 @@ module.exports = {
     async create (entry, context, profileId = null){
 
         // need to require here, if require in header pulls in self and recurses to death
-        const log = require(_$+'data/mongo/log')
-
-        const record = Object.assign({
-            content : entry,
-            date : new Date().getTime(),
-            profileId,
-            context : context
-        }, logType.new())
+        const 
+            logType = require(_$+'types/log'),
+            log = require(_$+'data/mongo/log'),
+            record = Object.assign({
+                content : entry,
+                date : new Date().getTime(),
+                profileId,
+                context : context
+            }, logType.new())
 
         await log.create(record)
     }

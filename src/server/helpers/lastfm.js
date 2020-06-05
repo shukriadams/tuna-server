@@ -1,20 +1,10 @@
-const 
-    crypto = require('crypto'),
-    request = require('request'),
-    xmlreader = require('xmlreader'),
-    urljoin = require('urljoin'),
-    settings = require(_$+'helpers/settings'),
-    log = require(_$+'logic/log'),
-    xmlHelper = require(_$+'helpers/xml'),
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    cache = require(_$+'helpers/cache'),
-    requestNative = require('request-promise-native'),
-    PlaySession = require(_$+'types/playSession')
-
 module.exports = {
 
     methodSignature(parameters){
+        const 
+            crypto = require('crypto'),
+            settings = require(_$+'helpers/settings')
+
         // sort parameters alphabetically
         let sortedParameters = [],
             apiSignature = '';
@@ -38,6 +28,8 @@ module.exports = {
     },
 
     getOauthUrl(authTokenId){
+        const settings = require(_$+'helpers/settings')
+        
         if (settings.lastFmDevAuthKey)
             return `${settings.siteUrl}/api/sandbox/lastfmAuthenticate?&session=${authTokenId}`;
         
@@ -46,6 +38,14 @@ module.exports = {
 
     /* sends message to last fm about current playing song.  */
     async nowPlaying(profile, song){
+        const 
+            request = require('request'),
+            xmlreader = require('xmlreader'),
+            settings = require(_$+'helpers/settings'),
+            log = require(_$+'logic/log'),
+            cache = require(_$+'helpers/cache'),
+            PlaySession = require(_$+'types/playSession')
+
         return new Promise(async (resolve, reject) => {
 
             try {
@@ -114,6 +114,12 @@ module.exports = {
     },
 
     async scrobble(profile, song, startedPlayingUnixTime){
+        const 
+            request = require('request'),
+            xmlreader = require('xmlreader'),
+            settings = require(_$+'helpers/settings'),
+            log = require(_$+'logic/log')
+
         return new Promise((resolve, reject) => {
             let parameters = {
                     method : 'track.scrobble',
@@ -163,6 +169,15 @@ module.exports = {
     },
 
     async swapCodeForToken(profileId, sessionToken){
+        const 
+            crypto = require('crypto'),
+            urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings'),
+            xmlHelper = require(_$+'helpers/xml'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            requestNative = require('request-promise-native')
+
         return new Promise(async (resolve, reject) => {
 
             try {

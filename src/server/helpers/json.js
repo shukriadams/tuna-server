@@ -3,11 +3,7 @@
  */
 const 
     constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    settings = require(_$+'helpers/settings'),
-    logger = require('winston-wrapper').instance(settings.logPath),
     errorBehaviourMap = {}
-
 
 errorBehaviourMap[constants.ERROR_DEFAULT] = { status : 500, log : true }
 errorBehaviourMap[constants.ERROR_INVALID_USER_OR_SESSION] = { status : 401, log : false, public : 'Invalid user/session. Please relog' }
@@ -47,9 +43,12 @@ module.exports = {
      * All errors must be routed through here - errors which bypass should be handled as fatal server errors by the client
      */
     returnException(res, ex){
-
-        // get some behaviour based on exception code. Don't assume code has been set.
-        let behaviour = errorBehaviourMap[ex.code || '--'] || errorBehaviourMap[constants.ERROR_DEFAULT]
+        const 
+            constants = require(_$+'types/constants'),
+            settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
+            // get some behaviour based on exception code. Don't assume code has been set.
+            behaviour = errorBehaviourMap[ex.code || '--'] || errorBehaviourMap[constants.ERROR_DEFAULT]
 
         // most logging happens here - errors that happen deep in the application stack are thrown as Exception and should always
         // bubble up to API interface, which ends up in this JSON helper, where we decide logging and how to inform client.
@@ -72,6 +71,8 @@ module.exports = {
      * ALL server-side JSON.parse should be replaced with this
      */
     parse (raw){
+        const Exception = require(_$+'types/exception')
+
         try {
             return JSON.parse(raw)
         }catch (ex){

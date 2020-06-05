@@ -1,20 +1,6 @@
-const 
-    jsonHelper = require(_$+'helpers/json'),
-    authHelper = require(_$+'helpers/authentication'),
-    bruteForce = require(_$+'helpers/bruteForce'),
-    settings = require(_$+'helpers/settings'),
-    authTokenLogic = require(_$+'logic/authToken'),
-    contentHelper = require(_$+'helpers/content'),
-    songsLogic = require(_$+'logic/songs'),
-    profileLogic = require(_$+'logic/profiles')
+const jsonHelper = require(_$+'helpers/json')
 
 module.exports = {
-
-    profileLogic,
-    authTokenLogic,
-    songsLogic,
-    authHelper,
-    bruteForce,
 
     bind(app){
 
@@ -24,7 +10,13 @@ module.exports = {
          */
         app.post('/v1/session', async function (req, res) {
             try {
-                const route = 'sessions/post';
+                const 
+                    bruteForce = require(_$+'helpers/bruteForce'),
+                    settings = require(_$+'helpers/settings'),
+                    authTokenLogic = require(_$+'logic/authToken'),
+                    contentHelper = require(_$+'helpers/content'),
+                    profileLogic = require(_$+'logic/profiles')
+                    route = 'sessions/post'
 
                 await bruteForce.process({
                     request : req,
@@ -53,7 +45,10 @@ module.exports = {
          */    
         app.get('/v1/session/isvalid', async function (req, res) {
             try {
-                let tokenRecord = await authTokenLogic.getById(req.query.token || ''),
+                let 
+                   authTokenLogic = require(_$+'logic/authToken'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    tokenRecord = await authTokenLogic.getById(req.query.token || ''),
                     isValid = false
         
                 // confirm both token and profile, token might be orphaned cache instance

@@ -1,8 +1,3 @@
-const 
-    systemData = require(_$+'data/mongo/system'),
-    JsonHelper = require(_$+'helpers/json'),
-    cache = require(_$+'helpers/cache')
-
 module.exports = {
 
     _getIdKey(recordId){
@@ -11,8 +6,12 @@ module.exports = {
     
 
     async getById(recordId){
-        let key = this._getIdKey(recordId)
-        let reply = await cache.get(key)
+        const 
+            systemData = require(_$+'data/mongo/system'),
+            JsonHelper = require(_$+'helpers/json'),
+            cache = require(_$+'helpers/cache'),
+            key = this._getIdKey(recordId)
+            reply = await cache.get(key)
     
         if (reply)
             return (JsonHelper.parse(reply))
@@ -26,28 +25,42 @@ module.exports = {
     
 
     async create(record){
-        record = await systemData.create(record)
-        let key = this._getIdKey(record.id)
-        await cache.add(key, JSON.stringify(record))
-        return record
+        const 
+            systemData = require(_$+'data/mongo/system'),
+            cache = require(_$+'helpers/cache'),
+            newRecord = await systemData.create(record),
+            key = this._getIdKey(newRecord.id)
+
+        await cache.add(key, JSON.stringify(newRecord))
+        return newRecord
     },
     
 
     async getById(id){
+        const systemData = require(_$+'data/mongo/system')
+
         return systemData.getById(id)
     },
     
 
     async update(record){
+        const 
+            systemData = require(_$+'data/mongo/system'),
+            cache = require(_$+'helpers/cache')
+
         await systemData.update(record)
-        let key = this._getIdKey(record.id)
+        const key = this._getIdKey(record.id)
         await cache.add(key, JSON.stringify(record))
     },
     
 
     async delete(record){
+        const 
+            systemData = require(_$+'data/mongo/system'),
+            cache = require(_$+'helpers/cache')
+
         await systemData.delete(record)
-        let key = this._getIdKey(record.id)
+        const key = this._getIdKey(record.id)
         await cache.remove(key)
     }
 }

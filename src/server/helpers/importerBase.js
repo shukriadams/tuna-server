@@ -1,13 +1,9 @@
 const 
-    path = require('path'),
-    settings = require(_$+'helpers/settings'),
-    logger = require('winston-wrapper').instance(settings.logPath),
     constants = require(_$+'types/constants'),
     Exception = require(_$+'types/exception'),
     Song = require(_$+'types/song'),
     songsLogic = require(_$+'logic/songs'),
     playlistLogic = require(_$+'logic/playlists'),    
-    authTokenLogic = require(_$+'logic/authToken'),
     debounce = require(_$+'helpers/debounce')
 
 /**
@@ -22,16 +18,21 @@ class Importer {
      * authTokenId can be null
      */
     constructor(profileId, authTokenId){
+        const settings = require(_$+'helpers/settings')
+
         // MUST be set by overriding class, egs, constants.SOURCES_NEXTCLOUD
-        this.integrationName = null
         this.socketHelper = require(_$+'helpers/socket')
         this.httputils = require('madscience-httputils')
         this.log = require(_$+'logic/log')
         this.cache = require(_$+'helpers/cache')
         this.settings = require(_$+'helpers/settings')
-        this.profileId = profileId;
-        this.authTokenId = authTokenId
         this.profileLogic = require(_$+'logic/profiles')
+
+        this.logger = require('winston-wrapper').instance(settings.logPath)
+        this.profileId = profileId
+        this.authTokenId = authTokenId
+        this.integrationName = null
+        
         // lets user get status of import job will it's running
         this.cacheKey = `${profileId}_importProgress`
         // populated with data from xml index files
@@ -125,7 +126,8 @@ class Importer {
                 if (this.importCounter >= this.songsFromIndices.length)
                     return await this._finish()
 
-                let item = this.songsFromIndices[this.importCounter],
+                let path = require('path'),
+                    item = this.songsFromIndices[this.importCounter],
                     itemPath = item.path || null,
                     extension = path.extname(itemPath).replace('.', ''),
                     name = (item.name || '').trim(),
@@ -195,7 +197,7 @@ class Importer {
                 // clean out cached session, this should be last step and frees up the cache queue for this user
                 await this.cache.remove( this.cacheKey )
 
-                logger.error.error(ex)
+                this.logger.error.error(ex)
 
                 if (this.authTokenId)
                     this.socketHelper.send(this.authTokenId, 'import.progress', {
@@ -343,7 +345,9 @@ class Importer {
             await this.profileLogic.update(profile)
             
             // signal that import is complete
-            const allTokens = await authTokenLogic.getForProfile(this.profileId)
+            const authTokenLogic = require(_$+'logic/authToken'),
+                allTokens = await authTokenLogic.getForProfile(this.profileId)
+
             for (let authToken of allTokens)
                 this.socketHelper.send(authToken.id, 'import.progress', {
                     complete : true

@@ -1,13 +1,12 @@
-const   
-    settings = require(_$+'helpers/settings'),
-    Exception = require(_$+'types/exception'),
-    Sendgrid = require('sendgrid')
-    
+
 
 module.exports = {
     send : async function(to, subject, body){
-
-        let helper = Sendgrid.mail,
+        const   
+            settings = require(_$+'helpers/settings'),
+            Exception = require(_$+'types/exception'),
+            Sendgrid = require('sendgrid'),
+            helper = Sendgrid.mail,
             fromEmail = new helper.Email(settings.fromEmail),
             toEmail = new helper.Email(to),
             content = new helper.Content('text/plain', body),

@@ -1,12 +1,6 @@
-const
-    jsonHelper = require(_$+'helpers/json'),
-    sourceProvider = require(_$+'helpers/sourceProvider'),
-    constants = require(_$+'types/constants'),
-    settings = require(_$+'helpers/settings')
+const jsonHelper = require(_$+'helpers/json')
 
 module.exports ={
-    
-    sourceProvider,
 
     bind(app){
 
@@ -15,7 +9,11 @@ module.exports ={
          */    
         app.get('/v1/settings', async function (req, res) {
             try {
-                let source = sourceProvider.get()
+                const 
+                    sourceProvider = require(_$+'helpers/sourceProvider'),
+                    constants = require(_$+'types/constants'),
+                    settings = require(_$+'helpers/settings'),
+                    source = sourceProvider.get()
 
                 jsonHelper.returnPayload(res, {
                     serverConstants : constants,

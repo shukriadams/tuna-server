@@ -1,9 +1,11 @@
-const 
-    xmlreader = require('xmlreader'),
-    Exception = require(_$+'types/exception')
+
 
 module.exports = {
     async toDoc(xmlText){
+        const 
+            xmlreader = require('xmlreader'),
+            Exception = require(_$+'types/exception')
+
         return new Promise((resolve, reject) => {
 
             try {

@@ -1,12 +1,14 @@
-const 
-    Exception = require(_$+'types/exception'),
-    constants = require(_$+'types/constants'),
-    timebelt = require('timebelt'),
-    cache = require(_$+'helpers/cache'),
-    jsonHelper = require(_$+'helpers/json')
 
 module.exports = {
+    
     async process(options){
+        const 
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            timebelt = require('timebelt'),
+            cache = require(_$+'helpers/cache'),
+            jsonHelper = require(_$+'helpers/json')
+
         if (!cache.isEnabled)
             return
 
@@ -50,7 +52,9 @@ module.exports = {
     },
 
     async clear(options){
-        let ip = options.request.connection.remoteAddress,
+        const 
+            cache = require(_$+'helpers/cache'),
+            ip = options.request.connection.remoteAddress,
             key = `${options.route}_${ip}`
 
         await cache.remove(key)

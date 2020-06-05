@@ -2,11 +2,12 @@ const
     ObjectID  = require('mongodb').ObjectID,
     constants = require(_$+'types/constants'),
     mongoHelper = require(_$+'helpers/mongo'),
-    Exception = require(_$+'types/exception'),
-    AuthToken = require(_$+'types/authToken')
+    Exception = require(_$+'types/exception')
 
 function normalize(mongoRecord){
-    let newRecord = AuthToken.new()
+    const 
+        AuthToken = require(_$+'types/authToken'),
+        newRecord = AuthToken.new()
 
     for (let property in newRecord)
         if (mongoRecord.hasOwnProperty(property))
@@ -17,7 +18,9 @@ function normalize(mongoRecord){
 }
 
 function denormalize(obj){
-    let clone = Object.assign({}, obj)
+    const 
+        ObjectID  = require('mongodb').ObjectID,
+        clone = Object.assign({}, obj)
 
     if (obj.id)
         clone._id = new ObjectID(obj.id)

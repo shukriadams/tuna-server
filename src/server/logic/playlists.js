@@ -1,14 +1,14 @@
-const 
-    Exception = require(_$+'types/exception'),
-    constants = require(_$+'types/constants'),
-    playlistsCache = require(_$+'cache/playlist')
-
 module.exports = {
 
     /**
      *
      */
     async create(playlist, profileId){
+        const 
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            playlistsCache = require(_$+'cache/playlist')
+
         if (!playlist)
             throw new Exception({ code: constants.ERROR_INVALID_ARGUMENT, log : 'playlist required' });
 
@@ -29,6 +29,12 @@ module.exports = {
      *
      */
     async update(playlist){
+        const 
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            playlistsCache = require(_$+'cache/playlist')
+
+
         if (!playlist)
             throw new Exception({ code: constants.ERROR_INVALID_ARGUMENT, log : 'playlist required' });
 
@@ -49,6 +55,8 @@ module.exports = {
      *
      */
     async delete(playlistId, profileId){
+        const playlistsCache = require(_$+'cache/playlist')
+
         await playlistsCache.delete(playlistId, profileId);
     },
 
@@ -57,6 +65,8 @@ module.exports = {
      *
      */
     async deleteAll(profileId){
+        const playlistsCache = require(_$+'cache/playlist')
+
         return await playlistsCache.deleteAll(profileId);
     },
 
@@ -65,6 +75,7 @@ module.exports = {
      *
      */
     async getAll(profileId){
+        const playlistsCache = require(_$+'cache/playlist')
         return await playlistsCache.getAll(profileId);
     },
 
@@ -73,6 +84,7 @@ module.exports = {
      *
      */
     async getById(playlistId){
+        const playlistsCache = require(_$+'cache/playlist')
         return await playlistsCache.getAll(playlistId);
     }
 };

@@ -1,11 +1,12 @@
-let 
-    Socketio = require('socket.io'),
-    authTokenLogic = require(_$+'logic/authToken'),
-    _io = null
+let _io = null
 
 module.exports = {
 
     initialize(expressServer){
+        const
+            Socketio = require('socket.io'),
+            authTokenLogic = require(_$+'logic/authToken')
+
         _io = Socketio(expressServer)
         _io.on('connection', function (socket) {
             socket.on('response.authToken', async function (data) {
