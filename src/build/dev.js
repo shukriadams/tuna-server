@@ -1,13 +1,14 @@
-const concatenate = require('./concatenate-css'),
+console.log('starting')
+let 
+    concatenate = require('./concatenate-css'),
     fs = require('fs-extra'),
     chokidar = require('chokidar'),
     spawn = require('cross-spawn'),
-    process = require('process');
+    process = require('process'),
     path = require('path'),
-    sass = require('node-sass');
-
-let _expressProcess = null,
-    _triggerFile = null;
+    sass = require('node-sass'),
+    _expressProcess = null,
+    _triggerFile = null
 
 /** 
  * Converts a Sass file map to its destination compiled css path in ./tmp folder
@@ -16,7 +17,7 @@ function mapSassToCss(file){
     return path.join(
         './.tmp/css',
         path.dirname(file),
-        path.basename(file).substr(0, path.basename(file).length - 5) + '.css'); // remove .scss extension
+        path.basename(file).substr(0, path.basename(file).length - 5) + '.css') // remove .scss extension
 }
 
 
@@ -31,22 +32,23 @@ async function compileSassFile(file){
                 file: file,
                 sourceComments: true
             }, function(err, result){
+
                 if (err){
-                    console.log(err);
-                    return resolve(err);
+                    console.log(err)
+                    return reject(err)
                 }
 
-                const outfile = mapSassToCss(file);
-                fs.ensureDirSync(path.dirname(outfile));
-                fs.writeFileSync(outfile, result.css);
-                console.log(`compiled ${outfile}`);
-                resolve();
+                const outfile = mapSassToCss(file)
+                fs.ensureDirSync(path.dirname(outfile))
+                fs.writeFileSync(outfile, result.css)
+                console.log(`compiled ${outfile}`)
+                resolve()
         
-            });
+            })
         }catch(ex){
-            reject(ex);
+            reject(ex)
         }
-    });
+    })
 }
 
 
@@ -57,13 +59,13 @@ async function compileSassFile(file){
  * Sass file is compiled.
  */
 async function handleSassEvent(file){
-    _triggerFile = file;
+    _triggerFile = file
     
-    await compileSassFile(file);
+    await compileSassFile(file)
     
     if (_triggerFile === file){
         await concatenate();
-        console.log(`concatenated css after last change to ${file}`);
+        console.log(`concatenated css after last change to ${file}`)
     }
 }
 
@@ -73,72 +75,76 @@ async function handleSassEvent(file){
  */
 function startExpress(){
     if (_expressProcess){
-        console.log('stopping existing express process');
-        _expressProcess.kill('SIGINT');
+        console.log('stopping existing express process')
+        _expressProcess.kill('SIGINT')
     }
 
-    let env = Object.create( process.env );
-    env.mode = 'debug';
-    const breakSwitch = process.argv.includes('--brk') || process.argv.includes('--break') ? '-brk' : '';
+    let env = Object.create( process.env )
+    env.mode = 'debug'
+    const breakSwitch = process.argv.includes('--brk') || process.argv.includes('--break') ? '-brk' : ''
     if (breakSwitch)
         console.log(`BREAK enabled - attach debugger to continue`)
 
-    _expressProcess = spawn('node', [`--inspect${breakSwitch}=0.0.0.0:48003`, 'index'], { cwd : process.cwd(), env });
+    _expressProcess = spawn('node', [`--inspect${breakSwitch}=0.0.0.0:48003`, 'index'], { cwd : process.cwd(), env })
 
     _expressProcess.stdout.on('data', function (data) {
         console.log(data.toString('utf8'));
-    });
+    })
      
     _expressProcess.stderr.on('data', function (data) {
         console.log(data.toString('utf8'));
-    });
+    })
 }
 
 
 (async function(){
+    
     // set up required paths
-    await fs.ensureDir('./.tmp/css');
+    let watch = async function(){
+        await fs.ensureDir('./.tmp/css')
 
-    // start watching sass files
-    let sassWatcher = chokidar.watch(['./client/app/**/*.scss'], {
-        persistent: true,
-        usePolling: true,
-        ignoreInitial : true,
-    });
-
-    sassWatcher
-        .on('add', async function(file) {
-            await handleSassEvent(file);
+        // start watching sass files
+        let sassWatcher = chokidar.watch(['./client/app/**/*.scss'], {
+            persistent: true,
+            usePolling: true,
+            ignoreInitial : true,
         })
-        .on('change', async function(file){
-            await handleSassEvent(file);
+    
+        sassWatcher
+            .on('add', async function(file) {
+                await handleSassEvent(file);
+            })
+            .on('change', async function(file){
+                await handleSassEvent(file);
+            })
+            .on('unlink', async function(file){
+                const outfile = mapSassToCss(file);
+                await fs.remove(outfile);
+                await concatenate();
+                console.log(`processed delete ${file}`);
+            })
+    
+        // start watching js files in 
+        let expressWatcher = chokidar.watch(['./index.js', './server/**/*.js'], {
+            persistent: true,
+            usePolling: true,
+            ignoreInitial : true,
         })
-        .on('unlink', async function(file){
-            const outfile = mapSassToCss(file);
-            await fs.remove(outfile);
-            await concatenate();
-            console.log(`processed delete ${file}`);
-        });
+    
+        expressWatcher
+            .on('add', async function() {
+                startExpress()
+            })
+            .on('change', async function(){
+                startExpress()
+            })
+            .on('unlink', async function(){
+                startExpress()
+            })
 
-    // start watching js files in 
-    let expressWatcher = chokidar.watch(['./index.js', './server/**/*.js'], {
-        persistent: true,
-        usePolling: true,
-        ignoreInitial : true,
-    });
+        console.log('watching for file changes ...')
+    }
 
-    expressWatcher
-        .on('add', async function() {
-            startExpress();
-        })
-        .on('change', async function(){
-            startExpress();
-        })
-        .on('unlink', async function(){
-            startExpress();
-        });
-
-    startExpress();
-
-    console.log('Watching...');
+    watch()
+    startExpress()
 })()
