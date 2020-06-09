@@ -1,27 +1,28 @@
-/*
-
 const 
     assert = require('madscience-node-assert'),
-    route = require(_$+'routes/dropbox'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    requireMock = require(_$t+'helpers/require'),
+    mocha = require(_$t+'helpers/testbase')
 
 mocha('route/dropbox/delete', async(testArgs)=>{
-
     
     it('happy path : route removes dropbox integration from profile and returns updated user content', async () => {
-        
-        let routeTester = await new RouteTester(route);
 
-        routeTester.authenticate();        
-        routeTester.setUserContent({ someUserContent : 'new content'});
-        routeTester.route.profileLogic.removeDropbox =()=>{ } // do nothing
+        // prevent deleteSource from cascading further down stack
+        const profileLogic = require(_$+'logic/profiles')
+        profileLogic.deleteSource = ()=>{ } // do nothing
+        requireMock.add(_$+'logic/profiles', profileLogic)
 
-        await routeTester.get('/v1/dropbox/delete');
+        // log user in, set some content to get back after deleting dropbox
+        const route = require(_$+'routes/dropbox'),
+            routeTester = await new RouteTester(route)
 
-        assert.equal(routeTester.res.content.payload.someUserContent, 'new content');
-    });
+        routeTester.authenticate()
+        routeTester.setUserContent({ someUserContent : 'new content'})
+
+        await routeTester.get('/v1/dropbox/delete')
+
+        assert.equal(routeTester.res.content.payload.someUserContent, 'new content')
+    })
 
 })
-
-*/

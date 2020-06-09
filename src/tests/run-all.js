@@ -8,6 +8,8 @@ const
         fgrep : argv._.length ? argv._[0] : '' // npm run testdebug "test name" to run a single test, test name is from it("I am a test name") 
     });
 
+process.env['IGNORE_DEV_ENV'] = true
+
 // import testbase to activate global root variables
 require('./helpers/testbase')
 

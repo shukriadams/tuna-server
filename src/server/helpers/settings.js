@@ -108,8 +108,10 @@ const
         useSelfSignedSSL : false
     }
 
+
 // apply custom .env settings - place an ".env" file in app root folder (where index.js/package.json) is
-customEnv.env() // 5ms
+if (!process.env['IGNORE_DEV_ENV'])
+    customEnv.env() // 5ms
 
 // override defaults with env variables
 for (let property in settings){

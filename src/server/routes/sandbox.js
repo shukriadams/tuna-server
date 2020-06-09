@@ -1,13 +1,10 @@
-/**
- * 
- */
-const 
-    settings = require(_$+'helpers/settings'),
-    jsonHelper = require(_$+'helpers/json')
-
 module.exports = { 
 
     bind(app){
+
+        const 
+            settings = require(_$+'helpers/settings'),
+            jsonHelper = require(_$+'helpers/json')
 
         // prevent binding of dev routes if not explicitly enabled in settings
         if (!settings.musicSourceSandboxMode)

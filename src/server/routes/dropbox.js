@@ -15,7 +15,7 @@ module.exports = {
                     profileLogic = require(_$+'logic/profiles'),
                     authToken = await authHelper.authenticate(req)
 
-                await profileLogic.removeDropbox(authToken.profileId)
+                await profileLogic.deleteSource(authToken.profileId)
 
                 const content = await contentHelper.build(authToken.profileId, authToken.id, 'profile')
                 jsonHelper.returnPayload(res, content)
