@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/system'),
@@ -15,4 +17,6 @@ mocha('route/system/isalive', async(testArgs)=>{
         assert.equal(routeTester.res.content, '1' );
     });
     
-});
+})
+
+*/

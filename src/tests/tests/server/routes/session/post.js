@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/session'),
@@ -13,8 +15,8 @@ mocha('route/session/post', async(testArgs)=>{
         routeTester.req.body.browserUID = 'myid';
 
         // disable brute forcing
-        routeTester.route.bruteForce.process=()=>{ /*do nothing*/}
-        routeTester.route.bruteForce.clear=()=>{ /*do nothing*/}
+        routeTester.route.bruteForce.process=()=>{ } // do nothing
+        routeTester.route.bruteForce.clear=()=>{ } // do nothing
 
         let actualUsername,
             actualPassword;
@@ -47,4 +49,6 @@ mocha('route/session/post', async(testArgs)=>{
         assert.equal(routeTester.res.content.payload.songs[0], 'a song' );        
     });
     
-});
+})
+
+*/

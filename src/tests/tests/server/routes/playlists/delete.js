@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/playlists'),
@@ -34,4 +36,6 @@ mocha('route/playlists/delete', async(testArgs)=>{
         assert.equal(routeTester.res.content.payload.someUserContent, 'shadows in the deep' );
     });
     
-});
+})
+
+*/

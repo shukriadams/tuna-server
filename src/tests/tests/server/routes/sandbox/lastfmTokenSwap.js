@@ -1,23 +1,25 @@
-const 
+/*
+
+const
     assert = require('madscience-node-assert'),
-    route = require(_$+'routes/dev'),
+    route = require(_$+'routes/sandbox'),
     constants = require(_$+'types/constants'),
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase');
 
-mocha('route/dev/lastfmAuthenticate', async(testArgs)=>{
+mocha('route/dev/lastfmTokenSwap', async(testArgs)=>{
 
     
-    it('happy path : route directs', async () => {
+    it('happy path : route returns token object', async () => {
         
         let routeTester = await new RouteTester(route);
         
         // route will not pass without a token of some kind
         routeTester.route.settings.lastFmDevAuthKey = 'placeholdertoken';
 
-        await routeTester.get('/v1/dev/lastfmAuthenticate');
+        await routeTester.post('/v1/dev/lastfmTokenSwap');
 
-        assert.notNull(routeTester.res.redirected);
+        assert.includes(routeTester.res.content, '<lfm status="ok">');
     });
     
 
@@ -28,8 +30,10 @@ mocha('route/dev/lastfmAuthenticate', async(testArgs)=>{
         // route will throw permission exception if no dev token set
         routeTester.route.settings.lastFmDevAuthKey = null;
 
-        await routeTester.get('/v1/dev/lastfmAuthenticate');
+        await routeTester.post('/v1/dev/lastfmTokenSwap');
 
         assert.equal(routeTester.res.content.code, constants.ERROR_PERMISSION_DENIED);
     });
-});
+})
+
+*/

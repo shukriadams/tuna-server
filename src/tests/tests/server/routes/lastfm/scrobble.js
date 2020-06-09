@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/lastfm'),
@@ -36,4 +38,6 @@ mocha('route/lastfm/scrobble', async(testArgs)=>{
         assert.empty(Object.keys(routeTester.res.content.payload));
     });
 
-});
+})
+
+*/

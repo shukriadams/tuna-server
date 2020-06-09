@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/lastfm'),
@@ -14,10 +16,12 @@ mocha('route/lastfm/delete', async(testArgs)=>{
         routeTester.authenticate();        
         routeTester.setUserContent({ someUserContent : 'left hand path'});
 
-        routeTester.route.profileLogic.removeLastfm =()=>{ /*do nothing*/ }
+        routeTester.route.profileLogic.removeLastfm =()=>{ } // do nothing
 
         await routeTester.get('/v1/lastfm/delete');
         assert.equal(routeTester.res.content.payload.someUserContent, 'left hand path');
     });
 
-});
+})
+
+*/

@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/profile'),
@@ -13,8 +15,8 @@ mocha('route/profiles/resetpassword', async(testArgs)=>{
         routeTester.req.query.key='abcd';
         
         // disable brute force check
-        routeTester.route.bruteForce.process=()=>{ /*do nothing*/}
-        routeTester.route.bruteForce.clear=()=>{ /*do nothing*/}
+        routeTester.route.bruteForce.process=()=>{ } // do nothing
+        routeTester.route.bruteForce.clear=()=>{ } // do nothing
 
         // read back actual values sent to playlist create
         let actualPassword = null,
@@ -47,8 +49,8 @@ mocha('route/profiles/resetpassword', async(testArgs)=>{
         routeTester.req.query.currentPassword='efgh';
 
         // disable brute force check
-        routeTester.route.bruteForce.process=()=>{ /*do nothing*/}
-        routeTester.route.bruteForce.clear=()=>{ /*do nothing*/}
+        routeTester.route.bruteForce.process=()=>{ } // do nothing
+        routeTester.route.bruteForce.clear=()=>{ } // do nothing
 
         // read back actual values sent to playlist create
         let actualPassword = null,
@@ -71,4 +73,6 @@ mocha('route/profiles/resetpassword', async(testArgs)=>{
         assert.equal(actualProfileId, routeTester.authToken.profileId);
         assert.equal(routeTester.res.content.code, 0 );
     });    
-});
+})
+
+*/

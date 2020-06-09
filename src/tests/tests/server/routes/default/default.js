@@ -1,8 +1,9 @@
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/default'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
 mocha('default route', async(testArgs)=>{
 
@@ -16,4 +17,4 @@ mocha('default route', async(testArgs)=>{
         assert.includes(routeTester.res.content, '<html>');
     });
     
-});
+})

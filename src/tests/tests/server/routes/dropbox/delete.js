@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/dropbox'),
@@ -13,11 +15,13 @@ mocha('route/dropbox/delete', async(testArgs)=>{
 
         routeTester.authenticate();        
         routeTester.setUserContent({ someUserContent : 'new content'});
-        routeTester.route.profileLogic.removeDropbox =()=>{ /*do nothing*/ }
+        routeTester.route.profileLogic.removeDropbox =()=>{ } // do nothing
 
         await routeTester.get('/v1/dropbox/delete');
 
         assert.equal(routeTester.res.content.payload.someUserContent, 'new content');
     });
 
-});
+})
+
+*/

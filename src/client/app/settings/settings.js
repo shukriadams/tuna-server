@@ -216,7 +216,7 @@ class View extends React.Component {
                     {
                         !this.props.isSourceConnected &&
                             <Row>
-                                You cannot import musis from {appSettings.sourceLabel} until you enable the connection
+                                You cannot import music from {appSettings.sourceLabel} until you enable the connection
                             </Row>
                     }
 

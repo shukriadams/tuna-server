@@ -13,7 +13,7 @@ require('./helpers/testbase')
 
 for (let i = 0 ; i < tests.length ; i ++){
     // slice removes .js file extension, which mocha doesn't want
-    // mocha.addFile(tests[i].slice(0, -3))
+    mocha.addFile(tests[i].slice(0, -3))
 }
 
 mocha.addFile('/vagrant/src/tests/simple')

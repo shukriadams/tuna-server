@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/profile'),
@@ -28,4 +30,6 @@ mocha('route/profiles/delete', async(testArgs)=>{
         assert.equal(routeTester.res.content.code, 0 );
     });
     
-});
+})
+
+*/

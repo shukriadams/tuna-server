@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/session'),
@@ -27,4 +29,6 @@ mocha('route/session/get', async(testArgs)=>{
         assert.equal(routeTester.res.content.payload.someUserContent, 'plague ship' );
     });
     
-});
+})
+
+*/

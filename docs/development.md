@@ -89,3 +89,13 @@ Open in browser from host machine
 
     http://localhost:58002
 
+
+## Tests
+
+To run all tests use
+
+    npm test
+
+To run a single test use
+
+    npm run testdebug "test name" 

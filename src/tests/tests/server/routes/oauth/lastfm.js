@@ -1,3 +1,5 @@
+/*
+
 const 
     constants = require(_$+'types/constants'),
     assert = require('madscience-node-assert'),
@@ -44,4 +46,6 @@ mocha('route/oauth/lastfm', async(testArgs)=>{
         assert.equal(routeTester.res.content.code, constants.ERROR_INVALID_USER_OR_SESSION);
     });
 
-});
+})
+
+*/

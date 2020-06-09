@@ -1,4 +1,5 @@
-const 
-    createTest = require(_$t+'helpers/mongo/create');
+/*
+const createTest = require(_$t+'helpers/mongo/create')
 
-createTest('data/mongo/log');
+createTest('data/mongo/log')
+*/

@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/profile'),
@@ -29,4 +31,6 @@ mocha('route/profiles/post', async(testArgs)=>{
         assert.equal(routeTester.res.content.payload.someUserContent, 'thorns of crimson death' );
     });
     
-});
+})
+
+*/

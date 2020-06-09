@@ -292,9 +292,9 @@ module.exports = {
             settings = require(_$+'helpers/settings'),
             dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
-            constants = require(_$+'types/constants')
-
-        let profile = await dataCache.getById(profileId)
+            constants = require(_$+'types/constants'),
+            profile = await dataCache.getById(profileId)
+            
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 
@@ -313,12 +313,11 @@ module.exports = {
         const 
             dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
-            constants = require(_$+'types/constants')
+            constants = require(_$+'types/constants'),
+            songsLogic = require(_$+'logic/songs'),
+            playlistsLogic = require(_$+'logic/playlists'),
+            profile = await dataCache.getById(profileId)
 
-        songsLogic = songsLogic || require(_$+'logic/songs')
-        let playlistsLogic = require(_$+'logic/playlists')
-
-        let profile = await dataCache.getById(profileId)
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 

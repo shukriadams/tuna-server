@@ -1,9 +1,11 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
-    route = require(_$+'routes/dev'),
+    route = require(_$+'routes/sandbox'),
     constants = require(_$+'types/constants'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
 mocha('route/dev/nextcloudTokenSwap', async(testArgs)=>{
 
@@ -33,5 +35,7 @@ mocha('route/dev/nextcloudTokenSwap', async(testArgs)=>{
         await routeTester.post('/v1/dev/nextcloudTokenSwap');
 
         assert.equal(routeTester.res.content.code, constants.ERROR_PERMISSION_DENIED);
-    });
-});
+    })
+})
+
+*/

@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
@@ -27,4 +29,6 @@ mocha('route/songs/stream', async(testArgs)=>{
         assert.equal(actualProfileId, routeTester.authToken.profileId );
     });
     
-});
+})
+
+*/

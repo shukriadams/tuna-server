@@ -1,9 +1,10 @@
+/*
 const 
     mocha = require(_$t+ 'helpers/testbase'),
     constants = require(_$+'types/constants'),
     fs = require('fs-extra'),
     mock = require(_$t+'tests/server/helpers/nextcloud/importer/mock'),
-    assert = require('madscience-node-assert');
+    assert = require('madscience-node-assert')
 
 mocha('test : /helpers/nextcloud/function:updateIndexReferences', function(testArgs){
     
@@ -63,4 +64,6 @@ mocha('test : /helpers/nextcloud/function:updateIndexReferences', function(testA
         assert.equal(importer.mockProfile.sources[constants.NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_WORKING);
     });
     
-});
+})
+
+*/

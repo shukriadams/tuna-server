@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/profile'),
@@ -13,8 +15,8 @@ mocha('route/profiles/requestpassword', async(testArgs)=>{
         routeTester.req.query.email='abc@123';
         
         // disable brute force check
-        routeTester.route.bruteForce.process=()=>{ /*do nothing*/}
-        routeTester.route.bruteForce.clear=()=>{ /*do nothing*/}
+        routeTester.route.bruteForce.process=()=>{ } // do nothing
+        routeTester.route.bruteForce.clear=()=>{ } // do nothing
 
         // read back actual values sent to playlist create
         let actualEmail;
@@ -28,4 +30,6 @@ mocha('route/profiles/requestpassword', async(testArgs)=>{
         assert.equal(routeTester.res.content.code, 0 );
     });
     
-});
+})
+
+*/

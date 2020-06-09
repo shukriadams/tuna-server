@@ -1,9 +1,6 @@
-const 
-    NextcloudImporter = require(_$+`helpers/nextcloud/importer`);
+/*
+const NextcloudImporter = require(_$+`helpers/nextcloud/importer`)
 
-/**
- * Sets up an importer instance with mocks of data/functions needed for a happy path result.
- */
 module.exports = {
     happyPath(){
         let importer = new NextcloudImporter('123'); // userid 123,
@@ -37,3 +34,4 @@ module.exports = {
         return importer;
     }
 }
+*/

@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
@@ -21,7 +23,7 @@ mocha('route/songs/import', async(testArgs)=>{
                     actualProfileId = profile;
                     actualAuthTokenId = authTokenId;
                 }
-                start(){ /* do nothing*/ }
+                start(){ } // do nothing
             }
         }
 
@@ -35,4 +37,6 @@ mocha('route/songs/import', async(testArgs)=>{
         assert.equal(routeTester.res.content.payload.someUserContent, 'the somberlain' );
     });
     
-});
+})
+
+*/

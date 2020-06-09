@@ -1,3 +1,5 @@
+/*
+
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/settings'),
@@ -21,4 +23,6 @@ mocha('route/settings/get', async(testArgs)=>{
         assert.equal(routeTester.res.content.payload.sourceLabel, 5678 );
     });
     
-});
+})
+
+*/
