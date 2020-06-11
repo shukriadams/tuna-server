@@ -3,6 +3,7 @@ const
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/oauth'),
     RouteTester = require(_$t+'helpers/routeTester'),
+    requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
 mocha('route/oauth/dropbox', async(testArgs)=>{
@@ -43,10 +44,13 @@ mocha('route/oauth/dropbox', async(testArgs)=>{
 
 
     it('route/oauth/dropbox : unhappy path : throws auth error authtoken invalid', async () => {
+        
+        // ensure authtoken is null
+        const authTokenLogic = require(_$+'logic/authToken')
+        authTokenLogic.getById =()=>{ return null }
+        requireMock.add(_$+'logic/authToken', authTokenLogic)
 
         let routeTester = await new RouteTester(route)
-        // ensure authtoken is null
-        routeTester.route.authTokenLogic.getById =()=>{ return null }
 
         await routeTester.get('/v1/oauth/dropbox')
 
