@@ -1,7 +1,7 @@
 const 
     assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    requireMock = require(_$t+'helpers/require'),
+    inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
 mocha('route/playlists/delete', async(testArgs)=>{
@@ -13,16 +13,16 @@ mocha('route/playlists/delete', async(testArgs)=>{
             actualProfileId,
             route = require(_$+'routes/playlists'),
             routeTester = await new RouteTester(route)
-            playlistLogic = require(_$+'logic/playlists')
-
-        // read back actual values sent to playlist create
-        playlistLogic.delete = (playlistId, profileId, authTokenId)=>{
-            actualPlaylistId = playlistId
-            actualProfileId = profileId
-            actualTokenId = authTokenId
-        }
-        requireMock.add(_$+'logic/playlists', playlistLogic)
         
+        // override delete to capture input
+        inject.object(_$+'logic/playlists', {
+            delete : (playlistId, profileId, authTokenId)=>{
+                actualPlaylistId = playlistId
+                actualProfileId = profileId
+                actualTokenId = authTokenId
+            }
+        })
+
         // return some user content
         routeTester.authenticate()
         routeTester.setUserContent({ someUserContent : 'shadows in the deep' })

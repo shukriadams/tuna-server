@@ -1,7 +1,7 @@
 const 
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/lastfm'),
-    requireMock = require(_$t+'helpers/require'),
+    inject = require(_$t+'helpers/inject'),
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase');
 
@@ -9,10 +9,11 @@ mocha('route/lastfm/delete', async(testArgs)=>{
     
     it('happy path : route removes lastfm integration from profile and returns updated user content', async () => {
 
-        // prevent delete from cascading to db
-        const profileLogic = require(_$+'logic/profiles')
-        profileLogic.removeLastfm =()=>{ } // do nothing
-        requireMock.add(_$+'logic/profiles', profileLogic)
+
+        inject.object(_$+'logic/profiles', {
+            // prevent delete from cascading to db
+            removeLastfm : ()=>{ } 
+        })
 
         let routeTester = await new RouteTester(route)
 

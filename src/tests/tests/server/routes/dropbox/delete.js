@@ -1,17 +1,17 @@
 const 
     assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    requireMock = require(_$t+'helpers/require'),
+    inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
 mocha('route/dropbox/delete', async(testArgs)=>{
     
     it('happy path : route removes dropbox integration from profile and returns updated user content', async () => {
 
-        // prevent deleteSource from cascading further down stack
-        const profileLogic = require(_$+'logic/profiles')
-        profileLogic.deleteSource = ()=>{ } // do nothing
-        requireMock.add(_$+'logic/profiles', profileLogic)
+        inject.object(_$+'logic/profiles', {
+            // prevent deleteSource from cascading further down stack
+            deleteSource : ()=>{ } 
+        })
 
         // log user in, set some content to get back after deleting dropbox
         const route = require(_$+'routes/dropbox'),

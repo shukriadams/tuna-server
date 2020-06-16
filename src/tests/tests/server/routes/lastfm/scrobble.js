@@ -2,23 +2,26 @@ const
     assert = require('madscience-node-assert'),
     route = require(_$+'routes/lastfm'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    requireMock = require(_$t+'helpers/require'),
+    inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase');
 
 mocha('route/lastfm/scrobble', async(testArgs)=>{
 
     
     it('happy path : scrobbles a play', async () => {
+        // intercept the actual song data scrobbled
+        let actualSong,
+            actualProfileId,
+            actualDuration
 
         // prevent scrobble from cascading to db
-        const songsLogic = require(_$+'logic/songs')
-        songsLogic.scrobble =(profileId, song, duration)=>{ 
-            actualSong = song
-            actualDuration = duration
-            actualProfileId = profileId
-        }        
-        requireMock.add(_$+'logic/songs', songsLogic)
-
+        inject.object(_$+'logic/songs', {
+            scrobble : (profileId, song, duration)=>{ 
+                actualSong = song
+                actualDuration = duration
+                actualProfileId = profileId
+            } 
+        })
 
         let routeTester = await new RouteTester(route)
         // user must be logged in to scrobble
@@ -27,10 +30,6 @@ mocha('route/lastfm/scrobble', async(testArgs)=>{
         routeTester.req.query.song = 'song1234'
         routeTester.req.query.songDuration = 'duration1234'
 
-        // intercept the actual song data scrobbled
-        let actualSong = null,
-            actualProfileId = null,
-            actualDuration = null
 
         await routeTester.get('/v1/lastfm/scrobble')
 
