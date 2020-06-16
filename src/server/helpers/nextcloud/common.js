@@ -113,6 +113,7 @@ module.exports = {
     async search(source, query) {
         const
             urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
             settings = require(_$+'helpers/settings'),
@@ -154,7 +155,7 @@ module.exports = {
                 </d:searchrequest>`
 
         const url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
-            result = await this.httputils.post(url, body, options)
+            result = await httputils.post(url, body, options)
             // todo : handle server call timing out
 
         // auth failure : This should not happen - we should have explicitly checked tokens just before this. Log explicit because

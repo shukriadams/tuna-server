@@ -15,6 +15,7 @@ mocha('route/playlists/delete', async(testArgs)=>{
             routeTester = await new RouteTester(route)
             playlistLogic = require(_$+'logic/playlists')
 
+        // read back actual values sent to playlist create
         playlistLogic.delete = (playlistId, profileId, authTokenId)=>{
             actualPlaylistId = playlistId
             actualProfileId = profileId
@@ -26,9 +27,8 @@ mocha('route/playlists/delete', async(testArgs)=>{
         routeTester.authenticate()
         routeTester.setUserContent({ someUserContent : 'shadows in the deep' })
         
-        // this would be a route parameter in actual express
+        // set route parameter for the playlist to delete
         routeTester.req.params.playlistId = 'myplaylistId'
-        // read back actual values sent to playlist create
 
         await routeTester.delete('/v1/playlists/:playlistId')
 

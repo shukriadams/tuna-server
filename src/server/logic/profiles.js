@@ -194,8 +194,6 @@ module.exports = {
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')
 
-        authTokenLogic = authTokenLogic || require(_$+'logic/authToken');
-
         if (!identifier)
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION, 
