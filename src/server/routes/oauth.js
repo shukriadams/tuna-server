@@ -1,14 +1,14 @@
-/**
- * Oauth "catchers" - receives incoming oauth redirects from external sites, exchanges oauth codes for tokens, then
- * redirects to local pages to complete oauth flow.
- */
-const     
-    jsonHelper = require(_$+'helpers/json')
+
 
 module.exports = {
 
     bind(app){
 
+        /**
+         * Oauth "catchers" - receives incoming oauth redirects from external sites, exchanges oauth codes for tokens, then
+         * redirects to local pages to complete oauth flow.
+         */
+        const jsonHelper = require(_$+'helpers/json')
 
         /**
          * Starts music source oauth flow

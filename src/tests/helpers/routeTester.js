@@ -36,8 +36,14 @@ module.exports = class RouteTester{
                 query : {},
                 params: {},
                 headers: {},
+
+                // normally used to retrieve headers
+                get(headername){
+                    return 'some-header'
+                },
+
                 header(item){
-                    return this.headers[item];
+                    return this.headers[item]
                 }
             }
 

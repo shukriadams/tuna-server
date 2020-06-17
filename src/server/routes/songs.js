@@ -1,8 +1,8 @@
-const jsonHelper = require(_$+'helpers/json')
-
 module.exports = {
 
     bind(app){
+
+        const jsonHelper = require(_$+'helpers/json')
 
         /**
          * Gets the url a song can be streamed from.

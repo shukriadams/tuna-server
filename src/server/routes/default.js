@@ -1,11 +1,13 @@
-let 
-    jsonHelper = require(_$+'helpers/json'),
-    indexTemplate = null
+
 
 module.exports = { 
 
     async bind(app) {
-            
+
+        let 
+            jsonHelper = require(_$+'helpers/json'),
+            indexTemplate = null
+
         /**
          * This is a catch-all route that forces all page views to our single page app. This route must be bound last, 
          * or it will overwrite all other routes. This is also the only route in the app that doesn't return JSON

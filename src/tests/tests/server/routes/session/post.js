@@ -1,54 +1,56 @@
-/*
-
 const 
     assert = require('madscience-node-assert'),
-    route = require(_$+'routes/session'),
+    inject = require(_$t+'helpers/inject'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    settings = require(_$+'helpers/settings'),
+    mocha = require(_$t+'helpers/testbase')
 
 mocha('route/session/post', async(testArgs)=>{
     
     it('route/session/post : happy path : logs user in, returns user content', async () => {
         
-        let routeTester = await new RouteTester(route);
-        routeTester.req.body.password = 'mypass';
-        routeTester.req.body.browserUID = 'myid';
-
-        // disable brute forcing
-        routeTester.route.bruteForce.process=()=>{ } // do nothing
-        routeTester.route.bruteForce.clear=()=>{ } // do nothing
-
         let actualUsername,
-            actualPassword;
+            actualPassword,
+            route = require(_$+'routes/session'),
+            routeTester = await new RouteTester(route)
 
-        routeTester.route.profileLogic.authenticate = (username, password)=>{
-            actualUsername = username;
-            actualPassword = password;
-            // this id will be passed along the chain of functions and eventually end up in the content returned
-            return 'a-profile-id';
-        }
+        routeTester.req.body.password = 'mypass'
+        routeTester.req.body.browserUID = 'myid'
 
-        routeTester.route.authTokenLogic.create = (profileId)=>{            
-            return { profileId, id : 'myAuthtokenId'}
-        }
+        // disable brute force check
+        inject.object(_$+'helpers/bruteForce', {
+            process: ()=>{ }, // do nothing
+            clear : ()=>{ } // do nothing
+        }) 
 
-        routeTester.route.songsLogic.getAll =()=> {
-            return['a song']
-        }
+        
+        inject.object(_$+'helpers/content', {
+            build : (profileId, authTokenId)=>{
+                return { someUserContent : '............', profileId, authTokenId } 
+            }
+        })
 
-        routeTester.route.profileLogic.buildUserContent =(profileId, authTokenId)=>{
-            return { someUserContent : '............', profileId, authTokenId } 
-        }
+        inject.object(_$+'logic/profiles', {
+            authenticate : (username, password)=>{
+                actualUsername = username
+                actualPassword = password
+                // this id will be passed along the chain of functions and eventually end up in the content returned
+                return 'a-profile-id'
+            }
+        })
 
-        await routeTester.post('/v1/session');
+        inject.object(_$+'logic/authToken', {
+            create : (profileId)=>{            
+                return { profileId, id : 'myAuthtokenId'}
+            }
+        })
 
-        assert.equal(actualUsername, settings.masterUsername);
-        assert.equal(actualPassword, 'mypass');
-        assert.equal(routeTester.res.content.code, 0 );
-        assert.equal(routeTester.res.content.payload.profileId, 'a-profile-id' );
-        assert.equal(routeTester.res.content.payload.songs[0], 'a song' );        
-    });
+        await routeTester.post('/v1/session')
+
+        assert.equal(actualUsername, settings.masterUsername)
+        assert.equal(actualPassword, 'mypass')
+        assert.null(routeTester.res.content.code)
+        assert.equal(routeTester.res.content.payload.profileId, 'a-profile-id')
+    })
     
 })
-
-*/

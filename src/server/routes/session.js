@@ -1,9 +1,8 @@
-const jsonHelper = require(_$+'helpers/json')
-
 module.exports = {
 
     bind(app){
 
+        const jsonHelper = require(_$+'helpers/json')
 
         /**
          * Logs a user in. Returns a full user session, including all user songs
@@ -37,7 +36,7 @@ module.exports = {
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
+        })
 
 
         /**
@@ -61,7 +60,6 @@ module.exports = {
                     if (isValid)
                         isValid = await profileLogic.songsHashValid(tokenRecord.profileId, req.query.hash || '')
                 }
-                
 
                 jsonHelper.returnPayload(res, { isValid })
             } catch(ex){

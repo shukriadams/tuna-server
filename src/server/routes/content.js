@@ -1,8 +1,8 @@
-const jsonHelper = require(_$+'helpers/json')
-
 module.exports = {
 
     bind(app){
+        
+        const jsonHelper = require(_$+'helpers/json')
 
         /**
          * Gets a user's content, based on requestedContent. This is a , separted string
