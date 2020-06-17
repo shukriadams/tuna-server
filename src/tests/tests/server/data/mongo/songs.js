@@ -1,4 +1,3 @@
-/*
 const 
     createManyTest = require(_$t+'helpers/mongo/createMany'),
     deleteManyTest = require(_$t+'helpers/mongo/deleteMany'),
@@ -13,4 +12,3 @@ getMultipleByQueryTest('data/mongo/songs', 'getAll')
 deleteTest('data/mongo/songs')
 deleteManyTest('data/mongo/songs', 'deleteAll')
 getSingleByQuery('data/mongo/playlist', 'getById')
-*/

@@ -1,4 +1,3 @@
-/*
 const 
     createTest = require(_$t+'helpers/mongo/create'),
     deleteTest = require(_$t+'helpers/mongo/create')
@@ -13,4 +12,3 @@ deleteForProfileTest('data/mongo/playlist')
 getSingleByQuery('data/mongo/playlist', 'getById')
 getMultipleByQueryTest('data/mongo/playlist', 'getForProfile')
 updateTest('data/mongo/playlist')
-*/

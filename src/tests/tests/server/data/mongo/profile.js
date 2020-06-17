@@ -1,4 +1,3 @@
-/*
 const 
     createTest = require(_$t+'helpers/mongo/create'),
     deleteTest = require(_$t+'helpers/mongo/create')
@@ -13,4 +12,3 @@ getSingleByQuery('data/mongo/profile', 'getByPasswordResetKey')
 getSingleByQuery('data/mongo/profile', 'getByIdentifier')
 getMultipleByQueryTest('data/mongo/profile', 'getAll')
 updateTest('data/mongo/profile')
-*/

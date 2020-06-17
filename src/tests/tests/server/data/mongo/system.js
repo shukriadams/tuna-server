@@ -1,4 +1,4 @@
-/*
+
 const 
     createTest = require(_$t+'helpers/mongo/create'),
     updateTest = require(_$t+'helpers/mongo/delete'),
@@ -9,4 +9,3 @@ createTest('data/mongo/system')
 getSingleByQueryTest('data/mongo/system', 'getById')
 updateTest('data/mongo/system')
 deleteTest('data/mongo/system')
-*/

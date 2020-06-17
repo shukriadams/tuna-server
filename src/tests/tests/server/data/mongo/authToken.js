@@ -1,4 +1,4 @@
-/*
+
 const 
     createTest = require(_$t+'helpers/mongo/create'),
     deleteTest = require(_$t+'helpers/mongo/create')
@@ -11,4 +11,3 @@ deleteTest('data/mongo/authToken')
 deleteForProfileTest('data/mongo/authToken')
 getSingleByQueryTest('data/mongo/authToken', 'getById')
 getMultipleByQueryTest('data/mongo/authToken', 'getForProfile')
-*/

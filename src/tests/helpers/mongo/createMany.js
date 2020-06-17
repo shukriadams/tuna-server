@@ -26,7 +26,7 @@ module.exports = function(testPath){
 
             let exception = await assert.throws(async ()=> { await mongoObject.createMany([{ name : '123'}, { name : '456' }]) })
 
-            assert.equal(exception.inner.err.thing, 4568 );
+            assert.equal(exception.thing, 4568 );
         });
 
     });
