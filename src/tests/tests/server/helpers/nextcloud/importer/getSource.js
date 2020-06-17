@@ -1,4 +1,3 @@
-/*
 const 
     constants = require(_$+'types/constants'),
     mocha = require(_$t+'helpers/testbase'),
@@ -42,4 +41,3 @@ mocha('test : /helpers/nextcloud/function:getSource', function(testArgs){
     
 })
 
-*/

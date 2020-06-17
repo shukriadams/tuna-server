@@ -1,4 +1,4 @@
-/*
+
 const 
     mocha = require(_$t+ 'helpers/testbase'),
     constants = require(_$+'types/constants'),
@@ -18,8 +18,8 @@ mocha('test : /helpers/nextcloud/function:updateIndexReferences', function(testA
         await importer._updateIndexReferences('123');
 
         // mock xml had 2 results in it, and known id 62599
-        assert.length(importer.mockProfile.sources[constants.NEXTCLOUD].indexes, 2);
-        assert.notNull(importer.mockProfile.sources[constants.NEXTCLOUD].indexes.find(item => item.fileid === '62599'));
+        assert.length(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes, 2);
+        assert.notNull(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes.find(item => item.fileid === '62599'));
     });
 
 
@@ -44,7 +44,7 @@ mocha('test : /helpers/nextcloud/function:updateIndexReferences', function(testA
         await importer._updateIndexReferences('123');
 
         // status flagged as broken
-        assert.equal(importer.mockProfile.sources[constants.NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_USER_REAUTHORIZE);
+        assert.equal(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_USER_REAUTHORIZE);
     });
 
 
@@ -52,7 +52,7 @@ mocha('test : /helpers/nextcloud/function:updateIndexReferences', function(testA
         let importer = mock.happyPath();
 
         // force a bogus object into indexes, we want to confirm this has been deleted
-        importer.mockProfile.sources[constants.NEXTCLOUD].indexes.push({});
+        importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes.push({});
 
         // body xml is reference XML for empty search results
         importer.mockPostResponse.body = await fs.readFile(_$+'reference/nextcloud/noResult.xml', 'utf8');
@@ -60,10 +60,9 @@ mocha('test : /helpers/nextcloud/function:updateIndexReferences', function(testA
         await importer._updateIndexReferences('123');
 
         // indexes collection must be set to empty, but integration is working
-        assert.empty(importer.mockProfile.sources[constants.NEXTCLOUD].indexes);
-        assert.equal(importer.mockProfile.sources[constants.NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_WORKING);
+        assert.empty(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes);
+        assert.equal(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_WORKING);
     });
     
 })
 
-*/
