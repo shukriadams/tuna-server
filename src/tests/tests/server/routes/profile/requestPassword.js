@@ -1,35 +1,38 @@
-/*
-
 const 
     assert = require('madscience-node-assert'),
-    route = require(_$+'routes/profile'),
+    inject = require(_$t+'helpers/inject'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
 mocha('route/profiles/requestpassword', async(testArgs)=>{
     
     it('route/profiles/requestpassword : happy path : request a password reset', async () => {
         
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        routeTester.req.query.email='abc@123';
+        let route = require(_$+'routes/profile'),
+            routeTester = await new RouteTester(route)
+
+        routeTester.authenticate()
+        routeTester.req.query.email='abc@123'
         
         // disable brute force check
-        routeTester.route.bruteForce.process=()=>{ } // do nothing
-        routeTester.route.bruteForce.clear=()=>{ } // do nothing
+        inject.object(_$+'helpers/bruteForce', {
+            process: ()=>{ }, // do nothing
+            clear : ()=>{ } // do nothing
+        }) 
 
         // read back actual values sent to playlist create
-        let actualEmail;
-        routeTester.route.profileLogic.requestPasswordReset = (username, email)=>{
-            actualEmail = email;
-        }
+        let actualEmail
+        inject.object(_$+'logic/profiles', {
+            requestPasswordReset : (username, email)=>{
+                actualEmail = email
+            }
+        })        
 
-        await routeTester.get('/v1/profile/requestPassword');
+        await routeTester.get('/v1/profile/requestPassword')
 
-        assert.equal(actualEmail, 'abc@123');
-        assert.equal(routeTester.res.content.code, 0 );
-    });
+        assert.equal(actualEmail, 'abc@123')
+        assert.null(routeTester.res.content.code)
+    })
     
 })
 
-*/

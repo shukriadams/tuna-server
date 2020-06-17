@@ -65,7 +65,7 @@ module.exports = {
          */    
         app.get('/v1/profile/resetPassword', async function (req, res) {
             try {
-                const 
+                let 
                     authHelper = require(_$+'helpers/authentication'),
                     bruteForce = require(_$+'helpers/bruteForce'),
                     profileLogic = require(_$+'logic/profiles'),
