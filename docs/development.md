@@ -98,4 +98,17 @@ To run all tests use
 
 To run a single test use
 
+    npm test "test name"
+
+where "test name" can be either a group of tests as defined in 
+ 
+    mocha("group name") 
+    
+at the top of a test file, or an individual test's name in 
+
+    it("test name")
+
+To debug a single test use
+
     npm run testdebug "test name" 
+
