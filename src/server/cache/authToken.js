@@ -4,7 +4,10 @@ module.exports = {
         return `authToken_${tokenId}`  
     },
     
-    
+
+    /**
+     * 
+     */
     async create(record){
         const 
             authTokenData = require(_$+'data/mongo/authToken'),
@@ -27,6 +30,9 @@ module.exports = {
     },
     
 
+    /**
+     * 
+     */
     async getById(tokenId){
         // try to get authoken from cache
         const 
@@ -34,18 +40,22 @@ module.exports = {
             cache = require(_$+'helpers/cache'),
             JsonHelper = require(_$+'helpers/json'),
             key = this._getIdKey(tokenId),
-            authTokenJson = await cache.get(key),
-            authToken = await authTokenData.getById(tokenId)
+            authTokenJson = await cache.get(key)
 
         if (authTokenJson)
             return JsonHelper.parse(authTokenJson)
-    
+
+        const authToken = await authTokenData.getById(tokenId)
+
         // get authtoken from data layer, while caching
         await cache.add(key, JSON.stringify(authToken))
         return authToken
     },
     
 
+    /**
+     * 
+     */
     async delete(id){
         const authTokenData = require(_$+'data/mongo/authToken'),
             cache = require(_$+'helpers/cache')
@@ -56,7 +66,7 @@ module.exports = {
    
 
     /**
-     * warning - no cache cleanup on these!
+     * Warning - no cache cleanup on these!
      */
     async deleteForProfile(profileId){
         const authTokenData = require(_$+'data/mongo/authToken')
@@ -66,6 +76,9 @@ module.exports = {
     },
 
 
+    /**
+     * 
+     */
     async deleteForContext(profileId, context){
         const authTokenData = require(_$+'data/mongo/authToken')
 

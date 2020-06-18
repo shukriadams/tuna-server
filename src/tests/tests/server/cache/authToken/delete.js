@@ -5,27 +5,29 @@ const
 
 mocha('authTokenCache : create', async(testArgs)=>{
 
-    it('happy path : creates and caches authToken', async () => {
-        let actualAuthToken,
-            authTokenCache = require(_$+'cache/authToken')
+    it('happy path : deletes an authToken', async () => {
+        let authTokenCache = require(_$+'cache/authToken'),
+            actualId = null, 
+            actualKey = null
 
         // replace call to mongo
         inject.object(_$+'data/mongo/authToken', {
-            create : (authToken)=>{
-                return authToken
+            delete : (id)=> {
+                actualId = id
             }
         })
         
         // capture call to cache
         inject.object(_$+'helpers/cache', {
-            add : (key, json)=>{
-                actualAuthToken = JSON.parse(json)
+            remove : (key)=>{
+                actualKey = key
             }
         })
 
-        await authTokenCache.create({id : 'some-id'})
+        await authTokenCache.delete('something')
 
-        assert.equal(actualAuthToken.id, 'some-id')
+        assert.notNull(actualId)
+        assert.notNull(actualKey)
     })
 
 })
