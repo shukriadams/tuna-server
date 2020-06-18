@@ -15,14 +15,7 @@ module.exports = {
         await cache.remove(key)
         return newPlaylist
     },
-    
-
-    async get(playlistId){
-        const playlistsData = require(_$+'data/mongo/playlist')
-
-        return await playlistsData.getById(playlistId)
-    },
-    
+   
     
     async getAll(profileId){
         let 
