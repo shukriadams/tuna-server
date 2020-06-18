@@ -1,4 +1,3 @@
-
 const 
     assert = require('madscience-node-assert'),
     inject = require(_$t+'helpers/inject'),

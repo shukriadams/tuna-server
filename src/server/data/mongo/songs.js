@@ -1,66 +1,48 @@
-let 
-    ObjectID = require('mongodb').ObjectID,
-    mongoHelper = require(_$+'helpers/mongo'),
-    Exception = require(_$+'types/exception')
-
-function normalize(mongoRecord){
-    if (!mongoRecord)
-        return null
-
-    let Song = require(_$+'types/song') // this is binding to playlist factory!?!?!?!
-    let record = Song.new()
-
-
-    for (let property in record)
-        if (mongoRecord.hasOwnProperty(property))
-            record[property] = mongoRecord[property]
-
-    record.id = mongoRecord._id.toString()
-    return record
-}
-
-function denormalize(obj){
-    let clone = {}
-
-    for (let prop in obj)
-        clone[prop] = obj[prop]
-
-    if (obj.id)
-        clone._id = new ObjectID(obj.id)
-
-    delete clone.id
-    return clone
-}
-
-
 module.exports = {
     
-    mongoHelper,
+    normalize(mongoRecord){
+        if (!mongoRecord)
+            return null
+    
+        const Song = require(_$+'types/song'), // this is binding to playlist factory!?!?!?!
+            record = Song.new()
+    
+    
+        for (const property in record)
+            if (mongoRecord.hasOwnProperty(property))
+                record[property] = mongoRecord[property]
+    
+        record.id = mongoRecord._id.toString()
+        return record
+    },
+    
+    denormalize(obj){
+        const
+            ObjectID = require('mongodb').ObjectID,
+            clone = {}
+    
+        for (const prop in obj)
+            clone[prop] = obj[prop]
+    
+        if (obj.id)
+            clone._id = new ObjectID(obj.id)
+    
+        delete clone.id
+        return clone
+    },
+
 
     /**
      *
      */
     async createMany(songs){
-        return new Promise(async (resolve, reject) => {
-            try {
-                const db = await mongoHelper.getCollection('songs'),
-                    insertRecords = []
+        const mongoCommon = require(_$+'data/mongo/common'),
+            insertRecords = []
 
-                for (let i = 0 ; i < songs.length ; i ++)
-                    insertRecords.push(denormalize(songs[i], true))
+        for (const song of songs)
+            insertRecords.push(this.denormalize(song))
 
-                db.collection.insertMany( insertRecords, err => {
-                    if (err)
-                        return reject(err)
-
-                    db.done()
-                    resolve(insertRecords.length)
-                })
-
-            } catch (ex) {
-                reject (ex)
-            }
-        })
+        await mongoCommon.createMany('songs', insertRecords)
     },
 
 
@@ -68,26 +50,10 @@ module.exports = {
      *
      */
     async update(record){
-        return new Promise(async (resolve, reject) => {
-
-            try {
-
-                const db = await mongoHelper.getCollection('songs')
-                    writeRecord = denormalize(record, false)
-
-                db.collection.updateOne({ _id : writeRecord._id }, { $set: writeRecord }, err => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-
-                    db.done()
-                    resolve(record)
-                })
-
-            } catch (ex) {
-                reject (ex)
-            }
-
-        })
+        const mongoCommon = require(_$+'data/mongo/common'),
+            writeRecord = this.denormalize(record)
+        
+        await mongoCommon.update('songs', record._id, writeRecord)
     },
 
 
@@ -95,29 +61,15 @@ module.exports = {
      *
      */
     async getAll(profileId){
-        return new Promise(async (resolve, reject) => {
+        const 
+            mongoCommon = require(_$+'data/mongo/common'),
+            records = await mongoCommon.find('songs', { profileId }),
+            results = []
 
-            try {
+        for (const record of records)
+            results.push(this.normalize(record))
 
-                const db = await mongoHelper.getCollection('songs')
-
-                db.collection.find({ profileId }).toArray((err, docs) => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-
-                    let results = []
-                    for (let i = 0 ; i < docs.length ; i ++)
-                        results.push(normalize(docs[i]))
-
-                    db.done()
-                    resolve(results)
-                })
-
-            } catch (ex) {
-                reject (ex)
-            }
-
-        })
+        return results
     },
 
 
@@ -125,22 +77,8 @@ module.exports = {
      *
      */
     async delete(songId){
-        return new Promise(async (resolve, reject) => {
-            try {
-
-                const db = await mongoHelper.getCollection('songs')
-                db.collection.deleteOne({_id : new ObjectID(songId) }, err => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-
-                    db.done()
-                    resolve()
-
-                })
-            } catch(ex) {
-                reject(ex)
-            }
-        })
+        const mongoCommon = require(_$+'data/mongo/common')
+        return await mongoCommon.delete('songs', songId)
     },
 
 
@@ -148,45 +86,19 @@ module.exports = {
      *
      */
     async deleteAll(profileId){
-        return new Promise(async (resolve, reject) => {
-            try {
-
-                const db = await mongoHelper.getCollection('songs')
-                db.collection.deleteMany({ profileId }, err => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-
-                    db.done()
-                    resolve()
-                })
-            } catch(ex) {
-                reject(ex)
-            }
-        })
+        const mongoCommon = require(_$+'data/mongo/common')
+        return await mongoCommon.deleteMany('songs', { profileId })
     },
 
 
     /**
      *
      */
-    async getById(songId){
-        return new Promise(async (resolve, reject) => {
-
-            try {
-
-                const db = await mongoHelper.getCollection('songs')
-                db.collection.findOne({ _id : new ObjectID(songId) }, (err, doc) => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-
-                    db.done()
-                    resolve(normalize(doc))
-                })
-
-            } catch(ex) {
-                reject(ex)
-            }
-
-        })
+    async getById(id){
+        const 
+            mongoCommon = require(_$+'data/mongo/common'),
+            record = await mongoCommon.findById('songs', id)
+    
+        return record ? this.normalize(record) : null
     }
 }
