@@ -22,6 +22,7 @@ module.exports = function(testName, tests){
 
         beforeEach(function(done) {
             (async ()=>{
+                requireMock.clear()
                 done()
             })()
         })
