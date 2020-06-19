@@ -43,10 +43,10 @@ module.exports = {
     /**
      *
      */
-    async deleteAll(profileId){
+    async deleteForProfile(profileId){
         const songsCache = require(_$+'cache/songs')
 
-        return await songsCache.deleteAll(profileId)
+        return await songsCache.deleteForProfile(profileId)
     },
 
 

@@ -85,7 +85,7 @@ module.exports = {
     /**
      *
      */
-    async deleteAll(profileId){
+    async deleteForProfile(profileId){
         const mongoCommon = require(_$+'data/mongo/common')
         return await mongoCommon.deleteMany('songs', { profileId })
     },

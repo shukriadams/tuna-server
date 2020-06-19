@@ -110,7 +110,7 @@ module.exports = {
 
         await authTokenLogic.deleteForProfile(profile.id)
 
-        await songsLogic.deleteAll(profile.id)
+        await songsLogic.deleteForProfile(profile.id)
 
         await dataCache.delete(profile)
     },
@@ -323,7 +323,7 @@ module.exports = {
         await dataCache.update(profile)
 
         // delete all songs
-        await songsLogic.deleteAll(profile.id)
+        await songsLogic.deleteForProfile(profile.id)
         await playlistsLogic.deleteAll(profile.id)
     },
 

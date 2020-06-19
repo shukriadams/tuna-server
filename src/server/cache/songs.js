@@ -50,13 +50,13 @@ module.exports = {
     },
 
 
-    async deleteAll(profileId){
+    async deleteForProfile(profileId){
         const 
             cache = require(_$+'helpers/cache'),
             songsData = require(_$+'data/mongo/songs'),
             key = this._getIdKey(profileId)
 
-        await songsData.deleteAll(profileId)
+        await songsData.deleteForProfile(profileId)
         await cache.remove(key)
     },
 
