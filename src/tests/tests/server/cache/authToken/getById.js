@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('authTokenCache : getForProfile', async(testArgs)=>{
+mocha('authTokenCache : getById', async(testArgs)=>{
 
     it('happy path : gets authTokens by id, already cached', async () => {
         
@@ -35,6 +35,7 @@ mocha('authTokenCache : getForProfile', async(testArgs)=>{
             add : (key, authToken)=>{
                 cachedAuthToken = JSON.parse(authToken)
             },
+            // return null to force data call
             get : ()=>{
                 return null 
             }

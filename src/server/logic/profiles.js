@@ -228,14 +228,13 @@ module.exports = {
      *
      */
     async resetPassword(key, password, currentPassword, profileId){
-        const 
+        let 
             fs = require('fs-extra'),
             settings = require(_$+'helpers/settings'),
             dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
-            constants = require(_$+'types/constants')
-
-        let profile = null,
+            constants = require(_$+'types/constants'),
+            profile = null,
             public
 
         if (key) {

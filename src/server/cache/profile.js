@@ -4,6 +4,16 @@ module.exports = {
         return `profile_id_${profileId}`  
     },
 
+    async create(record){
+        const
+            profileData = require(_$+'data/mongo/profile'),
+            cache = require(_$+'helpers/cache'),
+            profile = await profileData.create(record),
+            key = this._getIdKey(profile.id)
+
+        await cache.add(key, JSON.stringify(profile))
+        return profile
+    },
 
     async getById(profileId){
         const 
@@ -20,18 +30,6 @@ module.exports = {
         if (profile)
             await cache.add(key, JSON.stringify(profile))
 
-        return profile
-    },
-
-    
-    async create(record){
-        const
-            profileData = require(_$+'data/mongo/profile'),
-            cache = require(_$+'helpers/cache'),
-            profile = await profileData.create(record),
-            key = this._getIdKey(profile.id)
-
-        await cache.add(key, JSON.stringify(profile))
         return profile
     },
 
