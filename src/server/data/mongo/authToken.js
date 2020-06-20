@@ -50,13 +50,13 @@ module.exports = {
      */
     async delete (id){
         const mongoCommon = require(_$+'data/mongo/common')
-        return await mongoCommon.delete('authTokens', id)
+        await mongoCommon.delete('authTokens', id)
     },
 
     
     async deleteForProfile (profileId){
         const mongoCommon = require(_$+'data/mongo/common')
-        return await mongoCommon.deleteMany('authTokens', { profileId })
+        await mongoCommon.deleteMany('authTokens', { profileId })
     },
     
 
@@ -66,7 +66,7 @@ module.exports = {
     async deleteForContext(profileId, context){
         const mongoCommon = require(_$+'data/mongo/common')
 
-        return await mongoCommon.deleteMany('authTokens', {     
+        await mongoCommon.deleteMany('authTokens', {     
             $and: [ 
                 { 'profileId' :{ $eq : profileId } },
                 { 'context' :{ $eq : context } },

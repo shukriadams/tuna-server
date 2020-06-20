@@ -3,9 +3,9 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('authTokenData : create', async(testArgs)=>{
+mocha('playlistData : create', async(testArgs)=>{
 
-    it('happy path : creates authToken', async () => {
+    it('happy path : creates playlist', async () => {
 
         // replace call to mongo
         inject.object(_$+'data/mongo/common', {
@@ -14,10 +14,10 @@ mocha('authTokenData : create', async(testArgs)=>{
             }
         })
 
-        const authTokenMongo = require(_$+'data/mongo/authToken'),
-            actualAuthToken = await authTokenMongo.create({ id : '5349b4ddd2781d08c09890f4' })
+        const mongo = require(_$+'data/mongo/playlist'),
+            record = await mongo.create({ id : testArgs.mongoId })
 
-        assert.equal(actualAuthToken.id, '5349b4ddd2781d08c09890f4')
+        assert.equal(record.id, testArgs.mongoId)
     })
 
 })

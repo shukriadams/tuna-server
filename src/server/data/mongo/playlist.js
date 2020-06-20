@@ -60,7 +60,7 @@ module.exports = {
         const mongoCommon = require(_$+'data/mongo/common'),
             writePlaylist = this.denormalize(playlist)
         
-        await mongoCommon.update('playlists', playlist._id, writePlaylist)
+        await mongoCommon.update('playlists', playlist.id, writePlaylist)
     },
 
 

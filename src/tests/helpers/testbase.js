@@ -17,7 +17,7 @@ module.exports = function(testName, tests){
 
         // run tests importing this file. Pass variables to test as needed
         tests({
-
+            mongoId: '5349b4ddd2781d08c09890f4' // real BSON id for when ObjectID expects to parse the id
         })
 
         beforeEach(function(done) {

@@ -3,10 +3,9 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('authTokenData : delete', async(testArgs)=>{
+mocha('playlistData : delete', async(testArgs)=>{
 
-    it('happy path : deletes authToken', async () => {
-        let authTokenMongo = require(_$+'data/mongo/authToken')
+    it('happy path : deletes playlist', async () => {
 
         // replace call to mongo
         inject.object(_$+'data/mongo/common', {
@@ -15,9 +14,10 @@ mocha('authTokenData : delete', async(testArgs)=>{
             }
         })
 
-        const actualId = await authTokenMongo.delete('dafda')
+        const mongo = require(_$+'data/mongo/playlist'),
+            id = await mongo.delete('dafda')
 
-        assert.equal(actualId, 'dafda')
+        assert.equal(id, 'dafda')
     })
 
 })

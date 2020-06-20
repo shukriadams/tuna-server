@@ -6,17 +6,17 @@ const
 mocha('authTokenData : deleteForProfile', async(testArgs)=>{
 
     it('happy path : deletes authTokens for profile', async () => {
+        let authTokenMongo = require(_$+'data/mongo/authToken'),
+            actualQuery 
 
         // replace call to mongo
         inject.object(_$+'data/mongo/common', {
             deleteMany : (collection, query)=>{
-                return query
+                actualQuery = query
             }
         })
         
-        let authTokenMongo = require(_$+'data/mongo/authToken'),
-            actualQuery = await authTokenMongo.deleteForProfile('dafda')
-
+        await authTokenMongo.deleteForProfile('dafda')
         assert.equal(actualQuery.profileId, 'dafda')
     })
 
