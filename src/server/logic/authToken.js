@@ -17,12 +17,13 @@ module.exports = {
         authToken.context = browserUID
         authToken.userAgent = userAgent
 
-        // delete sessio for current browser
+        // delete session for current browser
         await cache.deleteForContext(profileId, browserUID)
 
         // ensure we don't exceed max allowed sessions
         let existingTokens = await cache.getForProfile(profileId)
         if (existingTokens.length > settings.maxSessionsPerUser){
+            
             // sort newest first
             existingTokens.sort((a,b)=>{
                 return a.created > b.created ? -1 :
@@ -34,7 +35,6 @@ module.exports = {
     
             for (let deleteToken of existingTokens)
                 await cache.delete(deleteToken.id)
-            
         }
     
         return await cache.create(authToken)

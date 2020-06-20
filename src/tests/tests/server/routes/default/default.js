@@ -10,11 +10,11 @@ mocha('default route', async(testArgs)=>{
     // this is a simple route, it has only one outcome
     it('happy path : returns html', async () => {
 
-        let routeTester = await new RouteTester(route);
+        let routeTester = await new RouteTester(route)
 
-        await routeTester.get(/^[^.]+$/);
+        await routeTester.get(/^[^.]+$/)
 
-        assert.includes(routeTester.res.content, '<html>');
-    });
+        assert.includes(routeTester.res.content, '<html>')
+    })
     
 })
