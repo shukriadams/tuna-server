@@ -19,7 +19,7 @@ module.exports = {
             throw new Exception({ code: constants.ERROR_INVALID_ARGUMENT, log : 'name required' })
 
         playlist.profileId = profileId
-        playlist.name = playlist.name.substr(0, 25)
+        playlist.name = playlist.name.substr(0, 25) // limit playlist name length
 
         await playlistsCache.create(playlist)
     },
@@ -77,14 +77,6 @@ module.exports = {
     async getAll(profileId){
         const playlistsCache = require(_$+'cache/playlist')
         return await playlistsCache.getAll(profileId)
-    },
-
-
-    /**
-     *
-     */
-    async getById(playlistId){
-        const playlistsCache = require(_$+'cache/playlist')
-        return await playlistsCache.getAll(playlistId)
     }
+
 };
