@@ -78,7 +78,7 @@ module.exports = {
         const mongoCommon = require(_$+'data/mongo/common'),
             writeProfile = this.denormalize(profile)
         
-        await mongoCommon.update('profiles', profile._id, writeProfile)
+        await mongoCommon.update('profiles', profile.id, writeProfile)
     },
     
     async delete(profile){

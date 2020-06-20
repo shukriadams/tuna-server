@@ -53,7 +53,7 @@ module.exports = {
         const mongoCommon = require(_$+'data/mongo/common'),
             writeRecord = this.denormalize(record)
         
-        await mongoCommon.update('songs', record._id, writeRecord)
+        await mongoCommon.update('songs', record.id, writeRecord)
     },
 
 

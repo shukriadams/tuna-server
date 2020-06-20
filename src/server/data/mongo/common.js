@@ -36,13 +36,9 @@ module.exports = {
 
         return new Promise(async (resolve, reject) => {
             try {
-                const db = await mongoHelper.getCollection(collection),
-                    insertRecords = []
+                const db = await mongoHelper.getCollection(collection)
 
-                for (const record of records)
-                    insertRecords.push(denormalize(record))
-
-                db.collection.insertMany( insertRecords, err => {
+                db.collection.insertMany( records, err => {
                     if (err)
                         return reject(err)
 
