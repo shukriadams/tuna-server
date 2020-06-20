@@ -41,7 +41,7 @@ mocha('profileCache : getById', async(testArgs)=>{
             }
         })
 
-        const profilesCache = require(_$+'cache/authToken'),
+        const profilesCache = require(_$+'cache/profile'),
             profile = await profilesCache.getById('some-id22')
 
         assert.equal(profile.id, 'some-id22')

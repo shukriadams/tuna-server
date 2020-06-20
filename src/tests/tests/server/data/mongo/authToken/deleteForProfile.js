@@ -13,7 +13,7 @@ mocha('authTokenData : deleteForProfile', async(testArgs)=>{
                 return query
             }
         })
-
+        
         let authTokenMongo = require(_$+'data/mongo/authToken'),
             actualQuery = await authTokenMongo.deleteForProfile('dafda')
 

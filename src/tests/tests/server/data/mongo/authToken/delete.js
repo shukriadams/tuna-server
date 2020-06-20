@@ -15,7 +15,7 @@ mocha('authTokenData : delete', async(testArgs)=>{
             }
         })
 
-        const actualId = await authTokenMongo.create('dafda')
+        const actualId = await authTokenMongo.delete('dafda')
 
         assert.equal(actualId, 'dafda')
     })

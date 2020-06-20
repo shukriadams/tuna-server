@@ -6,7 +6,6 @@ const
 mocha('authTokenData : create', async(testArgs)=>{
 
     it('happy path : creates authToken', async () => {
-        let authTokenMongo = require(_$+'data/mongo/authToken')
 
         // replace call to mongo
         inject.object(_$+'data/mongo/common', {
@@ -15,9 +14,10 @@ mocha('authTokenData : create', async(testArgs)=>{
             }
         })
 
-        const actualAuthToken = await authTokenMongo.create({ id : 'some-id' })
+        const authTokenMongo = require(_$+'data/mongo/authToken'),
+            actualAuthToken = await authTokenMongo.create({ id : '5349b4ddd2781d08c09890f4' })
 
-        assert.equal(actualAuthToken.id, 'some-id')
+        assert.equal(actualAuthToken.id, '5349b4ddd2781d08c09890f4')
     })
 
 })

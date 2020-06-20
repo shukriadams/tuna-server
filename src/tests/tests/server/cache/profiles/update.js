@@ -7,12 +7,13 @@ mocha('profilesCache : update', async(testArgs)=>{
 
     it('happy path : updates a profile', async () => {
         let called = false,
+            actualProfile,
             profilesCache = require(_$+'cache/profile')
 
         // replace call to mongo
-        inject.object(_$+'data/mongo/playlist', {
+        inject.object(_$+'data/mongo/profile', {
             update : (profile)=>{
-                return profile
+                actualProfile = profile
             }
         })
         
@@ -23,7 +24,7 @@ mocha('profilesCache : update', async(testArgs)=>{
             }
         })
 
-        const actualProfile = await profilesCache.create({ id : 'some-update-id' })
+        await profilesCache.update({ id : 'some-update-id' })
 
         assert.equal(actualProfile.id, 'some-update-id')
         assert.true(called)

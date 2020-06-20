@@ -61,6 +61,7 @@
     "fileconcat": "2.0.1",
     "minify": "4.1.1",
     "mocha": "7.1.0",
+    "lodash.clonedeep" : "4.5.0",
     "madscience-node-assert": "https://github.com/shukriadams/node-assert.git#0.0.5",
     "node-sass-runner": "https://github.com/shukriadams/node-sass-runner.git#0.0.4",
     "semver": "5.5.0"

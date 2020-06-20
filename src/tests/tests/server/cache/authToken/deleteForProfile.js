@@ -9,6 +9,7 @@ mocha('authTokenCache : deleteForProfile', async(testArgs)=>{
         // replace call to mongo
         inject.object(_$+'data/mongo/authToken', {
             deleteForProfile : (id)=> {
+                console.log(1111)
                 actualId = id
             }
         })
