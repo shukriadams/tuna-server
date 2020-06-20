@@ -128,7 +128,7 @@ module.exports = {
     /**
      *
      */
-    requestPasswordReset : async function requestPasswordReset(identifier, email){
+    async requestPasswordReset(identifier, email){
         const 
             randomstring = require('randomstring'),
             settings = require(_$+'helpers/settings'),
@@ -174,7 +174,7 @@ module.exports = {
     /**
      *
      */
-    isPasswordValid (profile, password){
+    _isPasswordValid (profile, password){
         const crypto = require('crypto'),
             sha512 = crypto.createHmac('sha512', profile.salt)
 
@@ -202,7 +202,7 @@ module.exports = {
         if (!password)
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION,
-                public : 'Invalid username / password ' 
+                public : 'Invalid username / password' 
             })
 
         // note that identifier is always trimmed and set to lowercase()
@@ -210,10 +210,10 @@ module.exports = {
         if (!profile)
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION, 
-                public : 'Invalid username / password ' 
+                public : 'Invalid username / password' 
             })
 
-        if (!this.isPasswordValid(profile, password))
+        if (!this._isPasswordValid(profile, password))
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION, 
                 public : 'Invalid username / password' 
@@ -252,7 +252,7 @@ module.exports = {
             })
 
         // verify current password if no key, ie, already authenticated
-        if (!key && !this.isPasswordValid(profile, currentPassword))
+        if (!key && !this._isPasswordValid(profile, currentPassword))
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION,
                 public : 'Current password is invalid' 

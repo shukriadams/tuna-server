@@ -1,6 +1,6 @@
 const mocha = require(_$t+'helpers/testbase')
 
-mocha('profilesLogic : autoCreateMaster', async(ctx)=>{
+mocha('logic/profiles/autoCreateMaster', async(ctx)=>{
 
     it('happy path : creates master profile', async () => {
 

@@ -4,7 +4,7 @@ const
     requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/dev/nextcloudTokenSwap', async(testArgs)=>{
+mocha('route/sandbox/nextcloudTokenSwap', async(testArgs)=>{
     
     it('happy path : route returns token object', async () => {
         

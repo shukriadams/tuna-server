@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('authTokensLogic : create', async(testArgs)=>{
+mocha('logic/authTokens/create', async(testArgs)=>{
 
     it('happy path : creates auth token, no existing sessions', async () => {
 

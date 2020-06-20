@@ -4,7 +4,7 @@ const
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/profiles/requestpassword', async(testArgs)=>{
+mocha('route/profiles/requestPassword', async(testArgs)=>{
     
     it('route/profiles/requestpassword : happy path : request a password reset', async () => {
         

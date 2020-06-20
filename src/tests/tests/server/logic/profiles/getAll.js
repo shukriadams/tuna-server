@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('profilesLogic : gets all profiles', async(testArgs)=>{
+mocha('logic/profiles/getAll', async(testArgs)=>{
 
     it('happy path : gets all profiles', async () => {
 

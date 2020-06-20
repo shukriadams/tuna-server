@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('profileCache : getById', async(testArgs)=>{
+mocha('cache/profiles/getById', async(testArgs)=>{
 
     it('happy path : gets profile by id, already cached', async () => {
         

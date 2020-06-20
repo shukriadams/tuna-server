@@ -5,7 +5,7 @@ const
     assert = require('madscience-node-assert')
 
 
-mocha('test : /helpers/nextcloud/function:getSource', function(testArgs){
+mocha('helpers/nextcloud/importer/getSource', function(testArgs){
 
 
     it('happy path : return profile and source', async () => {

@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('songsData : delete for profile', async(testArgs)=>{
+mocha('mongo/songs/deleteForProfile', async(testArgs)=>{
 
     it('happy path : deletes songs for profile', async () => {
 

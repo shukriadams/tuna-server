@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('profilesData : update', async(testArgs)=>{
+mocha('mongo/profiles/update', async(testArgs)=>{
 
     it('happy path : updates profile', async () => {
 

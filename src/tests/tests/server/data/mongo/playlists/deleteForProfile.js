@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('playlistsData : deleteForProfile', async(testArgs)=>{
+mocha('mongo/playlists/deleteForProfile', async(testArgs)=>{
 
     it('happy path : deletes playlists for profile', async () => {
         let mongo = require(_$+'data/mongo/playlist'),

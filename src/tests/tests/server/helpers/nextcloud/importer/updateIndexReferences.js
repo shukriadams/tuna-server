@@ -6,7 +6,7 @@ const
     mock = require(_$t+'tests/server/helpers/nextcloud/importer/mock'),
     assert = require('madscience-node-assert')
 
-mocha('test : /helpers/nextcloud/function:updateIndexReferences', function(testArgs){
+mocha('helpers/nextcloud/importer/getSource/updateIndexReferences', function(testArgs){
     
     
     it('happypath : should list multiple index files found', async () => {

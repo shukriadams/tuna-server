@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('profilesCache : getByPasswordResetKey', async(testArgs)=>{
+mocha('cache/profiles/getByPasswordResetKey', async(testArgs)=>{
 
     it('happy path : gets profile by identifier', async () => {
         // replace call to mongo

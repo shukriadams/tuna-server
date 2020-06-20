@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('logsLogic : create', async(testArgs)=>{
+mocha('logic/logs/create', async(testArgs)=>{
 
     it('happy path : creates a log entry', async () => {
 

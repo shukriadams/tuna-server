@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('playlistsData : getByIdentifier', async(testArgs)=>{
+mocha('mongo/profiles/getByIdentifier', async(testArgs)=>{
 
     it('happy path : gets playlist by identifier', async () => {
 

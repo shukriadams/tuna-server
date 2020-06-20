@@ -4,7 +4,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/profiles/resetpassword', async(testArgs)=>{
+mocha('route/profiles/resetPassword', async(testArgs)=>{
     
     it('route/profiles/resetpassword : happy path : request a password reset if not logged in', async () => {
         

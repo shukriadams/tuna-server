@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('profileCache : create', async(testArgs)=>{
+mocha('cache/profiles/create', async(testArgs)=>{
 
     it('happy path : creates and caches profile', async () => {
         let actualProfile,

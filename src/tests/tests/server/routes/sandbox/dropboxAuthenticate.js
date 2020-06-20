@@ -4,7 +4,7 @@ const
     requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/dev/dropboxAuthenticate', async(testArgs)=>{
+mocha('route/sandbox/dropboxAuthenticate', async(testArgs)=>{
     
     it('happy path : route directs', async () => {
 

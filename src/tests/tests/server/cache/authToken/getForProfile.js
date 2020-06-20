@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('authTokenCache : getForProfile', async(testArgs)=>{
+mocha('cache/authTokens/getForProfile', async(testArgs)=>{
 
     it('happy path : gets authTokens by profile', async () => {
         const authTokenCache = require(_$+'cache/authToken')

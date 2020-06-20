@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('profilesLogic : gets profile by identifier', async(testArgs)=>{
+mocha('logic/profiles/getByIdentifier', async(testArgs)=>{
 
     it('happy path : gets all profiles', async () => {
 

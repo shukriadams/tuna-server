@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('playlistCache : delete', async(testArgs)=>{
+mocha('cache/playlists/delete', async(testArgs)=>{
 
     it('happy path : deletes a playlist', async () => {
         let called = false,

@@ -28,6 +28,9 @@ module.exports = function(testName, tests){
                         overridden = Object.assign(clone, override)
 
                     requireMock.add(path, overridden)
+                },
+                function : (path, override)=>{
+                    requireMock.add(path, override)
                 }
             },
 

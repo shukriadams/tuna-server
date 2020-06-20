@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('playlistsLogic : create', async(testArgs)=>{
+mocha('logic/playlists/create', async(testArgs)=>{
 
     it('happy path : creates playlist', async () => {
 

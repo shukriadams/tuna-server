@@ -4,7 +4,7 @@ const
     requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/dev/lastfmTokenSwap', async(testArgs)=>{
+mocha('route/sandbox/lastfmTokenSwap', async(testArgs)=>{
     
     it('happy path : route returns token object', async () => {
         

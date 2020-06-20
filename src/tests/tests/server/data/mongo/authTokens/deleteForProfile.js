@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('authTokenData : deleteForProfile', async(testArgs)=>{
+mocha('mongo/authTokens/deleteForProfile', async(testArgs)=>{
 
     it('happy path : deletes authTokens for profile', async () => {
         let authTokenMongo = require(_$+'data/mongo/authToken'),

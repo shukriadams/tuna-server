@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('playlistsData : getByPasswordResetKey', async(testArgs)=>{
+mocha('mongo/profiles/getByPasswordResetKey', async(testArgs)=>{
 
     it('happy path : gets playlist by password reset key', async () => {
 

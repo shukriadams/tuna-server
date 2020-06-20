@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('songsData : create', async(testArgs)=>{
+mocha('mongo/songs/create', async(testArgs)=>{
 
     it('happy path : creates songs', async () => {
 

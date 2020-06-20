@@ -4,7 +4,7 @@ const
     requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/dev/lastfmAuthenticate', async(testArgs)=>{
+mocha('route/sandbox/lastfmAuthenticate', async(testArgs)=>{
 
     
     it('happy path : route directs', async () => {

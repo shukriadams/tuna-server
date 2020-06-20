@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('authTokenCache : create', async(testArgs)=>{
+mocha('cache/authTokens/create', async(testArgs)=>{
 
     it('happy path : creates and caches authToken', async () => {
         let actualAuthToken,

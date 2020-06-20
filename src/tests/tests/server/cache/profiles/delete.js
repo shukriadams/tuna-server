@@ -3,7 +3,7 @@ const
     inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('profilesCache : delete', async(testArgs)=>{
+mocha('cache/profiles/delete', async(testArgs)=>{
 
     it('happy path : deletes a profile', async () => {
         let called = false,

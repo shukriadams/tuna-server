@@ -5,7 +5,7 @@ const
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('default route', async(testArgs)=>{
+mocha('route/default/default', async(testArgs)=>{
 
     // this is a simple route, it has only one outcome
     it('happy path : returns html', async () => {

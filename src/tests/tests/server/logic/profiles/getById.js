@@ -1,6 +1,6 @@
 const mocha = require(_$t+'helpers/testbase')
 
-mocha('profilesLogic : get by id', async(ctx)=>{
+mocha('logic/profiles/getById', async(ctx)=>{
 
     it('happy path : get by id', async () => {
 
