@@ -20,7 +20,6 @@ mocha('logic/profiles/autoCreateMaster', async(ctx)=>{
                 return profile
             }
         })
-       
 
         const profile = await logic.autoCreateMaster('my-name')
         ctx.assert.equal(profile.identifier, 'my-name')

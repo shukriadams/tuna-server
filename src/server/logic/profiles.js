@@ -283,6 +283,10 @@ module.exports = {
         await dataCache.update(profile)
     },
 
+    
+    /**
+     *
+     */
     async songsHashValid(profileId, hash){
         const 
             settings = require(_$+'helpers/settings'),
