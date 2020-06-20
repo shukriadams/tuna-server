@@ -9,7 +9,9 @@ const path = require('path')
 global._$ = path.resolve(`${__dirname}/../../server`) + '/'
 global._$t = path.resolve(`${__dirname}/../`) + '/'
 
-const requireMock = require(_$t+'helpers/require')
+const clonedeep = require('lodash.clonedeep'),
+    assert = require('madscience-node-assert'),
+    requireMock = require(_$t+'helpers/require')
 
 module.exports = function(testName, tests){
     describe(testName, function() {
@@ -17,7 +19,34 @@ module.exports = function(testName, tests){
 
         // run tests importing this file. Pass variables to test as needed
         tests({
-            mongoId: '5349b4ddd2781d08c09890f4' // real BSON id for when ObjectID expects to parse the id
+            mongoId: '5349b4ddd2781d08c09890f4', // real BSON id for when ObjectID expects to parse the id
+            
+            inject : {
+                object : (path, override)=>{
+                    const target = require(path),
+                        clone = clonedeep(target),
+                        overridden = Object.assign(clone, override)
+
+                    requireMock.add(path, overridden)
+                }
+            },
+
+            assert,
+
+            suppressLogs (){
+                this.inject.object('winston-wrapper', {
+                    instance : ()=>{
+                        return {
+                            info : {
+                                info : ()=>{}
+                            },
+                            error : {
+                                error : ()=>{}
+                            }
+                        }
+                    }
+                })
+            }
         })
 
         beforeEach(function(done) {

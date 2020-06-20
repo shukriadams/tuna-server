@@ -121,8 +121,7 @@ module.exports = {
      */
     async getById(profileId){
         const dataCache = require(_$+'cache/profile')
-        let profile = await dataCache.getById(profileId)
-        return profile
+        return await dataCache.getById(profileId)
     },
 
 
