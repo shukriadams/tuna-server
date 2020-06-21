@@ -65,7 +65,7 @@ module.exports = {
 
 
     /**
-     * Safe parse wrapper for json.parse, throws meaningful exception in event of parse error, instead of Node's default
+     * Safe parse wrapper for json.parse, throws meaningful exception in event of parse error, instead of Node's useless default
      * "invalid token at position 1".
      * 
      * ALL server-side JSON.parse should be replaced with this
