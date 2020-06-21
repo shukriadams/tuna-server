@@ -1,31 +1,29 @@
 const 
     constants = require(_$+'types/constants'),
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/oauth'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase'),
-    requireMock = require(_$t+'helpers/require')
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/oauth/nextcloud', async(testArgs)=>{
+mocha('route/oauth/nextcloud', async(ctx)=>{
     
-    it('happy path : swap succeeds and redirects to next page ', async () => {
+    it('route/oauth/nextcloud::happy    swap succeeds and redirects to next page ', async () => {
         
-        let nextCloudHelper = require(_$+'helpers/nextcloud/common'),
-        // capture actual used profile and code
-            actualProfileId,
+        let actualProfileId,
             actualCode
 
-        nextCloudHelper.swapCodeForToken =(profileId, code)=>{ 
-            actualProfileId = profileId
-            actualCode = code
-        }
-        requireMock.add(_$+'helpers/nextcloud/common', nextCloudHelper)
-
-
-        const authTokenLogic = require(_$+'logic/authToken')
-        authTokenLogic.getById =()=>{ return { profileId: 'a-profile' }}
-        requireMock.add(_$+'logic/authToken', authTokenLogic)
-
+        // capture actual used profile and code
+        ctx.inject.object(_$+'helpers/nextcloud/common', {
+            swapCodeForToken (profileId, code){ 
+                actualProfileId = profileId
+                actualCode = code
+            }
+        })
+ 
+        ctx.inject.object(_$+'logic/authToken', {
+            getById (){ 
+                return { profileId: 'a-profile' 
+            }}
+        })
 
         let routeTester = await new RouteTester(route)
         // code to be converted to token
@@ -36,22 +34,26 @@ mocha('route/oauth/nextcloud', async(testArgs)=>{
 
         await routeTester.get('/v1/oauth/nextcloud')
 
-        assert.equal(actualCode, 'some-code')
-        assert.equal(actualProfileId, 'a-profile')
-        assert.equal(routeTester.res.redirected, '/the-page')
+        ctx.assert.equal(actualCode, 'some-code')
+        ctx.assert.equal(actualProfileId, 'a-profile')
+        ctx.assert.equal(routeTester.res.redirected, '/the-page')
     })
 
 
-    it('unhappy path : throws auth error authtoken invalid', async () => {
-        
-        // ensure authtoken is null
-        const authTokenLogic = require(_$+'logic/authToken')
-        authTokenLogic.getById =()=>{ return null }
-        requireMock.add(_$+'logic/authToken', authTokenLogic)
 
-        let routeTester = await new RouteTester(route)
+
+    it('route/oauth/nextcloud::unhappy    throws auth error authtoken invalid', async () => {
+        ctx.inject.object(_$+'logic/authToken', {
+            // ensure authtoken is null
+            getById (){ 
+                return null 
+            }
+
+        })        
+
+        const routeTester = await new RouteTester(route)
         await routeTester.get('/v1/oauth/nextcloud')
-        assert.equal(routeTester.res.content.code, constants.ERROR_INVALID_USER_OR_SESSION)
+        ctx.assert.equal(routeTester.res.content.code, constants.ERROR_INVALID_USER_OR_SESSION)
     })
 
 })

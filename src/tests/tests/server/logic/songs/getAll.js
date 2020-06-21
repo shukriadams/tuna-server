@@ -2,7 +2,7 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/songs/getAll', async(ctx)=>{
 
-    it('happy path : gets all songs for profile', async () => {
+    it('logic/songs/getAll::happy    gets all songs for profile', async () => {
         let actualProfileId
         
         ctx.inject.object(_$+'cache/songs', {

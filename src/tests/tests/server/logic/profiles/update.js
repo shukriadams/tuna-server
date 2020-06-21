@@ -1,14 +1,11 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('logic/profiles/update', async(testArgs)=>{
+mocha('logic/profiles/update', async(ctx)=>{
 
-    it('happy path : updates profile', async () => {
+    it('logic/profiles/update::happy    updates profile', async () => {
         
-        inject.object(_$+'logic/profiles', {
-            update : (profile)=>{
+        ctx.inject.object(_$+'logic/profiles', {
+            update (profile){
                 return profile
             }
         })
@@ -16,7 +13,7 @@ mocha('logic/profiles/update', async(testArgs)=>{
         const logic = require(_$+'logic/profiles'),
             properties = await logic.update({ id : 'some-id'})
             
-        assert.equal(properties.id, 'some-id')
+        ctx.assert.equal(properties.id, 'some-id')
     })
 
 })

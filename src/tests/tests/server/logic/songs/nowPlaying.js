@@ -3,7 +3,7 @@ const constants = require(_$+'types/constants'),
 
 mocha('logic/songs/nowPlaying', async(ctx)=>{
 
-    it('happy path : registers currently playing song', async () => {
+    it('logic/songs/nowPlaying::happy    registers currently playing song', async () => {
         // return a profile, this is required to proceed
         ctx.inject.object(_$+'logic/profiles', {
             getById (){
@@ -31,8 +31,10 @@ mocha('logic/songs/nowPlaying', async(ctx)=>{
         ctx.assert.equal(status, 'updated-on-last-fm')
     })
 
+
+
     
-    it('logic/songs/nowPlaying/unhappy/no profile found', async () => {
+    it('logic/songs/nowPlaying::unhappy    no profile found', async () => {
         // return null profile to trigger exception
         ctx.inject.object(_$+'logic/profiles', {
             getById (){
@@ -47,7 +49,9 @@ mocha('logic/songs/nowPlaying', async(ctx)=>{
     })
 
 
-    it('logic/songs/nowPlaying/unhappy/no song found', async () => {
+
+
+    it('logic/songs/nowPlaying::unhappy    no song found', async () => {
         // return a profile, this is required to proceed
         ctx.inject.object(_$+'logic/profiles', {
             getById (){

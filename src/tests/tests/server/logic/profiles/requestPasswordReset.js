@@ -2,7 +2,7 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/profiles/requestPasswordReset', async(ctx)=>{
 
-    it('happy path : requests password reset', async () => {
+    it('logic/profiles/requestPasswordReset::happy    requests password reset', async () => {
         let updatedProfile,
             sentEmail = null,
             sentSubject = null,
@@ -32,7 +32,10 @@ mocha('logic/profiles/requestPasswordReset', async(ctx)=>{
         ctx.assert.notNull(sentBody)
     })
 
-    it('unhappy path : profile not found', async () => {
+
+
+    
+    it('logic/profiles/requestPasswordReset::unhappy    profile not found', async () => {
         ctx.inject.object(_$+'cache/profile', {
             getByIdentifier (){
                 return null
@@ -45,7 +48,10 @@ mocha('logic/profiles/requestPasswordReset', async(ctx)=>{
         ctx.assert.equal(exception.public, 'That email address isn\'t bound to an account.')
     })
 
-    it('unhappy path : profile has no email', async () => {
+
+
+
+    it('logic/profiles/requestPasswordReset::unhappy    profile has no email', async () => {
         ctx.inject.object(_$+'cache/profile', {
             getByIdentifier (profileId){
                 return { profileId, email : null }
@@ -58,7 +64,10 @@ mocha('logic/profiles/requestPasswordReset', async(ctx)=>{
         ctx.assert.equal(exception.public, 'Your account doesn\t have an email address. Please reset password directly (see Tuna "help" guide for more info)')
     })
 
-    it('unhappy path : profile email doesn\'t match security email' , async () => {
+
+
+
+    it('logic/profiles/requestPasswordReset::unhappy    profile email doesn\'t match security email' , async () => {
         ctx.inject.object(_$+'cache/profile', {
             getByIdentifier (profileId){
                 return { profileId, email : 'something invalid' }

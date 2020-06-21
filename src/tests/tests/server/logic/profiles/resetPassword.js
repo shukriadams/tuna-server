@@ -2,17 +2,17 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/profiles/resetPassword', async(ctx)=>{
 
-    it('happy path : requests password reset, key given', async () => {
+    it('logic/profiles/resetPassword::happy    requests password reset, key given', async () => {
         let updatedProfile = null
 
         ctx.inject.object(_$+'cache/profile', {
-            getByPasswordResetKey : (key)=>{
+            getByPasswordResetKey(){
                 return {}
             }
         })
 
         ctx.inject.object(_$+'cache/profile', {
-            update : (profile)=>{
+            update (profile){
                 updatedProfile = profile
             }
         })
@@ -22,23 +22,26 @@ mocha('logic/profiles/resetPassword', async(ctx)=>{
         ctx.assert.notNull(updatedProfile)
     })
 
-    it('happy path : requests password reset, profileId given', async () => {
+
+
+
+    it('logic/profiles/resetPassword::happy    requests password reset, profileId given', async () => {
         let updatedProfile = null
 
         ctx.inject.object(_$+'cache/profile', {
-            getById : (profileId)=>{
+            getById (){
                 return {}
             }
         })
 
         ctx.inject.object(_$+'cache/profile', {
-            update : (profile)=>{
+            update (profile){
                 updatedProfile = profile
             }
         })
 
         ctx.inject.object(_$+'logic/profiles', {
-            _isPasswordValid : (profileId)=>{
+            _isPasswordValid (){
                 return true
             }
         })
@@ -48,37 +51,42 @@ mocha('logic/profiles/resetPassword', async(ctx)=>{
         ctx.assert.notNull(updatedProfile)
     })
 
-    it('unhappy path : requests password reset, no profile found', async () => {
-        let updatedProfile = null
 
+
+
+    it('logic/profiles/resetPassword::unhappy    requests password reset, no profile found', async () => {
         ctx.inject.object(_$+'cache/profile', {
-            getById : (profileId)=>{
+            getById (){
                 return null
             }
         })
 
-        let logic = require(_$+'logic/profiles')
-        exception = await ctx.assert.throws(async () => await logic.resetPassword(null, 'my-password', 'my-currentPassword', 'my-profile-idd') )
+        const logic = require(_$+'logic/profiles'),
+            exception = await ctx.assert.throws(async () => await logic.resetPassword(null, 'my-password', 'my-currentPassword', 'my-profile-idd') )
+
         ctx.assert.equal(exception.public, 'Invalid session')
     })
 
-    it('unhappy path : requests password reset, session instead of key, password invalid', async () => {
-        let updatedProfile = null
+
+
+
+    it('logic/profiles/resetPassword::unhappy    requests password reset, session instead of key, password invalid', async () => {
 
         ctx.inject.object(_$+'cache/profile', {
-            getById : (profileId)=>{
+            getById (){
                 return {}
             }
         })
 
         ctx.inject.object(_$+'logic/profiles', {
-            _isPasswordValid : (profileId)=>{
+            _isPasswordValid (){
                 return false
             }
         })
 
-        let logic = require(_$+'logic/profiles')
-        exception = await ctx.assert.throws(async () => await logic.resetPassword(null, 'my-password', 'my-currentPassword', 'my-profile-idd') )
+        const logic = require(_$+'logic/profiles'),
+            exception = await ctx.assert.throws(async () => await logic.resetPassword(null, 'my-password', 'my-currentPassword', 'my-profile-idd') )
+
         ctx.assert.equal(exception.public, 'Current password is invalid')
     })
 })

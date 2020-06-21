@@ -2,10 +2,10 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/profiles/getById', async(ctx)=>{
 
-    it('happy path : get by id', async () => {
+    it('logic/profiles/getById::happy    get by id', async () => {
 
         ctx.inject.object(_$+'cache/profile', {
-            getById : (profileId)=>{
+            getById (profileId){
                 return { profileId }
             }
         })

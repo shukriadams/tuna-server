@@ -2,16 +2,16 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/profiles/authenticate', async(ctx)=>{
 
-    it('happy path : authenticates profile', async () => {
+    it('logic/profiles/authenticate::happy    authenticates profile', async () => {
 
         ctx.inject.object(_$+'cache/profile', {
-            getByIdentifier : ()=>{
+            getByIdentifier (){
                 return { id : 'some-id' }
             }
         })
 
         ctx.inject.object(_$+'logic/profiles', {
-            _isPasswordValid : ()=>{
+            _isPasswordValid (){
                 return true
             }
         })
@@ -23,7 +23,9 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
     })
 
 
-    it('unhappy happy path : no identifier', async () => {
+
+
+    it('logic/profiles/authenticate::unhappy    no identifier', async () => {
         const logic = require(_$+'logic/profiles'),
             exception = await ctx.assert.throws(async () => await logic.authenticate(null, 'mypass') )
 
@@ -31,7 +33,9 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
     })
 
 
-    it('unhappy happy path : no password', async () => {
+
+
+    it('logic/profiles/authenticate::unhappy    no password', async () => {
         const logic = require(_$+'logic/profiles'),
             exception = await ctx.assert.throws(async () => await logic.authenticate('my-id', null) )
 
@@ -39,9 +43,11 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
     })
 
 
-    it('unhappy happy path : profile not found', async () => {
+
+
+    it('logic/profiles/authenticate::unhappy    profile not found', async () => {
         ctx.inject.object(_$+'cache/profile', {
-            getByIdentifier : ()=>{
+            getByIdentifier (){
                 return null
             }
         })
@@ -53,15 +59,17 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
     })
 
 
-    it('unhappy happy path : invalid password', async () => {
+
+
+    it('logic/profiles/authenticate::unhappy    invalid password', async () => {
         ctx.inject.object(_$+'cache/profile', {
-            getByIdentifier : ()=>{
+            getByIdentifier (){
                 return { id : 'some-id' }
             }
         })
 
         ctx.inject.object(_$+'logic/profiles', {
-            _isPasswordValid : ()=>{
+            _isPasswordValid (){
                 return false
             }
         })

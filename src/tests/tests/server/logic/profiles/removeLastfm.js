@@ -2,11 +2,11 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/profiles/removeLastfm', async(ctx)=>{
 
-    it('happy path : removes lastfm', async () => {
+    it('logic/profiles/removeLastfm::happy    removes lastfm', async () => {
         let actualProfile
 
         ctx.inject.object(_$+'cache/profile', {
-            getById : (profileId)=>{
+            getById (profileId){
                 return { profileId }
             },
             update (profile){

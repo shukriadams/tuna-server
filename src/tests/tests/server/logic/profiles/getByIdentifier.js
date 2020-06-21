@@ -1,22 +1,18 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('logic/profiles/getByIdentifier', async(testArgs)=>{
+mocha('logic/profiles/getByIdentifier', async(ctx)=>{
 
-    it('happy path : gets all profiles', async () => {
-
-        let logic = require(_$+'logic/profiles')
-
-        inject.object(_$+'cache/profile', {
-            getByIdentifier : ()=>{
+    it('logic/profiles/getByIdentifier::happy    gets all profiles', async () => {
+        ctx.inject.object(_$+'cache/profile', {
+            getByIdentifier (){
                 return {id : 'some-id'}
             }
         })
 
-        const profile = await logic.getByIdentifier()
-        assert.equal(profile.id, 'some-id')
+        const logic = require(_$+'logic/profiles'),
+            profile = await logic.getByIdentifier()
+
+        ctx.assert.equal(profile.id, 'some-id')
     })
 
 })

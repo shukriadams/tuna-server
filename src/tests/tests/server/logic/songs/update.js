@@ -2,7 +2,7 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/songs/update', async(ctx)=>{
 
-    it('happy path : updates song', async () => {
+    it('logic/songs/update::happy    updates song', async () => {
         ctx.inject.object(_$+'cache/songs', {
             update (song){
                 return song

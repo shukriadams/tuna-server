@@ -2,7 +2,7 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/songs/streamSong', async(ctx)=>{
 
-    it('happy path : streams song', async () => {
+    it('logic/songs/streamSong::happy    streams song', async () => {
         let actualProfileId,  
             actualMediaPath
 

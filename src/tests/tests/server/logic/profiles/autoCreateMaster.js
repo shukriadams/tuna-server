@@ -2,7 +2,7 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('logic/profiles/autoCreateMaster', async(ctx)=>{
 
-    it('happy path : creates master profile', async () => {
+    it('logic/profiles/autoCreateMaster::happy    creates master profile', async () => {
 
         ctx.suppressLogs()
 
@@ -10,13 +10,13 @@ mocha('logic/profiles/autoCreateMaster', async(ctx)=>{
         let logic = require(_$+'logic/profiles')
 
         ctx.inject.object(_$+'logic/profiles', {
-            getByIdentifier : ()=>{
+            getByIdentifier (){
                 return null
             }
         })
 
         ctx.inject.object(_$+'cache/profile', {
-            create : (profile)=>{
+            create (profile){
                 return profile
             }
         })

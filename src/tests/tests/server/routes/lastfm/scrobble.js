@@ -1,22 +1,19 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/lastfm'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/lastfm/scrobble', async(testArgs)=>{
-
+mocha('route/lastfm/scrobble', async(ctx)=>{
     
-    it('happy path : scrobbles a play', async () => {
+    it('route/lastfm/scrobble::happy    scrobbles a play', async () => {
         // intercept the actual song data scrobbled
         let actualSong,
             actualProfileId,
             actualDuration
 
         // prevent scrobble from cascading to db
-        inject.object(_$+'logic/songs', {
-            scrobble : (profileId, song, duration)=>{ 
+        ctx.inject.object(_$+'logic/songs', {
+            scrobble (profileId, song, duration){ 
                 actualSong = song
                 actualDuration = duration
                 actualProfileId = profileId
@@ -33,11 +30,11 @@ mocha('route/lastfm/scrobble', async(testArgs)=>{
 
         await routeTester.get('/v1/lastfm/scrobble')
 
-        assert.equal(actualSong, 'song1234')
-        assert.equal(actualDuration, 'duration1234')
-        assert.equal(actualProfileId, routeTester.authToken.profileId)
+        ctx.assert.equal(actualSong, 'song1234')
+        ctx.assert.equal(actualDuration, 'duration1234')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId)
         // the payload for a scrobble is an empty object, confirm by ensuring it's an object with no properties
-        assert.empty(Object.keys(routeTester.res.content.payload))
-    });
+        ctx.assert.empty(Object.keys(routeTester.res.content.payload))
+    })
 
 })

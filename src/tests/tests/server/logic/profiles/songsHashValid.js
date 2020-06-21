@@ -3,7 +3,7 @@ const constants = require(_$+'types/constants'),
 
 mocha('logic/profiles/songsHashValid', async(ctx)=>{
 
-    it('happy path : songs hash are valid', async () => {
+    it('logic/profiles/songsHashValid::happy    songs hash are valid', async () => {
         let settings = require(_$+'helpers/settings'),
             profile = {
                 sources : {}
@@ -13,7 +13,7 @@ mocha('logic/profiles/songsHashValid', async(ctx)=>{
         profile.sources[settings.musicSource] = {indexHash : 'myhash'}
 
         ctx.inject.object(_$+'cache/profile', {
-            getById : ()=>{
+            getById (){
                 return profile
             }
         })
@@ -24,9 +24,12 @@ mocha('logic/profiles/songsHashValid', async(ctx)=>{
         ctx.assert.true(isValid)
     })
 
-    it('songsHashValid/unhappy path/no profile found', async () => {
+
+
+
+    it('logic/profiles/songsHashValid::unhappy    no profile found', async () => {
         ctx.inject.object(_$+'cache/profile', {
-            getById : ()=>{
+            getById (){
                 return null
             }
         })
@@ -37,13 +40,16 @@ mocha('logic/profiles/songsHashValid', async(ctx)=>{
         ctx.assert.equal(exception.code, constants.ERROR_INVALID_USER_OR_SESSION)
     })
 
-    it('songsHashValid/unhappy path/no source', async () => {
+
+
+
+    it('logic/profiles/songsHashValid::unhappy    path/no source', async () => {
         let profile = {
                 sources : {}
             }
 
         ctx.inject.object(_$+'cache/profile', {
-            getById : ()=>{
+            getById (){
                 return profile
             }
         })
