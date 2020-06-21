@@ -1,12 +1,10 @@
 const 
-    assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/profiles/post', async(testArgs)=>{
+mocha('route/profiles/post', async(ctx)=>{
     
-    it('route/profiles/post : happy path : updates a profile, returns user content', async () => {
+    it('route/profiles/post::happy    updates a profile, returns user content', async () => {
         
         let 
             actualProfileData,
@@ -17,8 +15,8 @@ mocha('route/profiles/post', async(testArgs)=>{
         routeTester.req.body = { name : 1234 }
 
         // read back actual values sent to playlist create
-        inject.object(_$+'logic/profiles', {
-            updateProperties : (profileData) =>{
+        ctx.inject.object(_$+'logic/profiles', {
+            updateProperties (profileData) {
                 actualProfileData = profileData
             }
         })
@@ -28,10 +26,10 @@ mocha('route/profiles/post', async(testArgs)=>{
 
         await routeTester.post('/v1/profile')
 
-        assert.equal(actualProfileData.name, 1234 )
+        ctx.assert.equal(actualProfileData.name, 1234 )
         // user id should always be forced in as profile id
-        assert.equal(actualProfileData.id, routeTester.authToken.profileId )
-        assert.equal(routeTester.res.content.payload.someUserContent, 'thorns of crimson death' )
+        ctx.assert.equal(actualProfileData.id, routeTester.authToken.profileId )
+        ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'thorns of crimson death' )
     })
     
 })

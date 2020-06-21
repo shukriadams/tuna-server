@@ -1,21 +1,19 @@
 
 const 
-    assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/playlists/post', async(testArgs)=>{
+mocha('route/playlists/post', async(ctx)=>{
     
-    it('route/playlists/post : happy path : creates a playlist, returns user content', async () => {
+    it('route/playlists/post:: happy    creates a playlist, returns user content', async () => {
         // read back actual values sent to playlist create
         let actualPlaylist,
             actualProfileId,
             route = require(_$+'routes/playlists'),
             routeTester = await new RouteTester(route)
 
-        inject.object(_$+'logic/playlists', {
-            create : (playlist, profileId )=>{
+        ctx.inject.object(_$+'logic/playlists', {
+            create (playlist, profileId ){
                 actualPlaylist = playlist
                 actualProfileId = profileId
             }
@@ -30,21 +28,23 @@ mocha('route/playlists/post', async(testArgs)=>{
 
         await routeTester.post('/v1/playlists')
 
-        assert.equal(actualPlaylist.foo, 'bar')
-        assert.equal(actualProfileId, routeTester.authToken.profileId )
-        assert.equal(routeTester.res.content.payload.someUserContent, 'override the overture' )
+        ctx.assert.equal(actualPlaylist.foo, 'bar')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'override the overture' )
     })
 
+
+
     
-    it('route/playlists/post : happy path : updates a playlist, returns user content', async () => {
+    it('route/playlists/post::happy    updates a playlist, returns user content', async () => {
 
         // read back actual values sent to playlist create
         let actualPlaylist,
             route = require(_$+'routes/playlists'),
             routeTester = await new RouteTester(route)
 
-        inject.object(_$+'logic/playlists', {
-            update : (playlist)=>{
+        ctx.inject.object(_$+'logic/playlists', {
+            update (playlist){
                 actualPlaylist = playlist
             }
         })
@@ -58,8 +58,8 @@ mocha('route/playlists/post', async(testArgs)=>{
 
         await routeTester.post('/v1/playlists')
 
-        assert.equal(actualPlaylist.bar, 'foo')
-        assert.equal(routeTester.res.content.payload.someUserContent, 'soulless' )
+        ctx.assert.equal(actualPlaylist.bar, 'foo')
+        ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'soulless' )
     })
     
 })

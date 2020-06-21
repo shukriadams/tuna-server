@@ -1,15 +1,13 @@
 const 
-    assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/sandbox/nextcloudAuthenticate', async(testArgs)=>{
+mocha('route/sandbox/nextcloudAuthenticate', async(ctx)=>{
     
-    it('happy path : route directs', async () => {
+    it('route/sandbox/nextcloudAuthenticate::happy    route directs', async () => {
         
         // enable sandbox mode to allow sandbox route binding
-        requireMock.add(_$+'helpers/settings', {
+        ctx.inject.object(_$+'helpers/settings', {
             musicSourceSandboxMode : true
         })
 
@@ -18,7 +16,7 @@ mocha('route/sandbox/nextcloudAuthenticate', async(testArgs)=>{
 
         await routeTester.get('/v1/sandbox/nextcloudAuthenticate')
 
-        assert.notNull(routeTester.res.redirected)
+        ctx.assert.notNull(routeTester.res.redirected)
     })
 
 })

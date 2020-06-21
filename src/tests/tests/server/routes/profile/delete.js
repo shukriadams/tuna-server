@@ -1,13 +1,11 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/profile'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/profiles/delete', async(testArgs)=>{
+mocha('route/profiles/delete', async(ctx)=>{
     
-    it('route/profiles/delete : happy path : updates a profile, returns user content', async () => {
+    it('route/profiles/delete::happy    updates a profile, returns user content', async () => {
         
         let routeTester = await new RouteTester(route),
             actualProfileId,
@@ -18,8 +16,8 @@ mocha('route/profiles/delete', async(testArgs)=>{
 
         // read back actual values sent to playlist create
 
-        inject.object(_$+'logic/profiles', {
-            processDeleteAccount : (profileId, key) =>{
+        ctx.inject.object(_$+'logic/profiles', {
+            processDeleteAccount (profileId, key){
                 actualProfileId = profileId
                 actualKey = key
             }
@@ -27,9 +25,9 @@ mocha('route/profiles/delete', async(testArgs)=>{
 
         await routeTester.get('/v1/profile/delete')
 
-        assert.equal(actualKey, 1234)
-        assert.equal(actualProfileId, routeTester.authToken.profileId )
-        assert.null(routeTester.res.content.code) // aka empty response
+        ctx.assert.equal(actualKey, 1234)
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.null(routeTester.res.content.code) // aka empty response
     })
     
 })

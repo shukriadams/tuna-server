@@ -32,7 +32,7 @@ module.exports = {
         if (!token)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 
-        let authToken = await authTokenLogic.getById(token)
+        const authToken = await authTokenLogic.getById(token)
         if (!authToken)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 

@@ -1,13 +1,11 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
-    inject = require(_$t+'helpers/inject'),
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/import', async(testArgs)=>{
+mocha('route/songs/import', async(ctx)=>{
     
-    it('route/songs/import : happy path : starts an import', async ()=>{
+    it('route/songs/import::happy    starts an import', async ()=>{
         
         let routeTester = await new RouteTester(route),
             actualProfileId,
@@ -16,8 +14,8 @@ mocha('route/songs/import', async(testArgs)=>{
         routeTester.authenticate()
 
         // need to return a fake importer
-        inject.object(_$+'helpers/sourceProvider', {
-            getImporter: ()=>{
+        ctx.inject.object(_$+'helpers/sourceProvider', {
+            getImporter (){
                 return class {
                     constructor(profile, authTokenId){
                         actualProfileId = profile
@@ -32,9 +30,9 @@ mocha('route/songs/import', async(testArgs)=>{
 
         await routeTester.post('/v1/songs/import')
 
-        assert.equal(actualAuthTokenId, routeTester.authToken.id )
-        assert.equal(actualProfileId, routeTester.authToken.profileId )
-        assert.equal(routeTester.res.content.payload.someUserContent, 'the somberlain' )
+        ctx.assert.equal(actualAuthTokenId, routeTester.authToken.id )
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'the somberlain' )
     })
     
 })

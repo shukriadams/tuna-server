@@ -1,13 +1,11 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
-    inject = require(_$t+'helpers/inject'),
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/stream', async(testArgs)=>{
+mocha('route/songs/stream', async(ctx)=>{
     
-    it('route/songs/stream : happy path : streams a song', async ()=>{
+    it('route/songs/stream::happy    streams a song', async ()=>{
         
         let actualMediaPath,
             actualProfileId,
@@ -17,8 +15,8 @@ mocha('route/songs/stream', async(testArgs)=>{
         routeTester.req.params.authToken = 'some-token'
         routeTester.req.params.mediaPath = Buffer.from('some/path').toString('base64')
 
-        inject.object(_$+'logic/songs', {
-            streamSong : (profileId, mediaPath, res)=>{
+        ctx.inject.object(_$+'logic/songs', {
+            streamSong (profileId, mediaPath){
                 actualMediaPath = mediaPath
                 actualProfileId = profileId
             }
@@ -26,8 +24,8 @@ mocha('route/songs/stream', async(testArgs)=>{
 
         await routeTester.get('/v1/songs/stream/:authToken/:mediaPath')
 
-        assert.equal(actualMediaPath, 'some/path')
-        assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.equal(actualMediaPath, 'some/path')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
     })
     
 })

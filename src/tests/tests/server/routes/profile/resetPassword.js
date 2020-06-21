@@ -1,12 +1,10 @@
 const 
-    assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    inject = require(_$t+'helpers/inject'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/profiles/resetPassword', async(testArgs)=>{
+mocha('route/profiles/resetPassword', async(ctx)=>{
     
-    it('route/profiles/resetpassword : happy path : request a password reset if not logged in', async () => {
+    it('route/profiles/resetpassword::happy    request a password reset if not logged in', async () => {
         
         let actualPassword,
             actualKey,
@@ -16,17 +14,17 @@ mocha('route/profiles/resetPassword', async(testArgs)=>{
             routeTester = await new RouteTester(route)
 
         // send only a key, this is all we need when reseting password
-        routeTester.req.query.key='abcd'
+        routeTester.req.query.key = 'abcd'
         
         // disable brute force check
-        inject.object(_$+'helpers/bruteForce', {
-            process: ()=>{ }, // do nothing
-            clear : ()=>{ } // do nothing
+        ctx.inject.object(_$+'helpers/bruteForce', {
+            process (){ }, // do nothing
+            clear (){ } // do nothing
         }) 
 
         // read back actual values sent to playlist create
-        inject.object(_$+'logic/profiles', {
-            resetPassword : (key, password, currentPassword, profileId)=>{
+        ctx.inject.object(_$+'logic/profiles', {
+            resetPassword (key, password, currentPassword, profileId){
                 actualPassword = password
                 actualKey = key
                 actualProfileId = profileId
@@ -36,15 +34,17 @@ mocha('route/profiles/resetPassword', async(testArgs)=>{
 
         await routeTester.get('/v1/profile/resetPassword')
 
-        assert.equal(actualKey, 'abcd')
-        assert.null(actualPassword)
-        assert.null(actualProfileId)
-        assert.null(actualCurrentPassword)
-        assert.null(routeTester.res.content.code)
+        ctx.assert.equal(actualKey, 'abcd')
+        ctx.assert.null(actualPassword)
+        ctx.assert.null(actualProfileId)
+        ctx.assert.null(actualCurrentPassword)
+        ctx.assert.null(routeTester.res.content.code)
     })
 
 
-    it('route/profiles/resetpassword : happy path : request a password reset if logged in', async () => {
+
+
+    it('route/profiles/resetpassword::happy    request a password reset if logged in', async () => {
         
         let route = require(_$+'routes/profile'),
             routeTester = await new RouteTester(route),
@@ -54,14 +54,14 @@ mocha('route/profiles/resetPassword', async(testArgs)=>{
             actualCurrentPassword
 
         // disable brute force check
-        inject.object(_$+'helpers/bruteForce', {
-            process: ()=>{ }, // do nothing
-            clear : ()=>{ } // do nothing
+        ctx.inject.object(_$+'helpers/bruteForce', {
+            process (){ }, // do nothing
+            clear (){ } // do nothing
         }) 
 
         // read back actual values sent to playlist create
-        inject.object(_$+'logic/profiles', {
-            resetPassword : (key, password, currentPassword, profileId)=>{
+        ctx.inject.object(_$+'logic/profiles', {
+            resetPassword (key, password, currentPassword, profileId){
                 actualPassword = password
                 actualKey = key
                 actualProfileId = profileId
@@ -75,10 +75,10 @@ mocha('route/profiles/resetPassword', async(testArgs)=>{
         routeTester.req.query.currentPassword='efgh'
         await routeTester.get('/v1/profile/resetPassword')
 
-        assert.null(actualKey)
-        assert.equal(actualPassword, 'abcd')
-        assert.equal(actualCurrentPassword, 'efgh')
-        assert.equal(actualProfileId, routeTester.authToken.profileId)
-        assert.null(routeTester.res.content.code)
+        ctx.assert.null(actualKey)
+        ctx.assert.equal(actualPassword, 'abcd')
+        ctx.assert.equal(actualCurrentPassword, 'efgh')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId)
+        ctx.assert.null(routeTester.res.content.code)
     })
 })

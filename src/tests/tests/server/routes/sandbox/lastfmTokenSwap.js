@@ -1,15 +1,13 @@
 const
-    assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/sandbox/lastfmTokenSwap', async(testArgs)=>{
+mocha('route/sandbox/lastfmTokenSwap', async(ctx)=>{
     
-    it('happy path : route returns token object', async () => {
+    it('route/sandbox/lastfmTokenSwap::happy    route returns token object', async () => {
         
         // enable sandbox mode to allow sandbox route binding
-        requireMock.add(_$+'helpers/settings', {
+        ctx.inject.object(_$+'helpers/settings', {
             musicSourceSandboxMode : true
         })
 
@@ -18,7 +16,7 @@ mocha('route/sandbox/lastfmTokenSwap', async(testArgs)=>{
 
         await routeTester.post('/v1/sandbox/lastfmTokenSwap')
 
-        assert.includes(routeTester.res.content, '<lfm status="ok">')
+        ctx.assert.includes(routeTester.res.content, '<lfm status="ok">')
     })
 
 })

@@ -7,7 +7,7 @@ mocha('route/dropbox/delete', async(ctx)=>{
 
         ctx.inject.object(_$+'logic/profiles', {
             // prevent deleteSource from cascading further down stack
-            deleteSource : ()=>{ } 
+            deleteSource (){ } 
         })
 
         // log user in, set some content to get back after deleting dropbox

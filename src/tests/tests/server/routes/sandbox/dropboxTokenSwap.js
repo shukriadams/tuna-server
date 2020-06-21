@@ -1,16 +1,13 @@
 const 
-    assert = require('madscience-node-assert'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    requireMock = require(_$t+'helpers/require'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/sandbox/dropboxTokenSwap', async(testArgs)=>{
-
+mocha('route/sandbox/dropboxTokenSwap', async(ctx)=>{
     
-    it('happy path : route returns token object', async () => {
+    it('route/sandbox/dropboxTokenSwap::happy    route returns token object', async () => {
         
         // enable sandbox mode to allow sandbox route binding
-        requireMock.add(_$+'helpers/settings', {
+        ctx.inject.object(_$+'helpers/settings', {
             musicSourceSandboxMode : true
         })
 
@@ -19,7 +16,7 @@ mocha('route/sandbox/dropboxTokenSwap', async(testArgs)=>{
 
         await routeTester.post('/v1/sandbox/dropboxTokenSwap')
 
-        assert.equal(routeTester.res.content.uid, '12345')
+        ctx.assert.equal(routeTester.res.content.uid, '12345')
     })
 })
 

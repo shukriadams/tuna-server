@@ -2,7 +2,7 @@ const mocha = require(_$t+'helpers/testbase')
 
 mocha('cache/songs/update', async(ctx)=>{
 
-    it('happy path : updates a profile', async () => {
+    it('cache/songs/update::happy    updates a profile', async () => {
         let called = false,
             songsCache = require(_$+'cache/songs')
 
@@ -15,7 +15,7 @@ mocha('cache/songs/update', async(ctx)=>{
         
         // capture call to cache
         ctx.inject.object(_$+'helpers/cache', {
-            remove (key, json){
+            remove (){
                 called = true
             }
         })
