@@ -1,14 +1,11 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('cache/authTokens/deleteForProfile', async(testArgs)=>{
+mocha('cache/authTokens/deleteForProfile', async(ctx)=>{
 
-    it('happy path : deletes an authToken', async () => {
+    it('cache/authTokens/deleteForProfile::happy    deletes an authToken', async () => {
         // replace call to mongo
-        inject.object(_$+'data/mongo/authToken', {
-            deleteForProfile : (id)=> {
+        ctx.inject.object(_$+'data/mongo/authToken', {
+            deleteForProfile (id) {
                 actualId = id
             }
         })
@@ -18,7 +15,7 @@ mocha('cache/authTokens/deleteForProfile', async(testArgs)=>{
 
         await authTokenCache.deleteForProfile('something')
 
-        assert.notNull(actualId)
+        ctx.assert.notNull(actualId)
     })
 
 })
