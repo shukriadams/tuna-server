@@ -1,23 +1,20 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('logic/playlists/getAll', async(testArgs)=>{
+mocha('logic/playlists/getAll', async(ctx)=>{
 
-    it('happy path : gets playlists for a profile', async () => {
+    it('logic/playlists/getAll::happy    gets playlists for a profile', async () => {
 
         let logic = require(_$+'logic/playlists'),
             actualProfileId
 
-        inject.object(_$+'cache/playlist', {
-            getAll : (profileId)=>{
+        ctx.inject.object(_$+'cache/playlist', {
+            getAll (profileId){
                 actualProfileId = profileId
             }
         })
 
         await logic.getAll('some-profile')
-        assert.equal(actualProfileId, 'some-profile')
+        ctx.assert.equal(actualProfileId, 'some-profile')
     })
 
 })

@@ -1,31 +1,28 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('cache/songs/createMany', async(testArgs)=>{
+mocha('cache/songs/createMany', async(ctx)=>{
 
-    it('happy path : creates and caches profile', async () => {
+    it('cache/songs/createMany::happy    creates and caches profile', async () => {
 
         let called = false,
             songsCache = require(_$+'cache/songs')
 
         // replace call to mongo
-        inject.object(_$+'data/mongo/songs', {
-            createMany : (songs)=>{
+        ctx.inject.object(_$+'data/mongo/songs', {
+            createMany (songs){
                 return songs
             }
         })
         
         // capture call to cache
-        inject.object(_$+'helpers/cache', {
-            remove : ()=>{
+        ctx.inject.object(_$+'helpers/cache', {
+            remove (){
                 called = true
             }
         })
 
-        await songsCache.createMany([{profileId : 'some-songs-create-id'}])
-        assert.true(called)
+        await songsCache.createMany([{ profileId : 'some-songs-create-id' }])
+        ctx.assert.true(called)
     })
 
 })

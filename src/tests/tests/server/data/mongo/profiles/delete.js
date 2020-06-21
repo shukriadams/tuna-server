@@ -1,25 +1,21 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('mongo/profiles/delete', async(testArgs)=>{
+mocha('mongo/profiles/delete', async(ctx)=>{
 
-    it('happy path : deletes profile', async () => {
+    it('mongo/profiles/delete::happy    deletes profile', async () => {
 
         let mongo = require(_$+'data/mongo/profile'),
             actualId 
 
         // replace call to mongo
-        inject.object(_$+'data/mongo/common', {
-            delete : (collection, id)=>{
+        ctx.inject.object(_$+'data/mongo/common', {
+            delete (collection, id){
                 actualId = id
             }
         })
 
         await mongo.delete({ id : 'dafda'})
-
-        assert.equal(actualId, 'dafda')
+        ctx.assert.equal(actualId, 'dafda')
     })
 
 })

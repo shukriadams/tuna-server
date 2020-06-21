@@ -1,15 +1,12 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('mongo/profiles/getByIdentifier', async(testArgs)=>{
+mocha('mongo/profiles/getByIdentifier', async(ctx)=>{
 
-    it('happy path : gets playlist by identifier', async () => {
+    it('mongo/profiles/getByIdentifier::happy    gets playlist by identifier', async () => {
 
         // replace call to mongo
-        inject.object(_$+'data/mongo/common', {
-            findOne : (collection, query)=>{
+        ctx.inject.object(_$+'data/mongo/common', {
+            findOne (collection, query){
                 return { query, _id : 'some-id' }
             }
         })
@@ -17,7 +14,7 @@ mocha('mongo/profiles/getByIdentifier', async(testArgs)=>{
         let mongo = require(_$+'data/mongo/profile'),
             record = await mongo.getByIdentifier('dafda')
 
-        assert.equal(record.id, 'some-id')
+        ctx.assert.equal(record.id, 'some-id')
     })
 
 })

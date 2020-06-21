@@ -1,27 +1,25 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('mongo/playlists/update', async(testArgs)=>{
+mocha('mongo/playlists/update', async(ctx)=>{
 
-    it('happy path : updates playlist', async () => {
+    it('mongo/playlists/update::happy    updates playlist', async () => {
 
         // replace call to mongo
         let updatedRecord,
             updatedId
-        inject.object(_$+'data/mongo/common', {
-            update : (collection, id, record)=>{
+
+        ctx.inject.object(_$+'data/mongo/common', {
+            update (collection, id, record){
                 updatedId = id
                 updatedRecord = record
             }
         })
 
         const mongo = require(_$+'data/mongo/playlist')
-        await mongo.update({ id : testArgs.mongoId, thing : 'stuff' })
+        await mongo.update({ id : ctx.mongoId, thing : 'stuff' })
 
-        assert.equal(updatedId, testArgs.mongoId)
-        assert.equal(updatedRecord.thing, 'stuff')
+        ctx.assert.equal(updatedId, ctx.mongoId)
+        ctx.assert.equal(updatedRecord.thing, 'stuff')
     })
 
 })

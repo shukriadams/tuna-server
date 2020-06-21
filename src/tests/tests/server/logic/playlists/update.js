@@ -1,47 +1,53 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('logic/playlists/update', async(testArgs)=>{
+mocha('logic/playlists/update', async(ctx)=>{
 
-    it('happy path : updates playlist', async () => {
+    it('logic/playlists/update::happy    updates playlist', async () => {
 
         // replace call to mongo
         let logic = require(_$+'logic/playlists'),
             actualPlaylist
 
-        inject.object(_$+'cache/playlist', {
-            update : (playlist)=>{
+        ctx.inject.object(_$+'cache/playlist', {
+            update (playlist){
                 actualPlaylist = playlist
             }
         })
 
         await logic.update({ name : 'my-playlist', profileId : 'some-profile' })
 
-        assert.equal(actualPlaylist.name, 'my-playlist')
-        assert.equal(actualPlaylist.profileId, 'some-profile')
+        ctx.assert.equal(actualPlaylist.name, 'my-playlist')
+        ctx.assert.equal(actualPlaylist.profileId, 'some-profile')
     })
 
-    it('unhappy path : updates playlist, no playlist', async () => {
+
+
+
+    it('logic/playlists/update::unhappy    updates playlist, no playlist', async () => {
         let logic = require(_$+'logic/playlists'),
-            exception = await assert.throws(async () => await logic.update(null) )
+            exception = await ctx.assert.throws(async () => await logic.update(null) )
         
-        assert.equal(exception.log, 'playlist required')
+        ctx.assert.equal(exception.log, 'playlist required')
     })
 
-    it('unhappy path : updates playlist, no profile', async () => {
+
+
+
+    it('logic/playlists/update::unhappy    updates playlist, no profile', async () => {
         let logic = require(_$+'logic/playlists'),
-            exception = await assert.throws(async () => await logic.update({ name : 'my-playlist', notAProfile: 'some-profile' }) )
+            exception = await ctx.assert.throws(async () => await logic.update({ name : 'my-playlist', notAProfile: 'some-profile' }) )
         
-        assert.equal(exception.log, 'profileId required')
+        ctx.assert.equal(exception.log, 'profileId required')
     })
 
-    it('unhappy path : updates playlist, no playlist name', async () => {
+
+
+
+    it('logic/playlists/update::unhappy    updates playlist, no playlist name', async () => {
         let logic = require(_$+'logic/playlists'),
-            exception = await assert.throws(async () => await logic.update( { notAName : 'my-playlist', profileId: 'some-profile' }) )
+            exception = await ctx.assert.throws(async () => await logic.update( { notAName : 'my-playlist', profileId: 'some-profile' }) )
         
-        assert.equal(exception.log, 'name required')
+        ctx.assert.equal(exception.log, 'name required')
     })
 
 })

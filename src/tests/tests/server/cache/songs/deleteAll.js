@@ -1,33 +1,29 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('cache/songs/deleteAll', async(testArgs)=>{
+mocha('cache/songs/deleteAll', async(ctx)=>{
 
-    it('happy path : deletes all profile songs', async () => {
+    it('cache/songs/deleteAll::happy    deletes all profile songs', async () => {
         let called = false,
             actualProfileId,
             songsCache = require(_$+'cache/songs')
 
         // replace call to mongo
-        inject.object(_$+'data/mongo/songs', {
-            deleteForProfile : (profileId)=>{
+        ctx.inject.object(_$+'data/mongo/songs', {
+            deleteForProfile (profileId){
                 actualProfileId = profileId
             }
         })
         
         // capture call to cache
-        inject.object(_$+'helpers/cache', {
-            remove : (key, json)=>{
+        ctx.inject.object(_$+'helpers/cache', {
+            remove (){
                 called = true
             }
         })
 
         await songsCache.deleteForProfile('fgsfg')
-
-        assert.equal(actualProfileId, 'fgsfg')
-        assert.true(called)
+        ctx.assert.equal(actualProfileId, 'fgsfg')
+        ctx.assert.true(called)
     })
 
 })

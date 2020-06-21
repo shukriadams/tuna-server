@@ -1,50 +1,51 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('logic/authTokens/getById', async(testArgs)=>{
+mocha('logic/authTokens/getById', async(ctx)=>{
 
-    it('happy path : gets authToken by id', async () => {
-
-        let logic = require(_$+'logic/authToken')
-
-        inject.object(_$+'cache/authToken', {
-            getById : (id)=>{
+    it('logic/authTokens/getById::happy    gets authToken by id', async () => {
+        ctx.inject.object(_$+'cache/authToken', {
+            getById (id){
                 return { id }
             }
         })
 
-        let actualAuthToken = await logic.getById('some-token-id')
-        assert.equal(actualAuthToken.id, 'some-token-id')
+        const logic = require(_$+'logic/authToken'),
+            actualAuthToken = await logic.getById('some-token-id')
+
+        ctx.assert.equal(actualAuthToken.id, 'some-token-id')
     })
 
-    it('happy path : gets authToken by null id', async () => {
 
-        let logic = require(_$+'logic/authToken')
 
-        inject.object(_$+'cache/authToken', {
-            getById : (id)=>{
+
+    it('logic/authTokens/getById::happy    gets authToken by null id', async () => {
+        ctx.inject.object(_$+'cache/authToken', {
+            getById (id){
                 return { id }
             }
         })
 
-        let actualAuthToken = await logic.getById(null)
-        assert.null(actualAuthToken)
+        const logic = require(_$+'logic/authToken'),
+            actualAuthToken = await logic.getById(null)
+
+        ctx.assert.null(actualAuthToken)
     })
 
-    it('happy path : gets authToken by empty id', async () => {
 
-        let logic = require(_$+'logic/authToken')
 
-        inject.object(_$+'cache/authToken', {
-            getById : (id)=>{
+
+    it('logic/authTokens/getById::happy    gets authToken by empty id', async () => {
+
+        ctx.inject.object(_$+'cache/authToken', {
+            getById (id){
                 return { id }
             }
         })
 
-        let actualAuthToken = await logic.getById()
-        assert.null(actualAuthToken)
+        const logic = require(_$+'logic/authToken'),
+            actualAuthToken = await logic.getById()
+
+        ctx.assert.null(actualAuthToken)
     })
 
 })

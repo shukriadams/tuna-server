@@ -1,23 +1,20 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('logic/playlists/deleteAll', async(testArgs)=>{
+mocha('logic/playlists/deleteAll', async(ctx)=>{
 
-    it('happy path : deletes playlists for a profile', async () => {
+    it('logic/playlists/deleteAll::happy    deletes playlists for a profile', async () => {
 
         let logic = require(_$+'logic/playlists'),
             actualProfileId
 
-        inject.object(_$+'cache/playlist', {
-            deleteAll : (profileId)=>{
+        ctx.inject.object(_$+'cache/playlist', {
+            deleteAll (profileId){
                 actualProfileId = profileId
             }
         })
 
         await logic.deleteAll('some-profile')
-        assert.equal(actualProfileId, 'some-profile')
+        ctx.assert.equal(actualProfileId, 'some-profile')
     })
 
 })
