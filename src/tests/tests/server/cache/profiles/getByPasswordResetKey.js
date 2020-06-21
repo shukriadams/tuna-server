@@ -1,14 +1,11 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('cache/profiles/getByPasswordResetKey', async(testArgs)=>{
+mocha('cache/profiles/getByPasswordResetKey', async(ctx)=>{
 
-    it('happy path : gets profile by identifier', async () => {
+    it('cache/profiles/getByPasswordResetKey::happy    gets profile by identifier', async () => {
         // replace call to mongo
-        inject.object(_$+'data/mongo/profile', {
-            getByPasswordResetKey : (resetKey)=>{
+        ctx.inject.object(_$+'data/mongo/profile', {
+            getByPasswordResetKey (resetKey){
                 return { resetKey }
             }
         })
@@ -16,7 +13,7 @@ mocha('cache/profiles/getByPasswordResetKey', async(testArgs)=>{
         const profilesCache = require(_$+'cache/profile'),
             profiles = await profilesCache.getByPasswordResetKey('some-key')
 
-        assert.equal(profiles.resetKey, 'some-key')
+        ctx.assert.equal(profiles.resetKey, 'some-key')
     })
 
 })

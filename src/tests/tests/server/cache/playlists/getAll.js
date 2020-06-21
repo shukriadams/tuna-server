@@ -1,15 +1,12 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('cache/playlists/getAll', async(testArgs)=>{
+mocha('cache/playlists/getAll', async(ctx)=>{
 
-    it('happy path : gets all playlists, already cached', async () => {
+    it('cache/playlists/getAll::happy    gets all playlists, already cached', async () => {
         
         // capture call to cache
-        inject.object(_$+'helpers/cache', {
-            get : ()=>{
+        ctx.inject.object(_$+'helpers/cache', {
+            get(){
                 return JSON.stringify({ foo: 'bar' })
             }
         })
@@ -17,26 +14,29 @@ mocha('cache/playlists/getAll', async(testArgs)=>{
         const playlistCache = require(_$+'cache/playlist'),
             playlist = await playlistCache.getAll('some-id')
 
-        assert.equal(playlist.foo, 'bar')
+        ctx.assert.equal(playlist.foo, 'bar')
     })
 
-    it('happy path : gets all playlists, not cached', async () => {
+
+
+
+    it('cache/playlists/getAll::happy    gets all playlists, not cached', async () => {
         let cachedPlaylist
 
         // replace call to mongo
-        inject.object(_$+'data/mongo/playlist', {
-            getForProfile : (id)=>{
+        ctx.inject.object(_$+'data/mongo/playlist', {
+            getForProfile(id){
                 return { id }
             }
         })
 
         // capture call to cache
-        inject.object(_$+'helpers/cache', {
-            add : (key, authToken)=>{
+        ctx.inject.object(_$+'helpers/cache', {
+            add(key, authToken){
                 cachedPlaylist = JSON.parse(authToken)
             },
             // return null to force data call
-            get : ()=>{
+            get(){
                 return null 
             }
         })
@@ -44,8 +44,8 @@ mocha('cache/playlists/getAll', async(testArgs)=>{
         const playlistCache = require(_$+'cache/playlist'),
             playlist = await playlistCache.getAll('some-id2')
 
-        assert.equal(playlist.id, 'some-id2')
-        assert.equal(cachedPlaylist.id, 'some-id2')        
+        ctx.assert.equal(playlist.id, 'some-id2')
+        ctx.assert.equal(cachedPlaylist.id, 'some-id2')        
     })
 
 })

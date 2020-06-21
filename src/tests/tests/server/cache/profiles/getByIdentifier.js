@@ -1,14 +1,11 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('cache/profiles/getByIdentifier', async(testArgs)=>{
+mocha('cache/profiles/getByIdentifier', async(ctx)=>{
 
-    it('happy path : gets profile by identifier', async () => {
+    it('cache/profiles/getByIdentifier::happy    gets profile by identifier', async () => {
         // replace call to mongo
-        inject.object(_$+'data/mongo/profile', {
-            getByIdentifier : (identifier)=>{
+        ctx.inject.object(_$+'data/mongo/profile', {
+            getByIdentifier (identifier){
                 return { identifier }
             }
         })
@@ -16,7 +13,7 @@ mocha('cache/profiles/getByIdentifier', async(testArgs)=>{
         const profilesCache = require(_$+'cache/profile'),
             profiles = await profilesCache.getByIdentifier('some-identifier')
 
-        assert.equal(profiles.identifier, 'some-identifier')
+        ctx.assert.equal(profiles.identifier, 'some-identifier')
     })
 
 })

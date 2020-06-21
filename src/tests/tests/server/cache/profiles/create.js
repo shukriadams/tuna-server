@@ -1,30 +1,27 @@
-const 
-    assert = require('madscience-node-assert'),
-    inject = require(_$t+'helpers/inject'),
-    mocha = require(_$t+'helpers/testbase')
+const mocha = require(_$t+'helpers/testbase')
 
-mocha('cache/profiles/create', async(testArgs)=>{
+mocha('cache/profiles/create', async(ctx)=>{
 
-    it('happy path : creates and caches profile', async () => {
+    it('cache/profiles/create::happy    creates and caches profile', async () => {
         let actualProfile,
             profilesCache = require(_$+'cache/profile')
 
         // replace call to mongo
-        inject.object(_$+'data/mongo/profile', {
-            create : (profile)=>{
+        ctx.inject.object(_$+'data/mongo/profile', {
+            create (profile){
                 return profile
             }
         })
         
         // capture call to cache
-        inject.object(_$+'helpers/cache', {
-            add : (key, json)=>{
+        ctx.inject.object(_$+'helpers/cache', {
+            add (key, json){
                 actualProfile = JSON.parse(json)
             }
         })
 
         await profilesCache.create({id : 'some-profile-create-id'})
-        assert.equal(actualProfile.id, 'some-profile-create-id')
+        ctx.assert.equal(actualProfile.id, 'some-profile-create-id')
     })
 
 })
