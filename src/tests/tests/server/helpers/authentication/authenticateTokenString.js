@@ -22,7 +22,7 @@ mocha('helpers/authentication/authenticateToken', function(ctx){
 
     it('helpers/authentication/authenticateToken::unhappy    no token string', async () => {
         const authentication = require(_$+'helpers/authentication'),
-             exception = await ctx.assert.throws(async () => await authentication.authenticateTokenString(/* no string here */) )
+            exception = await ctx.assert.throws(async () => await authentication.authenticateTokenString(/* no string here */) )
 
         ctx.assert.equal(exception.code, constants.ERROR_INVALID_USER_OR_SESSION)
     })
