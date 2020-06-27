@@ -43,7 +43,7 @@ module.exports = {
                         return reject(err)
 
                     db.done()
-                    resolve(insertRecords.length)
+                    resolve(records.length)
                 })
 
             } catch (ex) {
@@ -53,14 +53,15 @@ module.exports = {
     },
 
     async update(collection, id, record){
-        const mongoHelper = require(_$+'helpers/mongo')
+        const mongoHelper = require(_$+'helpers/mongo'),
+            ObjectID = require('mongodb').ObjectID
 
         return new Promise(async (resolve, reject) => {
             try {
 
                 const db = await mongoHelper.getCollection(collection)
 
-                db.collection.updateOne({ _id : id }, { $set: record }, err => {
+                db.collection.updateOne({ _id : new ObjectID(id)  }, { $set: record }, err => {
                     if (err)
                         return reject(err)
 
@@ -78,7 +79,7 @@ module.exports = {
     async delete (collection, id){
         const 
             mongoHelper = require(_$+'helpers/mongo'),
-            ObjectID  = require('mongodb').ObjectID
+            ObjectID = require('mongodb').ObjectID
 
         return new Promise(async (resolve, reject) => {
     

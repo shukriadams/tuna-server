@@ -17,6 +17,9 @@ module.exports = {
                 return 'Password updated'
             },
             nextcloudCodeToToken = async(args)=>{
+                if (settings.musicSourceSandboxMode)
+                    return 'FAILED - code swapping cannot be done in sandbox mode.'
+
                 const profile = await profileLogic.getByIdentifier(settings.masterUsername)
                 await nextcloudCommon.swapCodeForToken(profile.id, args.code)
                 return 'SUCCESS - the code has been swapped for a token. Tuna will keep this token updated'
