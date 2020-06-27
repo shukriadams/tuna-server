@@ -27,7 +27,8 @@ module.exports = {
 
         ipc.config.id = 'tunaserver'
         ipc.config.retry = 15
-     
+        ipc.config.silent = true
+
         ipc.serve(() => {
             ipc.server.on(
                 'message',

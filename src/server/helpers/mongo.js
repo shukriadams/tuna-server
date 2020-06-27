@@ -9,7 +9,7 @@ module.exports = {
 
         return new Promise(async (resolve, reject)=>{
             try {
-                MongoClient.connect(settings.mongoConnectionString, (err, client)=>{
+                MongoClient.connect(settings.mongoConnectionString, { useUnifiedTopology: true }, (err, client)=>{
                     if (err)
                         return reject(new Exception({ code : constants.ERROR_DATABASE_NOT_AVAILABLE, inner : err }))
 
@@ -38,17 +38,18 @@ module.exports = {
 
         return new Promise(async (resolve, reject)=>{
             try {
-                MongoClient.connect(settings.mongoConnectionString, (err, client)=>{
+                MongoClient.connect(settings.mongoConnectionString, { useUnifiedTopology: true }, async (err, client)=>{
                     if (err)
                         return reject(new Exception({ code : constants.ERROR_DATABASE_NOT_AVAILABLE, inner : err }))
     
                     const db = client.db(settings.mongoDBName)
 
-                    db.collection(`${settings.mongoCollectionPrefix}profiles`).createIndex( { 'identifier': 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}profiles_unique` })
-                    db.collection(`${settings.mongoCollectionPrefix}songs`).createIndex( { 'path': 1 }, { unique: true, name : `${settings.mongoCollectionPrefix}songs_unique` })
-                    db.collection(`${settings.mongoCollectionPrefix}authTokens`).createIndex( { 'context': 1, 'profileId' : 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}authTokens_unique` })
-
+                    await db.collection(`${settings.mongoCollectionPrefix}profiles`).createIndex( { 'identifier': 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}profiles_unique` })
+                    await db.collection(`${settings.mongoCollectionPrefix}songs`).createIndex( { 'path': 1 }, { unique: true, name : `${settings.mongoCollectionPrefix}songs_unique` })
+                    await db.collection(`${settings.mongoCollectionPrefix}authTokens`).createIndex( { 'context': 1, 'profileId' : 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}authTokens_unique` })
+                    
                     client.close()
+
                     resolve()
                 })
 
