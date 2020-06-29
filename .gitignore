@@ -45,3 +45,4 @@ build/logs
 build/data
 src/data
 src/.cache-require-paths.json
+!/src/client/app/localLib/**
