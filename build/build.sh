@@ -35,11 +35,11 @@ fi
 
 # build 1: build frontend CSS/JS, and leaves it behind in .clone/src/dist folder. This build will npm install dev modules, which we
 # want to delete
-docker run -it -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && sh ./build-frontend.sh --setup" &&
+docker run -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && sh ./build-frontend.sh --setup" &&
 sudo rm -rf .clone/src/node_modules &&
 
 # build 2: run a second container install, this one npm intalls "production" modules, these we want
-docker run -it -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && yarn --no-bin-links --ignore-engines --production" &&
+docker run -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && yarn --no-bin-links --ignore-engines --production" &&
 
 # combine artifacts from steps 1 and 2 and zip them
 rm -rf .stage &&
