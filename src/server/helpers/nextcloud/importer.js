@@ -113,12 +113,12 @@ class Importer extends ImporterBase {
 
         // write new index files, preserve existing ones so we keep their history properties
         let newIndices = []
-        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].count(); i ++){
-            const response = resultXml['d:multistatus']['d:response'].at(i)
+        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].length; i ++){
+            const response = resultXml['d:multistatus']['d:response'][i]
             
             let newIndex = {
-                path : response['d:href'].text(),
-                id : response['d:propstat']['d:prop']['oc:fileid'].text(),
+                path : response['d:href'][0],
+                id : response['d:propstat'][0]['d:prop'][0]['oc:fileid'][0],
                 status :  ''
             }
 
@@ -157,9 +157,9 @@ class Importer extends ImporterBase {
                 }})
 
         const indexDoc = await xmlHelper.toDoc(indexRaw.body)
-        this.indexHash = indexDoc.items.attributes().hash
-        for (let i = 0 ; i < indexDoc.items.item.count() ; i ++)
-            this.songsFromIndices.push(indexDoc.items.item.at(i).attributes())
+        this.indexHash = indexDoc.items['$'].hash
+        for (let i = 0 ; i < indexDoc.items.item.length ; i ++)
+            this.songsFromIndices.push(indexDoc.items.item[i]['$'])
     }
 
 }

@@ -199,11 +199,13 @@ module.exports = {
                     method : 'GET'
                 }
 
-                let key = null;
+                let key = null
                 try {
                     let body = await requestNative(options),
                         xml = await xmlHelper.toDoc(body)
-                    key = xml.lfm.session.key.text()
+
+                    key = xml['lfm'][0]['session'][0].key[0]
+                    
                 } catch(ex) {
                     return reject(ex)
                 }

@@ -179,9 +179,9 @@ module.exports = {
         // write new index files, preserve existing ones so we keep their history properties
         let results = []
 
-        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].count(); i ++){
-            const item = resultXml['d:multistatus']['d:response'].at(i)
-            results.push(item['d:href'].text())
+        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].length; i ++){
+            const item = resultXml['d:multistatus']['d:response'][i]
+            results.push(item['d:href'][0])
         }
 
         return results

@@ -88,10 +88,10 @@ module.exports = class extends ImporterBase {
         let indexData = await common.downloadAsString(source.accessToken, source.indexes[0].path) 
         const indexDoc = await xmlHelper.toDoc(indexData)
         
-        this.indexHash = indexDoc.items.attributes().hash
+        this.indexHash = indexDoc.items['$'].hash
 
-        for (let i = 0 ; i < indexDoc.items.item.count() ; i ++)
-            this.songsFromIndices.push(indexDoc.items.item.at(i).attributes())
+        for (let i = 0 ; i < indexDoc.items.item.length ; i ++)
+            this.songsFromIndices.push(indexDoc.items.item[i]['$'])
 
     }
 
