@@ -52,7 +52,7 @@ module.exports = {
             try {
                 const 
                     body = '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:permissions/></d:prop></d:propfind>',
-                    url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/.tuna.xml`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
+                    url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/.tuna.dat`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
                     method = settings.musicSourceSandboxMode ? 'POST' : 'PROPFIND',
                     lookup = await httputils.post(url, body, { 
                         method,
@@ -78,7 +78,7 @@ module.exports = {
         // refresh token
         let 
             body = `grant_type=refresh_token&refresh_token=${source.refreshToken}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`,
-            url = settings.musicSourceSandboxMode ? '/v1/sandbox/nextcloud/refresh' : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
+            url = settings.musicSourceSandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/nextcloud/refresh') : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
             response = await httputils.postUrlString(url, body),
             content = null
         

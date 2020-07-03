@@ -146,10 +146,10 @@ module.exports = {
 
     
     /**
-     * Gets the contents of the index file. This is normally the .tuna.xml file in the dropbox folder root, but in
+     * Gets the contents of the index file. This is normally the .tuna.dat file in the dropbox folder root, but in
      * for dev purposes can also be:
-     * - .tunaTest.xml on the dropbox root
-     * - tuna.xml in the local /server/reference folder
+     * - .tunaTest.dat on the dropbox root
+     * - tuna.dat in the local /server/reference folder
      * - null, to simulate a user that has no index file.
      *
      * Returns null if no file found.
@@ -172,7 +172,7 @@ module.exports = {
             try {
 
                 // even thought Tuna index file is prefixed with '.' we omit that as it seems to confuse dropbox's api
-                let hits = this.search(source, 'tuna.xml')
+                let hits = this.search(source, 'tuna.dat')
                 if (!hits.length){
                     logger.info.info(`Dropbox import : No matches found.`)
                     return resolve(null)

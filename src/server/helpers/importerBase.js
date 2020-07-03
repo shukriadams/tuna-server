@@ -96,7 +96,7 @@ class Importer {
 
     
     /**
-     * Searches for .tuna.xml files in user's source platform files and adds / updates their references in profile.sources object. This is the first 
+     * Searches for .tuna.dat files in user's source platform files and adds / updates their references in profile.sources object. This is the first 
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){

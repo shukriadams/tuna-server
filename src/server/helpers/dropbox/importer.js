@@ -21,16 +21,15 @@ module.exports = class extends ImporterBase {
 
 
     /**
-     * Searches for .tuna.xml files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
+     * Searches for .tuna.dat files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
-        const
+        let
             common = require(_$+'helpers/dropbox/common'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception')
-
-        let s = await this._getSource(),
+            s = await this._getSource(),
             profile = s.profile, 
             source = s.source,
             newIndices = [],
@@ -40,7 +39,7 @@ module.exports = class extends ImporterBase {
             return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION }))
 
         // even thought Tuna index file is prefixed with '.' we omit that as it seems to confuse dropbox's api
-        let matches = await common.search(source, 'tuna.xml')
+        let matches = await common.search(source, 'tuna.dat')
 
         if (matches.length){
             let path = matches[0],
@@ -53,7 +52,7 @@ module.exports = class extends ImporterBase {
             // if same index already exists, use that one again
             newIndex = source.indexes.find(index => index.path === newIndex.path && index.id === newIndex.id) || newIndex
             newIndices.push(newIndex)
-        } 
+        }
 
         // write new index files, preserve existing ones so we keep their history properties
         source.indexes = newIndices
@@ -72,8 +71,7 @@ module.exports = class extends ImporterBase {
         const
             common = require(_$+'helpers/dropbox/common'),
             constants = require(_$+'types/constants'),
-            Exception = require(_$+'types/exception'),
-            xmlHelper = require(_$+'helpers/xml')
+            Exception = require(_$+'types/exception')
 
         let s = await this._getSource(),
             source = s.source
@@ -86,12 +84,17 @@ module.exports = class extends ImporterBase {
 
         // we're taking only the first index here, still no logic for handling multiple
         let indexData = await common.downloadAsString(source.accessToken, source.indexes[0].path) 
-        const indexDoc = await xmlHelper.toDoc(indexData)
+        const indexDoc = indexData.split('\n')
         
-        this.indexHash = indexDoc.items['$'].hash
+        this.indexHash = JSON.parse(indexDoc[0]).hash
 
-        for (let i = 0 ; i < indexDoc.items.item.length ; i ++)
-            this.songsFromIndices.push(indexDoc.items.item[i]['$'])
+        for (let i = 0 ; i < indexDoc.length - 1; i ++){
+            const raw = indexDoc[i + 1]
+            if (!raw)
+                continue
+
+            this.songsFromIndices.push(JSON.parse(raw))
+        }
 
     }
 

@@ -23,7 +23,7 @@ class Importer extends ImporterBase {
    
     
     /**
-     * Searches for .tuna.xml files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
+     * Searches for .tuna.dat files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
@@ -65,14 +65,14 @@ class Importer extends ImporterBase {
                                 <d:prop>
                                     <d:displayname/>
                                 </d:prop>
-                                <d:literal>.tuna.xml</d:literal>
+                                <d:literal>.tuna.dat</d:literal>
                             </d:like>
                         </d:where>
                         <d:orderby/>
                     </d:basicsearch>
                 </d:searchrequest>`
 
-        const url = settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/sandbox/nextcloud/find/.tuna.xml` : `${this.settings.nextCloudHost}/remote.php/dav`,
+        const url = settings.musicSourceSandboxMode ? `${this.settings.siteUrl}/v1/sandbox/nextcloud/find/.tuna.dat` : `${this.settings.nextCloudHost}/remote.php/dav`,
             result = await this.httputils.post(url, body, options)
         // todo : handle server call timing out
 
@@ -140,7 +140,6 @@ class Importer extends ImporterBase {
         const 
             httputils = require('madscience-httputils'),
             urljoin = require('urljoin'),
-            xmlHelper = require(_$+'helpers/xml'),
             s = await this._getSource(),
             source = s.source
 
@@ -149,17 +148,23 @@ class Importer extends ImporterBase {
         
         const 
             index = source.indexes[0],
-            url = this.settings.musicSourceSandboxMode ? urljoin(this.settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.xml`) : `${this.settings.nextCloudHost}${index.path}`,
+            url = this.settings.musicSourceSandboxMode ? urljoin(this.settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.dat`) : `${this.settings.nextCloudHost}${index.path}`,
             indexRaw = await httputils.downloadString ({ 
                 url, 
                 headers : {
                     'Authorization' : `Bearer ${source.accessToken}`
                 }})
 
-        const indexDoc = await xmlHelper.toDoc(indexRaw.body)
-        this.indexHash = indexDoc.items['$'].hash
-        for (let i = 0 ; i < indexDoc.items.item.length ; i ++)
-            this.songsFromIndices.push(indexDoc.items.item[i]['$'])
+        const indexDoc = indexRaw.body.split('\n')
+        this.indexHash = JSON.parse(indexDoc[0]).hash
+        
+        for (let i = 0 ; i < indexDoc.length - 1; i ++){
+            const raw = indexDoc[i + 1]
+            if (!raw)
+                continue
+
+            this.songsFromIndices.push(JSON.parse(raw))
+        }
     }
 
 }

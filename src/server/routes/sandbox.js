@@ -116,8 +116,8 @@ module.exports = {
 
                 if (req.params.file.includes('tuna.json'))
                     fileData = await fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
-                else if (req.params.file.includes('tuna.xml'))
-                    fileData = await fs.promises.readFile(_$+'reference/.tuna.xml', 'utf8')
+                else if (req.params.file.includes('tuna.dat'))
+                    fileData = await fs.promises.readFile(_$+'reference/.tuna.dat', 'utf8')
                 else
                     throw `cannot sandbox get ${req.params.file}`
 
@@ -175,8 +175,8 @@ module.exports = {
 
                 if (req.params.file === '.tuna.json')
                     fileData = await fs.promises.readFile(_$+'reference/.tuna.json', 'utf8')
-                else if (req.params.file === '.tuna.xml')
-                    fileData = await fs.promises.readFile(_$+'reference/.tuna.xml', 'utf8')
+                else if (req.params.file === '.tuna.dat')
+                    fileData = await fs.promises.readFile(_$+'reference/.tuna.dat', 'utf8')
                 else
                     throw `cannot sandbox get ${req.params.file}`
 
@@ -195,7 +195,7 @@ module.exports = {
             try {
                 res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
                 <d:response>
-                    <d:href>/remote.php/dav/files/dummyuser/.tuna.xml</d:href>
+                    <d:href>/remote.php/dav/files/dummyuser/.tuna.dat</d:href>
                     <d:propstat>
                         <d:prop>
                             <oc:fileid>62565</oc:fileid>
