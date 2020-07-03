@@ -71,6 +71,8 @@ module.exports = class extends ImporterBase {
         const
             common = require(_$+'helpers/dropbox/common'),
             constants = require(_$+'types/constants'),
+            settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
             Exception = require(_$+'types/exception')
 
         let s = await this._getSource(),
@@ -90,10 +92,15 @@ module.exports = class extends ImporterBase {
 
         for (let i = 0 ; i < indexDoc.length - 1; i ++){
             const raw = indexDoc[i + 1]
+
             if (!raw)
                 continue
 
-            this.songsFromIndices.push(JSON.parse(raw))
+            try {
+                this.songsFromIndices.push(JSON.parse(raw))
+            } catch (ex){
+                logger.error.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
+            }
         }
 
     }

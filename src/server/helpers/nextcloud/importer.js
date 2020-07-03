@@ -140,6 +140,8 @@ class Importer extends ImporterBase {
         const 
             httputils = require('madscience-httputils'),
             urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
             s = await this._getSource(),
             source = s.source
 
@@ -160,10 +162,15 @@ class Importer extends ImporterBase {
         
         for (let i = 0 ; i < indexDoc.length - 1; i ++){
             const raw = indexDoc[i + 1]
+            
             if (!raw)
                 continue
 
-            this.songsFromIndices.push(JSON.parse(raw))
+            try {
+                this.songsFromIndices.push(JSON.parse(raw))
+            } catch (ex){
+                logger.error.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
+            }
         }
     }
 
