@@ -27,11 +27,13 @@ if [ $CI -eq 1 ]; then
     # if running on CI system, copy everything from src to .clone folder
     cp -R ./../src .clone/ 
 else
+    echo "Copying a bunch of stuff, this will likely take a while ...."
     # copy everything from src but exclude 
     if [ $JSPM -eq 1 ]; then
-        rsync -r --exclude=node_modules --exclude=client/lib --exclude=.* ./../src .clone 
+        # exclude node modules, jspm lib and all hidden files in project root
+        rsync -v -r --exclude=node_modules --exclude=client/lib --exclude=.* ./../src .clone 
     else
-        rsync -r --exclude=node_modules --exclude=.* ./../src .clone 
+        rsync -v -r --exclude=node_modules --exclude=.* ./../src .clone 
     fi
 fi
 
