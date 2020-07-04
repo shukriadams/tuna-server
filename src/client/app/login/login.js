@@ -62,6 +62,10 @@ class View extends React.Component {
                 </h1>
 
                 <div className="form-row">
+                    <input className="form-textField" type="text" readonly value={appSettings.username} />
+                </div>
+
+                <div className="form-row">
                     <input ref="password" className="login-password form-textField" type="password" placeholder="Password" />
                 </div>
 

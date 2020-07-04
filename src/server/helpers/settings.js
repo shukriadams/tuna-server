@@ -9,6 +9,9 @@ const
         // base url of your site. Default is for dev environments, you NEED to change this when going live
         siteUrl : 'http://localhost:48004',
 
+        // when running sandbox mode in a container with port aliasing, this will have to be set to the outward-facing port
+        sandboxUrl : 'http://localhost:48004',
+        
         mongoConnectionString : 'mongodb://admin:secret@127.0.0.1:27017',
         mongoDBName : 'tuna',
         mongoCollectionPrefix : '',

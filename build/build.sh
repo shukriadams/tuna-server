@@ -48,6 +48,7 @@ mkdir -p .stage/public &&
 cp -R .clone/src/dist/client .stage &&
 cp -R .clone/src/node_modules .stage &&
 cp -R .clone/src/server .stage &&
+cp -R .clone/src/scripts .stage &&
 cp -R .clone/src/public/css .stage/public &&
 cp .clone/src/index.js .stage &&
 cp .clone/src/package.json .stage &&

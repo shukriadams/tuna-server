@@ -31,7 +31,7 @@ module.exports = {
         const settings = require(_$+'helpers/settings')
         
         if (settings.lastFmDevAuthKey)
-            return `${settings.siteUrl}/api/sandbox/lastfmAuthenticate?&session=${authTokenId}`;
+            return `${settings.sandboxUrl}/v1/sandbox/lastfmAuthenticate?&session=${authTokenId}`;
         
         return `http://www.last.fm/api/auth/?&api_key=${settings.lastFmApiKey}&cb=${settings.siteUrl}/api/catch/lastfm?session=${authTokenId}&state=none`;
     },
@@ -195,7 +195,7 @@ module.exports = {
                 apiSignature = crypto.createHash('md5').update(apiSignature, 'utf8').digest('hex')
 
                 let options = {
-                    url : settings.lastFmDevAuthKey ? urljoin(settings.siteUrl, '/v1/sandbox/lastfmTokenSwap') : `http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${settings.lastFmApiKey}&token=${sessionToken}&api_sig=${apiSignature}`,
+                    url : settings.lastFmDevAuthKey ? urljoin(settings.sandboxUrl, '/v1/sandbox/lastfmTokenSwap') : `http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${settings.lastFmApiKey}&token=${sessionToken}&api_sig=${apiSignature}`,
                     method : 'GET'
                 }
 
