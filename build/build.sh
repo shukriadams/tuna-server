@@ -24,8 +24,10 @@ fi
 mkdir -p .clone &&    
     
 if [ $CI -eq 1 ]; then
+    # if running on CI system, copy everything from src to .clone folder
     cp -R ./../src .clone/ 
 else
+    # copy everything from src but exclude 
     if [ $JSPM -eq 1 ]; then
         rsync -r --exclude=node_modules --exclude=client/lib --exclude=.* ./../src .clone 
     else
@@ -50,8 +52,10 @@ cp -R .clone/src/node_modules .stage &&
 cp -R .clone/src/server .stage &&
 cp -R .clone/src/scripts .stage &&
 cp -R .clone/src/public/css .stage/public &&
+cp -R .clone/src/client/media .stage/public &&
 cp .clone/src/index.js .stage &&
 cp .clone/src/package.json .stage &&
+rm -rf .stage/server/reference &&
 rm -f node/.stage.tar.gz &&
 tar -czvf node/.stage.tar.gz .stage &&
 
