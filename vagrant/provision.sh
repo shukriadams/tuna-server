@@ -13,6 +13,11 @@ sudo npm install yarn -g
 sudo npm install jspm@0.16x -g
 sudo npm install minify@5.1.1 -g
 
+# start dev containers
+cd /vagrant/build
+docker-compose -f docker-compose-dev.yml up -d 
+
+
 # force startup folder to /src folder in project
 echo "cd /vagrant/src" >> /home/vagrant/.bashrc
 

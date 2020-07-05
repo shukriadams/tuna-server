@@ -24,22 +24,26 @@ fi
 mkdir -p .clone &&    
     
 if [ $CI -eq 1 ]; then
+    # if running on CI system, copy everything from src to .clone folder
     cp -R ./../src .clone/ 
 else
+    echo "Copying a bunch of stuff, this will likely take a while ...."
+    # copy everything from src but exclude 
     if [ $JSPM -eq 1 ]; then
-        rsync -r --exclude=node_modules --exclude=client/lib --exclude=.* ./../src .clone 
+        # exclude node modules, jspm lib and all hidden files in project root
+        rsync -v -r --exclude=node_modules --exclude=client/lib --exclude=.* ./../src .clone 
     else
-        rsync -r --exclude=node_modules --exclude=.* ./../src .clone 
+        rsync -v -r --exclude=node_modules --exclude=.* ./../src .clone 
     fi
 fi
 
 # build 1: build frontend CSS/JS, and leaves it behind in .clone/src/dist folder. This build will npm install dev modules, which we
 # want to delete
-docker run -it -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && sh ./build-frontend.sh --setup" &&
+docker run -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && sh ./build-frontend.sh --setup" &&
 sudo rm -rf .clone/src/node_modules &&
 
 # build 2: run a second container install, this one npm intalls "production" modules, these we want
-docker run -it -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && yarn --no-bin-links --ignore-engines --production" &&
+docker run -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && yarn --no-bin-links --ignore-engines --production" &&
 
 # combine artifacts from steps 1 and 2 and zip them
 rm -rf .stage &&
@@ -48,9 +52,12 @@ mkdir -p .stage/public &&
 cp -R .clone/src/dist/client .stage &&
 cp -R .clone/src/node_modules .stage &&
 cp -R .clone/src/server .stage &&
+cp -R .clone/src/scripts .stage &&
 cp -R .clone/src/public/css .stage/public &&
+cp -R .clone/src/client/media .stage/public &&
 cp .clone/src/index.js .stage &&
 cp .clone/src/package.json .stage &&
+rm -rf .stage/server/reference &&
 rm -f node/.stage.tar.gz &&
 tar -czvf node/.stage.tar.gz .stage &&
 

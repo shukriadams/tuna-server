@@ -1,74 +1,84 @@
 const 
-    assert = require('madscience-node-assert'),
-    route = require(_$+'routes/profile'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/profiles/resetpassword', async(testArgs)=>{
+mocha('route/profiles/resetPassword', async(ctx)=>{
     
-    it('route/profiles/resetpassword : happy path : request a password reset if not logged in', async () => {
+    it('route/profiles/resetpassword::happy    request a password reset if not logged in', async () => {
         
-        let routeTester = await new RouteTester(route);
+        let actualPassword,
+            actualKey,
+            actualProfileId,
+            actualCurrentPassword,
+            route = require(_$+'routes/profile'),
+            routeTester = await new RouteTester(route)
+
         // send only a key, this is all we need when reseting password
-        routeTester.req.query.key='abcd';
+        routeTester.req.query.key = 'abcd'
         
         // disable brute force check
-        routeTester.route.bruteForce.process=()=>{ /*do nothing*/}
-        routeTester.route.bruteForce.clear=()=>{ /*do nothing*/}
+        ctx.inject.object(_$+'helpers/bruteForce', {
+            process (){ }, // do nothing
+            clear (){ } // do nothing
+        }) 
 
         // read back actual values sent to playlist create
-        let actualPassword = null,
-            actualKey = null,
-            actualProfileId = null,
-            actualCurrentPassword = null;
+        ctx.inject.object(_$+'logic/profiles', {
+            resetPassword (key, password, currentPassword, profileId){
+                actualPassword = password
+                actualKey = key
+                actualProfileId = profileId
+                actualCurrentPassword = currentPassword
+            }
+        })  
 
-        routeTester.route.profileLogic.resetPassword = (key, password, currentPassword, profileId)=>{
-            actualPassword = password;
-            actualKey = key;
-            actualProfileId = profileId;
-            actualCurrentPassword = currentPassword;
-        }
+        await routeTester.get('/v1/profile/resetPassword')
 
-        await routeTester.get('/v1/profile/resetPassword');
+        ctx.assert.equal(actualKey, 'abcd')
+        ctx.assert.null(actualPassword)
+        ctx.assert.null(actualProfileId)
+        ctx.assert.null(actualCurrentPassword)
+        ctx.assert.null(routeTester.res.content.code)
+    })
 
-        assert.equal(actualKey, 'abcd');
-        assert.null(actualPassword);
-        assert.null(actualProfileId);
-        assert.null(actualCurrentPassword);
-        assert.equal(routeTester.res.content.code, 0 );
-    });
 
-    it('route/profiles/resetpassword : happy path : request a password reset if logged in', async () => {
+
+
+    it('route/profiles/resetpassword::happy    request a password reset if logged in', async () => {
         
-        let routeTester = await new RouteTester(route);
+        let route = require(_$+'routes/profile'),
+            routeTester = await new RouteTester(route),
+            actualPassword,
+            actualKey,
+            actualProfileId,
+            actualCurrentPassword
+
+        // disable brute force check
+        ctx.inject.object(_$+'helpers/bruteForce', {
+            process (){ }, // do nothing
+            clear (){ } // do nothing
+        }) 
+
+        // read back actual values sent to playlist create
+        ctx.inject.object(_$+'logic/profiles', {
+            resetPassword (key, password, currentPassword, profileId){
+                actualPassword = password
+                actualKey = key
+                actualProfileId = profileId
+                actualCurrentPassword = currentPassword
+            }
+        }) 
+
         // need to be authenticated, and send current password and new password
-        routeTester.authenticate();
-        routeTester.req.query.password='abcd';
-        routeTester.req.query.currentPassword='efgh';
+        routeTester.authenticate()
+        routeTester.req.query.password='abcd'
+        routeTester.req.query.currentPassword='efgh'
+        await routeTester.get('/v1/profile/resetPassword')
 
-        // disable brute force check
-        routeTester.route.bruteForce.process=()=>{ /*do nothing*/}
-        routeTester.route.bruteForce.clear=()=>{ /*do nothing*/}
-
-        // read back actual values sent to playlist create
-        let actualPassword = null,
-            actualKey = null,
-            actualProfileId = null,
-            actualCurrentPassword = null;
-
-        routeTester.route.profileLogic.resetPassword = (key, password, currentPassword, profileId)=>{
-            actualPassword = password;
-            actualKey = key;
-            actualProfileId = profileId;
-            actualCurrentPassword = currentPassword;
-        }
-
-        await routeTester.get('/v1/profile/resetPassword');
-
-        assert.null(actualKey);
-        assert.equal(actualPassword, 'abcd');
-        assert.equal(actualCurrentPassword, 'efgh');
-        assert.equal(actualProfileId, routeTester.authToken.profileId);
-        assert.equal(routeTester.res.content.code, 0 );
-    });    
-});
+        ctx.assert.null(actualKey)
+        ctx.assert.equal(actualPassword, 'abcd')
+        ctx.assert.equal(actualCurrentPassword, 'efgh')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId)
+        ctx.assert.null(routeTester.res.content.code)
+    })
+})

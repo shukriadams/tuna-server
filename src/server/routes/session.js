@@ -1,30 +1,21 @@
-const 
-    jsonHelper = require(_$+'helpers/json'),
-    authHelper = require(_$+'helpers/authentication'),
-    bruteForce = require(_$+'helpers/bruteForce'),
-    settings = require(_$+'helpers/settings'),
-    authTokenLogic = require(_$+'logic/authToken'),
-    contentHelper = require(_$+'helpers/content'),
-    songsLogic = require(_$+'logic/songs'),
-    profileLogic = require(_$+'logic/profiles')
-
 module.exports = {
-
-    profileLogic,
-    authTokenLogic,
-    songsLogic,
-    authHelper,
-    bruteForce,
 
     bind(app){
 
+        const jsonHelper = require(_$+'helpers/json')
 
         /**
          * Logs a user in. Returns a full user session, including all user songs
          */
         app.post('/v1/session', async function (req, res) {
             try {
-                const route = 'sessions/post';
+                const 
+                    bruteForce = require(_$+'helpers/bruteForce'),
+                    settings = require(_$+'helpers/settings'),
+                    authTokenLogic = require(_$+'logic/authToken'),
+                    contentHelper = require(_$+'helpers/content'),
+                    profileLogic = require(_$+'logic/profiles')
+                    route = 'sessions/post'
 
                 await bruteForce.process({
                     request : req,
@@ -45,22 +36,7 @@ module.exports = {
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
-        });
-
-        
-        /**
-         * Gets session data for the current user
-         */    
-        app.get('/v1/session', async function (req, res) {
-            try {
-                let authToken = await authHelper.authenticate(req);
-                let content = await contentHelper.build(authToken.profileId, authToken.id, 'playlists,profile');
-                jsonHelper.returnPayload(res, content);
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
-        });
+        })
 
 
         /**
@@ -68,8 +44,10 @@ module.exports = {
          */    
         app.get('/v1/session/isvalid', async function (req, res) {
             try {
-                let tokenRecord = await authTokenLogic.getById(req.query.token || '')
-                    songsAreValid = false
+                let 
+                   authTokenLogic = require(_$+'logic/authToken'),
+                    profileLogic = require(_$+'logic/profiles'),
+                    tokenRecord = await authTokenLogic.getById(req.query.token || ''),
                     isValid = false
         
                 // confirm both token and profile, token might be orphaned cache instance
@@ -79,11 +57,11 @@ module.exports = {
                     isValid = !!profile
 
                     // confirm songs
-                    songsAreValid = await profileLogic.songsHashValid(tokenRecord.profileId, req.query.songsHash || '')
+                    if (isValid)
+                        isValid = await profileLogic.songsHashValid(tokenRecord.profileId, req.query.hash || '')
                 }
-                
 
-                jsonHelper.returnPayload(res, { isValid , songsAreValid })
+                jsonHelper.returnPayload(res, { isValid })
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }

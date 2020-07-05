@@ -1,37 +1,40 @@
 const 
     assert = require('madscience-node-assert'),
-    route = require(_$+'routes/playlists'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/playlists/delete', async(testArgs)=>{
+mocha('route/playlists/delete', async(ctx)=>{
     
-    it('route/playlists/delete : happy path : deletes a playlist, returns user content', async () => {
-        
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        // this would be a route parameter in actual express
-        routeTester.req.params.playlistId = 'myplaylistId';
-        // read back actual values sent to playlist create
+    it('route/playlists/delete::happy    deletes a playlist, returns user content', async () => {
+
         let actualPlaylistId,
             actualTokenId,
-            actualProfileId;
-
-        routeTester.route.playlistLogic.delete = (playlistId, profileId, authTokenId)=>{
-            actualPlaylistId = playlistId;
-            actualProfileId = profileId;
-            actualTokenId = authTokenId;
-        }
+            actualProfileId,
+            route = require(_$+'routes/playlists'),
+            routeTester = await new RouteTester(route)
+        
+        // override delete to capture input
+        ctx.inject.object(_$+'logic/playlists', {
+            delete (playlistId, profileId, authTokenId){
+                actualPlaylistId = playlistId
+                actualProfileId = profileId
+                actualTokenId = authTokenId
+            }
+        })
 
         // return some user content
-        routeTester.route.profileLogic.buildUserContent = ()=>{ return { someUserContent : 'shadows in the deep' } }
+        routeTester.authenticate()
+        routeTester.setUserContent({ someUserContent : 'shadows in the deep' })
+        
+        // set route parameter for the playlist to delete
+        routeTester.req.params.playlistId = 'myplaylistId'
 
-        await routeTester.delete('/v1/playlists/:playlistId');
+        await routeTester.delete('/v1/playlists/:playlistId')
 
-        assert.equal(actualPlaylistId, 'myplaylistId');
-        assert.equal(actualTokenId, routeTester.authToken.id);
-        assert.equal(actualProfileId, routeTester.authToken.profileId );
-        assert.equal(routeTester.res.content.payload.someUserContent, 'shadows in the deep' );
-    });
+        ctx.assert.equal(actualPlaylistId, 'myplaylistId')
+        ctx.assert.equal(actualTokenId, routeTester.authToken.id)
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'shadows in the deep' )
+    })
     
-});
+})

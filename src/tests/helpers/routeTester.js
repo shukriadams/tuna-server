@@ -1,3 +1,5 @@
+const requireMock = require(_$t+'helpers/require')
+
 class ExpressShim{
     
     constructor(){
@@ -34,8 +36,14 @@ module.exports = class RouteTester{
                 query : {},
                 params: {},
                 headers: {},
+
+                // normally used to retrieve headers
+                get(headername){
+                    return 'some-header'
+                },
+
                 header(item){
-                    return this.headers[item];
+                    return this.headers[item]
                 }
             }
 
@@ -73,23 +81,29 @@ module.exports = class RouteTester{
     }
     
     authenticate(token = 'placeholder'){
-        if (!this.route.authHelper)
-            throw 'Route does not expose authHelper - cannot shim authenticate on it';
-
-        this.req.headers.Authorization = `bearer ${token}`;
+        this.req.headers.Authorization = `bearer ${token}`
         // authHelper needs to find an authToken record for auth to pass
-        this.authToken = { id : 'placeholder-tokenId', profileId : 'placeholder-profileId' };
-        this.route.authHelper.authTokenLogic.getById =()=>{ return this.authToken };
+        this.authToken = { id : 'placeholder-tokenId', profileId : 'placeholder-profileId' }
+        
+        // override authHelper to approve authentication
+        const authTokenLogic = require(_$+'logic/authToken')
+        authTokenLogic.getById =()=>{ return this.authToken }
+        requireMock.add(_$+'logic/authToken', authTokenLogic)
     }
 
     setUserContent(userContent){
         if (!this.route)
             throw 'route not bound yet';
 
-        if (!this.route.profileLogic)
-            throw 'route must expose profileLogic for userContent setting to work';
+        // need to override both profilelogic and content helper as they can both be used to generated content
+        const profileLogic = require(_$+'logic/profiles'),
+            contentHelper = require(_$+'helpers/content')
 
-        this.route.profileLogic.buildUserContent =()=>{ return userContent };
+        contentHelper.build = ()=>{ return userContent }
+        requireMock.add(_$+'helpers/content', contentHelper)
+
+        profileLogic.buildUserContent =()=>{ return userContent }
+        requireMock.add(_$+'logic/profiles', profileLogic)
     }
 
     async get(routePattern){

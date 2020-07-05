@@ -1,30 +1,31 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/stream', async(testArgs)=>{
+mocha('route/songs/stream', async(ctx)=>{
     
-    it('route/songs/stream : happy path : streams a song', async ()=>{
+    it('route/songs/stream::happy    streams a song', async ()=>{
         
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        routeTester.req.params.authToken = 'some-token';
-        routeTester.req.params.mediaPath = Buffer.from('some/path').toString('base64');
-
         let actualMediaPath,
-            actualProfileId;
+            actualProfileId,
+            routeTester = await new RouteTester(route)
 
-        routeTester.route.songsLogic.streamSong = (profileId, mediaPath, res)=>{
-            actualMediaPath = mediaPath;
-            actualProfileId = profileId;
-        }
+        routeTester.authenticate()
+        routeTester.req.params.authToken = 'some-token'
+        routeTester.req.params.mediaPath = Buffer.from('some/path').toString('base64')
 
-        await routeTester.get('/v1/songs/stream/:authToken/:mediaPath');
+        ctx.inject.object(_$+'logic/songs', {
+            streamSong (profileId, mediaPath){
+                actualMediaPath = mediaPath
+                actualProfileId = profileId
+            }
+        }) 
 
-        assert.equal(actualMediaPath, 'some/path');
-        assert.equal(actualProfileId, routeTester.authToken.profileId );
-    });
+        await routeTester.get('/v1/songs/stream/:authToken/:mediaPath')
+
+        ctx.assert.equal(actualMediaPath, 'some/path')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+    })
     
-});
+})

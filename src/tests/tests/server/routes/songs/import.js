@@ -1,38 +1,38 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/import', async(testArgs)=>{
+mocha('route/songs/import', async(ctx)=>{
     
-    it('route/songs/import : happy path : starts an import', async ()=>{
+    it('route/songs/import::happy    starts an import', async ()=>{
         
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
+        let routeTester = await new RouteTester(route),
+            actualProfileId,
+            actualAuthTokenId
 
-        let actualProfileId,
-            actualAuthTokenId;
+        routeTester.authenticate()
 
         // need to return a fake importer
-        routeTester.route.sourceProvider.getImporter=()=>{
-            return class {
-                constructor(profile, authTokenId){
-                    actualProfileId = profile;
-                    actualAuthTokenId = authTokenId;
+        ctx.inject.object(_$+'helpers/sourceProvider', {
+            getImporter (){
+                return class {
+                    constructor(profile, authTokenId){
+                        actualProfileId = profile
+                        actualAuthTokenId = authTokenId
+                    }
+                    start(){ } // do nothing
                 }
-                start(){ /* do nothing*/ }
             }
-        }
+        }) 
 
-        routeTester.route.profileLogic.buildUserContent = ()=>{ return { someUserContent : 'the somberlain' } }
+        routeTester.setUserContent({ someUserContent : 'the somberlain' })
 
+        await routeTester.post('/v1/songs/import')
 
-        await routeTester.post('/v1/songs/import');
-
-        assert.equal(actualAuthTokenId, routeTester.authToken.id );
-        assert.equal(actualProfileId, routeTester.authToken.profileId );
-        assert.equal(routeTester.res.content.payload.someUserContent, 'the somberlain' );
-    });
+        ctx.assert.equal(actualAuthTokenId, routeTester.authToken.id )
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'the somberlain' )
+    })
     
-});
+})

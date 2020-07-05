@@ -1,8 +1,8 @@
 const 
-    Express = require('express'),
-    fs = require('fs-extra'),
-    path = require('path'),
-    bodyParser = require('body-parser'),
+    Express = require('express'), // 160ms
+    fs = require('fs-extra'),   // 77ms
+    path = require('path'),     // 0ms
+    bodyParser = require('body-parser'),    // 7ms
     pathingHelper = require(_$+'helpers/pathing'),
     cache = require(_$+'helpers/cache'),
     daemon = require(_$+'helpers/daemon'),
@@ -10,17 +10,26 @@ const
     profilesLogic = require(_$+'logic/profiles'),
     interprocess = require(_$+'helpers/interprocess'),
     mongoHelper = require(_$+'helpers/mongo'),
-    sourceProvider = require(_$+'helpers/sourceProvider'),
-    express = Express()
+    socketHelper = require(_$+'helpers/socket'),
+    sourceProvider = require(_$+'helpers/sourceProvider')
+
+let express = null
 
 module.exports = {
-    // export underlying express so we can access it from tests
-    express : express,
 
     /**
-     * Initializes controllers/daemons.
+     * Creates and expose express for script that will be handling server
      */
-    async start (){
+    initialize(){
+        express = Express()
+        return express
+    },
+
+
+    /**
+     * Initializes controllers/daemons. Requires httpServer passed in from script handling server
+     */
+    async start (httpServer){
         
         await fs.ensureDir(settings.dataFolder)
 
@@ -38,10 +47,12 @@ module.exports = {
 
         daemon.start()
 
+        socketHelper.initialize(httpServer)
+
         // generate the master user if it doesn't already exist
         await profilesLogic.autoCreateMaster(settings.masterUsername)
 
-        // do this before route handling!
+        // add middleware before route handling
         express.use(bodyParser.urlencoded({ extended: false }))
         express.use(bodyParser.json())
         

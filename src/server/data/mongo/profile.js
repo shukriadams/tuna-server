@@ -1,192 +1,89 @@
-const 
-    ObjectID  = require('mongodb').ObjectID,
-    constants = require(_$+'types/constants'),
-    mongoHelper = require(_$+'helpers/mongo'),
-    Exception = require(_$+'types/exception')
-
-function normalize(mongoRecord){
-    let profile = require(_$+'types/profile').new()
-
-
-    for (let property in profile)
-        if (mongoRecord.hasOwnProperty(property))
-            profile[property] = mongoRecord[property]
-
-    profile.id = mongoRecord._id.toString()
-    return profile
-}
-
-function denormalize(obj){
-    let clone = {}
-
-    for (var prop in obj)
-        clone[prop] = obj[prop]
-
-    if (obj.id)
-        clone._id = new ObjectID(obj.id)
-
-    // never persist these fields to db
-    delete clone.id
-    delete clone.password
-
-    return clone
-}
-
 module.exports = {
     
-    mongoHelper,
+    normalize(mongoRecord){
 
-    async create(record){
-        return new Promise(async (resolve, reject) => {
-            try {
-                if (!record)
-                    return reject(new Exception({ log : 'record is blank', code : constants.ERROR_INVALID_ARGUMENT }))
-
-                const db = await mongoHelper.getCollection('profiles'),
-                    writeRecord = denormalize(record)
+        const profile = require(_$+'types/profile').new()
     
-                db.collection.insertOne(writeRecord, (err, result) => {
-                    if (err || !result.ops.length)
-                        return reject(new Exception({ inner: { err, result } }))
-                        
-                    db.done()
-                    resolve(normalize (result.ops[0]))
-                })
+        for (const property in profile)
+            if (mongoRecord.hasOwnProperty(property))
+                profile[property] = mongoRecord[property]
     
-            } catch (ex) {
-                reject (ex)
-            }
-    
-        })
+        profile.id = mongoRecord._id.toString()
+        return profile
     },
     
-    async getById(profileId){
-        return new Promise(async (resolve, reject)=> {
+    denormalize(obj){
+        const 
+            ObjectID  = require('mongodb').ObjectID,
+            clone = {}
     
-            try {
+        for (const prop in obj)
+            clone[prop] = obj[prop]
     
-                const db = await mongoHelper.getCollection('profiles')
+        if (obj.id)
+            clone._id = new ObjectID(obj.id)
     
-                db.collection.findOne({ _id : new ObjectID(profileId) }, (err, doc) => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
+        // never persist these fields to db
+        delete clone.id
+        delete clone.password
     
-                    db.done()
-                    resolve(doc? normalize(doc) : null)
-                })
+        return clone
+    },
     
-            } catch(ex) {
-                reject(ex)
-            }
+
+    async create(record){
+        const mongoCommon = require(_$+'data/mongo/common'),
+            newRecord = await mongoCommon.create('profiles', this.denormalize(record))
+
+        return this.normalize(newRecord)
+    },
     
-        })
+    async getById(id){
+        const 
+            mongoCommon = require(_$+'data/mongo/common'),
+            record = await mongoCommon.findById('profiles', id)
+        
+        return record ? this.normalize(record) : null
     },
     
     async getAll(){
-        return new Promise(async (resolve, reject) =>{
+        const 
+            mongoCommon = require(_$+'data/mongo/common'),
+            records = await mongoCommon.find('profiles', { }),
+            results = []
 
-            try {
+        for (const record of records)
+            results.push(this.normalize(record))
 
-                const db = await mongoHelper.getCollection('profiles')
-                db.collection.find({ }).toArray((err, docs) => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-
-                    const results = []
-                    for (let i = 0 ; i < docs.length ; i ++)
-                        results.push(normalize(docs[i]))
-
-                    db.done()
-                    resolve(results)
-                })
-
-            } catch (ex) {
-                reject (ex)
-            }
-
-        })
+        return results
     },
     
     async getByIdentifier(identifier){
-        return new Promise(async (resolve, reject) => {
-            try {
-                const db = await mongoHelper.getCollection('profiles')
-                db.collection.findOne({ identifier }, (err, doc) => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-    
-                    db.done()
-                    resolve(doc? normalize(doc) : null)
-                })
-    
-            } catch (ex) {
-                reject (ex)
-            }
-        })
+        const 
+            mongoCommon = require(_$+'data/mongo/common'),
+            record = await mongoCommon.findOne('profiles', { identifier })
+
+        return record ? this.normalize(record) : null
     },
-    
     
     async getByPasswordResetKey(key){
-        return new Promise(async (resolve, reject) => {
-    
-            try {
-    
-                const db = await mongoHelper.getCollection('profiles')
-                db.collection.findOne({ passwordResetKey : key }, (err, doc) => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-    
-                    db.done()
-                    resolve(doc? normalize(doc) : null)
-                })
-    
-            } catch (ex) {
-                reject (ex)
-            }
-    
-        })
+        const 
+            mongoCommon = require(_$+'data/mongo/common'),
+            record = await mongoCommon.findOne('profiles', { passwordResetKey : key })
+
+        return record ? this.normalize(record) : null
     },
     
-    async update(record){
-        return new Promise(async (resolve, reject) => {
-    
-            try {
-    
-                const db = await mongoHelper.getCollection('profiles'),
-                    writeRecord = denormalize(record)
-
-                console.log('upt', writeRecord, record)
-                db.collection.updateOne({ _id : writeRecord._id }, { $set: writeRecord }, (err) => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-    
-                    db.done()
-                    resolve(record)
-                })
-    
-            } catch (ex) {
-                reject (ex)
-            }
-    
-        })
+    async update(profile){
+        const mongoCommon = require(_$+'data/mongo/common'),
+            writeProfile = this.denormalize(profile)
+        
+        await mongoCommon.update('profiles', profile.id, writeProfile)
     },
     
     async delete(profile){
-        return new Promise(async (resolve, reject) => {
-            try {
-                const db = await mongoHelper.getCollection('profiles')
-                db.collection.deleteOne({ _id : new ObjectID(profile.id) }, err => {
-                    if (err)
-                        return reject(new Exception({ inner: { err } }))
-    
-                    db.done()
-                    resolve()
-    
-                })
-            } catch(ex) {
-                reject(ex)
-            }
-        })
+        const mongoCommon = require(_$+'data/mongo/common')
+        return await mongoCommon.delete('profiles', profile.id)
     }
     
 }

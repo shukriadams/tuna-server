@@ -1,13 +1,16 @@
-let flip = function(listId, songIdsToFlip){
+/**
+ * Controls the visual "vertical flip" behavior of song list items when adding them to queue
+ */
+export default (listId, songIdsToFlip)=>{
     
-    let list = document.querySelector(`[data-list="${listId}"]`),
+    const list = document.querySelector(`[data-list="${listId}"]`),
         persist = 800,
         offset = 100
 
     for (let i = 0 ; i < songIdsToFlip.length ; i ++){
 
         let songId = songIdsToFlip[i],
-            songRow = list.querySelector(`[data-songid="${songId}"]`)
+            songRow = list.querySelector(`[data-songid="${songId}"]`);
 
         ((songRow, i)=>{
             setTimeout(()=>{
@@ -22,5 +25,3 @@ let flip = function(listId, songIdsToFlip){
 
     }
 }
-
-export default flip

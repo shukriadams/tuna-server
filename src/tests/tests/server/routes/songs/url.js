@@ -1,34 +1,35 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/url', async(testArgs)=>{
+mocha('route/songs/url', async(ctx)=>{
     
-    it('route/songs/url : happy path : gets a songs url', async ()=>{
+    it('route/songs/url::happy    gets a songs url', async ()=>{
         
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        routeTester.req.query.song = 'blinded by fear';
-
         let actualSongId,
             actualProfileId,
-            actualAuthTokenId;
+            actualAuthTokenId,
+            routeTester = await new RouteTester(route)
 
-        routeTester.route.songsLogic.getSongUrl = (songId, profileId, authTokenId)=>{
-            actualSongId = songId;
-            actualProfileId = profileId;
-            actualAuthTokenId = authTokenId;
-            return 'the-url';
-        }
+        routeTester.authenticate()
+        routeTester.req.query.song = 'blinded by fear'
 
-        await routeTester.get('/v1/songs/url');
+        ctx.inject.object(_$+'logic/songs', {
+            getSongUrl (songId, profileId, authTokenId){
+                actualSongId = songId
+                actualProfileId = profileId
+                actualAuthTokenId = authTokenId
+                return 'the-url'
+            }
+        }) 
 
-        assert.equal(actualSongId, 'blinded by fear');
-        assert.equal(actualProfileId, routeTester.authToken.profileId );
-        assert.equal(actualAuthTokenId, routeTester.authToken.id );
-        assert.equal(routeTester.res.content.payload.url, 'the-url' );
-    });
+        await routeTester.get('/v1/songs/url')
+
+        ctx.assert.equal(actualSongId, 'blinded by fear')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.equal(actualAuthTokenId, routeTester.authToken.id )
+        ctx.assert.equal(routeTester.res.content.payload.url, 'the-url' )
+    })
     
-});
+})

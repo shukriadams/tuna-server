@@ -2,7 +2,7 @@
 # with dev resources
 version: "2"
 services:
-    mongo:
+    mongotest:
         image: mongo:3.6.18
         container_name: mongo-test
         restart: unless-stopped
@@ -17,7 +17,7 @@ services:
         container_name: tuna-test
         restart: unless-stopped
         depends_on:
-            - mongo
+            - mongotest
         volumes:
             - ./logs:/usr/tuna/__logs/:rw
             - ./data:/usr/tuna/data
@@ -27,6 +27,7 @@ services:
             # connecting as root is only guaranteed method, mongo is pure garbage
             mongoConnectionString: "mongodb://admin:secret@mongo:27017"
             mongoDBName: "tuna"
+            musicSourceSandboxMode: "true"
         ports:
         - "58002:48004"
   

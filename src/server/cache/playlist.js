@@ -1,8 +1,3 @@
-const 
-    playlistsData = require(_$+'data/mongo/playlist'),
-    JsonHelper = require(_$+'helpers/json'),
-    cache = require(_$+'helpers/cache')
-
 module.exports = {
 
      _getKey(profileId){
@@ -11,23 +6,23 @@ module.exports = {
     
 
     async create(playlist){
-        playlist = await playlistsData.create(playlist)
-    
-        // assumes there is always at least onc song in collection, logic layer ensures this
-        let key = this._getKey(playlist.profileId)
+        const 
+            playlistsData = require(_$+'data/mongo/playlist'),
+            cache = require(_$+'helpers/cache'),
+            newPlaylist = await playlistsData.create(playlist),
+            key = this._getKey(newPlaylist.profileId)
     
         await cache.remove(key)
-        return playlist
+        return newPlaylist
     },
-    
-
-    async get(playlistId){
-        return await playlistsData.getById(playlistId)
-    },
-    
+   
     
     async getAll(profileId){
-        let key = this._getKey(profileId),
+        let 
+            JsonHelper = require(_$+'helpers/json'),
+            cache = require(_$+'helpers/cache'),
+            playlistsData = require(_$+'data/mongo/playlist'),
+            key = this._getKey(profileId),
             playlists = await cache.get(key)
     
         if (playlists)
@@ -40,18 +35,30 @@ module.exports = {
 
 
     async update(playlist){
+        const 
+            cache = require(_$+'helpers/cache'),
+            playlistsData = require(_$+'data/mongo/playlist')
+
         await playlistsData.update(playlist)
         await cache.remove(this._getKey(playlist.profileId))
     },
     
 
     async delete(playlistId, profileId){
+        const 
+            cache = require(_$+'helpers/cache'),
+            playlistsData = require(_$+'data/mongo/playlist')
+
         await playlistsData.delete(playlistId)
         await cache.remove(this._getKey(profileId))
     },
     
     
     async deleteAll(profileId){
+        const 
+            cache = require(_$+'helpers/cache'),        
+            playlistsData = require(_$+'data/mongo/playlist')
+
         await playlistsData.deleteForProfile(profileId)
         await cache.remove(this._getKey(profileId))
     }

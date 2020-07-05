@@ -1,92 +1,114 @@
 const 
-    assert = require('madscience-node-assert'),
-    route = require(_$+'routes/session'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/session/isvalid', async(testArgs)=>{
+mocha('route/session/isvalid', async(ctx)=>{
     
-    it('route/session/isvalid : happy path : gets a user session', async () => {
+    it('route/session/isvalid::happy    gets a user session', async () => {
         
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        routeTester.req.query.token = 1234;
-
         let actualAuthTokenId,
-            actualProfileId;
+            actualProfileId,
+            route = require(_$+'routes/session'),
+            routeTester = await new RouteTester(route)
 
-        routeTester.route.authTokenLogic.getById =(authTokenId)=>{ 
-            actualAuthTokenId = authTokenId;
-            return { id : authTokenId, profileId: 5678 } 
-        }
+        routeTester.authenticate()
+        routeTester.req.query.token = 1234
 
-        routeTester.route.profileLogic.getById =(profileId)=>{ 
-            actualProfileId = profileId;
-            return { } // return a profile
-        }
+        ctx.inject.object(_$+'logic/authToken', {
+            getById (authTokenId){ 
+                actualAuthTokenId = authTokenId
+                return { id : authTokenId, profileId: 5678 } 
+            }
+        })
+
+        ctx.inject.object(_$+'logic/profiles', {
+            // song hash will also be checked
+            songsHashValid (){ 
+                return true
+            },            
+            getById (profileId){ 
+                actualProfileId = profileId
+                return { } // return a profile
+            }
+        })
+
+        await routeTester.get('/v1/session/isvalid')
+
+        ctx.assert.equal(actualAuthTokenId, 1234 )
+        ctx.assert.equal(actualProfileId, 5678 )
+        ctx.assert.true(routeTester.res.content.payload.isValid)
+    })
 
 
-        await routeTester.get('/v1/session/isvalid');
 
-        assert.equal(actualAuthTokenId, 1234 );
-        assert.equal(actualProfileId, 5678 );
-        assert.equal(routeTester.res.content.payload.isValid, true );
 
-    });
-
-    it('route/session/isvalid : unhappy path : token does not exist', async () => {
+    it('route/session/isvalid::unhappy    token does not exist', async () => {
         
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        routeTester.req.query.token = 1234;
+        let tokenLookup = false,
+            profileLookup = false,
+            route = require(_$+'routes/session'),
+            routeTester = await new RouteTester(route)
+
+        routeTester.authenticate()
+        routeTester.req.query.token = 1234
         
-        let tokenLookup = false;
-            profileLookup = false;
+        ctx.inject.object(_$+'logic/authToken', {
+            // this must return null to simulate in valid token
+            getById (){ 
+                tokenLookup = true
+                return null
+            }
+        })
+        
+        ctx.inject.object(_$+'logic/profiles', {
+            getById (){ 
+                profileLookup = true
+                return null
+            }
+        })
+
+        await routeTester.get('/v1/session/isvalid')
+
+        ctx.assert.true(tokenLookup)
+        ctx.assert.false(profileLookup)
+        ctx.assert.false(routeTester.res.content.payload.isValid)
+    })
+
+    
+
+
+    it('route/session/isvalid::unhappy    user does not exist', async () => {
+        
+        let tokenLookup = false,
+            profileLookup = false,
+            route = require(_$+'routes/session'),
+            routeTester = await new RouteTester(route)
+
+        routeTester.authenticate()
+        routeTester.req.query.token = 1234
 
         // this must return null to simulate in valid token
-        routeTester.route.authTokenLogic.getById =()=>{ 
-            tokenLookup = true;
-            return null;
-        }
-        
-        routeTester.route.profileLogic.getById =()=>{ 
-            profileLookup = true;
-            return null
-        }
-
-        await routeTester.get('/v1/session/isvalid');
-
-        assert.true(tokenLookup);
-        assert.false(profileLookup);
-        assert.equal(routeTester.res.content.payload.isValid, false );
-
-    });
-    
-    it('route/session/isvalid : unhappy path : user does not exist', async () => {
-        
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        routeTester.req.query.token = 1234;
-
-        let tokenLookup = false;
-            profileLookup = false;
-
-        routeTester.route.authTokenLogic.getById =()=>{ 
-            tokenLookup = true;
-            return {};
-        }
+        ctx.inject.object(_$+'logic/authToken', {
+            getById (){ 
+                tokenLookup = true
+                return {}
+            }
+        })
 
         // must return null to simulate invalid profile
-        routeTester.route.profileLogic.getById =()=>{ 
-            profileLookup = true;
-            return null
-        }
+        ctx.inject.object(_$+'logic/profiles', {
+            getById (){ 
+                profileLookup = true
+                return null
+            }
+        })
 
-        await routeTester.get('/v1/session/isvalid');
+        await routeTester.get('/v1/session/isvalid')
 
-        assert.true(tokenLookup);
-        assert.true(profileLookup);
-        assert.equal(routeTester.res.content.payload.isValid, false );
+        ctx.assert.true(tokenLookup)
+        ctx.assert.true(profileLookup)
+        ctx.assert.false(routeTester.res.content.payload.isValid)
+    })
 
-    });
-});
+})
+

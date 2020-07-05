@@ -2,7 +2,6 @@ module.exports = {
 
     bind(app){
 
-
         /**
          * lightweight alive check
          */    

@@ -1,10 +1,6 @@
 const 
-    httputils = require('madscience-httputils'),
     ImporterBase = require(_$+'helpers/importerBase'),
-    nextCloudCommon = require(_$+'helpers/nextcloud/common'),
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    xmlHelper = require(_$+'helpers/xml')
+    constants = require(_$+'types/constants')
 
 /**
  * Imports song data from nextcloud. This process consists of multiple steps. It exposes which step it's on, 
@@ -20,22 +16,30 @@ class Importer extends ImporterBase {
     }
 
     async _ensureTokens(){
+        const nextCloudCommon = require(_$+'helpers/nextcloud/common')
+
         nextCloudCommon.ensureTokensAreUpdated(this.profileId)
     }
    
     
     /**
-     * Searches for .tuna.xml files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
+     * Searches for .tuna.dat files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
+        const 
+            settings = require(_$+'helpers/settings'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            xmlHelper = require(_$+'helpers/xml')
+
         let s = await this._getSource(),
             profile = s.profile, 
             source = s.source
 
         const 
             options = {
-                method: 'SEARCH',
+                method: settings.musicSourceSandboxMode ? 'POST' : 'SEARCH',
                 headers: {
                     'Content-Type': 'application/xml',
                     'Authorization' : `Bearer ${source.accessToken}`
@@ -61,15 +65,15 @@ class Importer extends ImporterBase {
                                 <d:prop>
                                     <d:displayname/>
                                 </d:prop>
-                                <d:literal>.tuna.xml</d:literal>
+                                <d:literal>.tuna.dat</d:literal>
                             </d:like>
                         </d:where>
                         <d:orderby/>
-                </d:basicsearch>
+                    </d:basicsearch>
                 </d:searchrequest>`
 
-
-        const result = await this.httputils.post(`${this.settings.nextCloudHost}/remote.php/dav`, body, options)
+        const url = settings.musicSourceSandboxMode ? `${this.settings.sandboxUrl}/v1/sandbox/nextcloud/find/.tuna.dat` : `${this.settings.nextCloudHost}/remote.php/dav`,
+            result = await this.httputils.post(url, body, options)
         // todo : handle server call timing out
 
         // auth failure : This should not happen - we should have explicitly checked tokens just before this. Log explicit because
@@ -109,12 +113,12 @@ class Importer extends ImporterBase {
 
         // write new index files, preserve existing ones so we keep their history properties
         let newIndices = []
-        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].count(); i ++){
-            const response = resultXml['d:multistatus']['d:response'].at(i)
+        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].length; i ++){
+            const response = resultXml['d:multistatus']['d:response'][i]
             
             let newIndex = {
-                path : response['d:href'].text(),
-                id : response['d:propstat']['d:prop']['oc:fileid'].text(),
+                path : response['d:href'][0],
+                id : response['d:propstat'][0]['d:prop'][0]['oc:fileid'][0],
                 status :  ''
             }
 
@@ -133,19 +137,40 @@ class Importer extends ImporterBase {
      * Reads data from remote index files, into temp local array
      */
     async _readIndices(){
-        const s = await this._getSource(),
+        const 
+            httputils = require('madscience-httputils'),
+            urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
+            s = await this._getSource(),
             source = s.source
 
-        for (const index of source.indexes){
-            const indexRaw = await httputils.downloadString ({ 
-                url : `${this.settings.nextCloudHost}${index.path}`, 
+        if (!source.indexes.length)
+            return
+        
+        const 
+            index = source.indexes[0],
+            url = this.settings.musicSourceSandboxMode ? urljoin(this.settings.sandboxUrl, `/v1/sandbox/nextcloud/getfile/.tuna.dat`) : `${this.settings.nextCloudHost}${index.path}`,
+            indexRaw = await httputils.downloadString ({ 
+                url, 
                 headers : {
                     'Authorization' : `Bearer ${source.accessToken}`
                 }})
 
-            const indexDoc = await xmlHelper.toDoc(indexRaw.body)
-            for (let i = 0 ; i < indexDoc.items.item.count() ; i ++)
-                this.songsFromIndices.push(indexDoc.items.item.at(i).attributes())
+        const indexDoc = indexRaw.body.split('\n')
+        this.indexHash = JSON.parse(indexDoc[0]).hash
+        
+        for (let i = 0 ; i < indexDoc.length - 1; i ++){
+            const raw = indexDoc[i + 1]
+            
+            if (!raw)
+                continue
+
+            try {
+                this.songsFromIndices.push(JSON.parse(raw))
+            } catch (ex){
+                logger.error.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
+            }
         }
     }
 

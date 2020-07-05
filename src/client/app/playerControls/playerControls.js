@@ -1,9 +1,9 @@
 import React from 'react'
 import pubsub from './../pubsub/pubsub'
 import ClassNames from 'classnames'
-import noUiSliderCss from 'github:leongersen/noUiSlider@8.5.1/nouislider.css!css'
+import noUiSliderCss from './../localLib/noUiSlider/nouislider.css!css'
+import noUiSlider from './../localLib/noUiSlider/nouislider'
 import { connect } from 'react-redux'
-import noUiSlider from 'github:leongersen/noUiSlider@8.5.1/nouislider'
 import { volumeSet } from './../actions/actions'
 import { replay, playShowSongBrowser, nextRepeatMode, focusPreviousSongInQueue, focusNextSongInQueue, playStart, playPause, playResume } from './../actions/actions'
 import debounce from 'debounce'
@@ -44,7 +44,7 @@ class PlayerControls extends React.Component {
             volumeSet(v)
         }, 50)) // this number controls how responsive volume change feels
 
-        store.subscribe(watch(store.getState, 'playing.percent')(()=>{
+        this.playingPercentUnsub = store.subscribe(watch(store.getState, 'playing.percent')(()=>{
             this.setState({ lockControls : false })
         }))
 
@@ -72,7 +72,7 @@ class PlayerControls extends React.Component {
         this.escapeKey = new KeyWatcher({
             key : 'Escape',
             onDown : ()=>{
-                playPause();
+                playPause()
             }
         })
     }
@@ -83,6 +83,9 @@ class PlayerControls extends React.Component {
         this.escapeKey.dispose()
 
         pubsub.unsub('playerControls', 'document.clicked')
+
+        if (this.playingPercentUnsub)
+            this.playingPercentUnsub()
     }
 
 

@@ -1,7 +1,3 @@
-let 
-    expressPath,
-    process = require('process')
-
 module.exports = {
 
     /**
@@ -9,6 +5,10 @@ module.exports = {
      * or from server.js in the express folder.
      */
     getExpressPath(){
+        let 
+            expressPath,
+            process = require('process')
+
         // if running from grunt, working directory is gruntfile's, force down into express folder
         if (!expressPath)
             expressPath = process.cwd()

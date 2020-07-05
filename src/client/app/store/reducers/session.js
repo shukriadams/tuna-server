@@ -4,7 +4,7 @@ let defaultSession = {
     token : null,
     volume : 50,
     songs : [],
-    songsHash : null,
+    hash : null,
     playlists : [], // can be array
     repeatMode : repeatModes.default()
 }
@@ -32,7 +32,12 @@ function sessionReducer(state = defaultSession, action) {
         }
 
         case 'SESSION_SET' : {
-            return Object.assign({}, state, action.session)
+            let newState = Object.assign({}, state)
+            
+            for (let property in action.session)
+                newState[property] = action.session[property]
+                
+            return newState
         }
 
         case 'CLEAR_SESSION' : {
@@ -42,7 +47,7 @@ function sessionReducer(state = defaultSession, action) {
         case 'SET_SONGS' : {
             return Object.assign({}, state, { 
                 songs : action.songs.songs, 
-                songsHash : action.songs.hash 
+                hash : action.songs.hash 
             })
         }
 

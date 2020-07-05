@@ -3,13 +3,12 @@
  * restarts.
  */
 
-let 
-    NodeCache = require('node-cache'),
-    Exception = require(_$+'types/exception'),
-    nodeCache = null
+let nodeCache = null
 
 module.exports = {
+
     initialize(){
+        const NodeCache = require('node-cache')
         nodeCache = new NodeCache({ stdTTL: 100, checkperiod: 120 })
     },
 
@@ -18,10 +17,11 @@ module.exports = {
             return
 
         nodeCache.flushAll()
-        console.log('cache flushed')
     },
 
     async add (key, object){
+        const Exception = require(_$+'types/exception')
+
         return new Promise((resolve, reject) => {
             try {
                 
@@ -43,6 +43,8 @@ module.exports = {
     },
 
     async get (key) {
+        const Exception = require(_$+'types/exception')
+
         return new Promise((resolve, reject) => {
 
             try {
@@ -63,6 +65,8 @@ module.exports = {
     },
 
     async remove(key){
+        let Exception = require(_$+'types/exception')
+
         return new Promise((resolve, reject) => {
 
             try {

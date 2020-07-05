@@ -133,35 +133,35 @@ class Player {
      * Note : player has no knowledge of playlists, it fetches the next song from the queue.
      */
     _playCurrentSong (force, callback) {
-        let nextSong = queueHelper.getCurrentSong();
+        let nextSong = queueHelper.getCurrentSong()
 
         if (!nextSong)
-            return this.stopPlay();
+            return this.stopPlay()
 
         // already playing song, ignore
         if (!force && this.currentSong && this.currentSong.id === nextSong.id)
-            return;
+            return
 
         // get media url from server
 
-        this.isPlaying = true;
-        playDownloading();
-        this._getOrDownloadSong(nextSong, playStart.bind(this));
+        this.isPlaying = true
+        playDownloading()
+        this._getOrDownloadSong(nextSong, playStart.bind(this))
 
         // common logic for after play has started
         function playStart(mediaUrl){
-            this.currentSong = nextSong;
+            this.currentSong = nextSong
 
-            this.nextSongLoaded = false;
-            this.player.setMedia(mediaUrl, 'mp3');
-            this.player.play();
+            this.nextSongLoaded = false
+            this.player.setMedia(mediaUrl, 'mp3')
+            this.player.play()
 
-            this.currentSongDuration = null;
-            this.trackScrobbled = false;
-            this.triggeredStarted = false;
+            this.currentSongDuration = null
+            this.trackScrobbled = false
+            this.triggeredStarted = false
 
             if (callback)
-                callback();
+                callback()
 
             let ajax = new Ajax();
             ajax.postAuth(`${appSettings.serverUrl}/v1/songs/nowplaying`,
@@ -171,21 +171,23 @@ class Player {
                 function(response){
                     // todo : write this to user on-screen log
                 }
-            );
+            )
         }
     }
 
 
     /**
-     *
+     * Callback is optional
      */
     _getOrDownloadSong(song, callback){
         (async function(){
-            let blobStore = new BlobStore();
+            let blobStore = new BlobStore()
 
-            let localMediaUrl = await blobStore.getLocalMediaUrl(song.id);
+            let localMediaUrl = await blobStore.getLocalMediaUrl(song.id)
+            // if localMediaUrl exists, song is already present in browser and there's no need to proceed with download
             if (localMediaUrl)
-                return callback(localMediaUrl);
+                return callback ? callback(localMediaUrl) : null
+            
 
             // get media url from server
             new Ajax().auth(
@@ -200,8 +202,8 @@ class Player {
                 function(response){
                     // song id is invalid
                     blobStore.flush()
-                });
-        }());
+                })
+        }())
     }
 
     
@@ -211,13 +213,13 @@ class Player {
     stopPlay () {
         // jplayer throws exception if attempting to stop while not playing
         if (!this.isPlaying)
-            return;
+            return
 
         // todo : check if playing first, else player writes error to console
-        this.player.stop();
-        this.isPlaying = false;
-        this.currentSongDuration = null;
-        playStop();
+        this.player.stop()
+        this.isPlaying = false
+        this.currentSongDuration = null
+        playStop()
     }
 
 
@@ -228,11 +230,11 @@ class Player {
         if (queueHelper.canQueueAdvance(true)){ // true = passive
             playStop(); // must force a stop in case there is only 1 song in queue, when it jumps it itself it wont register as a next
             // false means this is a passive transition
-            focusNextSongInQueue({ isPassive : true });
-            playStart();
+            focusNextSongInQueue({ isPassive : true })
+            playStart()
         }
         else
-            this.stopPlay();
+            this.stopPlay()
     }
 
 
@@ -241,12 +243,12 @@ class Player {
      */
     _jumpToPosition (percent){
         if (!this.currentSongDuration)
-            return;
+            return
 
         if (!this.isPlaying)
-            return;
+            return
 
-        this.player.jumpToPosition(percent);
+        this.player.jumpToPosition(percent)
     }
 
 
@@ -259,12 +261,12 @@ class Player {
         let self = this,
             profile = store.getState().session, //todo : assert profile, if null will explode
             time = this.player.getPosition(),
-            duration = null;
+            duration = null
 
         // trigger play start only once song has ticked, this is the only reliable way to do it
-        if (!this.triggeredStarted){
-            this.triggeredStarted = true;
-        }
+        if (!this.triggeredStarted)
+            this.triggeredStarted = true
+        
 
         // try to determine duration - if song doesn't have it as embedded value, wait
         // for player's song length to stabilize, then use that.
@@ -274,14 +276,14 @@ class Player {
             if  (thisDuration !== this.lastObservedDuration){
                 this.lastObservedDuration = thisDuration;
             } else {
-                duration = thisDuration;
+                duration = thisDuration
             }
         } else {
-            duration  = this.currentSong.duration;
+            duration  = this.currentSong.duration
         }
 
         if (duration !== null) // ?? needed
-            this.currentSongDuration = duration;
+            this.currentSongDuration = duration
 
 
         // send a scrobble order to backend once the halfway point of the song has passed.
@@ -290,38 +292,38 @@ class Player {
 
             let ajax = new Ajax(),
                 songDuration = this.currentSongDuration,
-                song = this.currentSong.id;
+                song = this.currentSong.id
 
             ajax.auth(`${appSettings.serverUrl}/v1/lastfm/scrobble?song=${song}&songDuration=${songDuration}` , function(result){
                 if (!result.code){
                     // todo inform user of teh win
-                    console.log('track scrobbled'); // todo : move this to ui console out
+                    console.log('track scrobbled') // todo : move this to ui console out
                 } else {
-                    console.log('scrobble failed : ' + result.message ); // todo : move this to ui console out
+                    console.log('scrobble failed : ' + result.message ) // todo : move this to ui console out
                 }
-            });
+            })
         }
 
         // try to prefetch next song
         if (!this.nextSongLoaded && time > (duration / 2)){
-            let song = queueHelper.peakNextSong();
+            let song = queueHelper.peakNextSong()
             if (song)
-                this._getOrDownloadSong(song);
+                this._getOrDownloadSong(song)
 
-            this.nextSongLoaded = true;
+            this.nextSongLoaded = true
         }
 
         // write song progress back to redux, this is vital to inform rest of the app that playing is ongoing
         if (duration !== null) { // ?? needed
-            let percent = Math.floor((time * 100 ) / duration);
-            playTick({ artist: this.currentSong.artist, song: this.currentSong.name, time : time, duration : duration, percent : percent });
+            let percent = Math.floor((time * 100 ) / duration)
+            playTick({ artist: this.currentSong.artist, song: this.currentSong.name, time : time, duration : duration, percent : percent })
         }
     }
 
 }
 
 
-let _instance = null;
+let _instance = null
 
 export default {
     init(){

@@ -1,27 +1,44 @@
-/**
- * Oauth "catchers" - receives incoming oauth redirects from external sites, exchanges oauth codes for tokens, then
- * redirects to local pages to complete oauth flow.
- */
-const     
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    dropboxHelper = require(_$+'helpers/dropbox/common'),
-    nextCloudHelper = require(_$+'helpers/nextcloud/common'),
-    lastFmHelper = require(_$+'helpers/lastfm'),
-    authTokenLogic = require(_$+'logic/authToken'),
-    jsonHelper = require(_$+'helpers/json')
+
 
 module.exports = {
-    
-    nextCloudHelper,
-    
-    dropboxHelper,
-
-    lastFmHelper,
-
-    authTokenLogic,
 
     bind(app){
+
+        /**
+         * Oauth "catchers" - receives incoming oauth redirects from external sites, exchanges oauth codes for tokens, then
+         * redirects to local pages to complete oauth flow.
+         */
+        const jsonHelper = require(_$+'helpers/json')
+
+        /**
+         * Starts music source oauth flow
+         */
+        app.get('/v1/oauth/source/start', async (req, res)=>{
+            let 
+                authHelper = require(_$+'helpers/authentication'),
+                sourceProvider = require(_$+'helpers/sourceProvider'),
+                authToken = await authHelper.authenticateTokenString(req.query.token),
+                url = sourceProvider.get().getOauthUrl(authToken.id)
+
+            if (req.query.origin)
+                url = url.replace('TARGETPAGE', req.query.origin)
+
+            res.redirect(url)
+        })
+
+
+        /**
+         * Starts last fm oauth flow
+         */
+        app.get('/v1/oauth/lastfm/start', async (req, res)=>{
+            const 
+                authHelper = require(_$+'helpers/authentication'),
+                lastFmHelper = require(_$+'helpers/lastfm'),
+                authToken = await authHelper.authenticateTokenString(req.query.token)
+
+            res.redirect(lastFmHelper.getOauthUrl(authToken.id))
+        })
+
 
         /**
          * Receives auth code from nextcloud. this must be exchanged for a token.
@@ -33,7 +50,12 @@ module.exports = {
                 // todo : ensure referrer is localhost or dropbox.com
 
                 // state contains two values, authTokenId, and the page the user was on when starting the authorization process
-                let code = req.query.code,
+                const
+                    constants = require(_$+'types/constants'),
+                    Exception = require(_$+'types/exception'),
+                    nextCloudHelper = require(_$+'helpers/nextcloud/common'),
+                    authTokenLogic = require(_$+'logic/authToken'),
+                    code = req.query.code,
                     state = (req.query.state || '').split('_'),
                     authTokenId = state.length > 1 ? state[0] : null,
                     targetPage = state.length > 1 ? state[1] : null,
@@ -65,7 +87,12 @@ module.exports = {
             try {
                 // todo : ensure referrer is localhost or dropbox.com
 
-                const code = req.query.code,
+                const 
+                    constants = require(_$+'types/constants'),
+                    Exception = require(_$+'types/exception'),
+                    dropboxHelper = require(_$+'helpers/dropbox/common'),
+                    authTokenLogic = require(_$+'logic/authToken'),
+                    code = req.query.code,
                     state = (req.query.state || '').split('_'),
                     authTokenId = state.length > 1 ? state[0] : null,
                     targetPage = state.length > 1 ? state[1] : null,
@@ -97,7 +124,12 @@ module.exports = {
             try {
                 // todo : ensure referrer is localhost or lastfm.com
             
-                const scrobbleToken = req.query.token,
+                const 
+                    lastFmHelper = require(_$+'helpers/lastfm'),
+                    constants = require(_$+'types/constants'),
+                    Exception = require(_$+'types/exception'),
+                    authTokenLogic = require(_$+'logic/authToken'),
+                    scrobbleToken = req.query.token,
                     authTokenId = req.query.session,
                     authToken = await authTokenLogic.getById(authTokenId)
             

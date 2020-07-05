@@ -5,7 +5,6 @@ import Pubsub from './../pubsub/pubsub'
 import watch from 'redux-watch'
 import pubsub from './../pubsub/pubsub'
 import debug from './../misc/debug'
-import { songsSet, playListSetAll } from './../actions/actions'
 import contentHelper from './../helpers/contentHelper'
 
 let _socket = null
@@ -71,8 +70,5 @@ pubsub.sub('import', 'import.progress', async data =>{
     if (window.location.href.endsWith('/import'))
         return
 
-    const content = await contentHelper.fetch('songs,playlists')
-    songsSet(content.songs)
-    playListSetAll(content.playlists)
-
+    await contentHelper.fetch('songs,playlists')
 })

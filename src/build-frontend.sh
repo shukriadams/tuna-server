@@ -40,8 +40,9 @@ node ./build/build-all-sass && minify ./public/css/style.css > ./public/css/styl
 # build and minify JS - this requires cd'ing into jspm relative folder. 
 # note that --minify option for jspm fails with ES6, we use uglifyJS instead
 cd client/app/
-jspm bundle-sfx main/main.js ../../dist/client/app/bundle.js
-cp config.js ../../dist/client/app/config.js
+jspm bundle-sfx main/main.js ../../dist/client/app/app.js
+# bundle large js files with bash for simplicity, appending newline between them
+awk 1 ./../lib/system.js ../../dist/client/app/app.js config.js > ../../dist/client/app/bundle.js
 cd -
 
 # wait for bundle to appear, it can take its time
@@ -52,4 +53,3 @@ do
 done
 
 uglifyjs -c -v -o ./dist/client/app/bundle.min.js -- ./dist/client/app/bundle.js
-uglifyjs -c -v -o ./dist/client/app/config.min.js -- ./dist/client/app/config.js

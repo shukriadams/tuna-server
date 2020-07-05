@@ -1,24 +1,23 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/settings'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/settings/get', async(testArgs)=>{
+mocha('route/settings/get', async(ctx)=>{
     
-    it('route/settings/get : happy path : gets settings', async () => {
+    it('route/settings/get::happy    gets settings', async () => {
         
-        let routeTester = await new RouteTester(route);
-        
-        routeTester.route.sourceProvider.get =()=>{ 
-            return {
-                getLabel(){ return 5678 }
-            }; 
-        }
+        ctx.inject.object(_$+'helpers/sourceProvider', {
+            get (){ 
+                return {
+                    getLabel(){ return 5678 }
+                }
+            }
+        }) 
 
-        await routeTester.get('/v1/settings');
-
-        assert.equal(routeTester.res.content.payload.sourceLabel, 5678 );
-    });
+        const routeTester = await new RouteTester(route)
+        await routeTester.get('/v1/settings')
+        ctx.assert.equal(routeTester.res.content.payload.sourceLabel, 5678 )
+    })
     
-});
+})

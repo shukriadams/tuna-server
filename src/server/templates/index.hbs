@@ -21,9 +21,7 @@
         <div id="player"></div>
 
         {{#if isJSBundled}}
-            <script src="lib/system.js"></script>
             <script src="app/bundle{{minModifier}}.js"></script>
-            <script src="app/config{{minModifier}}.js"></script>
         {{else}}
             <script src="lib/system.js"></script>
             <script src="app/config.js"></script>

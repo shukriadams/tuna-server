@@ -16,6 +16,13 @@ Tuna lets you stream your music to any modern browser. It is open source and sel
 Tuna uses Oauth to access to your music on your storage platform. Both Dropbox and Nextcloud allow you to set up apps which can grant access, and you'll need to set one up first. Fortunately the process is relatively straightforward. 
 
 - [Dropbox](https://www.dropbox.com/developers/apps/create)
+
+#### NextCloud
+
+When setting up your Oauth app in Nextcloud, you'll need to specify a callback URL. Use
+
+    https://yourtunaurl.com/v1/oauth/nextcloud
+
 - [Nextcloud](later)
 
 ### Server 
@@ -41,9 +48,10 @@ The following docker-compose script will set up everything you need to run a Tun
             depends_on:
                 - mongo
             volumes:
-                - ./tuna:/usr/app/data/:rw
+                - ./tuna:/usr/tuna/data/:rw
             environment:
                 mongoConnectionString: "mongodb://admin:yourPasswordHere@mongo:27017"
+                siteUrl: "https://yourtunaurl.com"
 
                 # Allowed values are : nextcloud|dropbox
                 musicSource : nextcloud 
@@ -62,6 +70,11 @@ The following docker-compose script will set up everything you need to run a Tun
 
 Change "yourPasswordHere" to something better. Note that this setup isn't ideal for security as it passwords are stored in clear text, and you're connecting to Mongo as root, but it's "good enough" to get started.
 
+Before starting you should create the local tuna folder and set its permission
+
+    mkdir tuna
+    chown 1000 -R tuna
+
 ### Indexing music
 
 Tuna needs to know what music you've got in your Dropbox or NextCloud drive. Download the Tuna Indexer app, install and point it to your Dropbox or NextCloud folder and let it do its thing.
@@ -76,6 +89,19 @@ If you lose your password you can set a new one from the command line with
 
 When you log in, you'll be prompted to give access to either Dropbox or Nextcloud, follow the on-screen instructions. 
 
+## Advanced 
+
+### Nginx and Socket.io
+
+This app makes entensive use of websockets, if you're hosting your app behind Nginx, you might have problems with this. Try adding the following to your Nginx config
+
+    location / {
+        proxy_pass http://localhost:YOUR-PORT-HERE; # add your own app port hehre
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
 
 ## License
 

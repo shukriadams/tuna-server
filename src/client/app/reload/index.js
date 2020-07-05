@@ -1,16 +1,12 @@
 import React from 'react'
-import { sessionSet, playListSetAll, songsSet } from './../actions/actions'
 import history from './../history/history'
 import { PROFILE } from './../routes/routes'
-import sessionHelper from './../helpers/sessionHelper'
+import contentHelper from './../helpers/contentHelper'
 
 class View extends React.Component {
 
     async componentDidMount(){
-        const content = await sessionHelper.fetch()
-        sessionSet(content.session)
-        playListSetAll(content.playlists)
-        songsSet(content.songs)
+        await contentHelper.fetchSession()
         history.push(`/${PROFILE}`)
     }
 

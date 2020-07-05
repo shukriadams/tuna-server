@@ -16,9 +16,9 @@ If you're running on localhost and want to test your integration on a live Nextc
 
             https://{NEXTCLOUDHOST}/index.php/apps/oauth2/authorize?response_type=code&client_id={NEXTCLOUD_CLIENT_ID}&state=somethingrandom&redirect_uri=https://{DEFINITELY_BOGUS_URL}
 
-    Change {NEXTCLOUDHOST}, {NEXTCLOUD_CLIENT_ID} AND {DEFINITELY_BOGUS_URL} - the latter should be a URL you know doesn't exist. Paste the resulting URL into a browser address bar to start the OAUTH flow. Authorize the request in Nextcloud - this will attempt to redirect to the bogus url and stall there. Copy the "code" querystring value that should now be in your browser address bar
+    Change {NEXTCLOUDHOST}, {NEXTCLOUD_CLIENT_ID} AND {DEFINITELY_BOGUS_URL} - the latter should be a URL you know doesn't exist and won't be redirected to a 404 or other page. Paste the resulting URL into a browser address bar to start the OAUTH flow. Authorize the request in Nextcloud - this will attempt to redirect to the bogus url and stall there. Copy the "code" querystring value that should now be in your browser address bar
 
-    4. Open a console window in your Tuna source code 
+    4. Make sure your local Tuna server is already running, and that it is not running sandbox mode. Open a console window in your Tuna source code 
 
         cd /src/scripts
         node nextcloud-codeToToken --code {YOUR-CODE-HERE}

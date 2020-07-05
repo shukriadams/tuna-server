@@ -1,30 +1,32 @@
 const 
-    assert = require('madscience-node-assert'),
     route = require(_$+'routes/songs'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/nowplaying', async(testArgs)=>{
+mocha('route/songs/nowplaying', async(ctx)=>{
     
-    it('route/songs/nowplaying : happy path : sets which song is currently playing', async ()=>{
+    it('route/songs/nowplaying::happy    sets which song is currently playing', async ()=>{
         
-        let routeTester = await new RouteTester(route);
-        routeTester.authenticate();
-        routeTester.req.body.song = 'slaughter of the soul';
-
         let actualSongId,
-            actualProfileId;
+            actualProfileId,
+            routeTester = await new RouteTester(route)
 
-        routeTester.route.songsLogic.nowPlaying=(profileId, song)=>{
-            actualSongId = song;
-            actualProfileId = profileId;
-        }
+        routeTester.authenticate()
+        routeTester.req.body.song = 'slaughter of the soul'
 
-        await routeTester.post('/v1/songs/nowplaying');
+        ctx.inject.object(_$+'logic/songs', {
+            nowPlaying (profileId, song){
+                actualSongId = song
+                actualProfileId = profileId
+            }
+        }) 
 
-        assert.equal(actualSongId, 'slaughter of the soul');
-        assert.equal(actualProfileId, routeTester.authToken.profileId );
-        assert.equal(routeTester.res.content.code, 0 );        
-    });
+        await routeTester.post('/v1/songs/nowplaying')
+
+        ctx.assert.equal(actualSongId, 'slaughter of the soul')
+        ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
+        ctx.assert.null(routeTester.res.content.code)
+    })
     
-});
+})
+

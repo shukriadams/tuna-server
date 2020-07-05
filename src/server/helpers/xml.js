@@ -1,14 +1,16 @@
-const 
-    xmlreader = require('xmlreader'),
-    Exception = require(_$+'types/exception')
+
 
 module.exports = {
     async toDoc(xmlText){
+        const 
+            parser = require('xml2js').parseString,
+            Exception = require(_$+'types/exception')
+
         return new Promise((resolve, reject) => {
 
             try {
 
-                xmlreader.read(xmlText, function (err, doc){
+                parser(xmlText, (err, doc)=>{
                     if (err)
                         return reject(new Exception(err))
 

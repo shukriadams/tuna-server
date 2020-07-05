@@ -1,14 +1,17 @@
-const customEnv = require('custom-env')
-
-let 
-    process = require('process'),
+const 
+    customEnv = require('custom-env'),          // 4ms
+    process = require('process'),               // 1ms
+    constants = require(_$+'types/constants'),
     settings = {
         // must match a SOURCE_* value from /types/constants
-        musicSource : null,
+        musicSource : constants.SOURCES_DROPBOX,
 
         // base url of your site. Default is for dev environments, you NEED to change this when going live
         siteUrl : 'http://localhost:48004',
 
+        // when running sandbox mode in a container with port aliasing, this will have to be set to the outward-facing port
+        sandboxUrl : 'http://localhost:48004',
+        
         mongoConnectionString : 'mongodb://admin:secret@127.0.0.1:27017',
         mongoDBName : 'tuna',
         mongoCollectionPrefix : '',
@@ -22,6 +25,7 @@ let
         passwordLength : 12,
         daemonInterval : '* * * * *',
         maxSessionsPerUser : 3,
+        
         // this should always be true on production. Disable on dev systems for faster app start
         enableCrossProcessScripts : true,
 
@@ -40,9 +44,6 @@ let
         // be volume mounted
         dataFolder :'./data',
         logPath :'./data/logs',
-
-        // allows binding of dev routes. Dev routes allow internal simulating of external oauth flows. 
-        enableDevRoutes : false,
 
         // if true loads js from bundle file. If false, main.js will load first
         // which will cascade load all other files.
@@ -110,8 +111,10 @@ let
         useSelfSignedSSL : false
     }
 
+
 // apply custom .env settings - place an ".env" file in app root folder (where index.js/package.json) is
-customEnv.env()
+if (!process.env['IGNORE_DEV_ENV'])
+    customEnv.env() // 5ms
 
 // override defaults with env variables
 for (let property in settings){
@@ -128,9 +131,8 @@ for (let property in settings){
         settings[property] = false
     
     // parse env integers
-    const intTest = parseInt(settings[property])
-    if (!isNaN(intTest))
-        settings[property] = intTest
+    if (Number.isInteger(settings[property]))
+        settings[property] = parseInt(settings[property])
 }
 
 module.exports = settings

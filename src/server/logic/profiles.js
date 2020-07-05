@@ -1,29 +1,20 @@
-const 
-    fs = require('fs-extra'),
-    path = require('path'),
-    randomstring = require('randomstring'),
-    settings = require(_$+'helpers/settings'),
-    logger = require('winston-wrapper').instance(settings.logPath),
-    dataCache = require(_$+'cache/profile'),
-    Profile = require(_$+'types/profile'),
-    sendgrid = require(_$+'helpers/sendgrid'),
-    Exception = require(_$+'types/exception'),
-    constants = require(_$+'types/constants')
-
-let songsLogic, authTokenLogic;
-
 module.exports = {
     
-    authTokenLogic,
-
-    songsLogic,
-
     /**
      * Autogenerates the single master user
      */
     async autoCreateMaster(username){
 
-        let profile = await this.getByIdentifier(username)
+        let 
+            fs = require('fs-extra'),
+            path = require('path'),
+            randomstring = require('randomstring'),
+            settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
+            dataCache = require(_$+'cache/profile'),
+            Profile = require(_$+'types/profile'),
+            profile = await this.getByIdentifier(username)
+
         if (profile)
             return
 
@@ -41,7 +32,8 @@ module.exports = {
         profile.password = password
         profile.created = new Date().getTime()
         profile.isPasswordChangeForced = true
-        
+        profile.hash = profile.created.toString()
+
         this._processPassword(profile)
 
         profile = await dataCache.create(profile)
@@ -53,6 +45,7 @@ module.exports = {
 
     
     async getAll(){
+        const dataCache = require(_$+'cache/profile')
         return await dataCache.getAll()
     },
 
@@ -61,6 +54,7 @@ module.exports = {
      * 
      */
     async getByIdentifier(identifier){
+        const dataCache = require(_$+'cache/profile')
         return await dataCache.getByIdentifier(identifier)
     },
 
@@ -87,6 +81,11 @@ module.exports = {
      *
      */
     async update(profile){
+        const 
+            dataCache = require(_$+'cache/profile'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants')       
+
         if (!profile)
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION, 
@@ -95,6 +94,8 @@ module.exports = {
 
         this._processPassword(profile)
         
+        profile.hash = new Date().getTime().toString()
+
         await dataCache.update(profile)
     },
 
@@ -103,12 +104,13 @@ module.exports = {
      * Completely deletes a user.
      */
     async delete(profile){
-        songsLogic = songsLogic || require(_$+'logic/songs')
-        authTokenLogic = authTokenLogic || require(_$+'logic/authToken')
+        const dataCache = require(_$+'cache/profile'),
+            songsLogic = require(_$+'logic/songs'),
+            authTokenLogic = require(_$+'logic/authToken')
 
         await authTokenLogic.deleteForProfile(profile.id)
 
-        await songsLogic.deleteAll(profile.id)
+        await songsLogic.deleteForProfile(profile.id)
 
         await dataCache.delete(profile)
     },
@@ -118,15 +120,22 @@ module.exports = {
      *
      */
     async getById(profileId){
-        let profile = await dataCache.getById(profileId)
-        return profile
+        const dataCache = require(_$+'cache/profile')
+        return await dataCache.getById(profileId)
     },
 
 
     /**
      *
      */
-    requestPasswordReset : async function requestPasswordReset(identifier, email){
+    async requestPasswordReset(identifier, email){
+        const 
+            randomstring = require('randomstring'),
+            settings = require(_$+'helpers/settings'),
+            dataCache = require(_$+'cache/profile'),
+            sendgrid = require(_$+'helpers/sendgrid'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants')
         
         email = email.trim()
 
@@ -165,7 +174,7 @@ module.exports = {
     /**
      *
      */
-    isPasswordValid (profile, password){
+    _isPasswordValid (profile, password){
         const crypto = require('crypto'),
             sha512 = crypto.createHmac('sha512', profile.salt)
 
@@ -179,8 +188,10 @@ module.exports = {
      * Logs user in. returns profile id of the user that was logged in
      */
     async authenticate(identifier, password){
-
-        authTokenLogic = authTokenLogic || require(_$+'logic/authToken');
+        const 
+            dataCache = require(_$+'cache/profile'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants')
 
         if (!identifier)
             throw new Exception({ 
@@ -191,7 +202,7 @@ module.exports = {
         if (!password)
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION,
-                public : 'Invalid username / password ' 
+                public : 'Invalid username / password' 
             })
 
         // note that identifier is always trimmed and set to lowercase()
@@ -199,10 +210,10 @@ module.exports = {
         if (!profile)
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION, 
-                public : 'Invalid username / password ' 
+                public : 'Invalid username / password' 
             })
 
-        if (!this.isPasswordValid(profile, password))
+        if (!this._isPasswordValid(profile, password))
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION, 
                 public : 'Invalid username / password' 
@@ -216,7 +227,13 @@ module.exports = {
      *
      */
     async resetPassword(key, password, currentPassword, profileId){
-        let profile = null,
+        let 
+            fs = require('fs-extra'),
+            settings = require(_$+'helpers/settings'),
+            dataCache = require(_$+'cache/profile'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            profile = null,
             public
 
         if (key) {
@@ -235,7 +252,7 @@ module.exports = {
             })
 
         // verify current password if no key, ie, already authenticated
-        if (!key && !this.isPasswordValid(profile, currentPassword))
+        if (!key && !this._isPasswordValid(profile, currentPassword))
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION,
                 public : 'Current password is invalid' 
@@ -259,13 +276,25 @@ module.exports = {
      *
      */
     async removeLastfm(profileId){
+        const dataCache = require(_$+'cache/profile')
+
         let profile = await dataCache.getById(profileId)
         profile.scrobbleToken = null
         await dataCache.update(profile)
     },
 
+    
+    /**
+     *
+     */
     async songsHashValid(profileId, hash){
-        let profile = await dataCache.getById(profileId)
+        const 
+            settings = require(_$+'helpers/settings'),
+            dataCache = require(_$+'cache/profile'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            profile = await dataCache.getById(profileId)
+            
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 
@@ -280,19 +309,25 @@ module.exports = {
     /**
      *
      */
-    async removeDropbox (profileId){
-        songsLogic = songsLogic || require(_$+'logic/songs')
+    async deleteSource(profileId){
+        const 
+            dataCache = require(_$+'cache/profile'),
+            Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
+            songsLogic = require(_$+'logic/songs'),
+            playlistsLogic = require(_$+'logic/playlists'),
+            profile = await dataCache.getById(profileId)
 
-        let profile = await dataCache.getById(profileId)
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 
-        delete profile.sources[constants.SOURCES_DROPBOX]
+        profile.sources = {}
 
         await dataCache.update(profile)
 
         // delete all songs
-        await songsLogic.deleteAll(profile.id)
+        await songsLogic.deleteForProfile(profile.id)
+        await playlistsLogic.deleteAll(profile.id)
     },
 
 
@@ -301,16 +336,17 @@ module.exports = {
      * reaches the database and is thus never stored openly.
      */
     _processPassword(profile){
+        const settings = require(_$+'helpers/settings'),
+            randomstring = require('randomstring'),
+            crypto = require('crypto')
 
         if (!profile.password)
             return
 
-        let randomstring = require('randomstring'),
-            crypto = require('crypto')
-
         profile.salt = randomstring.generate(settings.passwordLength)
-
-        let sha512 = crypto.createHmac('sha512', profile.salt)
+        profile.isPasswordChangeForced = false
+        
+        const sha512 = crypto.createHmac('sha512', profile.salt)
         sha512.update(profile.password)
         profile.hash = sha512.digest('hex')
 

@@ -5,10 +5,10 @@ module.exports = {
             accessToken : null,
 
             /**
-             * Array of tuna.xml index files found 
+             * Array of tuna.dat index files found 
              * {
              *     id : 1234                    (nextcloud file integer file)
-             *     path: /test/.tuna.xml        (nextcloud file path, )
+             *     path: /test/.tuna.dat        (nextcloud file path, )
              *     readDate: 123454544344       (milliseconds, date file content was read and music imported from it.)    
              *     status: ''                   (string, enduser-readable. result of import. 'success' | 'not a valid index file' | 'no songs found' etc)
              * }

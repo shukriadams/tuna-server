@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Ajax from './../ajax/ajax'
 import appSettings from './../appSettings/appSettings'
-import { sessionSet, songsSet, playListSetAll } from './../actions/actions'
+import { sessionSet } from './../actions/actions'
 import history from './../history/history'
 import { View as Button } from './../glu_button/index'
 
@@ -48,9 +48,7 @@ class View extends React.Component {
                 if (result.code) 
                     return this.setState( { disable : false, message : result.message } )
 
-                sessionSet(result.payload.session)
-                songsSet(result.payload.songs)
-                playListSetAll(result.payload.playlists)
+                sessionSet(result.payload)
                 this.setState( { disable : false, message : '' } )
                 history.push('/')
             })
@@ -62,6 +60,10 @@ class View extends React.Component {
                 <h1>
                     Log in
                 </h1>
+
+                <div className="form-row">
+                    <input className="form-textField" type="text" readonly value={appSettings.username} />
+                </div>
 
                 <div className="form-row">
                     <input ref="password" className="login-password form-textField" type="password" placeholder="Password" />

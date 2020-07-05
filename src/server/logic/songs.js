@@ -1,23 +1,21 @@
-const 
-    constants = require(_$+'types/constants'),
-    Exception = require(_$+'types/exception'),
-    lastFmHelper = require(_$+'helpers/lastfm'),
-    songsCache = require(_$+'cache/songs'),
-    JsonHelper = require(_$+'helpers/json')
-
 module.exports = {
 
     /**
      *
      */
     async createMany(songs){
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            songsCache = require(_$+'cache/songs')
+
         if (!songs || !songs.length)
             throw new Exception({ 
                 code : constants.ERROR_INVALID_ARGUMENT, 
                 log : 'Songs required' 
-            });
+            })
 
-        return await songsCache.createMany(songs);
+        return await songsCache.createMany(songs)
     },
 
 
@@ -25,10 +23,10 @@ module.exports = {
      * Streams a song from a source like nextcloud
      */
     async streamSong(profileId, mediaPath, res){
-        let sourceProvider = require(_$+'helpers/sourceProvider'),
-            source = sourceProvider.get();
+        const sourceProvider = require(_$+'helpers/sourceProvider'),
+            source = sourceProvider.get()
 
-        await source.streamMedia(profileId, mediaPath, res);
+        await source.streamMedia(profileId, mediaPath, res)
     },
 
 
@@ -36,15 +34,19 @@ module.exports = {
      *
      */
     async update(song){
-        return await songsCache.update(song);
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.update(song)
     },
 
 
     /**
      *
      */
-    async deleteAll(profileId){
-        return await songsCache.deleteAll(profileId);
+    async deleteForProfile(profileId){
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.deleteForProfile(profileId)
     },
 
 
@@ -52,7 +54,9 @@ module.exports = {
      * song : song object to delete.
      */
     async delete(song){
-        return await songsCache.delete(song);
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.delete(song)
     },
 
 
@@ -60,7 +64,9 @@ module.exports = {
      * Gets all user songs, unfiltered
      */
     async getAll(profileId){
-        return await songsCache.getAll(profileId);
+        const songsCache = require(_$+'cache/songs')
+
+        return await songsCache.getAll(profileId)
     },
 
     
@@ -68,18 +74,22 @@ module.exports = {
      *
      */
     async nowPlaying(profileId, songId){
-        let profileLogic = require(_$+'logic/profiles'),
-            profile = await profileLogic.getById(profileId);
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            lastFmHelper = require(_$+'helpers/lastfm'),
+            profileLogic = require(_$+'logic/profiles'),
+            profile = await profileLogic.getById(profileId)
 
         if (!profile)
-            throw new Exception({ code: constants.ERROR_INVALID_USER_OR_SESSION });
+            throw new Exception({ code: constants.ERROR_INVALID_USER_OR_SESSION })
 
-        let song = await this._getById(songId, profileId);
+        const song = await this._getById(songId, profileId)
 
         if (!song)
-            throw new Exception({ code: constants.ERROR_INVALID_SONG });
+            throw new Exception({ code: constants.ERROR_INVALID_SONG })
 
-        return await lastFmHelper.nowPlaying(profile, song);
+        return await lastFmHelper.nowPlaying(profile, song)
     },
 
 
@@ -87,13 +97,19 @@ module.exports = {
      * Move to lastfm helper
      */
     async scrobble(profileId, songId, songDuration){
-        let song = await this._getById(songId, profileId);
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            profileLogic = require(_$+'logic/profiles'),
+            lastFmHelper = require(_$+'helpers/lastfm'),
+            cache = require(_$+'helpers/cache'),
+            song = await this._getById(songId, profileId)
 
         if (!song)
-            throw { code: 2, message : 'Invalid song'};
+            throw new Exception({ code: constants.ERROR_INVALID_SONG })
 
-        let cacheKey = profileId + '_nowPlaying',
-            nowPlaying = await cache.get(cacheKey);
+        const cacheKey = `${profileId}_nowPlaying`,
+            nowPlaying = await cache.get(cacheKey)
 
         if (!nowPlaying)
             throw new Exception({ 
@@ -102,7 +118,7 @@ module.exports = {
                     profileId,
                     songId
                 }
-            });
+            })
 
         if (nowPlaying.songId !== songId)
             throw new Exception({ 
@@ -111,12 +127,12 @@ module.exports = {
                     playSession :nowPlaying,
                     songId
                 }
-            });        
+            })        
 
         // duration logic not working yet, disabling for now
-        let halfWayPoint = /*songDuration ? songDuration / 2 : song.duration ? (song.duration / 2) :*/ 30, // 30 bein lastfm minimum scrobble time
+        const halfWayPoint = /*songDuration ? songDuration / 2 : song.duration ? (song.duration / 2) :*/ 30, // 30 bein lastfm minimum scrobble time
             diff = new Date().getTime() - nowPlaying.started,
-            seconds = diff / 1000;
+            seconds = diff / 1000
 
         if (seconds < halfWayPoint)
             throw new Exception({ 
@@ -125,69 +141,42 @@ module.exports = {
                     playSession : nowPlaying,
                     songId
                 }
-            });
+            })
 
-        let profileLogic = require(_$+'logic/profiles'),
-            profile = await profileLogic.getById(profileId);
+        const profile = await profileLogic.getById(profileId)
 
         if (!profile)
-            throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION });
+            throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 
         if (!profile.scrobbleToken)
-            throw new Exception({ log : 'profile not scrobbling'});
+            throw new Exception({ log : 'profile not scrobbling'})
 
-        let unixStart = Math.round(+nowPlaying.started / 1000);
-        await lastFmHelper.scrobble(profile, song, unixStart);
-        await cache.remove( cacheKey );
+        const unixStart = Math.round(+nowPlaying.started / 1000)
+        await lastFmHelper.scrobble(profile, song, unixStart)
+        await cache.remove( cacheKey )
     },
 
 
     /**
-     * Why are we fething song this long-ass way?
-     */
-    async  _getById(songId, profileId){
-        let songs = await songsCache.getAll(profileId);
-        if (!songs.length)
-            return null;
-
-        let song = songs.find(function(element){
-            return element.id === songId;
-        });
-
-        return song;
-    },
-
-
-    /**
-     *
-     */
-    async toggleLove(songId, profileId){
-        let song = await this._getById(songId, profileId);
-        if (!song)
-            throw new Exception({ code : constants.ERROR_INVALID_SONG });
-
-        song.isLoved = !song.isLoved;
-        await songsCache.update(song);
-        return song;
-    },
-
-
-    /**
-     *
+     * Presents a way to update song from client using JSON string.
      */
     async persistSong(songRawJson, profileId){
-        let songJson = JsonHelper.parse(songRawJson);
+        const 
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            JsonHelper = require(_$+'helpers/json'),
+            songJson = JsonHelper.parse(songRawJson),
+            // we check ownership implicitly by fetching song id in scope of current profile
+            song = await this._getById(songJson.id, profileId)
 
-        // we check ownership implicitly by fetching song id in scope of current profile
-        let song = await this._getById(songJson.id, profileId);
         if (!song)
-           throw new Exception({ code : constants.ERROR_INVALID_SONG });
+           throw new Exception({ code : constants.ERROR_INVALID_SONG })
 
-        for (let property in song)
-            song[property] = songJson[property];
+        // persist properties that already exist on server, don't trust json from outside to define properties
+        for (const property in song)
+            song[property] = songJson[property]
 
-        await songsCache.update(song);
-        return song;
+        await this.update(song)
     },
 
 
@@ -197,13 +186,35 @@ module.exports = {
     async getSongUrl(songId, profileId, authTokenId){
         // dont make member, causes cross-import tangle
         const 
+            constants = require(_$+'types/constants'),
             sourceProvider = require(_$+'helpers/sourceProvider'),
+            Exception = require(_$+'types/exception'),
             profileLogic = require(_$+'logic/profiles'),
-            profile = await profileLogic.getById(profileId),
-            song = await this._getById(songId, profileId),
             source = sourceProvider.get(),
-            url = await source.getFileLink(profile.sources, song.path, authTokenId);
+            profile = await profileLogic.getById(profileId),
+            song = await this._getById(songId, profileId)
 
-        return url;
+        if (!profile)
+            throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
+
+        if (!song)
+           throw new Exception({ code : constants.ERROR_INVALID_SONG })
+
+        return await source.getFileLink(profile.sources, song.path, authTokenId)
+    },
+
+
+    /**
+     * 
+     */
+    async  _getById(songId, profileId){
+        const songsCache = require(_$+'cache/songs')
+
+        // we fetch all songs for user because content is cached at the user level
+        const songs = await songsCache.getAll(profileId)
+        if (!songs.length)
+            return null
+
+        return songs.find(song => song.id === songId)
     }
-};
+}

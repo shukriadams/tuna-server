@@ -3,36 +3,49 @@
  * can have multiple loaders - the mocha tester has its own loader so we can mount the server from tests.
  * 
  * Start your debugger on this file to launch a web server.
+ * Perf : raw startup time (node index) is 3200 ms
  */
 
 // set shortcut global for easier module imports. Modules are loaded relative to "server" directory
-global._$ = `${__dirname}/server/`;
+global._$ = `${__dirname}/server/`
+
+// load first to speed up app loads. Note that all module lode times in comments are with cache enabled
+require('cache-require-paths')
+
+// use stopwatch to measure start time
+const    
+    Stopwatch = require('statman-stopwatch'),
+    stopwatch = new Stopwatch()
+stopwatch.start()
 
 const    
-    http = require('http'),
-    https = require('https'),
-    tunaServer = require(_$+'server'),
-    settings = require(_$+'helpers/settings'),
-    socketHelper = require(_$+'helpers/socket'),
-    certificateHelper = require(_$+'helpers/certificateHelper'),
-    express = tunaServer.express;
+    tunaServer = require(_$+'server'),          // 2000ms
+    settings = require(_$+'helpers/settings'); // 12ms
 
-(async function(){
+(async ()=>{
     try {
-        await tunaServer.start()
 
-        let httpServer
+        let 
+            express = tunaServer.initialize(),
+            httpServer = null
 
         if (settings.useSelfSignedSSL) {
-            const keys = await certificateHelper()
+            const 
+                certificateHelper = require(_$+'helpers/certificateHelper'),
+                https = require('https'),
+                keys = await certificateHelper()
+
             httpServer = https.createServer({ key: keys.serviceKey, cert: keys.certificate }, express)
-        } else
+        } else {
+            const http = require('http')
             httpServer = http.createServer(express)
+        }
 
-        socketHelper.initialize(httpServer)
+        await tunaServer.start(httpServer) // 1200ms
 
-        httpServer.listen(settings.port, function () {
+        httpServer.listen(settings.port, ()=>{
             console.log(`Tuna started, listening on port ${httpServer.address().port}`)
+            console.log(`Tuna started in ${Math.floor(stopwatch.read())} ms`)
         })
         
     } catch(ex) {

@@ -36,8 +36,8 @@ export default class {
         this._do(url, true, 'POST', success, error, data)
     }
 
-    deleteAuth(url, data, success, error){
-        this._do(url, true, 'DELETE', success, error, data)
+    deleteAuth(url, success, error){
+        this._do(url, true, 'DELETE', success, error)
     }
 
     /**
@@ -72,33 +72,45 @@ export default class {
             body: data ? JSON.stringify(data) : null,
         })
         .then(response => {
-            // if response cannot be converted to JSON it is a serious error that is bypassing regular message handling
-            if (!response.json)
-                throw response
 
-            response.json().then(async (result) => {
-                // some kind of "expected" error has been returned from server, display it to user and do nothing else
-                if (result.code)
-                    return alertSet(result)
-    
-                // intercept common errors
-                if (result.code === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
-                    // auth token no longer value
-                    clearSession()
-                    history.push('/login')
+            response.text().then(async (json) => {
+                try {
+                    const result = JSON.parse(json)
+
+                    // some kind of "expected" error has been returned from server, display it to user and do nothing else
+                    if (result.code)
+                        return alertSet(result)
+        
+                    // intercept common errors
+                    if (result.code === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
+                        // auth token no longer value
+                        clearSession()
+                        history.push('/login')
+                    }
+
+                    if (resolve)
+                        await resolve(result)
+
+                }catch(ex){
+                    reject({
+                        message : 'failed to parse expected JSON response',
+                        ex,
+                        response : json
+                    })
                 }
 
-                if (resolve)
-                    await resolve(result)
             })
         })
         .catch(error => {
-            // only catastrophic errors should land here. Regular errors from server will be returned as JSON and be handled above
-            console.log(error);
+            // only unhandled errors should land here. Regular errors from server will be returned as JSON and be handled above
+            console.log(error)
+            
             alertSet({
                 message : 'Fatal server error - contact admin',
                 error : true
             })
+
+            reject(error)
         })
 
         
