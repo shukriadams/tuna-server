@@ -1,39 +1,59 @@
-/*
- * Does authenticated ajax call to server. Assumes login session is valid.
- * DO NOT refactor this to async, it will spill out and force refactoring most components to async as well, including
- * react plumbing, which I'm not sure supports async.
- **/
-
 import store from './../store/store'
 import { clearSession, alertSet } from './../actions/actions'
 import history from './../history/history'
 import appSettings from './../appSettings/appSettings'
 
-// url : url to call
-// success: callback if error code ===, accepts result as parameter
-// error : optional error callback
+/**
+* url : url to call
+ * success: callback if error code ===, accepts result as parameter
+ * error : optional error callback
+ */
 export default {
 
     /**
      *
      **/
-    async anon(url){
+    async anonGet(url){
         return await this._do(url, false)
     },
 
 
     /**
-     *
+     * Gets with authorization
      **/
-    async auth(url){
+    async authGet(url){
         return await this._do(url, true)
     },
 
 
     /**
      *
+     */
+    async post(url, data ){
+        return await this._do(url, true, 'POST', data)
+    },
+
+
+    /**
+     *
+     */
+    async postAnon(url, data ){
+        return await this._do(url, false, 'POST', data)
+    },
+
+
+    /**
+     *
+     */
+    async delete(url){
+        this._do(url, true, 'DELETE')
+    },
+
+
+    /**
+     *
      **/
-    async _do(url, isAuth, method = 'GET'){
+    async _do(url, isAuth, method = 'GET', data){
         return new Promise(function(resolve, reject){
 
             const headers = { 'Content-Type': 'application/json' }
@@ -53,6 +73,7 @@ export default {
             fetch(url, {
                 method,
                 headers,
+                body: data ? JSON.stringify(data) : null,
             })
             .then(response => {
                 response.text().then(async (json) => {

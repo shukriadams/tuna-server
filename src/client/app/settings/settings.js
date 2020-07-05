@@ -28,7 +28,7 @@ class View extends React.Component {
         }
     }
 
-    logout(){
+    async logout(){
         if (!confirm('Are you sure you want to log out?'))
             return
 

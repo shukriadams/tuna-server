@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import history from './../history/history'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import { clearSession } from './../actions/actions'
 import { Link } from 'react-router-dom'
@@ -23,23 +23,24 @@ export default class View extends React.Component {
             this.setState( { missingKey : true } )
     }
 
-    deleteAccount(){
-        let ajax = new Ajax(),
-            key = vc.getQueryString('key'),
-            url  = `${appSettings.serverUrl}/v1/profile/delete?key=${key}`
+    async deleteAccount(){
+        let key = vc.getQueryString('key'),
+            response
 
-        ajax.auth(url, response => {
-            if (!response.code) {
+        try {
+            response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/delete?key=${key}`)
+        } catch (ex){
+            this.setState({ deleteError : ex })
+        }
 
-                // log user out
-                clearSession()
+        if (!response.code) {
+            // log user out
+            clearSession()
 
-                // redirect to confirmation page
-
-                history.push('/deleted')
-            } else
-                this.setState({ deleteError : response.message })
-        })
+            // redirect to confirmation page
+            history.push('/deleted')
+        } else
+            this.setState({ deleteError : response.message })
     }
 
     render(){

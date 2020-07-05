@@ -1,7 +1,6 @@
 import ajax from './../ajax/asyncAjax'
 
 class AppSettings{
-
     
     constructor (){
 
@@ -20,10 +19,10 @@ class AppSettings{
 
 
     async update(){
-        const settings = await ajax.anon(`${this.serverUrl}/v1/settings`)
+        const settings = await ajax.anonGet(`${this.serverUrl}/v1/settings`)
 
         if (!settings.code)
-            for (let prop in settings.payload)
+            for (const prop in settings.payload)
                 this[prop] = settings.payload[prop]
     }
 }
