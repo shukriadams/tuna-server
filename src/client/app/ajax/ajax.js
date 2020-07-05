@@ -92,16 +92,29 @@ export default class {
                         await resolve(result)
 
                 }catch(ex){
-                    reject({
+                    ex = {
                         message : 'failed to parse expected JSON response',
                         ex,
                         response : json
+                    }
+
+                    if (ex)
+                        return reject(ex)
+                    
+                    console.log(ex)
+                    alertSet({
+                        message : 'Unhandled error',
+                        error : true
                     })
+       
                 }
 
             })
         })
         .catch(error => {
+            if (reject)
+                return reject(error)
+
             // only unhandled errors should land here. Regular errors from server will be returned as JSON and be handled above
             console.log(error)
             
@@ -109,11 +122,7 @@ export default class {
                 message : 'Fatal server error - contact admin',
                 error : true
             })
-
-            reject(error)
         })
-
-        
     }
 
 }
