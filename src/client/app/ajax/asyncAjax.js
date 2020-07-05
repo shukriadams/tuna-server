@@ -55,27 +55,31 @@ export default {
                 headers,
             })
             .then(response => {
-                if (!response.json){
-                    alertSet(response)
-                    return reject()
-                }
+                response.text().then(async (json) => {
+                    try {
+                        const result = JSON.parse(json)
+                        // auth token no longer value. Because we fetch serverConstants with this method, we need
+                        // to bypass serverConstants checks on anon to let serverConstants through.
+                        if (isAuth && result.code === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
+                            clearSession()
+                            history.push('/login')
+                            return resolve(null)
+                        }
 
-                response.json().then(async (result) => {
-                    
-                    // auth token no longer value. Because we fetch serverConstants with this method, we need
-                    // to bypass serverConstants checks on anon to let serverConstants through.
-                    if (isAuth && result.code === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
-                        clearSession()
-                        history.push('/login')
-                        return resolve(null)
+                        resolve(result)
+
+                    } catch (ex){
+                        reject({
+                            message : 'failed to parse expected JSON response',
+                            ex,
+                            response : json
+                        })
                     }
-
-                    resolve(result)
                 })
             })
             .catch(error => {
                 // only catastrophic errors should land here. Regular errors from server will be returned as JSON and be handled above
-                console.log(error);
+                console.log(error)
                 alertSet({
                     message : 'Fatal server error - contact admin',
                     error : true

@@ -129,7 +129,9 @@ export default class SongsListDragHelper{
     }
 
     mouseDown (e){
-
+        if (!this.mousePosition)
+            return
+            
         // use find parent to check if mouse was down on songrow
         let mousedownSongRow = vc.closestWithAttribute(e.target, 'data-songid')
 
