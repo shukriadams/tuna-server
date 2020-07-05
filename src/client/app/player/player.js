@@ -133,32 +133,32 @@ class Player {
      * Note : player has no knowledge of playlists, it fetches the next song from the queue.
      */
     _playCurrentSong (force, callback) {
-        let nextSong = queueHelper.getCurrentSong();
+        let nextSong = queueHelper.getCurrentSong()
 
         if (!nextSong)
-            return this.stopPlay();
+            return this.stopPlay()
 
         // already playing song, ignore
         if (!force && this.currentSong && this.currentSong.id === nextSong.id)
-            return;
+            return
 
         // get media url from server
 
-        this.isPlaying = true;
-        playDownloading();
-        this._getOrDownloadSong(nextSong, playStart.bind(this));
+        this.isPlaying = true
+        playDownloading()
+        this._getOrDownloadSong(nextSong, playStart.bind(this))
 
         // common logic for after play has started
         function playStart(mediaUrl){
-            this.currentSong = nextSong;
+            this.currentSong = nextSong
 
-            this.nextSongLoaded = false;
-            this.player.setMedia(mediaUrl, 'mp3');
-            this.player.play();
+            this.nextSongLoaded = false
+            this.player.setMedia(mediaUrl, 'mp3')
+            this.player.play()
 
-            this.currentSongDuration = null;
-            this.trackScrobbled = false;
-            this.triggeredStarted = false;
+            this.currentSongDuration = null
+            this.trackScrobbled = false
+            this.triggeredStarted = false
 
             if (callback)
                 callback()

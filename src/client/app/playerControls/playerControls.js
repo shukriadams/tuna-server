@@ -44,7 +44,7 @@ class PlayerControls extends React.Component {
             volumeSet(v)
         }, 50)) // this number controls how responsive volume change feels
 
-        store.subscribe(watch(store.getState, 'playing.percent')(()=>{
+        this.playingPercentUnsub = store.subscribe(watch(store.getState, 'playing.percent')(()=>{
             this.setState({ lockControls : false })
         }))
 
@@ -72,7 +72,7 @@ class PlayerControls extends React.Component {
         this.escapeKey = new KeyWatcher({
             key : 'Escape',
             onDown : ()=>{
-                playPause();
+                playPause()
             }
         })
     }
@@ -83,6 +83,9 @@ class PlayerControls extends React.Component {
         this.escapeKey.dispose()
 
         pubsub.unsub('playerControls', 'document.clicked')
+
+        if (this.playingPercentUnsub)
+            this.playingPercentUnsub()
     }
 
 
