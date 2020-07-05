@@ -89,6 +89,19 @@ If you lose your password you can set a new one from the command line with
 
 When you log in, you'll be prompted to give access to either Dropbox or Nextcloud, follow the on-screen instructions. 
 
+## Advanced 
+
+### Nginx and Socket.io
+
+This app makes entensive use of websockets, if you're hosting your app behind Nginx, you might have problems with this. Try adding the following to your Nginx config
+
+    location / {
+        proxy_pass http://localhost:YOUR-PORT-HERE; # add your own app port hehre
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
 
 ## License
 
