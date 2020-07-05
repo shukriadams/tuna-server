@@ -4,7 +4,7 @@ Tuna lets you stream your music to any modern browser. It is open source and sel
 
 ## Requirements
 
-- A modern HTML5 browser like FireFox, Chrome etc. (iOS is not supported as iOS does not natively support MP3)
+- A modern HTML5 browser like FireFox, Chrome etc.
 - An x64 Linux server with Docker (if you want to roll your own configuration you need NodeJS 10+ and MongoDB 3.x or higher)
 - MP3, MP4 or Ogg Vorbis music files with valid ID3 tags for at least song, album and artist.
 - A Dropbox or NextCloud account with enough space for your music files.  
