@@ -15,7 +15,8 @@ export default {
      **/
     fetch : async function(requestedTypes){
         const result = await ajax.authGet(`${appSettings.serverUrl}/v1/content/${requestedTypes}`)
-        sessionSet(result.payload)
+        if (result)
+            sessionSet(result.payload)
     }
 
 }

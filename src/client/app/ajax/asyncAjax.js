@@ -33,6 +33,22 @@ export default {
         return await this._do(url, true, 'POST', data)
     },
 
+    /**
+     * 
+     */
+    postCallback(url, data, success, error){
+        if (!success || !error)
+            throw 'success or error callbacks not set'
+
+        ;(async ()=>{
+            try {
+                const result = await this._do(url, true, 'POST', data)
+                success(result)
+            } catch (ex){
+                error(ex)
+            }
+        })()
+    },
 
     /**
      *

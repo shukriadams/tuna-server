@@ -4,7 +4,7 @@ Tuna lets you stream your music to any modern browser. It is open source and sel
 
 ## Requirements
 
-- A modern HTML5 browser like FireFox, Chrome etc. (iOS is not supported as iOS does not natively support MP3)
+- A modern HTML5 browser like FireFox, Chrome etc.
 - An x64 Linux server with Docker (if you want to roll your own configuration you need NodeJS 10+ and MongoDB 3.x or higher)
 - MP3, MP4 or Ogg Vorbis music files with valid ID3 tags for at least song, album and artist.
 - A Dropbox or NextCloud account with enough space for your music files.  
@@ -68,9 +68,9 @@ The following docker-compose script will set up everything you need to run a Tun
             ports:
             - "48004:48004"
 
-Change "yourPasswordHere" to something better. Note that this setup isn't ideal for security as it passwords are stored in clear text, and you're connecting to Mongo as root, but it's "good enough" to get started.
+Change "yourPasswordHere" to something better. Note that this setup isn't ideal for security as passwords are stored in clear text, and you're connecting to Mongo as root, but it's "good enough" to get started.
 
-Before starting you should create the local tuna folder and set its permission
+Before starting you should create the local tuna volume folder and set its permission
 
     mkdir tuna
     chown 1000 -R tuna
@@ -93,7 +93,7 @@ When you log in, you'll be prompted to give access to either Dropbox or Nextclou
 
 ### Nginx and Socket.io
 
-This app makes entensive use of websockets, if you're hosting your app behind Nginx, you might have problems with this. Try adding the following to your Nginx config
+Tuna makes entensive use of websockets, if you're hosting it behind Nginx, you might have problems with this. Try adding the following to your Nginx config
 
     location / {
         proxy_pass http://localhost:YOUR-PORT-HERE; # add your own app port hehre

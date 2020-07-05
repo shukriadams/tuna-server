@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import { playStop, clearSession , removeLastfm, sessionSet, } from './../actions/actions'
 import { Link } from 'react-router-dom'
@@ -67,41 +67,40 @@ class View extends React.Component {
         this.setState({ showConfirmLastfmDisconnect : false })
     }
 
-    onLastFmDisconnectAccept(){
-        new Ajax().auth(`${appSettings.serverUrl}/v1/lastfm/delete`, (response)=>{
-            this.setState({ showConfirmLastfmDisconnect : false })
-            if (!response.code)
-                return removeLastfm()
+    async onLastFmDisconnectAccept(){
+        const response = await ajax.authGet(`${appSettings.serverUrl}/v1/lastfm/delete`)
+        this.setState({ showConfirmLastfmDisconnect : false })
+        if (!response.code)
+            return removeLastfm()
 
-            throw response.message
-        })
+        // todo : handle error better
+        console.log(response.message)
     }
 
-    onUpdateProfile(){
+    async onUpdateProfile(){
         // todo : check email format?
         const data = {
             email : this.refs.email.value.trim().toLowerCase()
         }
 
-        new Ajax().postAuth(`${appSettings.serverUrl}/v1/profile`, data, (response)=>{
-            if (!response.code){
-                sessionSet(response.payload.session)
-                alert('Updated')
-            } else {
-                // todo : better handle error
-                console.log(response.message )
-            }
-        })
+        const response = await ajax.post(`${appSettings.serverUrl}/v1/profile`, data)
+        if (!response.code){
+            sessionSet(response.payload.session)
+            alert('Updated')
+        } else {
+            // todo : better handle error
+            console.log(response.message )
+        }
+
     }
 
-    resendValidationEmail(){
-        new Ajax().auth(`${appSettings.serverUrl}/v1/profile/resendValidationEmail`, (response)=>{
-            if (!response.code)
-                alert('Email sent')
-            else 
-                // todo : better handle error
-                console.log(response.message)
-        })
+    async resendValidationEmail(){
+        const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/resendValidationEmail`)
+        if (!response.code)
+            alert('Email sent')
+        else 
+            // todo : better handle error
+            console.log(response.message)
     }
 
     changeDropbox(willConnect){
@@ -123,31 +122,30 @@ class View extends React.Component {
         this.setState({ showConfirmDropboxConnect : false })
     }
 
-    onDropboxDisconnectAccept(){
-        new Ajax().deleteAuth(`${appSettings.serverUrl}/v1/profile/source`, (response) =>{
-            this.setState({ showConfirmDropboxDisconnect : false })
-            if (!response.code){
-                sessionSet(response.payload)
-                return
-            }
-                
-            throw response.message
-        })
+    async onDropboxDisconnectAccept(){
+        const response = await ajax.delete(`${appSettings.serverUrl}/v1/profile/source`)
+        this.setState({ showConfirmDropboxDisconnect : false })
+        if (!response.code){
+            sessionSet(response.payload)
+            return
+        }
+
+        // todo : handle error
+        console.log(response.message)
     }
 
     onDropboxDisconnectReject(){
         this.setState({ showConfirmDropboxDisconnect : false })
     }
 
-    deleteAllData(){
-        new Ajax().auth(`${appSettings.serverUrl}/v1/profile/startdelete`, (response)=>{
-            this.setState({ showDeleteAccountConfirm : false })
+    async deleteAllData(){
+        const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/startdelete`)
+        this.setState({ showDeleteAccountConfirm : false })
+        if (!response.code)
+            return this.setState({ showDeleteAccountConfirm : true })
 
-            if (!response.code)
-                return this.setState({ showDeleteAccountConfirm : true })
-
-            throw response.message
-        })
+        // todo : handle error
+        console.log(response.message)
     }
 
     onAccountDeleteClose(){

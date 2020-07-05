@@ -2,7 +2,7 @@ import React from 'react'
 import pguid from 'pguid'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import { sessionSet } from './../actions/actions'
 import history from './../history/history'
@@ -17,13 +17,10 @@ class View extends React.Component {
             message : null,
             disable : false
         }
-
-        this.onLoginClick = this.onLoginClick.bind(this)
     }
 
-    onLoginClick(){
-        const ajax = new Ajax(),
-            password = this.refs.password.value.trim()
+    async login(){
+        const password = this.refs.password.value.trim()
 
         if (!password)
             return this.setState( { message : 'Password required' })
@@ -38,20 +35,17 @@ class View extends React.Component {
             localStorage.setItem(key, browserUID)
         }
 
-        ajax.postAnon(
-            `${appSettings.serverUrl}/v1/session`,
-            {
-                password,
-                browserUID
-            },
-            result => {
-                if (result.code) 
-                    return this.setState( { disable : false, message : result.message } )
+        const result = await ajax.postAnon(`${appSettings.serverUrl}/v1/session`,{
+            password,
+            browserUID
+        })
 
-                sessionSet(result.payload)
-                this.setState( { disable : false, message : '' } )
-                history.push('/')
-            })
+        if (result.code) 
+            return this.setState( { disable : false, message : result.message } )
+
+        sessionSet(result.payload)
+        this.setState( { disable : false, message : '' } )
+        history.push('/')
     }
 
     render(){
@@ -62,7 +56,7 @@ class View extends React.Component {
                 </h1>
 
                 <div className="form-row">
-                    <input className="form-textField" type="text" readonly value={appSettings.username} />
+                    <input className="form-textField" type="text" readOnly value={appSettings.username} />
                 </div>
 
                 <div className="form-row">
@@ -70,7 +64,7 @@ class View extends React.Component {
                 </div>
 
                 <div className="form-row">
-                    <Button isDisabled={this.state.disable} text="Login" disabledText="Logging in" onClick={this.onLoginClick} />
+                    <Button isDisabled={this.state.disable} text="Login" disabledText="Logging in" onClick={this.login.bind(this)} />
                 </div>
 
                 <div className="form-row">
