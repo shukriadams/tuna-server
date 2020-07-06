@@ -5,7 +5,7 @@ module.exports = {
         const jsonHelper = require(_$+'helpers/json')
 
         /**
-         * Creates a playlist, returns updated usercontent
+         * Creates/updates playlist, returns updated usercontent
          */
         app.post('/v1/playlists', async function (req, res) {
             try {

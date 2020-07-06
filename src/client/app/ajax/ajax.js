@@ -98,7 +98,7 @@ export default class {
                         response : json
                     }
 
-                    if (ex)
+                    if (reject)
                         return reject(ex)
                     
                     console.log(ex)

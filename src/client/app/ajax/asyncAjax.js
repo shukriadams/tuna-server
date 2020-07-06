@@ -62,7 +62,7 @@ export default {
      *
      */
     async delete(url){
-        this._do(url, true, 'DELETE')
+        return await this._do(url, true, 'DELETE')
     },
 
 

@@ -6,6 +6,7 @@ import { View as Button } from './../glu_button/index'
 import playlistHelper from './../playlist/playlistHelper'
 import appSettings from './../appSettings/appSettings'
 import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import { View as GluConfirmModal } from './../glu_confirmModal/index'
 import { TextField } from './../form/form'
 import ReactSVG from 'react-svg'
@@ -48,25 +49,25 @@ class View extends React.Component {
         })
     }
 
-    savePlaylist(){
+   async savePlaylist(){
+        if (!this.refs.playlistName.value().length)
+            return
+            
         let playlist = playlistHelper.getById(this.state.editPlaylistId)
-        playlist.name = this.refs.playlistName.state.value
+        playlist.name = this.refs.playlistName.value()
 
         this.setState({
             isBusySaving : true
         })
 
-        new Ajax().postAuth(`${appSettings.serverUrl}/v1/playlists`, playlist, (result)=>{
-
-            this.setState({
-                editPlaylistId: null,
-                isBusySaving : false,
-                expandFunctionsPlaylistId : null
-            })
-
-            playListSetAll(result.payload.playlists)
-            playlistSet(result.payload.playlist.id)
+        const result = await ajax.post(`${appSettings.serverUrl}/v1/playlists`, playlist)
+        this.setState({
+            editPlaylistId: null,
+            isBusySaving : false,
+            expandFunctionsPlaylistId : null
         })
+
+        playListSetAll(result.payload.playlists)
     }
 
     cancelPlaylistEdit(){
@@ -90,18 +91,16 @@ class View extends React.Component {
         }
     }
 
-    acceptDelete(playlistId){
+    async acceptDelete(playlistId){
         if (!playlistId)
             playlistId = this.state.deletingPlaylistId
 
-        new Ajax().deleteAuth(`${appSettings.serverUrl}/v1/playlists/${playlistId}`, (result)=>{
-            playListSetAll(result.payload.playlists)
-
-            this.setState({
-                deletingPlaylistId: null,
-                expandFunctionsPlaylistId : null,
-                confirmDelete: false
-            })
+        const result = await ajax.delete(`${appSettings.serverUrl}/v1/playlists/${playlistId}`)
+        playListSetAll(result.payload.playlists)
+        this.setState({
+            deletingPlaylistId: null,
+            expandFunctionsPlaylistId : null,
+            confirmDelete: false
         })
     }
 
@@ -184,7 +183,7 @@ class View extends React.Component {
                                                 {
                                                     this.state.editPlaylistId === playlist.id &&
                                                         <Fragment>
-                                                            <TextField ref="playlistName" defaultValue={editPlaylist.name} maxLength="25" />
+                                                            <TextField ref="playlistName" defaultValue={editPlaylist.name} minLength="1" maxLength="25" />
                                                         </Fragment>
                                                 }
                                             </div>
@@ -222,9 +221,9 @@ class View extends React.Component {
                                                             {
                                                                 this.state.expandFunctionsPlaylistId === playlist.id &&
                                                                     <Fragment>
-                                                                        <Button onClick={this.confirmDeletePlaylist.bind(this, playlist.id)} text="Delete" />
                                                                         <Button onClick={this.editPlaylist.bind(this, playlist.id)} text="Rename" />
                                                                         <Button onClick={this.mergePlaylistStart.bind(this, playlist.id)} text="Merge" />
+                                                                        <Button onClick={this.confirmDeletePlaylist.bind(this, playlist.id)} text="Delete" />
                                                                     </Fragment>
                                                             }
 
