@@ -9,6 +9,7 @@ import plural from './../plural/index'
 import { View as GluModal } from './../glu_modal/index'
 import { playHideSongBrowser } from './../actions/actions'
 import KeyWatcher from './../keyWatcher/index'
+import history from './../history/history'
 
 class View extends React.Component {
 
@@ -68,6 +69,14 @@ class View extends React.Component {
         this.setState({ search : this.refs.search.value })
     }
 
+    /**
+     * Need to close song browser before navigating away, else it gets stuck invisible open state
+     */
+    showHelp(){
+        playHideSongBrowser()
+        history.push('help')
+    }
+
     clearSearch(){
         this.setState({ search : null})
     }
@@ -83,10 +92,14 @@ class View extends React.Component {
         let searchResults = new ListModel('songBrowserSearch'),
             songsToTreeStructure = new SongsToTreeStructure(this.props.songs),
             maxResults = 100,
+            songs = null,
+            hasSongs = this.props.songs.length > 0,
+            artists = null,
+            showBrowserHeader = !!hasSongs,
             searchPlaceholder = `Search your ${this.props.songs.length ? this.props.songs.length : ''} song${plural(this.props.songs, 's')}`,
             showSearch = false
 
-        if (this.state.search && this.state.search.length > 2 ){
+        if (hasSongs && this.state.search && this.state.search.length > 1 ){
             
             showSearch = true
 
@@ -102,122 +115,136 @@ class View extends React.Component {
 
         }
 
-        let songs = null,
-            artists = null
+        if (hasSongs){
+            if (this.state.letter)
+                artists = songsToTreeStructure.letters[this.state.letter].artists
+            
 
-        if (this.state.letter)
-            artists = songsToTreeStructure.letters[this.state.letter].artists
-        
-
-        if (this.state.artist) {
-            songs = new ListModel('songBrowserArtists')
-            songs.items = songsToTreeStructure.artistsHash[this.state.artist].songs
+            if (this.state.artist) {
+                songs = new ListModel('songBrowserArtists')
+                songs.items = songsToTreeStructure.artistsHash[this.state.artist].songs
+            }
         }
-
+    
         return (
             <div className="songBrowser">
                 <GluModal onClose={this.onModalClose.bind(this)} show={this.state.show} closeSVG="/media/svg/close.svg">
                     <div className="songBrowser-scaffold">
                         <ReactSVG path="/media/svg/close.svg" onClick={this.close.bind(this)} className={`songBrowser-close`} />
 
-                        <div className="songBrowser-header">
-                            <div className="songBrowser-headerTitle">
-                                { showSearch && <Fragment><a onClick={this.clearSearch.bind(this)}>Browse</a> </Fragment> }
-                                { !showSearch && <Fragment>Browse </Fragment> }
-                                or <input className="songBrowser-search" type="text" onChange={this.onSearchChanged} ref="search" placeholder={searchPlaceholder} />
-                            </div>
+                        {
+                            !hasSongs &&
+                                <div className="songBrowser-standaloneMessage">
+                                    You currently don't have any songs to browse.Want to import some? Check out the <a onClick={this.showHelp.bind(this)}>help page</a> for more info.
+                                </div>
+                        }
 
-                            {
-                                showSearch &&
-                                    <p>
-                                        {searchResults.items.length} song{plural(searchResults.items)} found for <strong>{this.search}</strong>.&nbsp;
-                                        {
-                                            searchResults.maxExceeded &&
-                                                <Fragment>
-                                                    More matches were found, try narrowing your search.
-                                                </Fragment>
-                                        }
-                                    </p>
-                            }
-                        </div>
-                        <div className="songBrowser-frame">
+                        {
+                            showBrowserHeader &&
+                                <div className="songBrowser-header">
+                                    <div className="songBrowser-headerTitle">
+                                        { showSearch && <Fragment><a onClick={this.clearSearch.bind(this)}>Browse</a> </Fragment> }
+                                        { !showSearch && <Fragment>Browse </Fragment> }
+                                        or <input className="songBrowser-search" type="text" onChange={this.onSearchChanged} ref="search" placeholder={searchPlaceholder} />
+                                    </div>
 
-                            {
-                                showSearch &&
-                                    <Fragment>
-                                        <ul className="songBrowser-list">
-                                            <li>
-                                                <List {...searchResults} />
-                                            </li>
-                                        </ul>
-                                    </Fragment>
-                            }
+                                    {
+                                        showSearch &&
+                                            <p>
+                                                {searchResults.items.length} song{plural(searchResults.items)} found for <strong>{this.search}</strong>.&nbsp;
+                                                {
+                                                    searchResults.maxExceeded &&
+                                                        <Fragment>
+                                                            More matches were found, try narrowing your search.
+                                                        </Fragment>
+                                                }
+                                            </p>
+                                    }
+                                </div>
 
-                            {
-                                !showSearch &&
-                                    <Fragment>
-                                        {/* always show this */}
-                                        <ul className="songBrowser-list">
-                                            {
-                                                songsToTreeStructure.artistLettersArray.map(function(letter, index){
+                        }
 
-                                                    return (
-                                                        <li key={index} className="songBrowser-item">
-                                                            <a className="songBrowser-itemLink" onClick={this.setLetter.bind(this, letter)}>
-                                                                {letter.toUpperCase()}
-                                                            </a>
-                                                        </li>
-                                                    )
-                                                }.bind(this))
-                                            }
-                                        </ul>
+                        {
+                            hasSongs &&
+                                <div className="songBrowser-frame">
 
-                                        {
-                                            artists &&
-                                                <Fragment>
-                                                    <div className="songBrowser-itemBack">
-                                                        <a onClick={this.closeLetter.bind(this)} className="songBrowser-itemBackLink">
-                                                            <ReactSVG path={`/media/svg/left.svg`} />
-                                                            All
-                                                        </a>
-                                                    </div>
-                                                    <div className="songBrowser-itemBackPad"></div>
-                                                    <ul className="songBrowser-list">
+                                    {
+                                        showSearch &&
+                                            <Fragment>
+                                                <ul className="songBrowser-list">
+                                                    <li>
+                                                        <List {...searchResults} />
+                                                    </li>
+                                                </ul>
+                                            </Fragment>
+                                    }
+
+                                    {
+                                        !showSearch &&
+                                            <Fragment>
+                                                {/* always show this */}
+                                                <ul className="songBrowser-list">
                                                     {
-                                                        artists.map(function(artist, index){
-                                                                return(
-                                                                    <li key={index} className="songBrowser-item">
-                                                                        <a onClick={this.setArtist.bind(this, artist.name)} className="songBrowser-itemLink">
-                                                                            {artist.name}
-                                                                        </a>
-                                                                    </li>
-                                                                )
-                                                            }.bind(this))
+                                                        songsToTreeStructure.artistLettersArray.map(function(letter, index){
+
+                                                            return (
+                                                                <li key={index} className="songBrowser-item">
+                                                                    <a className="songBrowser-itemLink" onClick={this.setLetter.bind(this, letter)}>
+                                                                        {letter.toUpperCase()}
+                                                                    </a>
+                                                                </li>
+                                                            )
+                                                        }.bind(this))
                                                     }
-                                                    </ul>
-                                                </Fragment>
-                                        }
+                                                </ul>
 
+                                                {
+                                                    artists &&
+                                                        <Fragment>
+                                                            <div className="songBrowser-itemBack">
+                                                                <a onClick={this.closeLetter.bind(this)} className="songBrowser-itemBackLink">
+                                                                    <ReactSVG path={`/media/svg/left.svg`} />
+                                                                    All
+                                                                </a>
+                                                            </div>
+                                                            <div className="songBrowser-itemBackPad"></div>
+                                                            <ul className="songBrowser-list">
+                                                            {
+                                                                artists.map(function(artist, index){
+                                                                        return(
+                                                                            <li key={index} className="songBrowser-item">
+                                                                                <a onClick={this.setArtist.bind(this, artist.name)} className="songBrowser-itemLink">
+                                                                                    {artist.name}
+                                                                                </a>
+                                                                            </li>
+                                                                        )
+                                                                    }.bind(this))
+                                                            }
+                                                            </ul>
+                                                        </Fragment>
+                                                }
 
-                                        {
-                                            songs &&
-                                                <Fragment>
-                                                    <div className="songBrowser-itemBack">
-                                                        <a onClick={this.closeArtist.bind(this)} className="songBrowser-itemBackLink">
-                                                            <ReactSVG path={`/media/svg/left.svg`} />
-                                                            <span className="songBrowser-backLetter">{this.state.artist}</span>
-                                                        </a>
-                                                    </div>
-                                                    <ul className="songBrowser-list">
-                                                        <li>
-                                                            <List {...songs} />
-                                                        </li>
-                                                    </ul>
-                                                </Fragment>
-                                        }
-                                    </Fragment>
-                            }
-                        </div>
+                                                {
+                                                    songs &&
+                                                        <Fragment>
+                                                            <div className="songBrowser-itemBack">
+                                                                <a onClick={this.closeArtist.bind(this)} className="songBrowser-itemBackLink">
+                                                                    <ReactSVG path={`/media/svg/left.svg`} />
+                                                                    <span className="songBrowser-backLetter">{this.state.artist}</span>
+                                                                </a>
+                                                            </div>
+                                                            <ul className="songBrowser-list">
+                                                                <li>
+                                                                    <List {...songs} />
+                                                                </li>
+                                                            </ul>
+                                                        </Fragment>
+                                                }
+                                            </Fragment>
+                                    }
+                                </div>                            
+                        }
+
                     </div>
                 </GluModal>
             </div>

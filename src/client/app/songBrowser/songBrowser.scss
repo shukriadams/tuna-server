@@ -40,6 +40,15 @@ $headerHeight: $layout-universalGutter * 13;
     }
 }
 
+.songBrowser-standaloneMessage {
+    left: 50%;
+    max-width: $layout-maxWidth;
+    padding: $layout-universalGutter*2 $layout-universalGutter;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .songBrowser-close {
     position: absolute;
     right: 10px;
