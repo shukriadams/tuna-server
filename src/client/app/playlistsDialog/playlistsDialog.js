@@ -20,6 +20,7 @@ class View extends React.Component {
             editPlaylistId : null,
             isBusySaving : false,
             isBusyCreating : false,
+            isMerging : false,
             expandFunctionsPlaylistId : null,
             mergePlaylistId : null,
             confirmDelete: false,
@@ -128,12 +129,14 @@ class View extends React.Component {
 
     mergePlaylistStart(playlistId){
         this.setState({
-            mergePlaylistId : playlistId
+            mergePlaylistId : playlistId,
+            isMerging : true
         })
     }
 
     cancelMerge(){
         this.setState({
+            isMerging : false,
             mergePlaylistId : null
         })
     }
@@ -187,6 +190,7 @@ class View extends React.Component {
                                                         </Fragment>
                                                 }
                                             </div>
+
                                             <div className="playlistsDialog-functions">
                                                 {
                                                     this.state.editPlaylistId === playlist.id &&
@@ -240,7 +244,12 @@ class View extends React.Component {
 
                     <Button onClick={this.createPlaylist.bind(this)} disabledText="contacting server" text="New playlist" isDisabled={this.state.isBusyCreating} />
                 </Modal>
-                <GluConfirmModal show={this.state.confirmDelete} onAccept={this.acceptDelete.bind(this)} onReject={this.rejectDelete.bind(this)}  />
+                <GluConfirmModal show={this.state.confirmDelete} onAccept={this.acceptDelete.bind(this)} onReject={this.rejectDelete.bind(this)} >
+                    <h2>Warning</h2>
+                    <p>
+                        Are you sure you want to delete this playlist?
+                    </p>
+                </GluConfirmModal>
             </div>
         )
     }

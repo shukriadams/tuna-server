@@ -4,7 +4,7 @@ import queueHelper from './../queue/queueHelper'
 import PlaylistsDialog from './../playlistsDialog/playlistsDialog'
 import { playListSetAll, nowPlaylistsDialogShow, playlistSet, playlistUnset, playlistClean, clearQueue } from './../actions/actions'
 import { connect } from 'react-redux'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 
 class View extends React.Component {
@@ -21,14 +21,13 @@ class View extends React.Component {
         nowPlaylistsDialogShow()
     }
 
-    savePlaylistChanges(){
+    async savePlaylistChanges(){
         let playlist = playlistHelper.getById(this.props.playlistId)
         playlist.songs = queueHelper.getQueueSongs()
 
-        new Ajax().postAuth(`${appSettings.serverUrl}/v1/playlists`, playlist, (result)=>{
-            playListSetAll(result.payload.playlists)
-            playlistClean()
-        })
+        const result = await ajax.post(`${appSettings.serverUrl}/v1/playlists`, playlist)
+        playListSetAll(result.payload.playlists)
+        playlistClean()
     }
 
     /**
@@ -42,7 +41,7 @@ class View extends React.Component {
         clearQueue()
     }
 
-    playlistFromQueue(){
+    async playlistFromQueue(){
         let playlist = playlistHelper.createNew()
         playlist.songs = queueHelper.getQueueSongs()
 
@@ -50,15 +49,12 @@ class View extends React.Component {
             isBusyCreating : true
         })
 
-        new Ajax().postAuth(`${appSettings.serverUrl}/v1/playlists`, playlist, (result)=>{
-
-            this.setState({
-                isBusyCreating : false
-            })
-
-            playListSetAll(result.payload.playlists)
-            playlistSet(result.payload.playlist.id)
+        const result = await ajax.post(`${appSettings.serverUrl}/v1/playlists`, playlist)
+        this.setState({
+            isBusyCreating : false
         })
+
+        playListSetAll(result.payload.playlists)
     }
 
     /**

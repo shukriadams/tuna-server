@@ -9,6 +9,7 @@ Tuna lets you stream your music to any modern browser. It is open source and sel
 - MP3, MP4 or Ogg Vorbis music files with valid ID3 tags for at least song, album and artist.
 - A Dropbox or NextCloud account with enough space for your music files.  
 
+
 ## Setup
 
 ### App ID + secret
@@ -75,9 +76,9 @@ Before starting you should create the local tuna volume folder and set its permi
     mkdir tuna
     chown 1000 -R tuna
 
-### Indexing music
+### Index your music
 
-Tuna needs to know what music you've got in your Dropbox or NextCloud drive. Download the Tuna Indexer app, install and point it to your Dropbox or NextCloud folder and let it do its thing.
+Tuna needs to know what music you've got in your Dropbox or NextCloud drive. To do this, you run a local program that scans your Dropbox/NextCloud folder for music and writes a local index file. [Download the Tuna Indexer](https://github.com/shukriadams/tuna-indexer/releases), install it, point it to your Dropbox or NextCloud folder and let it do its thing. If you're uncomfortable running the app and want to implement your onw, check the [developer docs](https://github.com/shukriadams/tuna-server/tree/master/docs).
 
 ### Logging in 
 
