@@ -8,9 +8,11 @@ DONE
 - signup is disable, can run in single user mode only
 - move all glu components into project
 - push new content out with socket.io
+- gpl2 license, forcing all people who adopt project to sharecode.
+- re-enable mongo table prefixing
 
 TODO
-
+- allow setting default password via docker-compose
 - remove jquery
 - replace jplayer with howler
 - dragging requires one drag a song past the next sibling to activate
@@ -18,11 +20,10 @@ TODO
 - unify oauth flow for all integrations, nextcloud and lastfm are still not routing to dev endpoints
 - clean out old xmas tree code in lastfm and dropbox integrations
 - unify the jsonHelper.payload strucutre that's returned to client
-- remove API endpoints that don't return JSON!
+- remove API endpoints that don't return JSON
 - add 2fa (look at speakeasy package)
 - index should write date flag to separate flag that can be scanned rapidly to check if index been updated
 - remove import page, replace with pop-under log
-- re-enable mongo table prefixing
 - move scrobble token to a "plugins" object
 - search for "new Exception(invalid init args)"
 - create pop-under log and remove all alerts on client. pop under should also be able to have links like "you should update your password - click HERE -> password page"
@@ -32,7 +33,6 @@ TODO
 - remove all third party integrations
 - bring back linked mongo container
 - write setup guide, try to reduce complexity
-- gpl2 license, forcing all people who adopt project to sharecode.
 - last fm : optional, must be set up personally
 - email : optional, smtp access required. needs email test.
 - password : can be written in plain text in docker-compose, or written to a salted file on disk. deleting this file will prompt user to create password again. username is always stored in docker-compose file.

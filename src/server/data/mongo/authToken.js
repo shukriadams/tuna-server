@@ -39,7 +39,8 @@ module.exports = {
      */    
     async create(record){
         const mongoCommon = require(_$+'data/mongo/common'),
-            newRecord = await mongoCommon.create('authTokens', this.denormalize(record))
+            settings = require(_$+'helpers/settings'),
+            newRecord = await mongoCommon.create(`${settings.mongoCollectionPrefix}authTokens`, this.denormalize(record))
 
         return this.normalize(newRecord)
     },
@@ -49,14 +50,18 @@ module.exports = {
      *
      */
     async delete (id){
-        const mongoCommon = require(_$+'data/mongo/common')
-        await mongoCommon.delete('authTokens', id)
+        const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'helpers/settings')
+
+        await mongoCommon.delete(`${settings.mongoCollectionPrefix}authTokens`, id)
     },
 
     
     async deleteForProfile (profileId){
-        const mongoCommon = require(_$+'data/mongo/common')
-        await mongoCommon.deleteMany('authTokens', { profileId })
+        const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'helpers/settings')
+
+        await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}authTokens`, { profileId })
     },
     
 
@@ -64,9 +69,10 @@ module.exports = {
      *
      */
     async deleteForContext(profileId, context){
-        const mongoCommon = require(_$+'data/mongo/common')
+        const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'helpers/settings')
 
-        await mongoCommon.deleteMany('authTokens', {     
+        await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}authTokens`, {     
             $and: [ 
                 { 'profileId' :{ $eq : profileId } },
                 { 'context' :{ $eq : context } },
@@ -81,7 +87,8 @@ module.exports = {
     async getForProfile(profileId){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            records = await mongoCommon.find('authTokens', { profileId }),
+            settings = require(_$+'helpers/settings'),
+            records = await mongoCommon.find(`${settings.mongoCollectionPrefix}authTokens`, { profileId }),
             results = []
 
         for (const record of records)
@@ -97,7 +104,8 @@ module.exports = {
     async getById(id){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            record = await mongoCommon.findById('authTokens', id)
+            settings = require(_$+'helpers/settings'),
+            record = await mongoCommon.findById(`${settings.mongoCollectionPrefix}authTokens`, id)
 
         return record ? this.normalize(record) : null
     }
