@@ -2,6 +2,7 @@
  *
  */
 let defaultSession = {
+    // currently loaded playlist
     playlistId : null,
     isDirty : false,
     uuid : null // unique is of state, use this to re-apply current playlist
