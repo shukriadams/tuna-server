@@ -74,9 +74,14 @@ class TextField extends React.Component {
     handleChange(event) {
       this.setState({value: event.target.value})
     }
+
+    value(){
+        return this.refs.field.value
+    }
+
     render() {
         return (
-            <input {...this.props} className="form-textField" type="text" onChange={this.handleChange.bind(this)} />
+            <input {...this.props} ref="field" className="form-textField" type="text" onChange={this.handleChange.bind(this)} />
         )
     }
 }

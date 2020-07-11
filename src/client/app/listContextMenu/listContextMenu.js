@@ -46,7 +46,7 @@ import flipper from './../songs/flipHelper'
 import { SelectedSongsHelper } from './../songs/selectedSongsHelper'
 import { View as Button } from './../glu_button/index'
 import { connect } from 'react-redux'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import playlistHelper from './../playlist/playlistHelper'
 import { playListSetAll } from './../actions/actions'
 import appSettings from './../appSettings/appSettings'
@@ -194,34 +194,32 @@ class View extends React.Component {
     }
 
 
-    addToPlaylist(){
+    async addToPlaylist(){
         let playlistId = this.refs.playlists.value
 
         if (playlistId){
-            let playlist = playlistHelper.getById(playlistId)
-            let songsToAdd = this.selectedSongsHelper.getSelectedSongIds()
-            let originalLength = playlist.songs.length
+            let playlist = playlistHelper.getById(playlistId),
+                songsToAdd = this.selectedSongsHelper.getSelectedSongIds(),
+                originalLength = playlist.songs.length
 
-            for (let songToAdd of songsToAdd)
+            for (const songToAdd of songsToAdd)
                 if (!playlist.songs.includes(songToAdd))
                     playlist.songs.push(songToAdd )
 
             if (originalLength === playlist.songs.length){
                 this.close()
             } else {
-                new Ajax().postAuth(`${appSettings.serverUrl}/v1/playlists`, playlist, (result)=>{
-                    playListSetAll(result.payload.playlists)
-                    this.close()
-                })
+                let result = await ajax.post(`${appSettings.serverUrl}/v1/playlists`, playlist)
+                playListSetAll(result.payload.playlists)
+                this.close()
             }
 
         } else {
             const newPlaylist = playlistHelper.createNew()
             newPlaylist.songs = this.selectedSongsHelper.getSelectedSongIds()
-            new Ajax().postAuth(`${appSettings.serverUrl}/v1/playlists`, newPlaylist, (result)=>{
-                playListSetAll(result.payload.playlists)
-                this.close()
-            })
+            const result = await ajax.post(`${appSettings.serverUrl}/v1/playlists`, newPlaylist)
+            playListSetAll(result.payload.playlists)
+            this.close()
         }
     }
 

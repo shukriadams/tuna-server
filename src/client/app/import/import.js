@@ -2,7 +2,7 @@
   * Dropbox oauth will drop us back here on the import page.
   */
 import React from 'react'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import { sessionSet, alertSet } from './../actions/actions'
 import contentHelper from './../helpers/contentHelper';
@@ -19,13 +19,6 @@ export default class extends React.Component {
             percent : '',
             stage : 1 // 1|2|3|'error'
         }
-
-        new Ajax().postAuth(`${appSettings.serverUrl}/v1/songs/import`, {}, response => {
-            if (!response.code)
-                sessionSet(response.payload)
-            else 
-                alertSet(response)
-        })
 
         pubsub.sub('import', 'import.progress', async data =>{
             if (data.percent){
@@ -54,8 +47,18 @@ export default class extends React.Component {
                     importMessage : data.text
                 })
             }
-
         })
+
+        ajax.postCallback(`${appSettings.serverUrl}/v1/songs/import`, {}, 
+            response => {
+                if (!response.code)
+                    sessionSet(response.payload)
+                else 
+                    alertSet(response)
+            }, 
+            error => {
+                console.log(error)
+            })
     }
 
     render(){

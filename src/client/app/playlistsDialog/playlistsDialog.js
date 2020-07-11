@@ -6,6 +6,7 @@ import { View as Button } from './../glu_button/index'
 import playlistHelper from './../playlist/playlistHelper'
 import appSettings from './../appSettings/appSettings'
 import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import { View as GluConfirmModal } from './../glu_confirmModal/index'
 import { TextField } from './../form/form'
 import ReactSVG from 'react-svg'
@@ -16,11 +17,11 @@ class View extends React.Component {
         super(props)
 
         this.state = {
-            editPlaylistId : null,
+            // the active playlist on this list
+            activePlaylistId : null,
             isBusySaving : false,
             isBusyCreating : false,
-            expandFunctionsPlaylistId : null,
-            mergePlaylistId : null,
+            mode : 'default', // default | edit
             confirmDelete: false,
             deletingPlaylistId : null
         }
@@ -35,7 +36,7 @@ class View extends React.Component {
 
     loadPlaylist(playlistId){
         this.setState({
-            expandFunctionsPlaylistId : null
+            activePlaylistId : null
         })
 
         playlistSet(playlistId)
@@ -44,35 +45,35 @@ class View extends React.Component {
 
     editPlaylist(playlistId){
         this.setState({
-            editPlaylistId: playlistId
+            mode : 'edit',
+            activePlaylistId : playlistId
         })
     }
 
-    savePlaylist(){
-        let playlist = playlistHelper.getById(this.state.editPlaylistId)
-        playlist.name = this.refs.playlistName.state.value
+   async savePlaylist(){
+        if (!this.refs.playlistName.value().length)
+            return
+            
+        const playlist = playlistHelper.getById(this.state.activePlaylistId)
+        playlist.name = this.refs.playlistName.value()
 
         this.setState({
             isBusySaving : true
         })
 
-        new Ajax().postAuth(`${appSettings.serverUrl}/v1/playlists`, playlist, (result)=>{
-
-            this.setState({
-                editPlaylistId: null,
-                isBusySaving : false,
-                expandFunctionsPlaylistId : null
-            })
-
-            playListSetAll(result.payload.playlists)
-            playlistSet(result.payload.playlist.id)
+        const result = await ajax.post(`${appSettings.serverUrl}/v1/playlists`, playlist)
+        playListSetAll(result.payload.playlists)
+        this.setState({
+            activePlaylistId: null,
+            mode : 'default',
+            isBusySaving : false
         })
     }
 
     cancelPlaylistEdit(){
         this.setState({
-            editPlaylistId: null,
-            expandFunctionsPlaylistId : null,
+            mode : 'default',
+            activePlaylistId: null
         })
     }
 
@@ -90,24 +91,24 @@ class View extends React.Component {
         }
     }
 
-    acceptDelete(playlistId){
+    async acceptDelete(playlistId){
         if (!playlistId)
             playlistId = this.state.deletingPlaylistId
 
-        new Ajax().deleteAuth(`${appSettings.serverUrl}/v1/playlists/${playlistId}`, (result)=>{
-            playListSetAll(result.payload.playlists)
-
-            this.setState({
-                deletingPlaylistId: null,
-                expandFunctionsPlaylistId : null,
-                confirmDelete: false
-            })
+        const result = await ajax.delete(`${appSettings.serverUrl}/v1/playlists/${playlistId}`)
+        playListSetAll(result.payload.playlists)
+        this.setState({
+            deletingPlaylistId: null,
+            activePlaylistId : null,
+            confirmDelete: false
         })
     }
 
     rejectDelete(){
         this.setState({
+            mode : 'default',
             confirmDelete: false,
+            activePlaylistId : null,
             deletingPlaylistId : null
         })
     }
@@ -127,29 +128,17 @@ class View extends React.Component {
         })
     }
 
-    mergePlaylistStart(playlistId){
-        this.setState({
-            mergePlaylistId : playlistId
-        })
-    }
-
-    cancelMerge(){
-        this.setState({
-            mergePlaylistId : null
-        })
-    }
-
     toggleExpandedFunctions(playlistId){
-        if (playlistId === this.state.expandFunctionsPlaylistId)
-            this.setState({ expandFunctionsPlaylistId : null })
+        if (playlistId === this.state.activePlaylistId)
+            this.setState({ activePlaylistId : null })
         else
-            this.setState({ expandFunctionsPlaylistId : playlistId })
+            this.setState({ activePlaylistId : playlistId })
     }
 
     render(){
-        let editPlaylist = null
-        if (this.state.editPlaylistId)
-            editPlaylist = playlistHelper.getById(this.state.editPlaylistId)
+        let activePlaylist = null
+        if (this.state.activePlaylistId)
+            activePlaylist = playlistHelper.getById(this.state.activePlaylistId)
 
         return(
             <div className="playlistsDialog">
@@ -163,85 +152,73 @@ class View extends React.Component {
 
                     {
                         this.props.playlists.length > 0 &&
-                        <ul className="playlistsDialog-playlists">
-                            {
-                                this.props.playlists.map(function(playlist, index){
-                                    return(
-                                        <li className="playlistsDialog-playlist" key={index}>
-                                            <div className="playlistsDialog-name">
-                                                <span className="playlistsDialog-count">
-                                                    {index + 1})
-                                                </span>
+                            <ul className="playlistsDialog-playlists">
+                                {
+                                    this.props.playlists.map(function(playlist, index){
+                                        return(
+                                            <li className="playlistsDialog-playlist" key={index}>
+                                                <div className="playlistsDialog-name">
+                                                    <span className="playlistsDialog-count">
+                                                        {index + 1})
+                                                    </span>
 
-                                                {
-                                                    this.state.editPlaylistId !== playlist.id &&
-                                                        <Fragment>
-                                                            {playlist.name}
-                                                            {playlist.songs.length ? ` (${playlist.songs.length} songs)` : ''}
-                                                        </Fragment>
-                                                }
+                                                    {
+                                                        (this.state.mode !== 'edit' || playlist.id !== this.state.activePlaylistId) &&
+                                                            <Fragment>
+                                                                {playlist.name}
+                                                                {playlist.songs.length ? ` (${playlist.songs.length} songs)` : ''}
+                                                            </Fragment>
+                                                    }
 
-                                                {
-                                                    this.state.editPlaylistId === playlist.id &&
-                                                        <Fragment>
-                                                            <TextField ref="playlistName" defaultValue={editPlaylist.name} maxLength="25" />
-                                                        </Fragment>
-                                                }
-                                            </div>
-                                            <div className="playlistsDialog-functions">
-                                                {
-                                                    this.state.editPlaylistId === playlist.id &&
-                                                        <Fragment>
-                                                            <Button onClick={this.savePlaylist.bind(this)} isDisabled={this.state.isBusySaving} disabledText="Saving" text="Update" />
-                                                            <Button onClick={this.cancelPlaylistEdit.bind(this)} text="Cancel" />
-                                                        </Fragment>
-                                                }
+                                                    {
+                                                        this.state.mode === 'edit' && this.state.activePlaylistId === playlist.id &&
+                                                            <Fragment>
+                                                                <TextField ref="playlistName" defaultValue={activePlaylist.name} minLength="1" maxLength="25" />
+                                                            </Fragment>
+                                                    }
+                                                </div>
 
-                                                {
-                                                    this.state.mergePlaylistId === playlist.id &&
-                                                        <Fragment>
-                                                            <select ref="mergeTarget" className="form-select">
-                                                            {
-                                                                this.props.playlists.map((playlist, index)=>{
-                                                                    return (
-                                                                        <option key={index} value={playlist.id}>{playlist.name}</option>
-                                                                    )
-                                                                })
-                                                            }
-                                                            </select>
-                                                            <Button onClick={this.cancelMerge.bind(this)} text="Cancel" />
-                                                        </Fragment>
-                                                }
+                                                <div className="playlistsDialog-functions">
+                                                    {
+                                                        this.state.mode === 'edit' && this.state.activePlaylistId === playlist.id &&
+                                                            <Fragment>
+                                                                <Button onClick={this.savePlaylist.bind(this)} isDisabled={this.state.isBusySaving} disabledText="Saving" text="Update" />
+                                                                <Button onClick={this.cancelPlaylistEdit.bind(this)} text="Cancel" />
+                                                            </Fragment>
+                                                    }
 
-                                                {
-                                                    this.state.editPlaylistId !== playlist.id &&
-                                                        <Fragment>
+                                                    {
+                                                        this.state.mode === 'default' &&
+                                                            <Fragment>
+                                                                <Button isDisabled={this.props.currentPlaylist === playlist.id} disabledText="Loaded" onClick={this.loadPlaylist.bind(this, playlist.id)} text="Load" />
 
-                                                            <Button onClick={this.loadPlaylist.bind(this, playlist.id)} text="Load" />
+                                                                {
+                                                                    this.state.activePlaylistId === playlist.id &&
+                                                                        <Fragment>
+                                                                            <Button onClick={this.editPlaylist.bind(this, playlist.id)} text="Rename" />
+                                                                            <Button onClick={this.confirmDeletePlaylist.bind(this, playlist.id)} text="Delete" />
+                                                                        </Fragment>
+                                                                }
 
-                                                            {
-                                                                this.state.expandFunctionsPlaylistId === playlist.id &&
-                                                                    <Fragment>
-                                                                        <Button onClick={this.confirmDeletePlaylist.bind(this, playlist.id)} text="Delete" />
-                                                                        <Button onClick={this.editPlaylist.bind(this, playlist.id)} text="Rename" />
-                                                                        <Button onClick={this.mergePlaylistStart.bind(this, playlist.id)} text="Merge" />
-                                                                    </Fragment>
-                                                            }
-
-                                                            <ReactSVG path='/media/svg/more.svg' className="playlistsDialog-toggleExpandedFunctions" onClick={this.toggleExpandedFunctions.bind(this, playlist.id)} />
-                                                        </Fragment>
-                                                }
-                                            </div>
-                                        </li>
-                                    );
-                                }.bind(this))
-                            }
-                        </ul>
+                                                                <ReactSVG path='/media/svg/more.svg' className="playlistsDialog-toggleExpandedFunctions" onClick={this.toggleExpandedFunctions.bind(this, playlist.id)} />
+                                                            </Fragment>
+                                                    }
+                                                </div>
+                                            </li>
+                                        );
+                                    }.bind(this))
+                                }
+                            </ul>
                     }
 
                     <Button onClick={this.createPlaylist.bind(this)} disabledText="contacting server" text="New playlist" isDisabled={this.state.isBusyCreating} />
                 </Modal>
-                <GluConfirmModal show={this.state.confirmDelete} onAccept={this.acceptDelete.bind(this)} onReject={this.rejectDelete.bind(this)}  />
+                <GluConfirmModal show={this.state.confirmDelete} reject="Cancel" onAccept={this.acceptDelete.bind(this)} onReject={this.rejectDelete.bind(this)} >
+                    <h2>Warning</h2>
+                    <p>
+                        Are you sure you want to delete this playlist?
+                    </p>
+                </GluConfirmModal>
             </div>
         )
     }
@@ -251,7 +228,8 @@ export default connect(
     (state)=>{
         return {
             playlists : state.session.playlists ? state.session.playlists : [],
-            show : state.now.showPlaylistsDialog
+            show : state.now.showPlaylistsDialog,
+            currentPlaylist : state.playlist.playlistId
         }
     }
 )(View)

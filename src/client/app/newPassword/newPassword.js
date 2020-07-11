@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import vc from 'vcjs'
 import { Link } from 'react-router-dom'
@@ -8,6 +8,7 @@ import classnames from 'classnames'
 import { View as Button } from './../glu_button/index'
 import { connect } from 'react-redux'
 import { Row, Description } from './../form/form'
+import history from './../history/history'
 
 class View extends React.Component {
 
@@ -24,8 +25,6 @@ class View extends React.Component {
             authSuccessMessage : null,
             anonSuccessMessage : null
         }
-
-        this.submit = this.submit.bind(this)
     }
 
     componentWillMount(){
@@ -46,10 +45,9 @@ class View extends React.Component {
         this.setState({passwordEmpty : this.refs.password.value.length === 0})
     }
 
-    submit(){
+    async submit(){
         let password = this.refs.password.value,
             current = this.props.isLoggedIn ? this.refs.currentPassword.value : null,
-            ajax = new Ajax(),
             key = vc.getQueryString('key')
 
         if (!password)
@@ -68,21 +66,20 @@ class View extends React.Component {
             if (!current)
                 return this.setState({ errorMessage : 'Current password required'})
 
-            ajax.auth(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&currentPassword=${current}`, (response)=>{
-                if (!response.code)
-                    this.setState({ authSuccessMessage : 'Your password has been updated.'})
-                else 
-                    this.setState({errorMessage : response.message})
-            })
+            const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&currentPassword=${current}`)
+            if (!response.code)
+                this.setState({ authSuccessMessage : 'Your password has been updated.'})
+            else 
+                this.setState({errorMessage : response.message})
 
-        } else
-            ajax.anon(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&key=${key}`, (response)=>{
-                if (!response.code)
-                    this.setState({ anonSuccessMessage : 'Your password has been updated.'})
-                else 
-                    this.setState({errorMessage : response.message})
-                
-            })
+        } else{
+
+            const response = await ajax.anonGet(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&key=${key}`)
+            if (!response.code)
+                this.setState({ anonSuccessMessage : 'Your password has been updated.'})
+            else 
+                this.setState({ errorMessage : response.message })
+        }
     }
 
     render(){

@@ -67,6 +67,10 @@ $functionsWidth: 270px;
     right: 0;
 }
 
+.playlistsDialog-toggleExpandedFunctions path{
+    fill: $mineShaft;
+}
+
 .playlistsDialog-count {
     width: 28px;
     display: inline-block;
