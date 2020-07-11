@@ -1,4 +1,4 @@
-import JPlayerWrapper from './jPlayerWrapper'
+import player from './playerWrapper'
 import Ajax from './../ajax/ajax'
 import appSettings from './../appSettings/appSettings'
 import BlobStore from './../blobStore/blobStore'
@@ -19,37 +19,30 @@ class Player {
      * store
      * profile
      **/
-    constructor(options) {
+    constructor() {
 
-        if (!options.element)
-            throw 'Player expects an element to bind to';
+        this.isPlaying = false
+        this.currentSong = null
+        this.currentSongDuration = null // must be calculated on the fly
+        this.player = null         // player - jplayer, phoengap or something else
+        this.trackScrobbled = false
+        this.triggeredStarted = false
 
-        let self = this,
-            PlayerType = JPlayerWrapper;
-
-        this.isPlaying = false;
-        this.currentSong = null;
-        this.currentSongDuration = null; // must be calculated on the fly
-        this.player = null;         // player - jplayer, phoengap or something else
-        this.trackScrobbled = false;
-        this.triggeredStarted = false;
-
-        let session = store.getState().session;
-        this.volume = session.volume;
-        this.repeatMode = session.repeatMode;
-        this.player = new PlayerType({
-            root : options.element,
-            onPlay : function(){
-                self._onSongTick();
+        let session = store.getState().session
+        this.volume = session.volume
+        this.repeatMode = session.repeatMode
+        this.player = new player({
+            onPlay : ()=>{
+                this._onSongTick()
             },
-            onReady : function(){
-                self.player.onEnd = function(){
-                    self._onSongEnd();
+            onReady : ()=>{
+                this.player.onEnd =()=>{
+                    this._onSongEnd()
                 }
-            }.bind(this)
-        });
+            }
+        })
 
-        this._bindEvents();
+        this._bindEvents()
     }
 
 
@@ -59,34 +52,34 @@ class Player {
     _bindEvents(){
 
         // handle song removal from queue
-        store.subscribe(watch(store.getState, 'queue.songs')(function(songs) {
+        store.subscribe(watch(store.getState, 'queue.songs')((songs)=>{
             debug('player > queue.songs');
             // this was breaking lots of weird things, so commented out
             // if queue no longer contains currently playing song, force a next
             //if (this.currentSong && !songs.includes( this.currentSong.id))
             //    replay();
-        }.bind(this)))
+        }))
 
         // handle forward or back in queue
-        store.subscribe(watch(store.getState, 'queue.index')(function() {
+        store.subscribe(watch(store.getState, 'queue.index')(()=>{
             debug('player > queue.index');
 
             if (this.isPlaying)
-                this._playCurrentSong(false, function(){
-                    playResume(); // force unpause, workaround for when we jump+play when already paused
-                });
-        }.bind(this)));
+                this._playCurrentSong(false, ()=>{
+                    playResume() // force unpause, workaround for when we jump+play when already paused
+                })
+        }))
 
 
         // handle song auditions
-        store.subscribe(watch(store.getState, 'queue.auditionedSongId')(function() {
-            debug('player > queue.auditionedSongId');
+        store.subscribe(watch(store.getState, 'queue.auditionedSongId')(()=>{
+            debug('player > queue.auditionedSongId')
 
             if (this.isPlaying)
                 this._playCurrentSong(false, function(){
-                    playResume();  // force unpause, workaround for when we jump+play when already paused
-                });
-        }.bind(this)));
+                    playResume()  // force unpause, workaround for when we jump+play when already paused
+                })
+        }))
 
         // either playing.playKey or playing.play can trigger playing. First one in wins. Both can also stop playing
         // we don't care about double stopping
@@ -94,35 +87,34 @@ class Player {
 
         // handles play order - this will be triggered when playHash is set, this is done by clicking play button or
         // double clicking on a song in list for ex.
-        store.subscribe(watch(store.getState, 'playing.playKey')(function(playKey) {
+        store.subscribe(watch(store.getState, 'playing.playKey')((playKey)=>{
             debug('player > playing.playKey');
 
             if (!playKey)
                 return this.stopPlay();
 
             this._playCurrentSong(true);
-        }.bind(this)));
+        }))
 
 
         // handle pause/resume
-        store.subscribe(watch(store.getState, 'playing.isPaused')(function(pause) {
-            debug('player > playing.isPaused');
+        store.subscribe(watch(store.getState, 'playing.isPaused')((pause)=>{
+            debug('player > playing.isPaused')
 
             if (!this.isPlaying)
-                return;
+                return
 
             if (pause)
-                return this.player.pause();
+                return this.player.pause()
 
-            this.player.play();
+            this.player.play()
+        }))
 
-        }.bind(this)));
+        store.subscribe(watch(store.getState, 'playing.jumpToPercent')((percent)=>{
+            debug('player > playing.jumpToPercent')
 
-        store.subscribe(watch(store.getState, 'playing.jumpToPercent')(function(percent) {
-            debug('player > playing.jumpToPercent');
-
-            this._jumpToPosition(percent);
-        }.bind(this)));
+            this._jumpToPosition(percent)
+        }))
     }
 
 
@@ -146,10 +138,7 @@ class Player {
 
         this.isPlaying = true
         playDownloading()
-        this._getOrDownloadSong(nextSong, playStart.bind(this))
-
-        // common logic for after play has started
-        function playStart(mediaUrl){
+        this._getOrDownloadSong(nextSong, (mediaUrl)=>{
             this.currentSong = nextSong
 
             this.nextSongLoaded = false
@@ -172,7 +161,10 @@ class Player {
                     // todo : write this to user on-screen log
                 }
             )
-        }
+        })
+
+        // common logic for after play has started
+        
     }
 
 
@@ -196,8 +188,8 @@ class Player {
                     blobStore.getOrDownload(song, song.id /* no longer using hashId here */, response.payload.url, function(localMediaUrl){
 
                         if (callback)
-                            callback(localMediaUrl);
-                    });
+                            callback(localMediaUrl)
+                    })
                 },
                 function(response){
                     // song id is invalid
@@ -248,7 +240,9 @@ class Player {
         if (!this.isPlaying)
             return
 
-        this.player.jumpToPosition(percent)
+        // convert peercent to seconds
+        const seconds = Math.floor(percent * this.currentSongDuration / 100)
+        this.player.jumpToPosition(seconds)
     }
 
 
@@ -272,9 +266,9 @@ class Player {
         // for player's song length to stabilize, then use that.
         if (this.currentSong.duration === 0)
         {
-            let thisDuration = this.player.getDuration();
+            let thisDuration = this.player.getDuration()
             if  (thisDuration !== this.lastObservedDuration){
-                this.lastObservedDuration = thisDuration;
+                this.lastObservedDuration = thisDuration
             } else {
                 duration = thisDuration
             }
@@ -288,7 +282,7 @@ class Player {
 
         // send a scrobble order to backend once the halfway point of the song has passed.
         if (profile.isScrobbling && !this.trackScrobbled && time > (duration / 2)){
-            self.trackScrobbled = true;
+            self.trackScrobbled = true
 
             let ajax = new Ajax(),
                 songDuration = this.currentSongDuration,
@@ -328,9 +322,7 @@ let _instance = null
 export default {
     init(){
         if (!_instance){
-            _instance = new Player( {
-                element : document.getElementById('player'),
-            });
+            _instance = new Player( )
         }
     }
 }
