@@ -14,6 +14,18 @@
             "smartStep": true,
             "skipFiles": ["<node_internals>/**"],            
             "remoteRoot": "/src"
-        } 
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "remote",
+            "port": 48009,
+            "address": "172.104.147.215",
+            "localRoot": "${workspaceFolder}/src",
+            "smartStep": true,
+            "skipFiles": ["<node_internals>/**"],
+            "remoteRoot": "/usr/tuna/"
+        }  
+         
     ]
 }

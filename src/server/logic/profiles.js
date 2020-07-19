@@ -180,7 +180,7 @@ module.exports = {
 
         sha512.update(password)
 
-        return profile.hash = sha512.digest('hex')
+        return profile.hash === sha512.digest('hex')
     },
 
 
