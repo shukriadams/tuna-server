@@ -86,7 +86,7 @@ Tuna is a single-user system. It will automatically create a user for you. To re
 
 If you lose your password you can set a new one from the command line with 
 
-    docker exec -it tuna-server "cd /usr/tuna/scripts && node set --password YOURPASSWORD"
+    docker exec -it tuna-server bash -c "cd /usr/tuna/scripts && node set --password YOURPASSWORD"
 
 When you log in, you'll be prompted to give access to either Dropbox or Nextcloud, follow the on-screen instructions. 
 
