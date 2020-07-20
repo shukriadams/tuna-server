@@ -18,6 +18,13 @@
     }
 }
 
+.glu_simpleHeader-menuItem--showOnsmall{
+    display: none;
+
+    @media #{$glu_mediaQuery-belowSmall}{
+        display: block;
+    }
+}
 
 .glu_simpleHeader-menuItemLink--active {
     &::before {

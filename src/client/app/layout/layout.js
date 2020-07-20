@@ -28,30 +28,43 @@ function anonHeaderModel(){
     model.isDockedToWindowTop = false
     model.menuItems = [ login ]
 
-    return model;
+    return model
 }
 
 function authenticatedHeaderModel(){
-
-    let music = Object.assign({ }, HeaderItemModel)
+    
+    const music = Object.assign({ }, HeaderItemModel)
     music.href = '/'
     music.title = 'Music'
     music.isRoute = true
     music.isActive = history.location.pathname === '/'
 
-    let settings = Object.assign({ }, HeaderItemModel)
+    const settings = Object.assign({ }, HeaderItemModel)
     settings.href = PROFILE
     settings.title = 'Profile'
     settings.isActive = history.location.pathname === `/${PROFILE}`
     settings.isRoute = true
+
+    const help = Object.assign({}, HeaderItemModel)
+    help.href = '/help'
+    help.showOnScreenSize = 'small'
+    help.title = 'Need help?'
+    help.isRoute = true
+
+    const terms = Object.assign({}, HeaderItemModel)
+    terms.href = '/terms-of-service'
+    terms.showOnScreenSize = 'small'
+    terms.title = 'Terms'
+    terms.isRoute = true
 
     let model = Object.assign({}, HeaderModel)
     model.closeSVG = '/media/svg/close.svg'
     model.logoSVG = '/media/svg/sitelogo.svg'
     model.menuSVG = '/media/svg/burger.svg'
     model.title = 'Tuna'
-    model.menuItems = [ music, settings ]
+    model.menuItems = [ music, settings, terms, help]
     model.isDockedToWindowTop = false
+
     return model
 }
 
@@ -100,17 +113,17 @@ class View extends React.Component {
 
     render() {
         let classNames = ClassNames('layout', { 'layout--fullSizePlayer' : this.props.playstripFullSize }),
-            headerModel = this.props.isLoggedIn ? authenticatedHeaderModel() : anonHeaderModel();
+            headerModel = this.props.isLoggedIn ? authenticatedHeaderModel() : anonHeaderModel()
 
         headerModel.search.placeholder = this.props.songCount === 0 ?
             'No songs to search yet' :
-            `Search your ${this.props.songCount} song`;
-        headerModel.search.onChange = this.onSearchChange.bind(this);
+            `Search your ${this.props.songCount} song`
+        headerModel.search.onChange = this.onSearchChange.bind(this)
 
         let cookieBannerButtonModel = {
             text : 'Accept',
             onClick : this.onCookieAccept.bind(this)
-        };
+        }
 
         return (
             <div className={classNames}>
