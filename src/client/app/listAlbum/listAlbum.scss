@@ -5,6 +5,6 @@
 .listAlbum {
     @include type-h2Strong;
     height: $layout-universalGutter * 9;
-    padding-top: 20px;
+    padding-top: 30px;
     padding-left: $songRowBrowserLeftPad;
 }
