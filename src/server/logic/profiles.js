@@ -32,7 +32,7 @@ module.exports = {
         profile.password = password
         profile.created = new Date().getTime()
         profile.isPasswordChangeForced = true
-        profile.hash = profile.created.toString()
+        profile.stateHash = profile.created.toString()
 
         this._processPassword(profile)
 
@@ -94,7 +94,7 @@ module.exports = {
 
         this._processPassword(profile)
         
-        profile.hash = new Date().getTime().toString()
+        profile.stateHash = new Date().getTime().toString()
 
         await dataCache.update(profile)
     },
@@ -180,7 +180,7 @@ module.exports = {
 
         sha512.update(password)
 
-        return profile.hash = sha512.digest('hex')
+        return profile.hash === sha512.digest('hex')
     },
 
 

@@ -38,7 +38,8 @@ module.exports = {
      */
     async create(playlist){
         const mongoCommon = require(_$+'data/mongo/common'),
-            newPlaylist = await mongoCommon.create('playlists', this.denormalize(playlist))
+            settings = require(_$+'helpers/settings'),
+            newPlaylist = await mongoCommon.create(`${settings.mongoCollectionPrefix}playlists`, this.denormalize(playlist))
 
         return this.normalize(newPlaylist)
     },
@@ -48,8 +49,10 @@ module.exports = {
      *
      */
     async delete(id){
-        const mongoCommon = require(_$+'data/mongo/common')
-        return await mongoCommon.delete('playlists', id)
+        const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'helpers/settings')
+
+        return await mongoCommon.delete(`${settings.mongoCollectionPrefix}playlists`, id)
     },
 
 
@@ -58,9 +61,10 @@ module.exports = {
      */
     async update(playlist){
         const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'helpers/settings'),
             writePlaylist = this.denormalize(playlist)
         
-        await mongoCommon.update('playlists', playlist.id, writePlaylist)
+        await mongoCommon.update(`${settings.mongoCollectionPrefix}playlists`, playlist.id, writePlaylist)
     },
 
 
@@ -70,7 +74,8 @@ module.exports = {
     async getForProfile(profileId){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            records = await mongoCommon.find('playlists', { profileId }),
+            settings = require(_$+'helpers/settings'),
+            records = await mongoCommon.find(`${settings.mongoCollectionPrefix}playlists`, { profileId }),
             results = []
 
         for (const record of records)
@@ -84,8 +89,10 @@ module.exports = {
      *
      */
     async deleteForProfile(profileId){
-        const mongoCommon = require(_$+'data/mongo/common')
-        return await mongoCommon.deleteMany('authTokens', { profileId })
+        const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'helpers/settings')
+
+        return await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}playlists`, { profileId })
     },
 
 
@@ -95,7 +102,8 @@ module.exports = {
     async getById(id){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            record = await mongoCommon.findById('playlists', id)
+            settings = require(_$+'helpers/settings'),
+            record = await mongoCommon.findById(`${settings.mongoCollectionPrefix}playlists`, id)
 
         return record ? this.normalize(record) : null
     }

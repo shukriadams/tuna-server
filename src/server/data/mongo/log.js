@@ -27,7 +27,8 @@ module.exports = {
     async create(record){
         const
             mongoCommon = require(_$+'data/mongo/common'),
-            newRecord = await mongoCommon.create('logs', this.denormalize(record))
+            settings = require(_$+'helpers/settings'),
+            newRecord = await mongoCommon.create(`${settings.mongoCollectionPrefix}logs`, this.denormalize(record))
 
         return this.normalize(newRecord)        
     }

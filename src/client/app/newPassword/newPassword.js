@@ -29,8 +29,8 @@ class View extends React.Component {
 
     componentWillMount(){
         let key = vc.getQueryString('key')
-        if (!key)
-            history.push('resetPassword')
+        //if (!key)
+        //    history.push('resetPassword')
     }
 
     showPassword(){

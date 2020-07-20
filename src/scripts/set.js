@@ -1,3 +1,6 @@
+/**
+ * Use this as external set command to change state on server.
+ */
 (async ()=>{
 
     const 

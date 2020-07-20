@@ -1,3 +1,8 @@
+/**
+ * Sends exeternal (shell) commands to Tuna server process. See /helpers/interprocess.js for code that receives and processes
+ * those commands.
+ */
+
 const ipc = require('node-ipc')
  
 module.exports = async function(name, data){
