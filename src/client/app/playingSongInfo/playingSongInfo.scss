@@ -9,11 +9,6 @@
 .playingSongInfo-title {
     overflow: hidden;
     white-space: nowrap;
-
-    @media #{$glu_mediaQuery-belowSmall}{
-        padding: 0 10px;
-    }
-
 }
 
 .playingSongInfo-artist {

@@ -2,7 +2,7 @@
 @import './../main/main-colorPalette';
 @import './../main/settings';
 
-@mixin item {
+@mixin playingStripSection {
     @media #{$glu_mediaQuery-aboveSmall} {
         display: table-cell;
         height: 100%;
@@ -108,6 +108,7 @@
     display: table;
     height: $layout-playStripHeight;
     pointer-events: auto;
+    position: relative;
     width: 100%;
 
     @media #{$glu_mediaQuery-belowSmall} {
@@ -118,7 +119,7 @@
 /* this is the only cell that has dynamic width, and its width needs to be tightly clamped or it will overflow only its
 siblings and obscure them */
 .playingStrip-info {
-    @include item;
+    @include playingStripSection;
 
     @media #{$glu_mediaQuery-aboveSmall} {
         max-width: 168px;
@@ -137,7 +138,7 @@ siblings and obscure them */
 }
 
 .playingStrip-timer {
-    @include item;
+    @include playingStripSection;
 
     @media #{$glu_mediaQuery-aboveSmall} {
         min-width: 60px;
@@ -147,13 +148,13 @@ siblings and obscure them */
 
     @media #{$glu_mediaQuery-belowSmall} {
         position: absolute;
-        right: 18px;
+        right: 0;
         top: $layout-universalGutter;
     }
 }
 
 .playingStrip-controls {
-    @include item;
+    @include playingStripSection;
 
     @media #{$glu_mediaQuery-aboveSmall} {
         background-color: $rust;
@@ -163,11 +164,13 @@ siblings and obscure them */
     }
 }
 
+// this the container of the progress bar, not the bar iteself
 .playingStrip-progress {
-    @include item;
-    padding: 0 10px;
+    @include playingStripSection;
 
     @media #{$glu_mediaQuery-aboveSmall} {
+        // padding is needed above mobile only, push in the progress bar child so it doesn't touch visible borders of container
+        padding: 0 $layout-universalGutter;
         min-width: 144px;
         max-width: 144px;
         width: 154px;
