@@ -1,7 +1,5 @@
-@import './../main/mixins';
 @import './../type/type';
 
 .termsOfService {
     @include type-bodyLarge;
-    @include pagelayout-standard;
 }

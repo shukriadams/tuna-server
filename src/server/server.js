@@ -52,6 +52,11 @@ module.exports = {
         // generate the master user if it doesn't already exist
         await profilesLogic.autoCreateMaster(settings.masterUsername)
 
+        // routes all static content (css, js etc) requests to public folder. Note, this route will ideally not used when app is
+        // hidden behind an nginx proxy front, as ngxin will directly handle static content 
+        express.use(Express.static(path.join(pathingHelper.getExpressPath(), '/client')))
+        express.use(Express.static(path.join(pathingHelper.getExpressPath(), '/public')))
+
         // add middleware before route handling
         express.use(bodyParser.urlencoded({ extended: false }))
         express.use(bodyParser.json())
@@ -77,9 +82,5 @@ module.exports = {
         if (defaultRoute)
             await defaultRoute.bind(express)
 
-        // routes all static content (css, js etc) requests to public folder. Note, this route will ideally not used when app is
-        // hidden behind an nginx proxy front, as ngxin will directly handle static content 
-        express.use(Express.static(path.join(pathingHelper.getExpressPath(), '/client')))
-        express.use(Express.static(path.join(pathingHelper.getExpressPath(), '/public')))
     }
 }

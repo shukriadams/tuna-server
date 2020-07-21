@@ -1,7 +1,5 @@
-@import './../main/mixins';
 @import './../type/type';
 
 .playlists {
     @include type-bodyLarge;
-    @include pagelayout-standard;
 }

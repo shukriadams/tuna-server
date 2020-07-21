@@ -26,6 +26,7 @@ import DeleteProfile from './../pages/deleteProfile'
 import DeletedProfile from './../pages/deletedProfile'
 import SessionExpired from './../pages/sessionExpired'
 import Playlists from './../pages/playlists'
+import Playlist from './../pages/playlist'
 import About from './../pages/about'
 import Terms from './../pages/termsOfService'
 import appSettings from './../appSettings/appSettings'
@@ -66,6 +67,7 @@ import contentHelper from './../helpers/contentHelper'
                         <Route exact path="/kitchenSink" component={KitchenSink} />
                         <Route exact path="/verifyemail" component={VerifyEmail} />
                         <Route exact path="/playlists" component={Playlists} />
+                        <Route exact path="/playlist/:id" render={props => <Playlist {...props} /> } />
                         <Route exact path="/session-expired" component={SessionExpired}/>
                         <Route component={FourOhFour} />
                     </Switch>

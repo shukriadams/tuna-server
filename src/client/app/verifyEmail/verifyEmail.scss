@@ -1,10 +1,8 @@
 @import './../main/settings';
 @import './../type/type';
-@import './../main/mixins';
 
 .verifyEmail {
     @include type-bodyLarge;
-    @include pagelayout-standard;
 }
 
 .verifyEmail-form {
