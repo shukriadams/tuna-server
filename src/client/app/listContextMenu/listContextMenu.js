@@ -238,12 +238,13 @@ class View extends React.Component {
             <div className="listContextMenu" ref="menu" style={this.state.position}>
                 <div className="listContextMenu-scaffold">
                     <ul>
-                        <li className="listContextMenu-function" onMouseEnter={this.closePlaylists.bind(this)}>
+                        <li className="listContextMenu-function listContextMenu-close" onMouseEnter={this.closePlaylists.bind(this)}>
                             <a className="listContextMenu-functionLink" onClick={this.close.bind(this)}>
                                 <ReactSVG path="/media/svg/close.svg" />
                                 Close
                             </a>
                         </li>
+                        
                         {
                             false &&
                                 <li className="listContextMenu-function" onMouseEnter={this.closePlaylists.bind(this)}><a className="listContextMenu-functionLink" onClick={()=>loveSong(this.props.songId)}>Love</a></li>

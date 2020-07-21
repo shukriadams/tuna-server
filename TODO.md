@@ -17,6 +17,7 @@ DONE
 - mobile : move footer menu into main menu
 
 TODO
+- needs public player mode - disable profile page, disable profile actions, autologin
 - add player test section - store local blob, play remote mp3/ogg/mp3, play local mp3/ogg/mp4
 - last fm : rewrite to allow any public instance to be its own lastfm app.
 - allow setting default password via docker-compose

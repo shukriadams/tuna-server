@@ -80,7 +80,7 @@ class View extends React.Component {
                 {
                     playlist &&
                         <div className="playlistBar-currentPlaylist">
-                            <span className="playlistBar-currentLiteral">Current playlist :</span> <span className="playlistBar-currentPlaylistName">{ playlist.name }</span>
+                            <span className="playlistBar-currentLiteral">Playlist :</span> <span className="playlistBar-currentPlaylistName">{ playlist.name }</span>
                             <a className="playlistBar-unloadPlaylist" onClick={this.unloadPlaylist.bind(this)}>Unload it</a>
                             {
                                 this.props.isDirty &&

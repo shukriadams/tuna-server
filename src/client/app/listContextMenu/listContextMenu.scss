@@ -10,7 +10,6 @@
     @include gloo-browser(box-shadow, -4px 8px 12px 4px rgba($codGray, .5));
     background-color: $seaShell;
     color: $white;
-    min-height: 80px;
     min-width: 220px;
     padding: $layout-universalGutter;
     position: absolute;
@@ -104,4 +103,11 @@
     display: block;
     min-height: 38px;
     padding-top: $layout-universalGutter;
+}
+
+.listContextMenu-close {
+    display: none;
+    @media #{$glu_mediaQuery-belowSmall}{
+        display: block;
+    }
 }
