@@ -26,11 +26,14 @@
     width: 100%;
 }
 
+// this is where we enforce width layout for all pages
 .layout-content {
+    max-width: $layout-maxWidth;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: $layout-universalGutter;
+    padding-right: $layout-universalGutter;
     padding-bottom: $layout-verticalModuleRhythm; // this finishes the vertical layout flow on a page, modules have top padding only. this makes consistency easier
     flex: 1;
-
-    @media #{$glu_mediaQuery-aboveSmall} {
-
-    }
+    width: $layout-maxWidth;
 }

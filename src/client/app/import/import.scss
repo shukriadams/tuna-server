@@ -1,16 +1,5 @@
-@import './../gloo/gloo';
-@import './../main/settings';
-
-.import {
-    max-width: $layout-maxWidth;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: $layout-universalGutter;
-    padding-right: $layout-universalGutter;
-}
-
-
 .import-stageTwoPercent {
+    // refactor, use type system!
     font-size: 12em;
 }
 

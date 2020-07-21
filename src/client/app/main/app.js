@@ -25,6 +25,7 @@ import VerifyEmail from './../pages/verifyEmail'
 import DeleteProfile from './../pages/deleteProfile'
 import DeletedProfile from './../pages/deletedProfile'
 import SessionExpired from './../pages/sessionExpired'
+import Playlists from './../pages/playlists'
 import About from './../pages/about'
 import Terms from './../pages/termsOfService'
 import appSettings from './../appSettings/appSettings'
@@ -49,21 +50,22 @@ import contentHelper from './../helpers/contentHelper'
             <Router history={history}>
                 <Provider store={Store}>
                     <Switch>
-                        <PrivateRoute exact path={`/${PROFILE}`} component={Settings}/>
-                        <PrivateRoute exact path={`/${IMPORT}`} component={Import}/>
-                        <PrivateRoute exact path="/deleteAccount" component={DeleteProfile}/>
-                        <PrivateRoute exact path="/reload" component={Reload}/>
-                        <Route exact path="/deleted" component={DeletedProfile}/>
-                        <Route exact path="/" component={Home}/>
-                        <Route exact path="/terms-of-service" component={Terms}/>
-                        <Route exact path="/login" component={Login}/>
-                        <Route exact path="/about" component={About}/>
-                        <Route exact path="/help" component={Help}/>
-                        <Route exact path="/resetPassword" component={ResetPassword}/>
-                        <Route exact path="/how" component={How}/>
-                        <Route exact path="/newPassword" component={NewPassword}/>
-                        <Route exact path="/kitchenSink" component={KitchenSink}/>
-                        <Route exact path="/verifyemail" component={VerifyEmail}/>
+                        <PrivateRoute exact path={`/${PROFILE}`} component={Settings} />
+                        <PrivateRoute exact path={`/${IMPORT}`} component={Import} />
+                        <PrivateRoute exact path="/deleteAccount" component={DeleteProfile} />
+                        <PrivateRoute exact path="/reload" component={Reload} />
+                        <Route exact path="/deleted" component={DeletedProfile} />
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/terms-of-service" component={Terms} />
+                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/about" component={About} />
+                        <Route exact path="/help" component={Help} />
+                        <Route exact path="/resetPassword" component={ResetPassword} />
+                        <Route exact path="/how" component={How} />
+                        <Route exact path="/newPassword" component={NewPassword} />
+                        <Route exact path="/kitchenSink" component={KitchenSink} />
+                        <Route exact path="/verifyemail" component={VerifyEmail} />
+                        <Route exact path="/playlists" component={Playlists} />
                         <Route exact path="/session-expired" component={SessionExpired}/>
                         <Route component={FourOhFour} />
                     </Switch>

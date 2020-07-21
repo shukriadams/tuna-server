@@ -45,6 +45,12 @@ function authenticatedHeaderModel(){
     settings.isActive = history.location.pathname === `/${PROFILE}`
     settings.isRoute = true
 
+    const playlists = Object.assign({ }, HeaderItemModel)
+    playlists.href = '/playlists'
+    playlists.title = 'Playlists'
+    playlists.isActive = history.location.pathname.startsWith(`/playlist`)
+    playlists.isRoute = true
+
     const help = Object.assign({}, HeaderItemModel)
     help.href = '/help'
     help.showOnScreenSize = 'small'
@@ -62,7 +68,7 @@ function authenticatedHeaderModel(){
     model.logoSVG = '/media/svg/sitelogo.svg'
     model.menuSVG = '/media/svg/burger.svg'
     model.title = 'Tuna'
-    model.menuItems = [ music, settings, terms, help]
+    model.menuItems = [ music, playlists, settings, terms, help]
     model.isDockedToWindowTop = false
 
     return model

@@ -59,6 +59,19 @@
     }
 }
 
+
+/**
+ * Gives a page standard visual behaviour. Use this for dimensions only, not typography etc
+ */
+@mixin pagelayout-standard {
+    max-width: $layout-maxWidth;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: $layout-universalGutter;
+    padding-right: $layout-universalGutter;
+}
+
+
 /**
  * The song list style is used be several implementors. This is the common style for all of them.
  */

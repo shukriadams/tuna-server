@@ -112,3 +112,21 @@ To debug a single test use
 
     npm run testdebug "test name" 
 
+## Concepts
+
+### Playlist
+
+- A playlist is a saved list of songs which can be added to the queue. 
+- A user can have multiple playlists.
+- Songs in a playlist must be added to the queue to play them. 
+- Adding songs to the queue can either delete all existing songs in the queue, or append to the songs already in the queue.
+- Playlists have a max size, this mainly for performance.
+
+### Queue 
+
+- The queue is a master list of songs which the player object uses to play music. 
+- There is only one queue.
+- When the queue runs out playing stops, or the use can loop the queue to play again from start.
+- The queue shares the same max size with playlists.
+- The queue can be be set to randomly grow - a new song will be added to it each time the last song is reached. New song selection can be based on settings that will be added later.
+
