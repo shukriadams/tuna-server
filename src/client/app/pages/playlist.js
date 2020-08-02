@@ -12,7 +12,7 @@ export default class extends React.Component {
     render(){
         return (
             <Layout>
-                <View />
+                <View {...this.props} />
             </Layout>
         )
     }

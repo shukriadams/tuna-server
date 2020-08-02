@@ -15,6 +15,7 @@ DONE
 - bring back linked mongo container
 - move all npm build components into project
 - mobile : move footer menu into main menu
+- recreate howler instance on next play
 
 TODO
 - needs public player mode - disable profile page, disable profile actions, autologin

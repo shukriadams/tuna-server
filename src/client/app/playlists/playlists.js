@@ -34,14 +34,17 @@ class View extends React.Component {
     render(){
         return (
             <div className="playlists">
-                Playlists!
+                <h1>Playlists</h1>
+
                 {
                     this.props.playlists &&
-                        <ul>
+                        <ul className="playlists-list">
                             {
                                 this.props.playlists.map(function(playlist, index){
-                                    return(<li key={index}>
-                                        <Link to={`playlist/${playlist.id}`}>{playlist.name}</Link>
+                                    return(<li className="playlists-listItem" key={index}>
+                                        <div className="playlists-listItemContent">
+                                            <Link to={`playlist/${playlist.id}`}>{playlist.name}{playlist.songs.length ? ` (${playlist.songs.length})` : ''} </Link>
+                                        </div>
                                     </li>)
                                 })
                             }

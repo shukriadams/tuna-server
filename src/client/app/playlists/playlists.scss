@@ -1,5 +1,9 @@
-@import './../type/type';
+@import './../main/mixins';
 
-.playlists {
-    @include type-bodyLarge;
+.playlists-listItem {
+    @include listItem;
+}
+
+.playlists-listItemContent{
+    @include listItemContent;
 }

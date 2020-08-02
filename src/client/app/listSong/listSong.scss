@@ -9,25 +9,6 @@
     alignment in a standard way so we can add different types of row content without cludging
     their alignment in different ways
 */
-@mixin rowContent ($isClickableSVGContainer : false){
-    //@include gloo-browser(transform, translateY(-50%));
-    display: table-cell;
-    position: relative;
-    vertical-align: middle;
-
-    svg {
-        position: relative;
-    }
-}
-
-@mixin rowContentInteractive{
-    &:hover {
-        path, polygon {
-            @include gloo-transition(fill, .1s);
-            fill: lighten($rust, 10%);
-        }
-    }
-}
 
 $smallSectionWidth: 32px;
 
@@ -42,14 +23,14 @@ $smallSectionWidth: 32px;
     @include gloo-browser(transition-property, (background-color, transform));
     @include gloo-browser(user-select, none);
     @include songListColorScheme;
-    @include listStyle;
-
+    @include listItem;
+    /*
     display: table;
     padding: 0 $layout-universalGutter 0 $layout-universalGutter; // don't use padding to vertical center content
     position: relative;
     table-layout: fixed;
     width: 100%;
-
+    */
     svg {
         position: relative;
     }
@@ -118,13 +99,13 @@ $smallSectionWidth: 32px;
 
 /* holds a single function icon, normally plus or minus */
 .listSong-function {
-    @include rowContent(true);
+    @include listItemContent;
     @include smallSection;
     text-align: center;
 
     &.listSong-function--interactive {
         cursor: pointer;
-        @include rowContentInteractive;
+        @include listItemContentInteractive;
     }
 }
 
@@ -140,14 +121,14 @@ $smallSectionWidth: 32px;
     every row must have a lead, it has space for ONE icon
 */
 .listSong-lead {
-    @include rowContent;
+    @include listItemContent;
     @include type-subText;
     @include smallSection;
     padding-left: 4px;
 }
 
 .listSong-dynamicContent {
-    @include rowContent;
+    @include listItemContent;
     overflow: hidden;
     width: 100%;
 }
@@ -177,8 +158,8 @@ $smallSectionWidth: 32px;
 
 /* Scaffold element in row that contains the more icon. Always rendered, even when empty, as its part of standard row layout */
 .listSong-more {
-    @include rowContent(true);
-    @include rowContentInteractive;
+    @include listItemContent;
+    @include listItemContentInteractive;
     @include smallSection;
     padding-left: 8px;
     text-align: center;

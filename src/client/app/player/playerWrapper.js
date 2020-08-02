@@ -28,6 +28,10 @@ export default class {
         if (this._updateTimer)
             clearInterval(this._updateTimer)
 
+        // need to destroy existing instance else we get overlapping plays. todo : fade out for softer transitions?
+        if (this.player)
+            this.player.unload()
+
         this.player = new Howl({
             src : [url],
             format,
