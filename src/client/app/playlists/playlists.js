@@ -7,6 +7,15 @@ import appSettings from './../appSettings/appSettings'
 import { playListSetAll } from './../actions/actions'
 import { Link } from 'react-router-dom'
 
+const sortPlaylists = (a,b)=> {
+    const aName = a.name.toLowerCase(),
+        bName = b.name.toLowerCase()
+
+    return aName > bName ? 1 :
+        bName > aName ? -1 :
+        0
+}
+
 class View extends React.Component {
     
     constructor(props) {
@@ -57,12 +66,14 @@ class View extends React.Component {
                         You haven't created any playlists yet
                     </Fragment>
                 }
-
-                <Button 
-                    onClick={this.createPlaylist.bind(this)} 
-                    disabledText="contacting server" 
-                    text="New playlist" 
-                    isDisabled={this.state.isBusyCreating} />
+                
+                <div className="playlists-functions">
+                    <Button 
+                        onClick={this.createPlaylist.bind(this)} 
+                        disabledText="contacting server" 
+                        text="New playlist" 
+                        isDisabled={this.state.isBusyCreating} />
+                </div>
 
             </div>
         )
@@ -72,7 +83,7 @@ class View extends React.Component {
 export default connect(
     (state)=>{
         return {
-            playlists : state.session.playlists ? state.session.playlists : []
+            playlists : state.session.playlists ? state.session.playlists.sort(sortPlaylists) : []
         }
     }
 )(View)

@@ -1,4 +1,5 @@
 @import './../main/mixins';
+@import './../type/type';
 
 .playlist-listItem {
     @include listItem;
@@ -10,4 +11,12 @@
 
 .playlist-functions {
     @include layoutPaddedContainer;
+}
+
+.playlist-renameEnter{
+    display: inline-block;
+}
+
+.playlist-renameTooltip {
+    @include type-subText;
 }

@@ -4,6 +4,10 @@
     @include listItem;
 }
 
-.playlists-listItemContent{
+.playlists-listItemContent {
     @include listItemContent;
+}
+
+.playlists-functions {
+    @include layoutPaddedContainer;
 }

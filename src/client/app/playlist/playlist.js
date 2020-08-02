@@ -4,18 +4,47 @@ import { Link } from 'react-router-dom'
 import store from './../store/store';
 import history from './../history/history'
 import { View as Button } from './../glu_button/index'
+import playlistHelper from './../playlist/playlistHelper'
+import ajax from './../ajax/asyncAjax'
+import appSettings from './../appSettings/appSettings'
+import { playListSetAll } from './../actions/actions'
 
 class View extends React.Component {
     
     constructor(props) {
         super(props)
         this.state = {
-
+            changingName : false,
+            isBusySaving : false
         }
     }
+    
+    enterChangeName(){
+        this.setState({ changingName : true })
+    }
 
-    componentWillReceiveProps(nextProps) {
-        console.log('inc props', nextProps)
+    leaveChangeName(){
+        this.setState({ changingName : false })
+    }
+    
+    async updateName(){
+        if (!this.refs.name.value.length)
+            return
+            
+        const playlist = playlistHelper.getById(this.props.id)
+        playlist.name = this.refs.name.value
+
+        this.setState({
+            isBusySaving : true
+        })
+
+        const result = await ajax.post(`${appSettings.serverUrl}/v1/playlists`, playlist)
+        playListSetAll(result.payload.playlists)
+
+        this.setState({ 
+            changingName : false, 
+            isBusySaving : false
+         })
     }
 
     render(){
@@ -43,7 +72,25 @@ class View extends React.Component {
             <div className="playlist">
                 <Link to="/playlists">All playlists</Link>
                 <div>
-                    <h2>{this.props.playlist.name}</h2>
+                    {
+                        !this.state.changingName &&
+                        <Fragment>
+                            <h2><a className="playlist-renameEnter" onClick={this.enterChangeName.bind(this)}>{this.props.playlist.name}</a></h2>
+                            <div className="playlist-renameTooltip">
+                                Click to rename
+                            </div>
+                        </Fragment>
+                    }
+
+                    {
+                        this.state.changingName &&
+                        <Fragment>
+                            <input ref="name" defaultValue={this.props.playlist.name} type="text" />
+                            <a onClick={this.updateName.bind(this)}>Save</a>
+                            <a onClick={this.leaveChangeName.bind(this)}>Cancel</a>
+                        </Fragment>
+                    }
+
 
                     {
                         !songsInPlaylist.length &&
@@ -53,7 +100,7 @@ class View extends React.Component {
                     }
 
                     {
-                        songsInPlaylist.length &&
+                        !!songsInPlaylist.length &&
                         <Fragment>
                             <ul className="playlist">
                                 {
