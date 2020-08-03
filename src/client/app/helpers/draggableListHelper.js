@@ -6,7 +6,7 @@
  */
 import vc from 'vcjs'
 
-import { setDraggedOverItem, clearDraggedOverItem ,clearSelectedRows } from './../actions/actions'
+import { setDraggedOverItem, clearDraggedOverItem, clearSelectedRows } from './../actions/actions'
 import store from './../store/store'
 import debounce from 'debounce'
 
@@ -27,7 +27,7 @@ export default class SongsListDragHelper{
         // if dragging, the item being dragged over
         this.hoveredOver = null
 
-        this.mouseMoveDelegate = debounce( (e)=>{
+        this.mouseMoveDelegate = debounce( e => {
             this.mouseMove(e)
         }, 10)
 
