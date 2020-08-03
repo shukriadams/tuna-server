@@ -6,7 +6,7 @@ import ListSong from './../listSong/listSong'
 import { View as ListAlbum } from './../listAlbum/listAlbum'
 import  ContextMenu from './../listContextMenu/listContextMenu'
 import vc from 'vcjs'
-import DragHelper from './../songs/songsListDragHelper'
+import DragHelper from './../helpers/draggableSongListHelper'
 import ListModel from './../store/models/listContextListModel'
 import queueHelper from './../queue/queueHelper'
 import playHelper from './../player/playerHelper'
@@ -19,7 +19,7 @@ class View extends React.Component {
 
     componentDidMount(){
         if (this.props.context === 'queue')
-            this.dragHelper = new DragHelper(this.refs.list, this.props.id)
+            this.dragHelper = new DragHelper(this.refs.list, this.props.id, 'listSong', 'data-songid')
 
         // need to bind event handler as class member with no "this" in it to allow us to cleanly unbind it. Else
         // even an opening click will trigger a close
