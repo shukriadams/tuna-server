@@ -8,6 +8,7 @@ import playlistHelper from './../playlist/playlistHelper'
 import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import { playListSetAll } from './../actions/actions'
+import DragHelper from './../helpers/draggableListHelper'
 
 class View extends React.Component {
     
@@ -45,6 +46,9 @@ class View extends React.Component {
             changingName : false, 
             isBusySaving : false
          })
+    }
+    componentDidMount(){
+        this.dragHelper = new DragHelper(this.refs.list, this.props.id, 'playlist', 'data-songid')
     }
 
     render(){
@@ -102,10 +106,11 @@ class View extends React.Component {
                     {
                         !!songsInPlaylist.length &&
                         <Fragment>
-                            <ul className="playlist">
+
+                            <ul ref="list" className="playlist">
                                 {
                                     songsInPlaylist.map((song, index) => (
-                                        <li className="playlist-listItem" key={index}>
+                                        <li className="playlist-listItem listsong" data-songid={song.id} key={index}>
                                             <div className="playlist-listItemContent">
                                                 {song.name}
                                             </div>

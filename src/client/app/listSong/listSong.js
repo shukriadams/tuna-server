@@ -171,7 +171,7 @@ let Model = {
 
     // context is straight from parent list. queue|search etc, tells us what the list being used for, which influences row behavior
     context : null
-};
+}
 
 
 View.defaultProps = Model

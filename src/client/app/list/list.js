@@ -128,7 +128,7 @@ class View extends React.Component {
                                         song={item}
                                         tags={tags}
                                         draggedOver={listContextModel.draggedOverSongId === item.id}
-                                        isCurrentSong = {isCurrentSong}
+                                        isCurrentSong={isCurrentSong}
                                         isScrollingPastCurrent={listContextModel.isScrollingPastCurrent}
                                         isSelected={selectedRowIds.includes(item.id)}
                                         context={this.props.context}
