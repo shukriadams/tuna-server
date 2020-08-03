@@ -32,17 +32,17 @@ export default class SongsListDragHelper{
         }, 10)
 
         this.viewRootNode = draggableList
-        this.viewRootNode.addEventListener('mousedown', this.mouseDown.bind(this), false)
         this.viewRootNode.addEventListener('mousemove', this.mouseMoveDelegate, false)
         this.viewRootNode.addEventListener('mouseover', this.mouseOver.bind(this), false)
-        // mouseup must be @ document level, as dropping a drag must not be limited to the list only
+        // mouse up/down events must be @ document level, as off-clicking or dropping a drag must not be limited to the list only
+        document.addEventListener('mousedown', this.mouseDown.bind(this), false)
         document.addEventListener('mouseup', this.mouseUp.bind(this), false)
     }
 
     dispose(){
-        this.viewRootNode.removeEventListener('mousedown', this.mouseDown.bind(this), false)
         this.viewRootNode.removeEventListener('mousemove', this.mouseMoveDelegate, false)
         this.viewRootNode.removeEventListener('mouseover', this.mouseOver.bind(this), false)
+        document.removeEventListener('mousedown', this.mouseDown.bind(this), false)
         document.removeEventListener('mouseup', this.mouseUp.bind(this), false)
     }
 
@@ -148,6 +148,8 @@ export default class SongsListDragHelper{
             }
 
             e.stopPropagation()
+        } else {
+            clearSelectedRows(this.listId)
         }
     }
 

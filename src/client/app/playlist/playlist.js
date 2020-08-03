@@ -8,7 +8,9 @@ import playlistHelper from './../playlist/playlistHelper'
 import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import { playListSetAll } from './../actions/actions'
-import DragHelper from './../helpers/draggableListHelper'
+import DragHelper from './../helpers/draggablePlaylistHelper'
+import ListSong from './../listSong/listSong'
+import ListModel from './../store/models/listContextListModel'
 
 class View extends React.Component {
     
@@ -47,11 +49,18 @@ class View extends React.Component {
             isBusySaving : false
          })
     }
+    
     componentDidMount(){
-        this.dragHelper = new DragHelper(this.refs.list, this.props.id, 'playlist', 'data-songid')
+        if (this.refs.list)
+            this.dragHelper = new DragHelper(this.refs.list, this.props.id, 'playlist', 'data-songid')
     }
 
     render(){
+        // get this menu's redux state, else use a blank state model from Store
+        let listContextModel = this.props.listContext[this.props.id] ?
+            this.props.listContext[this.props.id] :
+            Object.assign({}, ListModel)
+
         const songsInPlaylist = [],
             allSongs = store.getState().session.songs
 
@@ -107,15 +116,19 @@ class View extends React.Component {
                         !!songsInPlaylist.length &&
                         <Fragment>
 
-                            <ul ref="list" className="playlist">
+                            <ul ref="list" className="playlist" data-list={this.props.id}>
                                 {
                                     songsInPlaylist.map((song, index) => (
-                                        <li className="playlist-listItem listsong" data-songid={song.id} key={index}>
-                                            <div className="playlist-listItemContent">
-                                                {song.name}
-                                            </div>
-                                        </li>
-                                    ))
+                                        <ListSong
+                                            key={index}
+                                            song={song}
+                                            draggedOver={listContextModel.draggedOverSongId === song.id}
+                                            isScrollingPastCurrent={listContextModel.isScrollingPastCurrent}
+                                            isSelected={listContextModel.selectedSongIds.includes(song.id)}
+                                            context="playlist"
+                                            rowNumber={index + 1}
+                                            listId={this.props.id} />
+                                        ))
                                 }
                             </ul>
 
@@ -137,6 +150,7 @@ class View extends React.Component {
 export default connect(
     (state, props)=>{
         return {
+            listContext : state.listContext,
             playlist : state.session.playlists.find(playlist => playlist.id === props.id) 
         }
     }
