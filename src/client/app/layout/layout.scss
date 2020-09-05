@@ -11,10 +11,10 @@
     position: relative;
 
     &.layout--fullSizePlayer {
-        padding-top: $layout-playStripHeight + $layout-headerHeight + $layout-playlistBarHeight;
+        padding-top: $layout-playStripHeight + $layout-headerHeight;
 
         @media #{$glu_mediaQuery-belowSmall} {
-            padding-top: $layout-playStripHeightBelowSmall + $layout-headerHeight  + $layout-playlistBarHeight;
+            padding-top: $layout-playStripHeightBelowSmall + $layout-headerHeight;
         }
     }
 }
@@ -35,5 +35,4 @@
     padding-right: $layout-universalGutter;
     padding-bottom: $layout-verticalModuleRhythm; // this finishes the vertical layout flow on a page, modules have top padding only. this makes consistency easier
     flex: 1;
-    width: $layout-maxWidth;
 }

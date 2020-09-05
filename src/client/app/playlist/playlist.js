@@ -52,7 +52,7 @@ class View extends React.Component {
     
     componentDidMount(){
         if (this.refs.list)
-            this.dragHelper = new DragHelper(this.refs.list, this.props.id, 'playlist', 'data-songid')
+            this.dragHelper = new DragHelper(this.refs.list, this.props.id, 'listSong', 'data-songid')
     }
 
     render(){
@@ -83,12 +83,11 @@ class View extends React.Component {
 
         return (
             <div className="playlist">
-                <Link to="/playlists">All playlists</Link>
                 <div>
                     {
                         !this.state.changingName &&
                         <Fragment>
-                            <h2><a className="playlist-renameEnter" onClick={this.enterChangeName.bind(this)}>{this.props.playlist.name}</a></h2>
+                            <h1><a className="playlist-renameEnter" onClick={this.enterChangeName.bind(this)}>{this.props.playlist.name}</a></h1>
                             <div className="playlist-renameTooltip">
                                 Click to rename
                             </div>
@@ -139,6 +138,8 @@ class View extends React.Component {
 
                         </Fragment>
                     }
+
+                    <Link to="/playlists">Back to All playlists</Link>
 
                 </div>
 

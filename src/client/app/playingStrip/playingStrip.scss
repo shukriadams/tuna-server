@@ -63,10 +63,6 @@
             display: none;
         }
 
-        .playingStrip-playlistBar {
-            display: none;
-        }
-
         .playingStrip-progress {
             display: none;
         }
@@ -130,11 +126,6 @@ siblings and obscure them */
         display: inline-block;
         padding: 8px 0;
     }
-}
-
-.playingStrip-playlistBar {
-    border-top: 1px solid $coral;
-    pointer-events: auto;
 }
 
 .playingStrip-timer {

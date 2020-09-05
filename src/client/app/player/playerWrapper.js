@@ -35,6 +35,7 @@ export default class {
         this.player = new Howl({
             src : [url],
             format,
+            volume : store.getState().session.volume / 100,
             onend :()=>{
                 if (this.onEnd)
                     this.onEnd()
@@ -53,8 +54,6 @@ export default class {
         store.subscribe(volumeWatcher((newVolume) => {
             this.player.volume(newVolume / 100) // convert from 0-100 to 0-1
         }))
-
-        this.player.volume(store.getState().session.volume)
 
         if (this.onReady)
             this.onReady()

@@ -80,7 +80,7 @@ export default class SongsListDragHelper{
         return percent < 50
     }
 
-    mouseUp (e){
+    async mouseUp (e){
         // instantly clear temp drag stuff when mouse is released, no questions asked
         this.startDragPosition = null
         this.pendingDraggedItem = null
@@ -104,14 +104,14 @@ export default class SongsListDragHelper{
 
         // first try to move selected songs. if no songs selected, move the currently dragged row from this drag helper
         this.listContext = store.getState().listContext[this.listId]
-        this.onItemsDragged()
+        await this.onItemsDragged()
         clearSelectedRows(this.listId)
 
         this.clearDrag()
     }
 
     // override this
-    onItemsDragged(){}
+    async onItemsDragged(){}
 
     mouseMove (e){
         this.mousePosition = { x : e.pageX, y : e.pageY }
