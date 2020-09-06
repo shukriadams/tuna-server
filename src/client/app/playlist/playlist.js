@@ -165,7 +165,7 @@ class View extends React.Component {
                     }
                     <div>
                         <h2>Dangerzone</h2>
-                        <Button text="Delete playlist" onClick={()=>{ console.log("lol") ; this.setState({ promptDelete : true }) }} />
+                        <Button text="Delete playlist" onClick={()=> this.setState({ promptDelete : true }) } />
                     </div>
 
                 </div>
