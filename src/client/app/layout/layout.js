@@ -35,7 +35,7 @@ function authenticatedHeaderModel(){
     
     const music = Object.assign({ }, HeaderItemModel)
     music.href = '/'
-    music.title = 'Music'
+    music.title = 'Play'
     music.isRoute = true
     music.isActive = history.location.pathname === '/'
 

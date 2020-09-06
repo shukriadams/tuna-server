@@ -35,4 +35,5 @@
     padding-right: $layout-universalGutter;
     padding-bottom: $layout-verticalModuleRhythm; // this finishes the vertical layout flow on a page, modules have top padding only. this makes consistency easier
     flex: 1;
+    width: 100%;
 }

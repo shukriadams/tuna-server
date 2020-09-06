@@ -72,22 +72,24 @@ class View extends React.Component {
         );
     }
 }
+
 let link = {
     href : 'example.com',
     text : 'Thing',
     iconSVG : null
-};
+}
+
 let section = {
     title : 'Your title here',
     subTitle : 'Your subtitle here',
     links : [link, link, link, link]
-};
+}
 
 let Model = {
     sections : [section, section, section, section],
     secondaryText : 'Copyright 2016. Powered by coffee.'
-};
+}
 
-View.defaultProps = Model;
+View.defaultProps = Model
 
-export { View, Model };
+export { View, Model }

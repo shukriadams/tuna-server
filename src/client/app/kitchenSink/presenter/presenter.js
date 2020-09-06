@@ -17,7 +17,7 @@ class View extends React.Component {
 
 View.defaultProps = {
   title: 'your-title-here',
-  fullBleed : true
+  fullBleed : false
 }
 
 export default View

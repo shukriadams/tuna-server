@@ -60,7 +60,7 @@ class View extends React.Component {
     render(){
         // ###################################################################
         // set various things based on song state, this should probably be optimized
-        let showMainFunction = this.props.context !== 'queue',
+        let showMainFunction = this.props.showMainFunction && this.props.context !== 'queue',
             functionInteractive = true
 
         if (this.props.context === 'queue')
@@ -170,7 +170,9 @@ let Model = {
     isScrollingPastCurrent: false,
 
     // context is straight from parent list. queue|search etc, tells us what the list being used for, which influences row behavior
-    context : null
+    context : null,
+
+    showMainFunction: true
 }
 
 

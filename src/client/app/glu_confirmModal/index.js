@@ -16,20 +16,22 @@ class View extends React.Component {
 
     onReject(){
         if (this.props.onReject)
-            this.props.onReject();
-        this.setState({ show : false });
+            this.props.onReject()
+
+        this.setState({ show : false })
     }
 
     onAccept(){
         if (this.props.onAccept)
-            this.props.onAccept();
-        this.setState({ show : false });
+            this.props.onAccept()
+
+        this.setState({ show : false })
     }
 
     render(){
         return (
             <div className={`glu_confirmModal`}>
-                <GluModal closeOnOffClick={false} show={this.state.show} onClick={this.props.click}>
+                <GluModal closeOnOffClick={true} show={this.state.show} onClick={this.props.click}>
                     <div className={`glu_confirmModal-message`}>
                         {this.props.children}
                     </div>
