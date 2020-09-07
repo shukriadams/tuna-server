@@ -1,6 +1,10 @@
 @import './../main/mixins';
 @import './../type/type';
 
+.playlist-list{
+    position: relative;
+}
+
 .playlist-listItem {
     @include listItem;
 }

@@ -55,6 +55,20 @@ function sessionReducer(state = defaultSession, action) {
             return Object.assign({}, state, { isScrobbling : false })
         }
 
+        case 'PLAYLIST_REMOVESONG' : {
+
+            const newState = Object.assign({}, state),
+                playlist = newState.playlists.find( playlist => playlist.id === action.playlistId )
+            
+            if (playlist){
+                const index = playlist.songs.indexOf(action.songId)
+                if (index !== -1)
+                    playlist.songs.splice(index, 1)
+            }
+
+            return newState
+        }
+
         case 'SESSION_FLAGRELOAD' : {
             return Object.assign({}, state, { forceRefreshOnNextLoad : true })
         }

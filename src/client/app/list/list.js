@@ -23,7 +23,7 @@ class View extends React.Component {
 
         // need to bind event handler as class member with no "this" in it to allow us to cleanly unbind it. Else
         // even an opening click will trigger a close
-        this.handleOffClick = (e)=>{
+        this.handleOffClick = e =>{
             if (vc.isDescendentOf(e.target, ReactDOM.findDOMNode(this.refs.list)))
                 return
 
@@ -71,7 +71,7 @@ class View extends React.Component {
             rowData.sort(function(song1, song2){
                 return song1.album > song2.album ? 1 :
                     song1.album < song2.album ? -1 :
-                    0;
+                    0
             })
         }
 
@@ -102,25 +102,26 @@ class View extends React.Component {
         const selectedRowIds = listContextModel.selectedSongIds,
             contextMenu = listContextModel.contextMenu
 
-
         return (
             <div className={listClassNames}>
                 <ul className="list-list" ref="list" data-list={this.props.id}>
                     {
                         rowData.map((item, index) => {
                             let tags = [],
-                                isCurrentSong = queueHelper.isCurrentSong(item.id);
+                                isCurrentSong = queueHelper.isCurrentSong(item.id)
 
                             if (queueHelper.isSongInQueue(item.id) && this.props.context !== 'queue')
-                                tags.push('InQueue');
+                                tags.push('InQueue')
 
                             if (isCurrentSong && this.props.isPlaying)
-                                tags.push('Playing');
+                                tags.push('Playing')
 
                             if (item.type === 'albumHeader')
                                 return (
-                                    <ListAlbum key={index} text={item.text} />
-                                );
+                                    <ListAlbum 
+                                        key={index} 
+                                        text={item.text} />
+                                )
                             else {
                                 return(
                                     <ListSong
@@ -133,7 +134,7 @@ class View extends React.Component {
                                         isSelected={listContextModel.selectedSongIds.includes(item.id)}
                                         context={this.props.context}
                                         listId={this.props.id}
-                                        rowNumber={item.rowNumber}  />
+                                        rowNumber={item.rowNumber} />
                                 )
                             }
                         })
@@ -143,7 +144,11 @@ class View extends React.Component {
                 {
                     // force key so a menu for a different song can immediately replace an existing menu
                     contextMenu &&
-                        <ContextMenu key={contextMenu.songId} context={this.props.context} listId={this.props.id} songId={contextMenu.songId} />
+                        <ContextMenu 
+                            key={contextMenu.songId} 
+                            context={this.props.context} 
+                            listId={this.props.id} 
+                            songId={contextMenu.songId} />
                 }
 
             </div>
@@ -152,7 +157,7 @@ class View extends React.Component {
 }
 
 
-let Model = class {
+const Model = class {
 
     /**
      * @param {*} listId Initialize with random listId if id is not specified
@@ -174,7 +179,6 @@ let Model = class {
 
         this.id = listId
     }
-
 }
 
 

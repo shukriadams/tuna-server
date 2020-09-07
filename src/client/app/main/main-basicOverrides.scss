@@ -7,7 +7,6 @@ Set base HTML elements and fonts here
 @import './settings';
 
 @import url('http://fonts.googleapis.com/css?family=Lato');
-//@import url(http://fonts.googleapis.com/css?family=Raleway);
 @import url('http://fonts.googleapis.com/css?family=Work+Sans');
 @import url('http://fonts.googleapis.com/css?family=Source+Sans+Pro:900');
 
@@ -41,11 +40,6 @@ a {
 
 h1 {
     @include type-h1Layout;
-    margin: 0;
-
-    @media #{$glu_mediaQuery-belowSmall} {
-        //text-align: center;
-    }
 }
 
 h2 {

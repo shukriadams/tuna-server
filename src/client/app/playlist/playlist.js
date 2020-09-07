@@ -12,6 +12,7 @@ import DragHelper from './../helpers/draggablePlaylistHelper'
 import ListSong from './../listSong/listSong'
 import ListModel from './../store/models/listContextListModel'
 import { View as GluConfirmModal } from './../glu_confirmModal/index'
+import ContextMenu from './../listContextMenu/listContextMenu'
 
 class View extends React.Component {
     
@@ -96,6 +97,8 @@ class View extends React.Component {
 
                 songsInPlaylist.push(song)
         }
+        
+        const contextMenu = listContextModel.contextMenu
 
         return (
             <div className="playlist">
@@ -130,16 +133,16 @@ class View extends React.Component {
 
                     {
                         !songsInPlaylist.length &&
-                            <div>
+                            <p>
                                 This in playlist is empty - add some songs to it
-                            </div>
+                            </p>
                     }
 
                     {
                         !!songsInPlaylist.length &&
                         <Fragment>
 
-                            <ul ref="list" className="playlist" data-list={this.props.id}>
+                            <ul ref="list" className="playlist-list" data-list={this.props.id}>
                                 {
                                     songsInPlaylist.map((song, index) => (
                                         <ListSong
@@ -154,6 +157,16 @@ class View extends React.Component {
                                             listId={this.props.id} />
                                         ))
                                 }
+
+                                {
+                                    // context menu must be in <ul> to be placed relative to its row content
+                                    contextMenu && 
+                                    <ContextMenu 
+                                        key={contextMenu.songId} 
+                                        context="playlist" 
+                                        listId={this.props.id} 
+                                        songId={contextMenu.songId} />
+                                }
                             </ul>
 
                             <div className="playlist-functions">
@@ -163,12 +176,16 @@ class View extends React.Component {
 
                         </Fragment>
                     }
+                    
                     <div>
                         <h2>Dangerzone</h2>
                         <Button text="Delete playlist" onClick={()=> this.setState({ promptDelete : true }) } />
                     </div>
 
                 </div>
+
+
+
             </div>
         )
     }

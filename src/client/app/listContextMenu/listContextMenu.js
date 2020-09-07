@@ -39,7 +39,7 @@ import ReactDOM from 'react-dom'
 import ClassNames from 'classnames'
 import ReactSVG from 'react-svg'
 import vc from 'vcjs'
-import { clearSelectedRows, closeContextMenu, loveSong, unloveSong, auditionSong, addToQueue, removeFromQueue } from './../actions/actions'
+import { clearSelectedRows, playlistRemoveSong, closeContextMenu, loveSong, unloveSong, auditionSong, addToQueue, removeFromQueue } from './../actions/actions'
 import QueueHelper from './../queue/queueHelper'
 import gluActiveMediaQuery from './../glu_activeMediaQuery/index'
 import flipper from './../songs/flipHelper'
@@ -79,10 +79,11 @@ class View extends React.Component {
         let isInQueue = QueueHelper.isSongInQueue(this.props.songId)
         this.setState({
             timeOpened : new Date(),
-            showEnqueue : !isInQueue,
+            showEnqueue : this.props.context !== 'playlist' && !isInQueue,
+            removeFromPlaylist : this.props.context === 'playlist',
             showRemoveFromQueue : this.props.context === 'queue',
-            showAddToPlaylist : this.props.context !== 'queue',
-            showAudition : this.props.context !== 'queue'
+            showAddToPlaylist : this.props.context !== 'queue' && this.props.context !== 'playlist',
+            showAudition : this.props.context !== 'queue' && this.props.context !== 'playlist'
         })
     }
 
@@ -131,9 +132,8 @@ class View extends React.Component {
 
         let list = document.querySelector(`[data-list="${this.props.listId}"]`),
             row = list.querySelector(`[data-songid="${this.props.songId}"]`),
-            relativeY = vc.offset(row).top + list.scrollTop - vc.offset(list).top + 2   // work out position of context menu relative to row clicked icon is in ... some of these values are fudged
-
-        let position = {right : contextMenuBreathingSpace, top : relativeY}                        // note : position object is used directly as inline CSS by react
+            relativeY = vc.offset(row).top + list.scrollTop - vc.offset(list).top + 2,   // work out position of context menu relative to row clicked icon is in ... some of these values are fudged
+            position = { right : contextMenuBreathingSpace, top : relativeY }                        // note : position object is used directly as inline CSS by react
 
         // note that we cannot reliably get menu position using its offset, but menu is positioned relative to a row,
         // and we CAN get the row's position
@@ -152,7 +152,7 @@ class View extends React.Component {
                 right: contextMenuBreathingSpace
             }
 
-        }  else if (contextMenuTop < containerOffset.top)
+        } else if (contextMenuTop < containerOffset.top)
             // if top of menu collides with container top, force it to render at a respectable distance
             position.top = list.scrollTop + contextMenuBreathingSpace
 
@@ -193,6 +193,10 @@ class View extends React.Component {
         this.close()
     }
 
+    removeFromPlaylist(){
+        playlistRemoveSong(this.props.listId, this.props.songId)
+        this.close()
+    }
 
     async addToPlaylist(){
         let playlistId = this.refs.playlists.value
@@ -263,6 +267,11 @@ class View extends React.Component {
                         {
                             this.state.showEnqueue &&
                                 <li className="listContextMenu-function" onMouseEnter={this.closePlaylists.bind(this)}><a className="listContextMenu-functionLink" onClick={this.enqueue.bind(this)}>Enqueue</a></li>
+                        }
+
+                        {           
+                            this.state.removeFromPlaylist &&
+                                <li className="listContextMenu-function" onMouseEnter={this.closePlaylists.bind(this)}><a className="listContextMenu-functionLink" onClick={this.removeFromPlaylist.bind(this)}>Remove</a></li>
                         }
 
                         {

@@ -27,6 +27,7 @@ const
     playlistDirty = () => store.dispatch({ type: 'PLAYLIST_DIRTY' }),
     playlistClean = () => store.dispatch({ type: 'PLAYLIST_CLEAN' }),
     playListSetAll = (playlists) => store.dispatch({ type: 'SESSION_SETPLAYLISTS', playlists }),
+    playlistRemoveSong = (playlistId, songId) => store.dispatch({ type: 'PLAYLIST_REMOVESONG', playlistId, songId }),
 
     // use this to log the user out
     clearSession = () => store.dispatch({ type: 'CLEAR_SESSION' }),
@@ -90,6 +91,7 @@ export {
     playlistUnset,
     playlistDirty,
     playlistClean,
+    playlistRemoveSong,
     nowPlaylistsDialogShow,
     nowPlaylistsDialogHide,
     clearSelectedRows,

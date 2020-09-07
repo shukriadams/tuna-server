@@ -57,7 +57,7 @@
  */
 @mixin type-h1Layout {
     @include type-h1;
-    margin: $layout-universalGutter * 5 0;
+    margin: ($layout-universalGutter*4) 0 ($layout-universalGutter*2);
 
     @media #{$glu_mediaQuery-belowSmall} {
         margin: $layout-verticalTextRhythm 0;
