@@ -32,11 +32,13 @@ class View extends React.Component {
     addToQueue(){
         const playlist = playlistHelper.getById(this.props.id)
         addToQueue(playlist.songs)
+        this.refs.addToQueueButton.setTemporaryText('Added', 1500)
     }
 
     overwriteQueue(){
         const playlist = playlistHelper.getById(this.props.id)
-        setQueue(playlist.songs)        
+        setQueue(playlist.songs)
+        this.refs.overwriteQueueButton.setTemporaryText('Overwritten', 1500)
     }
 
     async delete(){
@@ -45,6 +47,8 @@ class View extends React.Component {
         this.setState({
             promptDelete: false
         })
+
+        history.push('/playlists')
     }
 
     async updateName(){
@@ -112,7 +116,7 @@ class View extends React.Component {
                         !this.state.changingName &&
                         <div className="playlist-headerContainer" onClick={()=> this.setState({ changingName : true }) }>
                             <h1 className="playlist-header">{this.props.playlist.name}</h1>
-                            <a className="playlist-renameEnter" >
+                            <a className="playlist-renameEnter">
                                 Rename
                             </a>
                         </div>
@@ -170,8 +174,8 @@ class View extends React.Component {
                             </ul>
 
                             <div className="playlist-functions">
-                                <Button text="Add to queue" onClick={this.addToQueue.bind(this)} />
-                                <Button text="Overwrite queue" onClick={this.overwriteQueue.bind(this)}  />
+                                <Button className="playlist-addToQueue" ref="addToQueueButton" text="Add to queue" onClick={this.addToQueue.bind(this)} />
+                                <Button className="playlist-overWriteQueue" ref="overwriteQueueButton" text="Overwrite queue" onClick={this.overwriteQueue.bind(this)}  />
                             </div>
 
                         </Fragment>
