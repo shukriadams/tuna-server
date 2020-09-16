@@ -28,9 +28,14 @@ export default class {
         if (this._updateTimer)
             clearInterval(this._updateTimer)
 
+        // need to destroy existing instance else we get overlapping plays. todo : fade out for softer transitions?
+        if (this.player)
+            this.player.unload()
+
         this.player = new Howl({
             src : [url],
             format,
+            volume : store.getState().session.volume / 100,
             onend :()=>{
                 if (this.onEnd)
                     this.onEnd()
@@ -49,8 +54,6 @@ export default class {
         store.subscribe(volumeWatcher((newVolume) => {
             this.player.volume(newVolume / 100) // convert from 0-100 to 0-1
         }))
-
-        this.player.volume(store.getState().session.volume)
 
         if (this.onReady)
             this.onReady()

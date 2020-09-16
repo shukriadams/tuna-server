@@ -33,7 +33,7 @@ $functionsWidth: 270px;
 }
 
 .playlistsDialog-playlist {
-    @include listStyle;
+    @include listItem;
     color: $doveGray;
     padding-top: 10px;
     position: relative;

@@ -154,11 +154,13 @@ function queueReducer(state = defaultState, action) {
                 if (songPosition === -1)
                     continue
 
+                // remove song from list
                 let item = songs.splice(songPosition, 1)[0]
 
                 if (songPosition < action.position)
                     action.position --
 
+                // add song back to list at new position
                 songs.splice(action.position, 0, item)
             }
 

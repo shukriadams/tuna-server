@@ -70,7 +70,48 @@
     }
 }
 
-@mixin listStyle {
+/**
+ * Used to style a list. Apply this to highest level items in list. In a UL > LI control, this would be applied to LI
+ */
+@mixin listItem {
     border-bottom: 1px solid $white;
     height: $listRowHeight;
+    display: table;
+    padding: 0 $layout-universalGutter 0 $layout-universalGutter; // don't use padding to vertical center content
+    position: relative;
+    table-layout: fixed;
+    width: 100%;    
+}
+
+/**
+ * Content in a list must be wrapped in a block element. UL > LI > DIV > TEXT this would be applied to DIV
+ */
+@mixin listItemContent (){
+    display: table-cell;
+    position: relative;
+    vertical-align: middle;
+
+    svg {
+        position: relative;
+    }
+}
+
+/**
+ * List items that are interactive should have this hover style
+ */
+@mixin listItemContentInteractive{
+    &:hover {
+        path, polygon {
+            @include gloo-transition(fill, .1s);
+            fill: lighten($rust, 10%);
+        }
+    }
+}
+
+/**
+ * form rows. also used in any other layout elements that have content that should be spaced from container boundary
+ */
+@mixin layoutPaddedContainer {
+    padding-bottom: $formElementInputFieldPadding;
+    padding-top: $formElementInputFieldPadding;
 }

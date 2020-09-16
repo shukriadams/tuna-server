@@ -7,6 +7,10 @@
     height: 60px;
     color: $white;
     background-color: $mineShaft;
+
+    @media #{$glu_mediaQuery-belowSmall} {
+        display: none;
+    }
 }
 
 .glu_simpleFooter-anchor {

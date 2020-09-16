@@ -7,4 +7,7 @@
     @include button;
     @include type-subText;
     height: $buttonHeight;
+
+    // a button always pushes the next item away. this makes it easier to put buttons in a row
+    margin-right: $layout-universalGutter;
 }

@@ -1,0 +1,52 @@
+@import './../main/mixins';
+@import './../type/type';
+
+.playlist-list{
+    position: relative;
+}
+
+.playlist-listItem {
+    @include listItem;
+}
+
+.playlist-headerContainer {
+    position: relative;
+}
+
+.playlist-listItemContent{
+    @include listItemContent;
+}
+
+.playlist-functions {
+    @include layoutPaddedContainer;
+}
+
+.playlist-header {
+    display: inline-block;
+}
+
+.playlist-headerEdit {
+    @include type-h1Layout;
+}
+
+.playlist-renameEnter{
+    @include type-subText;
+    display: inline-block;
+    padding-left:$layout-universalGutter;
+}
+
+.playlist-headerSave {
+    padding-left:$layout-universalGutter;
+}
+
+.playlist-headerCancel {
+    padding-left:$layout-universalGutter;
+}
+
+.playlist-addToQueue {
+    width: 123px;
+}
+
+.playlist-overWriteQueue {
+    width: 143px;
+}

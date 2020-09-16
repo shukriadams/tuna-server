@@ -29,6 +29,7 @@ import { View as GluModal } from './../glu_modal/index'
 import { View as GluConfirmModal } from './../glu_confirmModal/index'
 import { View as GluSlidingCheckbox } from './../glu_slidingCheckbox/index'
 import PlayingStrip from './../playingStrip/playingStrip'
+import footerModel from './models/footer.js'
 
 export default class extends React.Component {
 
@@ -53,7 +54,7 @@ export default class extends React.Component {
         return (
             <div className="kitchenSink">
 
-                <Presenter title="glu_button" fullBleed={false}>
+                <Presenter title="glu_button">
                     <a className={`glu_button`}>Button</a>
                 </Presenter>
 
@@ -61,7 +62,7 @@ export default class extends React.Component {
                     <GluSlidingCheckbox />
                 </Presenter>
 
-                <Presenter title="glu_simpleHeader">
+                <Presenter title="glu_simpleHeader" fullBleed={true}>
                     <GluSimpleHeader closeSVG="/media/svg/close.svg" logoSVG="/media/svg/sitelogo.svg" menuSVG="/media/svg/burger.svg" />
                     <br />
                     <br />
@@ -69,27 +70,27 @@ export default class extends React.Component {
                     <br />
                 </Presenter>
 
-                <Presenter title="glu_textIntro" fullBleed={false}>
+                <Presenter title="glu_textIntro">
                     <GluTextIntro />
                 </Presenter>
 
-                <Presenter title="glu_mediaElement with video">
+                <Presenter title="glu_mediaElement with video" fullBleed={true}>
                     <GluMediaElement />
                 </Presenter>
 
-                <Presenter title="glu_mediaElement with image">
+                <Presenter title="glu_mediaElement with image" fullBleed={true}>
                     <GluMediaElement video={null} />
                 </Presenter>
 
-                <Presenter title="glu_simpleFooter">
-                    <GluSimpleFooter />
+                <Presenter title="glu_simpleFooter" fullBleed={true} >
+                    <GluSimpleFooter {...footerModel} />
                 </Presenter>
 
                 <Presenter title="glu_multiColumnText">
                     <GluMultiColumnText />
                 </Presenter>
 
-                <Presenter title="glu_picture" fullBleed={false}>
+                <Presenter title="glu_picture" >
                     <GluPicture />
                 </Presenter>
 
@@ -115,11 +116,11 @@ export default class extends React.Component {
                     <button onClick={this.showConfirmModal.bind(this)}>Toggle</button>
                 </Presenter>
 
-                <Presenter title="layout">
+                <Presenter title="layout" fullBleed={true}>
                     <Layout />
                 </Presenter>
 
-                <Presenter title="form" fullBleed={false}>
+                <Presenter title="form">
                     <FormExample />
                 </Presenter>
 
@@ -155,15 +156,15 @@ export default class extends React.Component {
                     <Settings />
                 </Presenter>
 
-                <Presenter title="FourOhFour" fullBleed={false}>
+                <Presenter title="FourOhFour">
                     <FourOhFour />
                 </Presenter>
 
-                <Presenter title="Help" fullBleed={false}>
+                <Presenter title="Help">
                     <Help />
                 </Presenter>
 
-                <Presenter title="How" fullBleed={false}>
+                <Presenter title="How">
                     <How />
                 </Presenter>
 
@@ -171,7 +172,7 @@ export default class extends React.Component {
                     <PlayingStrip />
                 </Presenter>
 
-                <Presenter title="List" fullBleed={false}>
+                <Presenter title="List">
                     <ListExample />
                 </Presenter>
 

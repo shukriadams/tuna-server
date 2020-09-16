@@ -2,17 +2,6 @@
 @import './../main/main-colorPalette';
 @import './../main/settings';
 
-.home-authenticated {
-    max-width: $layout-maxWidth;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: $layout-universalGutter;
-    padding-right: $layout-universalGutter;
-
-    display: flex;
-    flex-direction: column;
-}
-
 .home-browser {
     @include gloo-browser(flex, 1);
     position: relative;

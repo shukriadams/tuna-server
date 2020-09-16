@@ -1,4 +1,5 @@
 @import './../gloo/gloo';
+
 .glu_modal {
     z-index: 3 // required to allow mask to float above page, as this the masks' parent
 }

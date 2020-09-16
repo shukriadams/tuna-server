@@ -1,51 +1,59 @@
 /**
  * Applies drag behaviour to a list of songs.
  *
- * Assumes the usual :
+ * Assumes :
+ * - list items are LI
  */
 import vc from 'vcjs'
+
+import { setDraggedOverItem, clearDraggedOverItem, clearSelectedRows } from './../actions/actions'
 import store from './../store/store'
-import { moveSongsInQueue, setDraggedOverItem, clearDraggedOverItem ,clearSelectedRows } from './../actions/actions'
 import debounce from 'debounce'
 
 export default class SongsListDragHelper{
 
-    constructor(draggableList, listId){
+    constructor(draggableList, listId, itemClass, dataItemAttribute ){
 
         this.pendingDraggedItem = null
         this.startDragPosition = null
         this.mousePosition = null
         this.dragThreshold = 10
         this.listId = listId
+        this.itemClass = itemClass
+        this.dataItemAttribute = dataItemAttribute
+        // index (int) of item in list that is currently being dragged over
+        this.indexDraggedOver = null
 
         // if dragging, the item being dragged over
         this.hoveredOver = null
 
-        this.mouseMoveDelegate = debounce( (e)=>{
+        this.mouseMoveDelegate = debounce( e => {
             this.mouseMove(e)
         }, 10)
 
         this.viewRootNode = draggableList
-        this.viewRootNode.addEventListener('mousedown', this.mouseDown.bind(this), false)
         this.viewRootNode.addEventListener('mousemove', this.mouseMoveDelegate, false)
-        this.viewRootNode.addEventListener('mouseup', this.mouseUp.bind(this), false)
         this.viewRootNode.addEventListener('mouseover', this.mouseOver.bind(this), false)
+        // mouse up/down events must be @ document level, as off-clicking or dropping a drag must not be limited to the list only
+        document.addEventListener('mousedown', this.mouseDown.bind(this), false)
+        document.addEventListener('mouseup', this.mouseUp.bind(this), false)
     }
 
     dispose(){
-        this.viewRootNode.removeEventListener('mousedown', this.mouseDown.bind(this), false)
         this.viewRootNode.removeEventListener('mousemove', this.mouseMoveDelegate, false)
-        this.viewRootNode.removeEventListener('mouseup', this.mouseUp.bind(this), false)
         this.viewRootNode.removeEventListener('mouseover', this.mouseOver.bind(this), false)
+        document.removeEventListener('mousedown', this.mouseDown.bind(this), false)
+        document.removeEventListener('mouseup', this.mouseUp.bind(this), false)
     }
 
     mouseOver(e){
+
         if (!this.draggedItem){
             e.stopPropagation()
             return
         }
 
-        let hoverOverSongRow = vc.closest(e.target, 'listSong')
+        let hoverOverSongRow = vc.closest(e.target, this.itemClass)
         if (hoverOverSongRow){
             if (this.draggedItem === hoverOverSongRow){
                 // do nothing, the item is dragging over itself, happens at start of drag
@@ -72,48 +80,44 @@ export default class SongsListDragHelper{
         return percent < 50
     }
 
-    mouseUp (e){
+    async mouseUp (e){
         // instantly clear temp drag stuff when mouse is released, no questions asked
         this.startDragPosition = null
         this.pendingDraggedItem = null
 
         if (!this.draggedItem){
             e.stopPropagation()
-            return
+            return 
         }
 
         if (this.hoveredOver === null){
             e.stopPropagation()
             this.clearDrag()
-            return
+            return 
         }
 
         // handle drag release here
         let isScrollingPastCurrent = this.isScrollingPast(e)
-        let targetIndex = vc.index(this.hoveredOver)
+        this.indexDraggedOver = vc.index(this.hoveredOver)
         if (!isScrollingPastCurrent)
-            targetIndex ++ // we want to drop it AFTER the hovered item
+            this.indexDraggedOver ++ // we want to drop it AFTER the hovered item
 
         // first try to move selected songs. if no songs selected, move the currently dragged row from this drag helper
-        let listContext = store.getState().listContext[this.listId]
-
-        if (listContext){
-            let draggedSongIds = listContext.selectedSongIds
-            if (!draggedSongIds.length)
-                draggedSongIds = [this.draggedItem.getAttribute('data-songid')]
-            
-            moveSongsInQueue(draggedSongIds, targetIndex)
-            clearSelectedRows(this.listId)
-        }
+        this.listContext = store.getState().listContext[this.listId]
+        await this.onItemsDragged()
+        clearSelectedRows(this.listId)
 
         this.clearDrag()
     }
+
+    // override this
+    async onItemsDragged(){}
 
     mouseMove (e){
         this.mousePosition = { x : e.pageX, y : e.pageY }
 
         if (this.hoveredOver)
-            setDraggedOverItem(this.listId, this.hoveredOver.getAttribute('data-songid'), this.isScrollingPast(e))
+            setDraggedOverItem(this.listId, this.hoveredOver.getAttribute(this.dataItemAttribute), this.isScrollingPast(e))
 
         if (this.startDragPosition && (
             Math.abs(this.startDragPosition.x - this.mousePosition.x) > this.dragThreshold ||
@@ -133,7 +137,7 @@ export default class SongsListDragHelper{
             return
             
         // use find parent to check if mouse was down on songrow
-        let mousedownSongRow = vc.closestWithAttribute(e.target, 'data-songid')
+        let mousedownSongRow = vc.closestWithAttribute(e.target, this.dataItemAttribute)
 
         if (mousedownSongRow) {
             // drag may have started
@@ -144,6 +148,8 @@ export default class SongsListDragHelper{
             }
 
             e.stopPropagation()
+        } else {
+            clearSelectedRows(this.listId)
         }
     }
 
@@ -154,6 +160,7 @@ export default class SongsListDragHelper{
         clearDraggedOverItem(this.listId)
         this.draggedItem = null
         this.hoveredOver = null
+        this.indexDraggedOver = null
     }
 
 }

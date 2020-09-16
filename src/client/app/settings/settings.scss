@@ -3,14 +3,10 @@
 @import './../main/settings';
 @import './../type/type';
 
-.settings-gridScaffold {
-    @include glu_grid-element;
-    max-width: $layout-maxWidth;
-    padding: 0 $layout-verticalModuleRhythm $layout-verticalTextRhythm $layout-universalGutter;
-
+.settings {
     .form-infoblocks {
         padding: 6px;
-    }
+    }    
 }
 
 .settings-sectionHeader {

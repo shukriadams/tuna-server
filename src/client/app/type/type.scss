@@ -52,13 +52,15 @@
 /**
  *  h1 with layout padding
  *  use at top of page, in heros etc. should be only one instance per page to avoid yell fatigue.
+ *  Note that margin is used instead of padding as mixin can also be applied to text fields, which
+ *  would look strange with padding.
  */
 @mixin type-h1Layout {
     @include type-h1;
-    padding: $layout-universalGutter * 5 0;
+    margin: ($layout-universalGutter*4) 0 ($layout-universalGutter*2);
 
     @media #{$glu_mediaQuery-belowSmall} {
-        padding: $layout-verticalTextRhythm 0;
+        margin: $layout-verticalTextRhythm 0;
     }
 }
 

@@ -83,6 +83,10 @@ $headerHeight: $layout-universalGutter * 13;
 
 .songBrowser-headerTitle {
     @include type-h2;
+    display: inline-block;
+    position: relative;
+    top: 4px; // vertically align text against search box
+    padding-right: $layout-universalGutter;
 }
 
 .songBrowser-frame {
@@ -112,9 +116,7 @@ $headerHeight: $layout-universalGutter * 13;
 
     svg {
         height: $layout-universalGutter*2;
-        left: $layout-universalGutter;
-        position: absolute;
-        top: $layout-universalGutter*2;
+        margin-right: $layout-universalGutter;
         width: $layout-universalGutter*2;
     }
 
@@ -128,6 +130,15 @@ $headerHeight: $layout-universalGutter * 13;
     height: $listRowHeight;
 }
 
+.songBrowser-itemBackIcon {
+    display: inline-block;
+}
+
+.songBrowser-itemBackText {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
 .songBrowser-itemLink {
     @include songBrowserRow;
 }
@@ -135,11 +146,6 @@ $headerHeight: $layout-universalGutter * 13;
 .songBrowser-itemBackLink {
     @include songBrowserRow;
     @include type-h2;
-    padding: 11px 0 0 $songRowBrowserLeftPad;
-}
-
-.songBrowser-backLetter {
-    text-transform: uppercase;
 }
 
 .songBrowser-search {

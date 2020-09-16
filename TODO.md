@@ -14,8 +14,12 @@ DONE
 - replace jplayer with howler
 - bring back linked mongo container
 - move all npm build components into project
+- mobile : move footer menu into main menu
+- recreate howler instance on next play
 
 TODO
+- needs public player mode - disable profile page, disable profile actions, autologin
+- add player test section - store local blob, play remote mp3/ogg/mp3, play local mp3/ogg/mp4
 - last fm : rewrite to allow any public instance to be its own lastfm app.
 - allow setting default password via docker-compose
 - dragging requires one drag a song past the next sibling to activate

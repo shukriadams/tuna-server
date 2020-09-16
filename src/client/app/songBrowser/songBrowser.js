@@ -142,10 +142,17 @@ class View extends React.Component {
                         {
                             showBrowserHeader &&
                                 <div className="songBrowser-header">
-                                    <div className="songBrowser-headerTitle">
-                                        { showSearch && <Fragment><a onClick={this.clearSearch.bind(this)}>Browse</a> </Fragment> }
-                                        { !showSearch && <Fragment>Browse </Fragment> }
-                                        or <input className="songBrowser-search" type="text" onChange={this.onSearchChanged} ref="search" placeholder={searchPlaceholder} />
+                                    <div>
+
+                                        <div className="songBrowser-headerTitle">
+                                            { showSearch && <Fragment><a onClick={this.clearSearch.bind(this)}>Browse</a> </Fragment> }
+
+                                            { !showSearch && <Fragment>Browse </Fragment> }
+                                            or
+                                        </div>
+
+                                        <input className="songBrowser-search" type="text" onChange={this.onSearchChanged} ref="search" placeholder={searchPlaceholder} />
+
                                     </div>
 
                                     {
@@ -203,8 +210,10 @@ class View extends React.Component {
                                                         <Fragment>
                                                             <div className="songBrowser-itemBack">
                                                                 <a onClick={this.closeLetter.bind(this)} className="songBrowser-itemBackLink">
-                                                                    <ReactSVG path={`/media/svg/left.svg`} />
-                                                                    All
+                                                                    <ReactSVG className="songBrowser-itemBackIcon" path={`/media/svg/left.svg`} />
+                                                                    <div className="songBrowser-itemBackText">
+                                                                        All
+                                                                    </div>
                                                                 </a>
                                                             </div>
                                                             <div className="songBrowser-itemBackPad"></div>
@@ -229,8 +238,8 @@ class View extends React.Component {
                                                         <Fragment>
                                                             <div className="songBrowser-itemBack">
                                                                 <a onClick={this.closeArtist.bind(this)} className="songBrowser-itemBackLink">
-                                                                    <ReactSVG path={`/media/svg/left.svg`} />
-                                                                    <span className="songBrowser-backLetter">{this.state.artist}</span>
+                                                                    <ReactSVG className="songBrowser-itemBackIcon" path={`/media/svg/left.svg`} />
+                                                                    <span className="songBrowser-itemBackText">{this.state.artist}</span>
                                                                 </a>
                                                             </div>
                                                             <ul className="songBrowser-list">

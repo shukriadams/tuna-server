@@ -1,38 +1,38 @@
-import React from 'react';
-import classNames from 'classnames';
-import ReactSVG from 'react-svg';
-import noScroll from './../glu_noScroll/index';
-import { HashLink as Link } from 'react-router-hash-link';
+import React from 'react'
+import classNames from 'classnames'
+import ReactSVG from 'react-svg'
+import noScroll from './../glu_noScroll/index'
+import { HashLink as Link } from 'react-router-hash-link'
 
 class View extends React.Component {
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             isOpen : false
-        };
+        }
     }
 
     toggleMenu(){
-        this.setState({isOpen : !this.state.isOpen});
+        this.setState({ isOpen : !this.state.isOpen })
     }
 
     onSearchChange(){
         if (this.props.search.onChange)
-            this.props.search.onChange(this.refs.search.value);
+            this.props.search.onChange(this.refs.search.value)
     }
 
     render(){
-        const menuSVG = this.state.isOpen ? this.props.closeSVG : this.props.menuSVG;
+        const menuSVG = this.state.isOpen ? this.props.closeSVG : this.props.menuSVG
 
         if (this.state.isOpen)
-            noScroll.lock();
+            noScroll.lock()
         else
-            noScroll.unlock();
+            noScroll.unlock()
 
-        let moduleClassNames = {};
-        moduleClassNames[`glu_simpleHeader--dockTop`] = this.props.isDockedToWindowTop;
-        moduleClassNames[`glu_simpleHeader--open`] = this.state.isOpen;
+        let moduleClassNames = {}
+        moduleClassNames[`glu_simpleHeader--dockTop`] = this.props.isDockedToWindowTop
+        moduleClassNames[`glu_simpleHeader--open`] = this.state.isOpen
 
         return (
             <div className={classNames(`glu_simpleHeader`, moduleClassNames )}>
@@ -64,25 +64,30 @@ class View extends React.Component {
                     <ul className={`glu_simpleHeader-menu`}>
                         {
                             this.props.menuItems.map(function(item, index){
-                                let classes = {};
-                                classes[`glu_simpleHeader-menuItemLink--active`] = item.isActive;
-                                classes[`glu_button`] = item.isCTA;
+                                
+                                const itemClasses={}
+                                if (item.showOnScreenSize)
+                                    itemClasses[`glu_simpleHeader-menuItem--showOn${item.showOnScreenSize}`] = true
+
+                                const linkClasses = {}
+                                linkClasses[`glu_simpleHeader-menuItemLink--active`] = item.isActive
+                                linkClasses[`glu_button`] = item.isCTA
 
                                 return (
-                                    <li key={index} className={`glu_simpleHeader-menuItem`}>
+                                    <li key={index} className={classNames(`glu_simpleHeader-menuItem`, itemClasses)}>
                                         {
                                             item.isRoute &&
-                                            <Link className={classNames(`glu_simpleHeader-menuItemLink`, classes )} to={item.href}>{item.title}</Link>
+                                            <Link className={classNames(`glu_simpleHeader-menuItemLink`, linkClasses )} to={item.href}>{item.title}</Link>
                                         }
 
                                         {
                                             !item.isRoute &&
-                                            <a className={classNames(`glu_simpleHeader-menuItemLink`, classes )} onClick={item.onClick}  href={item.href}>
+                                            <a className={classNames(`glu_simpleHeader-menuItemLink`, linkClasses )} onClick={item.onClick}  href={item.href}>
                                                 {item.title}
                                             </a>
                                         }
 
-                                    </li>);
+                                    </li>)
                             })
                         }
                     </ul>
@@ -93,7 +98,7 @@ class View extends React.Component {
 
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -124,9 +129,12 @@ let Model = {
         onChange : null,
         autocomplete : false
     }
-};
+}
 
 let ItemModel = {
+    
+    // string, use to modify listitem class for limiting to screen size
+    showOnScreenSize : null,
 
     // url of menu item target page
     href : 'page-url',
@@ -142,16 +150,16 @@ let ItemModel = {
 
     // display text in menu item
     title : 'page-name'
-};
+}
 
-let ctaMenuItem = Object.assign({}, ItemModel);
-ctaMenuItem.isCTA = true;
+let ctaMenuItem = Object.assign({}, ItemModel)
+ctaMenuItem.isCTA = true
 
-let activeItem = Object.assign({}, ItemModel);
-activeItem.isActive = true;
+let activeItem = Object.assign({}, ItemModel)
+activeItem.isActive = true
 
-Model.menuItems = [ ItemModel, activeItem, ctaMenuItem ];
+Model.menuItems = [ ItemModel, activeItem, ctaMenuItem ]
 
-View.defaultProps = Model;
+View.defaultProps = Model
 
-export { View, Model, ItemModel };
+export { View, Model, ItemModel }

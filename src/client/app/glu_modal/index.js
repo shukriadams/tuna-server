@@ -14,14 +14,14 @@ class View extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ show : nextProps.show });
+        this.setState({ show : nextProps.show })
     }
 
     close(){
-        this.setState({ show : false});
+        this.setState({ show : false})
 
         if (this.props.onClose)
-            this.props.onClose();
+            this.props.onClose()
     }
 
     onMaskClicked(){

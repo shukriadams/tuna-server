@@ -9,7 +9,6 @@ import ProgressBar from './../progressBar/progressBar'
 import PlayingTimer from './../playingTimer/playingTimer'
 import PlayingSongInfo from './../playingSongInfo/playingSongInfo'
 import ClassNames from 'classnames'
-import PlaylistBar from './../playlistBar/playlistBar'
 
 class View extends React.Component {
     render(){
@@ -33,10 +32,7 @@ class View extends React.Component {
                             <PlayerControls />
                         </div>
                     </div>
-                    <div className="playingStrip-playlistBar">
-                        <PlaylistBar />
-                    </div>
-                </div>
+               </div>
             </div>
         )
     }

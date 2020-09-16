@@ -2,9 +2,7 @@
 @import './../main/main-colorPalette';
 @import './../main/settings';
 @import './../type/type';
-
-$formElementStandardFontSize: 18px;
-$formElementInputFieldPadding: 16px;
+@import './../main/mixins';
 
 @mixin formInputField {
     // give fields an inner dropshadow to give them some depth + separation from surrounding page
@@ -26,11 +24,8 @@ $formElementInputFieldPadding: 16px;
 }
 
 .form-row {
-    padding-bottom: $formElementInputFieldPadding;
-    padding-top: $formElementInputFieldPadding;
+    @include layoutPaddedContainer;
     min-height: 27px; // force the row to be visible even when empty, useful for error message holders and general spacing
-
-
 }
 
 .form-description {

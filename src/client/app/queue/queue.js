@@ -2,8 +2,13 @@ import React from 'react'
 import { Model, View as List } from './../list/list'
 import SongHelper from './../songs/songsHelper'
 import { connect } from 'react-redux'
+import { playShowSongBrowser } from './../actions/actions'
 
 class View extends React.Component {
+    
+    openBrowser(){
+        playShowSongBrowser()
+    }
 
     render() {
         let model = new Model('queue')
@@ -14,11 +19,20 @@ class View extends React.Component {
             <div className="queue">
                 <div className="queue-gridScaffold">
                     {
-                        model.items.length === 0 &&
+                        model.items.length === 0 && this.props.songsCount && 
                             <div className="queue-empty">
-                                Your playlist is empty. Search or browse your {this.props.songsCount} songs.
+                                Play queue is empty - you have <a onClick={this.openBrowser.bind(this)}> {this.props.songsCount} songs</a> available
                             </div>
                     }
+
+                    {
+                        model.items.length === 0 && !this.props.songsCount &&
+                            <div className="queue-empty">
+                                Play queue is empty - you have no songs available. Try importing some?
+                            </div>
+                    }
+
+
                     <List {...model} />
                 </div>
             </div>

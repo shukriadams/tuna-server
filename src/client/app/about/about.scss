@@ -1,12 +1,5 @@
-@import './../gloo/gloo';
-@import './../main/settings';
 @import './../type/type';
 
 .about {
     @include type-bodyLarge;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: $layout-maxWidth;
-    padding-left: $layout-universalGutter;
-    padding-right: $layout-universalGutter;
 }

@@ -10,8 +10,10 @@
 
     .glu_modal-inner{
         background-color: $dustyGrey;
+        color: $seaShell;
         max-width: 300px;
         max-height: 250px;
+        min-height: 200px;
     }
 
     .glu_modal-content {
