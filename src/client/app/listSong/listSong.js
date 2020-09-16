@@ -77,7 +77,7 @@ class View extends React.Component {
                 'listSong--draggedPast' : this.props.draggedOver && this.props.isScrollingPastCurrent
             }),
             functionClassNames = classnames('listSong-function', { 'listSong-function--interactive' : functionInteractive })
-
+            
         return (
             <Fragment>
                 <li className={classNames} data-songid={this.props.song.id} data-fliptext={flipText} onDoubleClick={this.onDoubleClick.bind(this)} ref="self">
@@ -120,14 +120,28 @@ class View extends React.Component {
                                     <span className="listSong-album">({this.props.song.album})</span>
                             }
                         </div>
+
+                        {
+                            /* tags are in dynamic content because it has to wrap underneath song name on mobile*/
+                            this.props.genres.length > 0 &&
+                            <ul className="listSong-genres">
+                                {
+                                    this.props.genres.map(function(genre, index){
+                                        return(<li key={index} className={`listSong-genre`}>{genre}</li>);
+                                    }.bind(this))
+                                }
+                            </ul>
+                        }
+
                         {/* tags are in dynamic content because it has to wrap underneath song name on mobile*/}
                         <ul className="listSong-tags">
                             {
                                 this.props.tags.map(function(tag, index){
-                                    return(<li key={index} className={`listSong-tag${tag}`}></li>);
+                                    return(<li key={index} className={`listSong-tag--${tag}`}></li>);
                                 }.bind(this))
                             }
                         </ul>
+
                     </div>
 
                     <div className="listSong-more">
@@ -161,6 +175,8 @@ let Model = {
 
     // tag elements, must coincide with css class in tag list
     tags : [],
+
+    genres : [],
 
     isCurrentSong : false,
 

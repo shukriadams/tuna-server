@@ -115,6 +115,10 @@ class View extends React.Component {
 
                             if (isCurrentSong && this.props.isPlaying)
                                 tags.push('Playing')
+                            
+                            let genres = []
+                            if (this.props.context === 'browser')
+                                genres = item.tags
 
                             if (item.type === 'albumHeader')
                                 return (
@@ -128,6 +132,7 @@ class View extends React.Component {
                                         key={index}
                                         song={item}
                                         tags={tags}
+                                        genres={genres}
                                         draggedOver={listContextModel.draggedOverSongId === item.id}
                                         isCurrentSong={isCurrentSong}
                                         isScrollingPastCurrent={listContextModel.isScrollingPastCurrent}
