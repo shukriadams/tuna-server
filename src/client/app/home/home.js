@@ -1,18 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import HomeAuthenticated from './homeAuthed'
-import HomeAnonymous from './homeAnon'
+import history from './../history/history'
 
 class View extends React.Component {
+    componentWillMount(){
+        if (!this.props.isLoggedIn)
+            history.push('/login')
+    }
 
     render(){
-        let content = (<HomeAnonymous/>)
-        if (this.props.isLoggedIn)
-            content = (<HomeAuthenticated/>)
-
         return (
             <div className="home">
-                {content}
+                <HomeAuthenticated/>
             </div>
         )
     }
