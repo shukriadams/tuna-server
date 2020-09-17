@@ -7,23 +7,14 @@ let filter = function(searchFor, maxResults){
         maxExceeded = false,
         allSongs = store.getState().session ? store.getState().session.songs : [],
         foundCount = 0,
-        searchString = searchFor.trim()
+        searchString = searchFor.toLowerCase().trim().split(' ').map(word => `(?=.*${word})`).join(''),
+        reg = new RegExp(searchString, 'i') // i = case insensitive
+
+        console.log(searchString)
 
     for (let song of allSongs){
 
-        let match = false,
-            reg = new RegExp(searchString, 'i') // i = case insensitive
-
-        if (song.name.match(reg))
-            match = true
-
-        if (song.album.match(reg))
-            match = true
-
-        if (song.artist.match(reg))
-            match = true
-
-        if (!match)
+        if (!`${song.name} ${song.album} ${song.artist} ${song.tags.join('')}`.match(reg))
             continue
 
         if (!foundFirstStage[song.id]){
@@ -42,8 +33,6 @@ let filter = function(searchFor, maxResults){
             break
         }
     }
-
-
 
     // convert to array
     for (let p in foundFirstStage)
