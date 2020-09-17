@@ -35,17 +35,24 @@ class View extends React.Component {
             localStorage.setItem(key, browserUID)
         }
 
-        const result = await ajax.postAnon(`${appSettings.serverUrl}/v1/session`,{
-            password,
-            browserUID
-        })
+        try {
+            const result = await ajax.postAnon(`${appSettings.serverUrl}/v1/session`,{
+                password,
+                browserUID
+            })
 
-        if (result.code) 
-            return this.setState( { disable : false, message : result.message } )
+            if (result.code)
+                this.setState( { disable : false, message : result.message  } )            
+            else {
+                sessionSet(result.payload)
+                history.push('/')
+            }
 
-        sessionSet(result.payload)
-        this.setState( { disable : false, message : '' } )
-        history.push('/')
+        } catch(ex){
+            console.log(ex)
+            this.setState( { disable : false, message : ex } )
+        } 
+
     }
 
     render(){
