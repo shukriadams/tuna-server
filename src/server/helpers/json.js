@@ -2,7 +2,6 @@
  * Common JSON logic for server-side
  */
 const constants = require(_$+'types/constants'),
-    JsonStreamStringify = require('json-stream-stringify'),
     errorBehaviourMap = {}
 
 errorBehaviourMap[constants.ERROR_DEFAULT] = { status : 500, log : true }
@@ -30,21 +29,11 @@ module.exports = {
      * or some kind of detailed error description, but in that case .code will still be set to some value.
      */
     returnPayload(res, payload = {}){
-        /*
-        res.send({
+        res.json({
             code : null,
             message: null,
             payload : payload
         })
-        */
-       
-       res.type('json')
-       new JsonStreamStringify({
-            code : null,
-            message: null,
-            payload : payload
-        }).pipe(res)
-        
     },
    
 
