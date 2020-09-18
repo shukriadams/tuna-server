@@ -59,7 +59,7 @@ module.exports = {
 
         // add middleware before route handling
         express.use(bodyParser.urlencoded({ extended: false }))
-        express.use(bodyParser.json())
+        express.use(bodyParser.json({ limit : settings.maxJsonResponseSize }))
         
         let defaultRoute = null
             routeFiles = await fs.promises.readdir(path.join(__dirname, 'routes'))

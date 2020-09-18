@@ -25,7 +25,7 @@ const
         passwordLength : 12,
         daemonInterval : '* * * * *',
         maxSessionsPerUser : 3,
-        
+        maxJsonResponseSize: 100000000,
         // this should always be true on production. Disable on dev systems for faster app start
         enableCrossProcessScripts : true,
 

@@ -23,7 +23,7 @@ class View extends React.Component {
         const password = this.refs.password.value.trim()
 
         if (!password)
-            return this.setState( { message : 'Password required' })
+            return this.setState( { message : 'Password required' } )
 
         this.setState( { disable : true } )
         
@@ -95,6 +95,5 @@ class View extends React.Component {
 export default connect(
     function() {
         return { }
-    },
-
+    }
 )(View)
