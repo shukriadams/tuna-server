@@ -30,21 +30,21 @@ module.exports = {
      * or some kind of detailed error description, but in that case .code will still be set to some value.
      */
     returnPayload(res, payload = {}){
-        
+        /*
         res.send({
             code : null,
             message: null,
             payload : payload
         })
-        
-       /*
+        */
+       
        res.type('json')
        new JsonStreamStringify({
             code : null,
             message: null,
             payload : payload
         }).pipe(res)
-        */
+        
     },
    
 
