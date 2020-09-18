@@ -71,7 +71,7 @@ class View extends React.Component {
                 </div>
 
                 <div className="form-row">
-                    <Button isDisabled={this.state.disable} text="Login" disabledText="Logging in" onClick={this.login.bind(this)} />
+                    <Button isDisabled={this.state.disable} text="Login" disabledText="Fetching data" onClick={this.login.bind(this)} />
                 </div>
 
                 <div className="form-row">

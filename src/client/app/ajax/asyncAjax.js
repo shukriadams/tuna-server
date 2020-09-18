@@ -92,6 +92,7 @@ export default {
                 body: data ? JSON.stringify(data) : null,
             })
             .then(response => {
+
                 response.text().then(async (json) => {
                     try {
                         const result = JSON.parse(json)

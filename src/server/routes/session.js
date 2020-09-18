@@ -35,7 +35,6 @@ module.exports = {
             
                 await bruteForce.clear({ request : req, route : route })
                 console.log('cleared bruteforce log')
-            
                 return jsonHelper.returnPayload(res, content)
             } catch(ex){
                 jsonHelper.returnException(res, ex)
