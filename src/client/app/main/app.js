@@ -28,7 +28,6 @@ import SessionExpired from './../pages/sessionExpired'
 import Playlists from './../pages/playlists'
 import Playlist from './../pages/playlist'
 import About from './../pages/about'
-import Terms from './../pages/termsOfService'
 import appSettings from './../appSettings/appSettings'
 import ajax from './../ajax/asyncAjax'
 import player from './../player/player' // importing the player here is enough to initialize it
@@ -57,7 +56,6 @@ import contentHelper from './../helpers/contentHelper'
                         <PrivateRoute exact path="/reload" component={Reload} />
                         <Route exact path="/deleted" component={DeletedProfile} />
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/terms-of-service" component={Terms} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/about" component={About} />
                         <Route exact path="/help" component={Help} />

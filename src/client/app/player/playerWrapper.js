@@ -12,7 +12,6 @@ export default class {
      *
      **/
     constructor(options) { // put in defaults here
-
         this.onPlay = options.onPlay || null
         this.onEnd = options.onEnd || null
         this.onReady = options.onReady || null

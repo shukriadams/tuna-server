@@ -56,18 +56,12 @@ function authenticatedHeaderModel(){
     help.title = 'Need help?'
     help.isRoute = true
 
-    const terms = Object.assign({}, HeaderItemModel)
-    terms.href = '/terms-of-service'
-    terms.showOnScreenSize = 'small'
-    terms.title = 'Terms'
-    terms.isRoute = true
-
     let model = Object.assign({}, HeaderModel)
     model.closeSVG = '/media/svg/close.svg'
     model.logoSVG = '/media/svg/sitelogo.svg'
     model.menuSVG = '/media/svg/burger.svg'
     model.title = 'Tuna'
-    model.menuItems = [ music, playlists, settings, terms, help]
+    model.menuItems = [ music, playlists, settings, help]
     model.isDockedToWindowTop = false
 
     return model
@@ -82,12 +76,6 @@ let footModel = {
                     href : '/help',
                     text : 'Need help?',
                     isRoute : true
-                },
-                {
-                    href : '/terms-of-service',
-                    text : 'Terms',
-                    isRoute : true,
-                    iconSVG : null
                 }
             ]
         }
