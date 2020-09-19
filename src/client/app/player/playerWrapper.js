@@ -88,7 +88,6 @@ export default class {
      * Jumps the player to a position in the currently playing song
      **/
     jumpToPosition (position){
-        console.log(this._duration, this._position, position)
         this.player.seek(position)
     }
 
