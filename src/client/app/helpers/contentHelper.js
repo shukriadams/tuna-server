@@ -26,7 +26,7 @@ export default {
         while (calls < 30){ // set max calls to prevent runaway
             let page = await ajax.authGet(`${appSettings.serverUrl}/v1/content/songs?page=${calls}`)
             if (page && page.payload){
-                if (call === 0)
+                if (calls === 0)
                     sessionSetSongs(page.payload.songs)
                 else
                     sessionAddSongs(page.payload.songs)
