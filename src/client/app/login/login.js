@@ -7,6 +7,7 @@ import appSettings from './../appSettings/appSettings'
 import { sessionSet } from './../actions/actions'
 import history from './../history/history'
 import { View as Button } from './../glu_button/index'
+import contentHelper from './../helpers/contentHelper'
 
 class View extends React.Component {
 
@@ -45,6 +46,7 @@ class View extends React.Component {
                 this.setState( { disable : false, message : result.message  } )            
             else {
                 sessionSet(result.payload)
+                await contentHelper.fetchSongs()
                 history.push('/')
             }
 

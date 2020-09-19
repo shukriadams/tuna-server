@@ -12,7 +12,6 @@ module.exports = {
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             Session = require(_$+'types/session'),
-            songsLogic = require(_$+'logic/songs'),
             profile = await profileLogic.getById(profileId)
 
         if (!profile)
@@ -26,8 +25,9 @@ module.exports = {
         // return songs only if source is current, else force empty array, even if there are songs in DB.
         // if a source is changed songs from previous source might be present. This isn't likely, but still possible.
         // Songs will be automatically cleared when daemon runs next autoimport
-        if (contentRequired.includes('songs'))
-            session.songs = source ? await songsLogic.getAll(profileId) : []
+        if (contentRequired.includes('songs')){
+            // yeah, ignore this, returning songs will crash the server for large song collections, use paging instead
+        }
 
         // NOTE : playlists can contain invalid songs if source has changed and songs from previous source are still in db.
         // Songs will be automatically cleared when daemon runs next autoimport

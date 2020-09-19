@@ -38,7 +38,8 @@ export default class extends React.Component {
 
                 this.setState({ stage : 3 })
 
-                await contentHelper.fetch('songs,playlists,profile')
+                await contentHelper.fetch('playlists,profile')
+                await contentHelper.fetchSongs()
                 history.push('/')
 
             } else {

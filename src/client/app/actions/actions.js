@@ -18,8 +18,10 @@ const
     clearDraggedOverItem = (listId) => store.dispatch({ type: LISTCONTEXT_CLEARDRAGGEDOVERITEM, listId : listId }),
 
     // session
-    sessionSet = (session) => store.dispatch({ type: 'SESSION_SET', session : session }),
-    volumeSet = (volume) => store.dispatch({ type: 'SESSION_SETVOLUME', volume: volume }),
+    sessionSet = session => store.dispatch({ type: 'SESSION_SET', session : session }),
+    sessionSetSongs = songs => store.dispatch({ type: 'SESSION_SETSONGS', songs }),
+    sessionAddSongs = songs => store.dispatch({ type: 'SESSION_ADDSONGS', songs }),
+    volumeSet = volume => store.dispatch({ type: 'SESSION_SETVOLUME', volume: volume }),
 
     // playlist
     playlistSet = (playlistId) => store.dispatch({ type: 'PLAYLIST_SET', playlistId: playlistId }),
@@ -101,6 +103,8 @@ export {
     setDraggedOverItem,
     clearDraggedOverItem,
     sessionSet,
+    sessionAddSongs,
+    sessionSetSongs,
     removeLastfm,
     clearSession,
     volumeSet,

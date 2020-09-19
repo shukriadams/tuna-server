@@ -70,5 +70,6 @@ pubsub.sub('import', 'import.progress', async data =>{
     if (window.location.href.endsWith('/import'))
         return
 
-    await contentHelper.fetch('songs,playlists')
+    await contentHelper.fetch('playlists')
+    await contentHelper.fetchSongs()
 })

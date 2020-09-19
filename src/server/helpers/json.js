@@ -29,7 +29,7 @@ module.exports = {
      * or some kind of detailed error description, but in that case .code will still be set to some value.
      */
     returnPayload(res, payload = {}){
-        res.json({
+        res.send({
             code : null,
             message: null,
             payload : payload

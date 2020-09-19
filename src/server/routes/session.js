@@ -26,15 +26,12 @@ module.exports = {
                 });
             
                 // todo : too much going on here, can we simplify this?
-                let profileId = await profileLogic.authenticate(settings.masterUsername, req.body.password)
-                console.log('authenticated')
-                let authToken = await authTokenLogic.create(profileId, req.body.browserUID, req.get('User-Agent'))
-                console.log('created auth token')
-                let content = await contentHelper.build(authToken.profileId, authToken.id, 'songs,playlists,profile')
-                console.log('retrieved content')
+                let profileId = await profileLogic.authenticate(settings.masterUsername, req.body.password),
+                    authToken = await authTokenLogic.create(profileId, req.body.browserUID, req.get('User-Agent')),
+                    content = await contentHelper.build(authToken.profileId, authToken.id, 'songs,playlists,profile')
             
                 await bruteForce.clear({ request : req, route : route })
-                console.log('cleared bruteforce log')
+                
                 return jsonHelper.returnPayload(res, content)
             } catch(ex){
                 jsonHelper.returnException(res, ex)
