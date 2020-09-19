@@ -72,7 +72,7 @@ $menuItemBorderColor: lighten($mineShaft, 10%);
 
     @media #{$glu_mediaQuery-belowSmall} {
         border-top-color: $menuItemBorderColor;
-        padding-left: $layout-universalGutter;
+        padding-left: $layout-universalGutter * 2;
         padding-right: $layout-universalGutter;
     }
 
