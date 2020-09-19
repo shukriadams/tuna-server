@@ -13,7 +13,7 @@ function sessionReducer(state = defaultSession, action) {
 
     switch (action.type) {
 
-        case 'SESSION_NEWSONGS' : {
+        case 'SESSION_SETSONGS' : {
             return Object.assign({}, state, { 
                 songs : action.songs
             })

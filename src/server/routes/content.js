@@ -12,7 +12,7 @@ module.exports = {
             try {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
-                    contentHelper = require(_$+'helpers/content')
+                    contentHelper = require(_$+'helpers/content'),
                     authToken = await authHelper.authenticate(req),
                     requestedContent = req.params.requestedContent.split(','),
                     content = await contentHelper.build(authToken.profileId, authToken.id,  requestedContent)
@@ -32,7 +32,7 @@ module.exports = {
                 
                 const 
                     authHelper = require(_$+'helpers/authentication'),
-                    settings = require(_$+'helpers/settings')
+                    settings = require(_$+'helpers/settings'),
                     songsLogic = require(_$+'logic/songs'),
                     authToken = await authHelper.authenticate(req),
                     index = req.query.page ? parseInt(req.query.page) : 0,
