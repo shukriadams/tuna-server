@@ -5,9 +5,9 @@ module.exports = {
         const jsonHelper = require(_$+'helpers/json')
 
         /**
-         * todo : convert to DELETE
+         * Removes lastfm integration
          */    
-        app.get('/v1/lastfm/delete', async function (req, res) {
+        app.delete('/v1/lastfm', async function (req, res) {
             try {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
@@ -32,7 +32,7 @@ module.exports = {
             try {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
-                    songsLogic = require(_$+'logic/songs')
+                    songsLogic = require(_$+'logic/songs'),
                     authToken = await authHelper.authenticate(req)
            
                 await songsLogic.scrobble(

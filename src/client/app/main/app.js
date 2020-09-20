@@ -84,7 +84,7 @@ import contentHelper from './../helpers/contentHelper'
             token = session.token
 
         // always check session on app load. session can be expired, or state can have changed
-        const result = await ajax.anonGet(`${appSettings.serverUrl}/v1/session/isvalid?token=${token}&hash=${hash}`)
+        const result = await ajax.anonGet(`${appSettings.serverUrl}/v1/session?token=${token}&hash=${hash}`)
         if (!result.code && !result.payload.isValid){
             await contentHelper.fetch('playlists,profile')
             await contentHelper.fetchSongs()

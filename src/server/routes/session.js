@@ -39,7 +39,7 @@ module.exports = {
         /**
          * tests if a session is valid. this is done on client load, and a relog is forced if this returns false
          */    
-        app.get('/v1/session/isvalid', async function (req, res) {
+        app.get('/v1/session', async function (req, res) {
             try {
                 let 
                    authTokenLogic = require(_$+'logic/authToken'),

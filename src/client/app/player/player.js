@@ -153,7 +153,7 @@ class Player {
                 callback()
 
             let ajax = new Ajax();
-            ajax.postAuth(`${appSettings.serverUrl}/v1/songs/nowplaying`,
+            ajax.postAuth(`${appSettings.serverUrl}/v1/playing`,
                 {
                     song : this.currentSong.id
                 },
@@ -183,7 +183,7 @@ class Player {
 
             // get media url from server
             new Ajax().auth(
-                `${appSettings.serverUrl}/v1/songs/url?song=${song.id}`,
+                `${appSettings.serverUrl}/v1/song/${song.id}`,
                 function(response){
                     // on ios never download locally as this isn't allowed
                     if (!!navigator.userAgent.match(/iPhone|iPod|iPad/) || !!navigator.platform.match(/iPhone|iPod|iPad/))

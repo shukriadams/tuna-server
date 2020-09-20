@@ -67,7 +67,7 @@ class View extends React.Component {
     }
 
     async onLastFmDisconnectAccept(){
-        const response = await ajax.authGet(`${appSettings.serverUrl}/v1/lastfm/delete`)
+        const response = await ajax.delete(`${appSettings.serverUrl}/v1/lastfm`)
         this.setState({ showConfirmLastfmDisconnect : false })
         if (!response.code)
             return removeLastfm()

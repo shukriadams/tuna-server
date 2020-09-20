@@ -50,7 +50,7 @@ export default class extends React.Component {
             }
         })
 
-        ajax.postCallback(`${appSettings.serverUrl}/v1/songs/import`, {}, 
+        ajax.postCallback(`${appSettings.serverUrl}/v1/import`, {}, 
             response => {
                 if (!response.code)
                     sessionSet(response.payload)
