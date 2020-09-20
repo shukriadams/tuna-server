@@ -63,10 +63,15 @@ module.exports = {
      * Writes an object's propeties onto an existing profile 
      */
     async updateProperties(properties){
+        const settings = require(_$+'helpers/settings')
+
         if (!properties.id)
             throw 'properties must have an id'
 
         const profile = await this.getById(properties.id)
+
+        if (settings.demoMode)
+            return profile
 
         for (let property in profile)
             // copy over only properties that already exist in the recipient object
@@ -137,6 +142,9 @@ module.exports = {
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')
         
+        if (settings.demoMode)
+            return 
+
         email = email.trim()
 
         let profile = await dataCache.getByIdentifier(identifier)
@@ -236,6 +244,9 @@ module.exports = {
             profile = null,
             public
 
+        if (settings.demoMode)
+            return 
+
         if (key) {
             profile = await dataCache.getByPasswordResetKey(key)
             public = 'Invalid reset key'
@@ -276,9 +287,13 @@ module.exports = {
      *
      */
     async removeLastfm(profileId){
-        const dataCache = require(_$+'cache/profile')
+        const dataCache = require(_$+'cache/profile'),
+            settings = require(_$+'helpers/settings'),
+            profile = await dataCache.getById(profileId)
 
-        let profile = await dataCache.getById(profileId)
+        if (settings.demoMode)
+            return profile
+
         profile.scrobbleToken = null
         await dataCache.update(profile)
     },
@@ -311,12 +326,16 @@ module.exports = {
      */
     async deleteSource(profileId){
         const 
+            settings = require(_$+'helpers/settings'),
             dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             songsLogic = require(_$+'logic/songs'),
             playlistsLogic = require(_$+'logic/playlists'),
             profile = await dataCache.getById(profileId)
+    
+        if (settings.demoMode)
+            return
 
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })

@@ -279,7 +279,7 @@ module.exports = {
         /**
          * Fakes 2nd stage of Oauth flow for lastfm.
          */  
-        app.post('/v1/sandbox/lastfmTokenSwap', async function (req, res) {
+        app.get('/v1/sandbox/lastfmTokenSwap', async function (req, res) {
             try {
             
                 res.send(

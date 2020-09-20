@@ -54,7 +54,8 @@ class View extends React.Component {
     }
 
     onLastFmConnectAccept(){
-        window.location = '/v1/oauth/lastfm/start'
+        const session = store.getState().session || {}
+        window.location = `/v1/oauth/lastfm/start?token=${session.token}`
     }
 
     onLastFmConnectReject(){
@@ -207,9 +208,19 @@ class View extends React.Component {
                         Last.fm
                     </Label>
 
-                    <Row>
-                        <GluSlidingCheckbox isChecked={this.props.isScrobbling} onChanged={this.changeScrobbling.bind(this)} />
-                    </Row>
+                    {
+                        !appSettings.canConnectLastFM &&
+                        <Row>
+                            Last.fm integration is not enabled in Tuna settings.
+                        </Row>
+                    }
+
+                    {
+                        appSettings.canConnectLastFM &&
+                        <Row>
+                            <GluSlidingCheckbox isChecked={this.props.isScrobbling} onChanged={this.changeScrobbling.bind(this)} />
+                        </Row>
+                    }
 
                     <Description>
                         Track your playing history - <a href="http://www.last.fm" target="_new">read more</a>.

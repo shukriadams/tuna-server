@@ -7,7 +7,11 @@ module.exports = {
         const 
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
+            settings = require(_$+'helpers/settings'),
             playlistsCache = require(_$+'cache/playlist')
+
+        if (settings.demoMode)
+            return
 
         if (!playlist)
             throw new Exception({ code: constants.ERROR_INVALID_ARGUMENT, log : 'playlist required' })
@@ -32,8 +36,11 @@ module.exports = {
         const 
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
+            settings = require(_$+'helpers/settings'),
             playlistsCache = require(_$+'cache/playlist')
 
+        if (settings.demoMode)
+            return            
 
         if (!playlist)
             throw new Exception({ code: constants.ERROR_INVALID_ARGUMENT, log : 'playlist required' })
@@ -55,7 +62,11 @@ module.exports = {
      *
      */
     async delete(playlistId, profileId){
-        const playlistsCache = require(_$+'cache/playlist')
+        const playlistsCache = require(_$+'cache/playlist'),
+            settings = require(_$+'helpers/settings')
+            
+        if (settings.demoMode)
+            return            
 
         await playlistsCache.delete(playlistId, profileId)
     },

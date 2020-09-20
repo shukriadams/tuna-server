@@ -204,7 +204,7 @@ module.exports = {
                     let body = await requestNative(options),
                         xml = await xmlHelper.toDoc(body)
 
-                    key = xml['lfm'][0]['session'][0].key[0]
+                    key = xml['lfm']['session'][0].key[0]
                     
                 } catch(ex) {
                     return reject(ex)

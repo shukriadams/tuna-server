@@ -27,7 +27,8 @@ const
         maxSessionsPerUser : 3,
         songsPageSize: 10000,
         maxJsonResponseSize: '100k',
-        
+        demoMode : true,
+
         // this should always be true on production. Disable on dev systems for faster app start
         enableCrossProcessScripts : true,
 

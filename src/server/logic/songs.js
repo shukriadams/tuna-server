@@ -103,7 +103,11 @@ module.exports = {
             profileLogic = require(_$+'logic/profiles'),
             lastFmHelper = require(_$+'helpers/lastfm'),
             cache = require(_$+'helpers/cache'),
+            settings = require(_$+'helpers/settings'),
             song = await this._getById(songId, profileId)
+
+        if (settings.demoMode)
+            return profile
 
         if (!song)
             throw new Exception({ code: constants.ERROR_INVALID_SONG })

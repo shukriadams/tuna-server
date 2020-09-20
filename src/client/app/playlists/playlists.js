@@ -70,7 +70,7 @@ class View extends React.Component {
                 <div className="playlists-functions">
                     <Button 
                         onClick={this.createPlaylist.bind(this)} 
-                        disabledText="contacting server" 
+                        disabledText="Adding ..." 
                         text="New playlist" 
                         isDisabled={this.state.isBusyCreating} />
                 </div>
