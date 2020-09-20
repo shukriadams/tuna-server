@@ -24,7 +24,7 @@ module.exports = {
                     cooldown : settings.bruteForceCooldown
                 });
             
-                let profileId = await profileLogic.authenticate(settings.masterUsername, req.body.password),
+                let profileId = await profileLogic.authenticate(req.body.username, req.body.password),
                     authToken = await authTokenLogic.create(profileId, req.body.browserUID, req.get('User-Agent'))
             
                 await bruteForce.clear({ request : req, route : route })

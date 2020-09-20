@@ -21,7 +21,12 @@ class View extends React.Component {
     }
 
     async login(){
-        const password = this.refs.password.value.trim()
+        const 
+            username = this.refs.username.value.trim(),
+            password = this.refs.password.value.trim()
+
+        if (!username)
+            return this.setState( { message : 'Username required' } )
 
         if (!password)
             return this.setState( { message : 'Password required' } )
@@ -38,6 +43,7 @@ class View extends React.Component {
 
         try {
             const result = await ajax.postAnon(`${appSettings.serverUrl}/v1/session`,{
+                username,
                 password,
                 browserUID
             })
@@ -64,7 +70,7 @@ class View extends React.Component {
                 </h1>
 
                 <div className="form-row">
-                    <input className="form-textField" type="text" readOnly value={appSettings.username} />
+                    <input ref="username" className="form-textField" placeholder="Username" type="text" />
                 </div>
 
                 <div className="form-row">
