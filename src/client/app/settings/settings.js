@@ -18,12 +18,10 @@ class View extends React.Component {
         super(props)
 
         this.state = {
-            startDelete : false,
             showConfirmDropboxConnect : false,
             showConfirmDropboxDisconnect : false,
             showConfirmLastfmConnect : false,
             showConfirmLastfmDisconnect : false,
-            showDeleteAccountConfirm : false,
             showEmailChangeCancelPrompt : false
         }
     }
@@ -138,20 +136,6 @@ class View extends React.Component {
         this.setState({ showConfirmDropboxDisconnect : false })
     }
 
-    async deleteAllData(){
-        const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/startdelete`)
-        this.setState({ showDeleteAccountConfirm : false })
-        if (!response.code)
-            return this.setState({ showDeleteAccountConfirm : true })
-
-        // todo : handle error
-        console.log(response.message)
-    }
-
-    onAccountDeleteClose(){
-         this.setState({ showDeleteAccountConfirm : false })
-    }
-
     render(){
         return (
             <div className="settings">
@@ -184,14 +168,7 @@ class View extends React.Component {
                             This will disable play tracking with last.fm. You can re-enable tracking at any time.
                        </p>
                     </GluConfirmModal>
-
-                    <GluConfirmModal reject={null} confirm="Ok" onAccept={this.onAccountDeleteClose.bind(this)} show={this.state.showDeleteAccountConfirm }>
-                        <h2>Delete account</h2>
-                        <p>
-                            We've sent you an email with final delete instructions. If you want to proceed, follow the instructions in the mail.
-                       </p>
-                    </GluConfirmModal>
-
+ 
                     <Divider>
                         Session
                     </Divider>
@@ -257,23 +234,6 @@ class View extends React.Component {
                     <Row>
                         <Link to="newPassword">Want to change password? Try here</Link>
                     </Row>
-
-                    <Divider>
-                        Account
-                    </Divider>
-
-                    <Label>
-                        Permanently delete your account
-                    </Label>
-
-                    <Row>
-                        <button className={`glu_button`} onClick={this.deleteAllData.bind(this)}>Delete me</button>
-                    </Row>
-
-                    <Description>
-                        WARNING : Cannot be undone. This will delete all your data on this node and reset it. To remove the node itself
-                        contanct your server administrator.
-                    </Description>
 
                 </div>
             </div>

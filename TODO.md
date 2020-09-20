@@ -1,5 +1,5 @@
 DONE
-- clean up rest api, this is a mess but is quickly rectified
+- clean up rest api
 - remove all payment stuff
 - dropbox must be set up personally
 - move settings into .env file, and docker-compose files.

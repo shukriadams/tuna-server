@@ -103,27 +103,6 @@ module.exports = {
         })
 
 
-        /**
-         * Finalizes profile delete. This will actually delete a profile, for real.
-         * todo : turn into DELETE
-         */
-        app.get('/v1/profile/delete', async function (req, res) {
-            try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
-                    profileLogic = require(_$+'logic/profiles'),
-                    authToken = await authHelper.authenticate(req),
-                    key = req.query.key
-            
-                await profileLogic.processDeleteAccount(authToken.profileId, key)
-            
-                jsonHelper.returnPayload(res)
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
-        })   
-
         app.delete('/v1/profile/source', async function (req, res) {
             try {
                 const 
