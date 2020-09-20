@@ -185,6 +185,10 @@ class Player {
             new Ajax().auth(
                 `${appSettings.serverUrl}/v1/songs/url?song=${song.id}`,
                 function(response){
+                    // on ios never download locally as this isn't allowed
+                    if (!!navigator.userAgent.match(/iPhone|iPod|iPad/) || !!navigator.platform.match(/iPhone|iPod|iPad/))
+                        return callback ? callback(response.payload.url) : null
+
                     blobStore.getOrDownload(song, song.id /* no longer using hashId here */, response.payload.url, function(localMediaUrl){
 
                         if (callback)
