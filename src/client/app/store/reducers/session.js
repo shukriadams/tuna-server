@@ -13,6 +13,18 @@ function sessionReducer(state = defaultSession, action) {
 
     switch (action.type) {
 
+        case 'SESSION_SETSONGS' : {
+            return Object.assign({}, state, { 
+                songs : action.songs
+            })
+        }
+
+        case 'SESSION_ADDSONGS' : {
+            return Object.assign({}, state, { 
+                songs : state.songs.concat(action.songs) 
+            })
+        }
+
         case 'SESSION_SETPLAYLISTS' : {
             return Object.assign({}, state, {
                 playlists : action.playlists

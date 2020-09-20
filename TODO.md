@@ -1,5 +1,5 @@
 DONE
-- clean up rest api, this is a mess but is quickly rectified
+- clean up rest api
 - remove all payment stuff
 - dropbox must be set up personally
 - move settings into .env file, and docker-compose files.
@@ -16,37 +16,39 @@ DONE
 - move all npm build components into project
 - mobile : move footer menu into main menu
 - recreate howler instance on next play
+- needs public player mode - disable profile page, disable profile actions, autologin
+- allow setting default password via docker-compose
+- remove API endpoints that don't return JSON
+- replace sendgrid with smtp
+- remove custom generated mongo ids, they're unnecessary
+- remove all third party integrations
 
 TODO
-- needs public player mode - disable profile page, disable profile actions, autologin
+- add support for streaming from an s3 bucket
 - add player test section - store local blob, play remote mp3/ogg/mp3, play local mp3/ogg/mp4
+- local storage needs to be togglable
 - last fm : rewrite to allow any public instance to be its own lastfm app.
-- allow setting default password via docker-compose
 - dragging requires one drag a song past the next sibling to activate
 - write detailed import log so user can read through import history after the fact, instead of having to follow live
 - unify oauth flow for all integrations, nextcloud and lastfm are still not routing to dev endpoints
 - clean out old xmas tree code in lastfm and dropbox integrations
 - unify the jsonHelper.payload strucutre that's returned to client
-- remove API endpoints that don't return JSON
 - add 2fa (look at speakeasy package)
 - index should write date flag to separate flag that can be scanned rapidly to check if index been updated
 - remove import page, replace with pop-under log
 - move scrobble token to a "plugins" object
 - search for "new Exception(invalid init args)"
 - create pop-under log and remove all alerts on client. pop under should also be able to have links like "you should update your password - click HERE -> password page"
-- remove custom generated mongo ids, they're unnecessary
-- test minimum hardware requirements - will it work on raspberry pi?
-- remove all third party integrations
+- test minimum hardware requirements
+- build for raspberry pi aka ARM
 - write setup guide, try to reduce complexity
 - email : optional, smtp access required. needs email test.
-- password : can be written in plain text in docker-compose, or written to a salted file on disk. deleting this file will prompt user to create password again. username is always stored in docker-compose file.
 - need way to force reset email from command line
-- replace sendgrid with smtp
 
 
 ## exceptions
 
-- avoid trapping, let them bubble up to API
+- let all bubble up to API
 - give them a unique code which is both public and private. this is an INT, and is mapped to an HTTP error code for exposing
 - give optional public message, let the UI decide how to display them
 - give them an internal exception, this NEVER escape API, and is always logged at the API

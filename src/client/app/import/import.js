@@ -38,7 +38,8 @@ export default class extends React.Component {
 
                 this.setState({ stage : 3 })
 
-                await contentHelper.fetch('songs,playlists,profile')
+                await contentHelper.fetch('playlists,profile')
+                await contentHelper.fetchSongs()
                 history.push('/')
 
             } else {
@@ -49,7 +50,7 @@ export default class extends React.Component {
             }
         })
 
-        ajax.postCallback(`${appSettings.serverUrl}/v1/songs/import`, {}, 
+        ajax.postCallback(`${appSettings.serverUrl}/v1/import`, {}, 
             response => {
                 if (!response.code)
                     sessionSet(response.payload)

@@ -7,6 +7,7 @@ import appSettings from './../appSettings/appSettings'
 import { sessionSet } from './../actions/actions'
 import history from './../history/history'
 import { View as Button } from './../glu_button/index'
+import contentHelper from './../helpers/contentHelper'
 
 class View extends React.Component {
 
@@ -20,10 +21,15 @@ class View extends React.Component {
     }
 
     async login(){
-        const password = this.refs.password.value.trim()
+        const 
+            username = this.refs.username.value.trim(),
+            password = this.refs.password.value.trim()
+
+        if (!username)
+            return this.setState( { message : 'Username required' } )
 
         if (!password)
-            return this.setState( { message : 'Password required' })
+            return this.setState( { message : 'Password required' } )
 
         this.setState( { disable : true } )
         
@@ -35,17 +41,25 @@ class View extends React.Component {
             localStorage.setItem(key, browserUID)
         }
 
-        const result = await ajax.postAnon(`${appSettings.serverUrl}/v1/session`,{
-            password,
-            browserUID
-        })
+        try {
+            const result = await ajax.postAnon(`${appSettings.serverUrl}/v1/session`,{
+                username,
+                password,
+                browserUID
+            })
 
-        if (result.code) 
-            return this.setState( { disable : false, message : result.message } )
+            if (result.code)
+                this.setState({ disable : false, message : result.message })            
+            else {
+                await contentHelper.fetchSessionByTokenId(result.payload.authToken)
+                history.push('/')
+            }
 
-        sessionSet(result.payload)
-        this.setState( { disable : false, message : '' } )
-        history.push('/')
+        } catch(ex){
+            console.log(ex)
+            this.setState( { disable : false, message : ex } )
+        } 
+
     }
 
     render(){
@@ -56,7 +70,7 @@ class View extends React.Component {
                 </h1>
 
                 <div className="form-row">
-                    <input className="form-textField" type="text" readOnly value={appSettings.username} />
+                    <input ref="username" className="form-textField" placeholder="Username" type="text" />
                 </div>
 
                 <div className="form-row">
@@ -64,7 +78,7 @@ class View extends React.Component {
                 </div>
 
                 <div className="form-row">
-                    <Button isDisabled={this.state.disable} text="Login" disabledText="Logging in" onClick={this.login.bind(this)} />
+                    <Button isDisabled={this.state.disable} text="Login" disabledText="Fetching data" onClick={this.login.bind(this)} />
                 </div>
 
                 <div className="form-row">
@@ -77,9 +91,6 @@ class View extends React.Component {
                 <hr className="form-divider" />
                 <div className="form-row"></div>
 
-                <div className="form-row">
-                    <Link to="/resetPassword">Forgot your password?</Link>
-                </div>
             </div>
         )
     }
@@ -88,6 +99,5 @@ class View extends React.Component {
 export default connect(
     function() {
         return { }
-    },
-
+    }
 )(View)

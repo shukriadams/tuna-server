@@ -282,7 +282,7 @@ module.exports = {
             urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings')
 
-        return urljoin(settings.siteUrl, `/v1/songs/stream/${authToken}/${Buffer.from(path).toString('base64')}`)
+        return urljoin(settings.siteUrl, `/v1/stream/${authToken}/${Buffer.from(path).toString('base64')}`)
     }
 
 }

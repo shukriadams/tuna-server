@@ -27,12 +27,6 @@ class View extends React.Component {
         }
     }
 
-    componentWillMount(){
-        let key = vc.getQueryString('key')
-        //if (!key)
-        //    history.push('resetPassword')
-    }
-
     showPassword(){
         this.setState({ showPassword : true })
     }
@@ -62,24 +56,15 @@ class View extends React.Component {
         if (password === current)
             return this.setState({ errorMessage : 'Your new password cannot be identical to your current one'})
 
-        if (this.props.isLoggedIn){
-            if (!current)
-                return this.setState({ errorMessage : 'Current password required'})
+        if (!current)
+            return this.setState({ errorMessage : 'Current password required'})
 
-            const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&currentPassword=${current}`)
-            if (!response.code)
-                this.setState({ authSuccessMessage : 'Your password has been updated.'})
-            else 
-                this.setState({errorMessage : response.message})
+        const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&currentPassword=${current}`)
+        if (!response.code)
+            this.setState({ authSuccessMessage : 'Your password has been updated.'})
+        else 
+            this.setState({errorMessage : response.message})
 
-        } else{
-
-            const response = await ajax.anonGet(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&key=${key}`)
-            if (!response.code)
-                this.setState({ anonSuccessMessage : 'Your password has been updated.'})
-            else 
-                this.setState({ errorMessage : response.message })
-        }
     }
 
     render(){

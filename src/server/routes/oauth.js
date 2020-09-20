@@ -17,8 +17,12 @@ module.exports = {
             let 
                 authHelper = require(_$+'helpers/authentication'),
                 sourceProvider = require(_$+'helpers/sourceProvider'),
+                settings = require(_$+'helpers/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token),
                 url = sourceProvider.get().getOauthUrl(authToken.id)
+
+            if (settings.demoMode)
+                return res.redirect('/')  
 
             if (req.query.origin)
                 url = url.replace('TARGETPAGE', req.query.origin)
@@ -34,7 +38,11 @@ module.exports = {
             const 
                 authHelper = require(_$+'helpers/authentication'),
                 lastFmHelper = require(_$+'helpers/lastfm'),
+                settings = require(_$+'helpers/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token)
+
+            if (settings.demoMode)
+                return res.redirect('/')  
 
             res.redirect(lastFmHelper.getOauthUrl(authToken.id))
         })
@@ -55,11 +63,15 @@ module.exports = {
                     Exception = require(_$+'types/exception'),
                     nextCloudHelper = require(_$+'helpers/nextcloud/common'),
                     authTokenLogic = require(_$+'logic/authToken'),
+                    settings = require(_$+'helpers/settings'),
                     code = req.query.code,
                     state = (req.query.state || '').split('_'),
                     authTokenId = state.length > 1 ? state[0] : null,
                     targetPage = state.length > 1 ? state[1] : null,
                     authToken = await authTokenLogic.getById(authTokenId)
+
+                if (settings.demoMode)
+                    return res.redirect('/')  
 
                 if (!authToken)
                     throw new Exception({ 
@@ -92,11 +104,15 @@ module.exports = {
                     Exception = require(_$+'types/exception'),
                     dropboxHelper = require(_$+'helpers/dropbox/common'),
                     authTokenLogic = require(_$+'logic/authToken'),
+                    settings = require(_$+'helpers/settings'),
                     code = req.query.code,
                     state = (req.query.state || '').split('_'),
                     authTokenId = state.length > 1 ? state[0] : null,
                     targetPage = state.length > 1 ? state[1] : null,
                     authToken = await authTokenLogic.getById(authTokenId)
+
+                if (settings.demoMode)
+                    return res.redirect('/')  
 
                 if (!authToken)
                     throw new Exception({ 
@@ -129,10 +145,14 @@ module.exports = {
                     constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
                     authTokenLogic = require(_$+'logic/authToken'),
+                    settings = require(_$+'helpers/settings'),
                     scrobbleToken = req.query.token,
                     authTokenId = req.query.session,
                     authToken = await authTokenLogic.getById(authTokenId)
-            
+                    
+                if (settings.demoMode)
+                    return res.redirect('/')  
+
                 if (!authToken)
                     throw new Exception({ 
                         code: constants.ERROR_INVALID_USER_OR_SESSION,

@@ -12,7 +12,6 @@ export default class {
      *
      **/
     constructor(options) { // put in defaults here
-
         this.onPlay = options.onPlay || null
         this.onEnd = options.onEnd || null
         this.onReady = options.onReady || null
@@ -88,7 +87,6 @@ export default class {
      * Jumps the player to a position in the currently playing song
      **/
     jumpToPosition (position){
-        console.log(this._duration, this._position, position)
         this.player.seek(position)
     }
 

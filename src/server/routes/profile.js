@@ -28,39 +28,6 @@ module.exports = {
 
 
         /**
-         * Must be anonymous, user cannot log in.
-         */    
-        app.get('/v1/profile/requestPassword', async function (req, res) {
-            try {
-                const 
-                    bruteForce = require(_$+'helpers/bruteForce'),
-                    profileLogic = require(_$+'logic/profiles'),
-                    settings = require(_$+'helpers/settings'),
-                    route = 'profile/requestPassword'
-
-                await bruteForce.process({
-                    request : req,
-                    route : route,
-                    threshold : settings.bruteForceThreshold,
-                    period : settings.bruteForcePeriod,
-                    cooldown : settings.bruteForceCooldown
-                })
-
-                const email = decodeURIComponent(req.query.email || '')
-        
-                await profileLogic.requestPasswordReset(settings.masterUsername, email)
-                
-                await bruteForce.clear({ request : req, route : route })
-
-                jsonHelper.returnPayload(res)
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
-        })
-
-
-        /**
          * Used by BOTH the normal change password page, and the emergency password recovery page.
          */    
         app.get('/v1/profile/resetPassword', async function (req, res) {
@@ -102,27 +69,6 @@ module.exports = {
             }
         })
 
-
-        /**
-         * Finalizes profile delete. This will actually delete a profile, for real.
-         * todo : turn into DELETE
-         */
-        app.get('/v1/profile/delete', async function (req, res) {
-            try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
-                    profileLogic = require(_$+'logic/profiles'),
-                    authToken = await authHelper.authenticate(req),
-                    key = req.query.key
-            
-                await profileLogic.processDeleteAccount(authToken.profileId, key)
-            
-                jsonHelper.returnPayload(res)
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
-        })   
 
         app.delete('/v1/profile/source', async function (req, res) {
             try {

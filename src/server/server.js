@@ -50,7 +50,7 @@ module.exports = {
         socketHelper.initialize(httpServer)
 
         // generate the master user if it doesn't already exist
-        await profilesLogic.autoCreateMaster(settings.masterUsername)
+        await profilesLogic.autoCreateMaster()
 
         // routes all static content (css, js etc) requests to public folder. Note, this route will ideally not used when app is
         // hidden behind an nginx proxy front, as ngxin will directly handle static content 
@@ -59,7 +59,7 @@ module.exports = {
 
         // add middleware before route handling
         express.use(bodyParser.urlencoded({ extended: false }))
-        express.use(bodyParser.json())
+        express.use(bodyParser.json({ limit : settings.maxJsonResponseSize }))
         
         let defaultRoute = null
             routeFiles = await fs.promises.readdir(path.join(__dirname, 'routes'))

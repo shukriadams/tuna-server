@@ -18,7 +18,7 @@ module.exports ={
                 jsonHelper.returnPayload(res, {
                     serverConstants : constants,
                     emailVerificationDeadlineHours : settings.emailVerificationDeadlineHours,
-                    username : settings.masterUsername,
+                    canConnectLastFM : !!settings.lastFmApiKey,
                     sourceLabel : source.getLabel()
                 })
 

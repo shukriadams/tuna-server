@@ -8,7 +8,6 @@ import ClassNames from 'classnames'
 import SongBrowser from './../songBrowser/songBrowser'
 import history from './../history/history'
 import { PROFILE } from './../routes/routes'
-import { View as CookieBanner } from './../glu_simpleCookieBanner/index'
 import { Link } from 'react-router-dom'
 import Alert from './../alert/alert'
 
@@ -57,18 +56,12 @@ function authenticatedHeaderModel(){
     help.title = 'Need help?'
     help.isRoute = true
 
-    const terms = Object.assign({}, HeaderItemModel)
-    terms.href = '/terms-of-service'
-    terms.showOnScreenSize = 'small'
-    terms.title = 'Terms'
-    terms.isRoute = true
-
     let model = Object.assign({}, HeaderModel)
     model.closeSVG = '/media/svg/close.svg'
     model.logoSVG = '/media/svg/sitelogo.svg'
     model.menuSVG = '/media/svg/burger.svg'
     model.title = 'Tuna'
-    model.menuItems = [ music, playlists, settings, terms, help]
+    model.menuItems = [ music, playlists, settings, help]
     model.isDockedToWindowTop = false
 
     return model
@@ -83,12 +76,6 @@ let footModel = {
                     href : '/help',
                     text : 'Need help?',
                     isRoute : true
-                },
-                {
-                    href : '/terms-of-service',
-                    text : 'Terms',
-                    isRoute : true,
-                    iconSVG : null
                 }
             ]
         }
@@ -98,23 +85,8 @@ let footModel = {
 
 class View extends React.Component {
 
-    constructor(props){
-        super(props)
-
-        this.state = {
-            showCookieBanner : document.cookie.indexOf('acceptPolicy') === -1
-        }
-    }
-
     onSearchChange(arg){
-        search(arg);
-    }
-
-    onCookieAccept(){
-        document.cookie = 'acceptPolicy; expires=Fri, 3 Aug 2101 20:47:11 UTC; path=/'
-        this.setState({
-            showCookieBanner : false
-        })
+        search(arg)
     }
 
     render() {
@@ -126,22 +98,9 @@ class View extends React.Component {
             `Search your ${this.props.songCount} song`
         headerModel.search.onChange = this.onSearchChange.bind(this)
 
-        let cookieBannerButtonModel = {
-            text : 'Accept',
-            onClick : this.onCookieAccept.bind(this)
-        }
-
         return (
             <div className={classNames}>
                 <div className="layout-sticky">
-
-                    {
-                        this.state.showCookieBanner  &&
-                            <CookieBanner buttonModel={cookieBannerButtonModel}>
-                                This site uses a minimal amount of cookies for security and anonymous usage measurement.
-                                Check our <Link to="/data-policy">data policy</Link> for more information.
-                            </CookieBanner>
-                    }
 
                     <GluSimpleHeader {... headerModel} />
                     

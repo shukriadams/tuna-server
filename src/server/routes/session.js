@@ -13,8 +13,7 @@ module.exports = {
                     bruteForce = require(_$+'helpers/bruteForce'),
                     settings = require(_$+'helpers/settings'),
                     authTokenLogic = require(_$+'logic/authToken'),
-                    contentHelper = require(_$+'helpers/content'),
-                    profileLogic = require(_$+'logic/profiles')
+                    profileLogic = require(_$+'logic/profiles'),
                     route = 'sessions/post'
 
                 await bruteForce.process({
@@ -25,14 +24,12 @@ module.exports = {
                     cooldown : settings.bruteForceCooldown
                 });
             
-                // todo : too much going on here, can we simplify this?
-                let profileId = await profileLogic.authenticate(settings.masterUsername, req.body.password),
-                    authToken = await authTokenLogic.create(profileId, req.body.browserUID, req.get('User-Agent')),
-                    content = await contentHelper.build(authToken.profileId, authToken.id, 'songs,playlists,profile')
+                let profileId = await profileLogic.authenticate(req.body.username, req.body.password),
+                    authToken = await authTokenLogic.create(profileId, req.body.browserUID, req.get('User-Agent'))
             
                 await bruteForce.clear({ request : req, route : route })
-            
-                return jsonHelper.returnPayload(res, content)
+                
+                return jsonHelper.returnPayload(res, { authToken : authToken.id })
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
@@ -42,7 +39,7 @@ module.exports = {
         /**
          * tests if a session is valid. this is done on client load, and a relog is forced if this returns false
          */    
-        app.get('/v1/session/isvalid', async function (req, res) {
+        app.get('/v1/session', async function (req, res) {
             try {
                 let 
                    authTokenLogic = require(_$+'logic/authToken'),

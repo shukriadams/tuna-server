@@ -194,6 +194,19 @@ $smallSectionWidth: 32px;
     }
 }
 
+.listSong-genres{
+    display: inline-block;
+    padding-left: $layout-universalGutter;
+    position: relative;
+    top: 3px;
+}
+
+.listSong-genre {
+    padding-left: $layout-universalGutter;
+    color: $alto;
+    float: left;
+}
+
 /*----------------------------------------------------------------------------------------------------------------------
     Tags in playlist - only the text and color change.
     Tags must be <LI> elements inside an <OL> parent.
@@ -214,19 +227,24 @@ $smallSectionWidth: 32px;
     }
 }
 
-.listSong-tagPlaying {
+.listSong-tag {
+    float:left;
+    padding-left:$layout-universalGutter;
+}
+
+.listSong-tag--Playing {
     @include tag('Playing', $rust);
 }
 
-.listSong-tagInQueue {
+.listSong-tag--InQueue {
     @include tag('In queue', $dustyGrey);
 }
 
-.listSong-tagPlaylist {
+.listSong-tag--Playlist {
     @include tag('Playlist', $breakerBay);
 }
 
-.listSong-tagLoved {
+.listSong-tag--Loved {
     @include tag('Loved', $rust);
 }
 /*--------------------------------------------------------------------------------------------------------------------*/

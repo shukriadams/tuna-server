@@ -5,8 +5,6 @@ import VerifyEmail from './../verifyEmail/verifyEmail'
 import Login from './../login/login'
 import Queue from './../queue/queue'
 import NewPassword from './../newPassword/newPassword'
-import ResetPassword from './../resetPassword/resetPassword'
-import HomeAnonymous from './../home/homeAnon'
 import HomeAuthenticated from './../home/homeAuthed'
 import Home from './../home/home'
 import Settings from './../settings/settings'
@@ -136,16 +134,8 @@ export default class extends React.Component {
                     <NewPassword />
                 </Presenter>
 
-                <Presenter title="ResetPassword">
-                    <ResetPassword />
-                </Presenter>
-
                 <Presenter title="Home">
                     <Home />
-                </Presenter>
-
-                <Presenter title="HomeAnonymous">
-                    <HomeAnonymous />
                 </Presenter>
 
                 <Presenter title="HomeAuthenticated">

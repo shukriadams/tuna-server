@@ -1,8 +1,0 @@
-@import './../type/type';
-
-.hero {
-    .glu_textIntro {
-        @include type-h1Layout;
-        text-align: center;
-    }
-}

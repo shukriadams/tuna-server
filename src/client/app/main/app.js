@@ -14,7 +14,6 @@ import Help from './../pages/help'
 import Import from './../pages/import'
 import FourOhFour from './../pages/fourOhFour'
 import PrivateRoute from './privateRoute'
-import ResetPassword from './../pages/resetPassword'
 import How from './../pages/how'
 import NewPassword from './../pages/newPassword'
 import KitchenSink from './../kitchenSink/kitchenSink'
@@ -28,7 +27,6 @@ import SessionExpired from './../pages/sessionExpired'
 import Playlists from './../pages/playlists'
 import Playlist from './../pages/playlist'
 import About from './../pages/about'
-import Terms from './../pages/termsOfService'
 import appSettings from './../appSettings/appSettings'
 import ajax from './../ajax/asyncAjax'
 import player from './../player/player' // importing the player here is enough to initialize it
@@ -57,11 +55,9 @@ import contentHelper from './../helpers/contentHelper'
                         <PrivateRoute exact path="/reload" component={Reload} />
                         <Route exact path="/deleted" component={DeletedProfile} />
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/terms-of-service" component={Terms} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/about" component={About} />
                         <Route exact path="/help" component={Help} />
-                        <Route exact path="/resetPassword" component={ResetPassword} />
                         <Route exact path="/how" component={How} />
                         <Route exact path="/newPassword" component={NewPassword} />
                         <Route exact path="/kitchenSink" component={KitchenSink} />
@@ -88,9 +84,10 @@ import contentHelper from './../helpers/contentHelper'
             token = session.token
 
         // always check session on app load. session can be expired, or state can have changed
-        const result = await ajax.anonGet(`${appSettings.serverUrl}/v1/session/isvalid?token=${token}&hash=${hash}`)
+        const result = await ajax.anonGet(`${appSettings.serverUrl}/v1/session?token=${token}&hash=${hash}`)
         if (!result.code && !result.payload.isValid){
-            await contentHelper.fetch('songs,playlists,profile')
+            await contentHelper.fetch('playlists,profile')
+            await contentHelper.fetchSongs()
         }
     })
 
