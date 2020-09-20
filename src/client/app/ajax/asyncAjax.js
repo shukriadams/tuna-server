@@ -27,6 +27,14 @@ export default {
 
 
     /**
+     * Gets with authorization and forced token
+     **/
+    async authGetWithToken(url, token){
+        return await this._do(url, true, 'GET', null, token)
+    },
+
+
+    /**
      *
      */
     async post(url, data ){
@@ -69,21 +77,24 @@ export default {
     /**
      *
      **/
-    async _do(url, isAuth, method = 'GET', data){
+    async _do(url, isAuth, method = 'GET', data, token){
         return new Promise(function(resolve, reject){
 
             const headers = { 'Content-Type': 'application/json' }
 
             if (isAuth){
-                const session = store.getState().session || {}
-                
-                if (!session.token){
-                    clearSession()
-                    history.push('/login')
-                    return resolve()
+                if (!token){
+                    const session = store.getState().session || {}
+                    if (!session.token){
+                        clearSession()
+                        history.push('/login')
+                        return resolve(null)
+                    }
+
+                    token = session.token
                 }
     
-                headers['Authorization'] = `Bearer ${session.token}`
+                headers['Authorization'] = `Bearer ${token}`
             }
 
             fetch(url, {

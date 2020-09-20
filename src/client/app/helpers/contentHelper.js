@@ -20,22 +20,53 @@ export default {
             sessionSet(result.payload)
     },
 
+    fetchSessionByTokenId : async function(token){
+        let basicSession = await ajax.authGetWithToken(`${appSettings.serverUrl}/v1/content/all/playlists,profile`, token)
+        basicSession = basicSession.payload
+        basicSession.songs = []
 
-    fetchSongs : async function(){
         let calls = 0
         while (calls < 30){ // set max calls to prevent runaway
-            let page = await ajax.authGet(`${appSettings.serverUrl}/v1/content/songs?page=${calls}`)
-            if (page && page.payload){
-                if (calls === 0)
-                    sessionSetSongs(page.payload.songs)
-                else
-                    sessionAddSongs(page.payload.songs)
+            let page = await ajax.authGetWithToken(`${appSettings.serverUrl}/v1/content/songs?page=${calls}`, token)
 
+            if (page && page.payload){
+                basicSession.songs = basicSession.songs.concat(page.payload.songs)
                 if (page.payload.isEnd)
                     break
             }
 
             calls ++
+        }
+
+        sessionSet(basicSession)
+    },
+
+    fetchSongs : async function(){
+        try {
+            let basicSession = await ajax.authGet(`${appSettings.serverUrl}/v1/content/all/playlists,profile`)
+            // null basicsession = not loggedin
+            if (!basicSession)
+                return 
+                
+            basicSession = basicSession.payload
+    
+            let calls = 0
+            while (calls < 30){ // set max calls to prevent runaway
+                let page = await ajax.authGet(`${appSettings.serverUrl}/v1/content/songs?page=${calls}`)
+                if (page && page.payload){
+                    if (calls === 0)
+                        sessionSetSongs(page.payload.songs)
+                    else
+                        sessionAddSongs(page.payload.songs)
+    
+                    if (page.payload.isEnd)
+                        break
+                }
+    
+                calls ++
+            }
+        } catch (ex){
+
         }
     }
 

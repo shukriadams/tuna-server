@@ -43,10 +43,9 @@ class View extends React.Component {
             })
 
             if (result.code)
-                this.setState( { disable : false, message : result.message  } )            
+                this.setState({ disable : false, message : result.message })            
             else {
-                sessionSet(result.payload)
-                await contentHelper.fetchSongs()
+                await contentHelper.fetchSessionByTokenId(result.payload.authToken)
                 history.push('/')
             }
 
