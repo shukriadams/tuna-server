@@ -91,9 +91,6 @@ class View extends React.Component {
                 <hr className="form-divider" />
                 <div className="form-row"></div>
 
-                <div className="form-row">
-                    <Link to="/resetPassword">Forgot your password?</Link>
-                </div>
             </div>
         )
     }

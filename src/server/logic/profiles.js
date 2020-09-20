@@ -22,7 +22,7 @@ module.exports = {
             throw `"masterDefaultPassword" not defined in system settings`
 
         profile = Profile.new()
-        profile.identifier = settings.masterUsername
+        profile.identifier = settings.masterUsername.trim().toLowerCase()
         profile.password = settings.masterDefaultPassword
         profile.created = new Date().getTime()
         profile.isPasswordChangeForced = true
@@ -127,55 +127,6 @@ module.exports = {
     /**
      *
      */
-    async requestPasswordReset(identifier, email){
-        const 
-            randomstring = require('randomstring'),
-            settings = require(_$+'helpers/settings'),
-            dataCache = require(_$+'cache/profile'),
-            sendgrid = require(_$+'helpers/sendgrid'),
-            Exception = require(_$+'types/exception'),
-            constants = require(_$+'types/constants')
-        
-        if (settings.demoMode)
-            return 
-
-        email = email.trim()
-
-        let profile = await dataCache.getByIdentifier(identifier)
-        if (!profile)
-            throw new Exception({ 
-                code : constants.ERROR_VALIDATION, 
-                public: 'That email address isn\'t bound to an account.'
-            })
-
-        if (!profile.email)
-            throw new Exception({ 
-                code : constants.ERROR_EMAIL_NOT_SET, 
-                public: 'Your account doesn\t have an email address. Please reset password directly (see Tuna "help" guide for more info)'
-            })
-
-        if (profile.email.trim().toLowerCase() != email.toLowerCase())
-            throw new Exception({ 
-                code : constants.ERROR_EMAIL_NOT_SET, 
-                public: 'The email address you gave was not found. Please reset password directly (see Tuna "help" guide for more info)'
-            })
-
-        let verificationKey = randomstring.generate(32)
-
-        profile.passwordResetKey = verificationKey
-        await dataCache.update(profile)
-
-        let resetLink = `${settings.siteUrl}/newPassword?key=${verificationKey}`
-        await sendgrid(
-            profile.email, 
-            'Password reset', 
-            `Hi. If you forgot your password, you can click on the link below to enter a new one.\n\n ${resetLink}\n\nRegards\nSome robot`)
-    },
-
-
-    /**
-     *
-     */
     _isPasswordValid (profile, password){
         const crypto = require('crypto'),
             sha512 = crypto.createHmac('sha512', profile.salt)
@@ -208,7 +159,7 @@ module.exports = {
             })
 
         // note that identifier is always trimmed and set to lowercase()
-        let profile = await dataCache.getByIdentifier(identifier.trim().toLowerCase());
+        let profile = await dataCache.getByIdentifier(identifier.trim().toLowerCase())
         if (!profile)
             throw new Exception({ 
                 code : constants.ERROR_VALIDATION, 

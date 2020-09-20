@@ -37,7 +37,6 @@
     "request-promise-native": "1.0.5",
     "socket.io": "2.1.1",
     "thread-sleep": "2.0.0",
-    "sendgrid": "5.1.0",
     "urljoin": "0.1.5",
     "minimist": "1.2.5",
     "statman-stopwatch": "2.11.1",

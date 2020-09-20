@@ -14,7 +14,6 @@ import Help from './../pages/help'
 import Import from './../pages/import'
 import FourOhFour from './../pages/fourOhFour'
 import PrivateRoute from './privateRoute'
-import ResetPassword from './../pages/resetPassword'
 import How from './../pages/how'
 import NewPassword from './../pages/newPassword'
 import KitchenSink from './../kitchenSink/kitchenSink'
@@ -59,7 +58,6 @@ import contentHelper from './../helpers/contentHelper'
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/about" component={About} />
                         <Route exact path="/help" component={Help} />
-                        <Route exact path="/resetPassword" component={ResetPassword} />
                         <Route exact path="/how" component={How} />
                         <Route exact path="/newPassword" component={NewPassword} />
                         <Route exact path="/kitchenSink" component={KitchenSink} />

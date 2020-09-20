@@ -17,12 +17,13 @@ DONE
 - mobile : move footer menu into main menu
 - recreate howler instance on next play
 - needs public player mode - disable profile page, disable profile actions, autologin
+- allow setting default password via docker-compose
 
 TODO
+- add support for streaming from an s3 bucket
 - add player test section - store local blob, play remote mp3/ogg/mp3, play local mp3/ogg/mp4
 - local storage needs to be togglable
 - last fm : rewrite to allow any public instance to be its own lastfm app.
-- allow setting default password via docker-compose
 - dragging requires one drag a song past the next sibling to activate
 - write detailed import log so user can read through import history after the fact, instead of having to follow live
 - unify oauth flow for all integrations, nextcloud and lastfm are still not routing to dev endpoints
