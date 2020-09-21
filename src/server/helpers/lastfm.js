@@ -33,7 +33,7 @@ module.exports = {
         if (settings.lastFmDevAuthKey)
             return `${settings.sandboxUrl}/v1/sandbox/lastfmAuthenticate?&session=${authTokenId}`;
         
-        return `http://www.last.fm/api/auth/?&api_key=${settings.lastFmApiKey}&cb=${settings.siteUrl}/api/catch/lastfm?session=${authTokenId}&state=none`;
+        return `http://www.last.fm/api/auth/?&api_key=${settings.lastFmApiKey}&cb=${settings.siteUrl}/v1/oauth/lastfm?session=${authTokenId}&state=none`;
     },
 
     /* sends message to last fm about current playing song.  */
