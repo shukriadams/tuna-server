@@ -9,6 +9,7 @@ import queueHelper from './../queue/queueHelper'
 import { playResume, playDownloading, focusNextSongInQueue, replay } from './../actions/actions'
 import watch from 'redux-watch'
 import debug from './../misc/debug'
+import debounce from 'debounce'
 
 class Player {
 
@@ -41,7 +42,7 @@ class Player {
                 }
             }
         })
-
+        this.attemptScrobbleDebounced = debounce(this._attemptScrobble.bind(this), 500)
         this._bindEvents()
     }
 
@@ -256,8 +257,7 @@ class Player {
     _onSongTick () {
 
         // set current and total time of song
-        let self = this,
-            profile = store.getState().session, //todo : assert profile, if null will explode
+        let profile = store.getState().session, //todo : assert profile, if null will explode
             time = this.player.getPosition(),
             duration = null
 
@@ -285,22 +285,8 @@ class Player {
 
 
         // send a scrobble order to backend once the halfway point of the song has passed.
-        if (profile.isScrobbling && !this.trackScrobbled && time > (duration / 2)){
-            self.trackScrobbled = true
-
-            let ajax = new Ajax(),
-                songDuration = this.currentSongDuration,
-                song = this.currentSong.id
-
-            ajax.auth(`${appSettings.serverUrl}/v1/lastfm/scrobble?song=${song}&songDuration=${songDuration}` , function(result){
-                if (!result.code){
-                    // todo inform user of teh win
-                    console.log('track scrobbled') // todo : move this to ui console out
-                } else {
-                    console.log('scrobble failed : ' + result.message ) // todo : move this to ui console out
-                }
-            })
-        }
+        if (profile.isScrobbling && !this.trackScrobbled && time > (duration / 2))
+            this.attemptScrobbleDebounced()
 
         // try to prefetch next song
         if (!this.nextSongLoaded && time > (duration / 2)){
@@ -318,6 +304,19 @@ class Player {
         }
     }
 
+    _attemptScrobble(){
+        let ajax = new Ajax(),
+            songDuration = this.currentSongDuration,
+            song = this.currentSong.id
+
+        ajax.auth(`${appSettings.serverUrl}/v1/lastfm/scrobble?song=${song}&songDuration=${songDuration}` , (result) =>{
+            if (!result.code && result.payload.scrobbled){
+                // todo inform user of teh win
+                console.log('track scrobbled') // todo : move this to ui console out
+                this.trackScrobbled = true
+            }
+        })
+    }
 }
 
 
