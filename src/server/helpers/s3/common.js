@@ -7,7 +7,8 @@ module.exports = {
      * query : 'tuna.dat'
      */
     async search(source, query){
-        
+        //  s3 must have the index file in the bucket root
+        return ['.tuna.dat']
     },
 
 
@@ -15,7 +16,15 @@ module.exports = {
      * Downloads a file from s3 as a string. This should be used for accessing Tuna dat and json index files
      */
     async downloadAsString(accessToken, path){
-        
+        const s3utils = require('madscience-s3helper').utils,
+            settings = require(_$+'helpers/settings')
+            
+        try{
+            return await s3utils.getStringFile(settings.s3key, settings.s3secret, settings.s3host, settings.s3bucket, path )
+        }catch(ex){
+            console.log(ex)
+            return null
+        }
     },
 
 
@@ -42,8 +51,43 @@ module.exports = {
     /**
      * Gets a link to streamable source. In the case of s3, we stream from our own API, which in turn retrieves the file from s3.
      */
-    async getFileLink(sources, path){
-        
+    async getFileLink(sources, path, authToken){
+        const
+            urljoin = require('urljoin'),
+            settings = require(_$+'helpers/settings')
+
+        return urljoin(settings.siteUrl, `/v1/stream/${authToken}/${Buffer.from(path).toString('base64')}`)
+    },
+
+    async streamMedia (profileId, mediaPath, res){
+
+        const
+            urljoin = require('urljoin'),
+            request = require('request'),
+            Exception = require(_$+'types/exception'),
+            settings = require(_$+'helpers/settings')
+
+        // ensure tokens are up-to-date before doing an API call
+        await this.ensureTokensAreUpdated(profileId)
+        // stream media from nextcloud back
+        try {
+            if (settings.sandboxMode)
+                request.get({ 
+                        url : urljoin(settings.sandboxUrl, '/v1/sandbox/s3/stream'), 
+                    }).pipe(res)
+            else
+                (await s3utils.getBinaryFile(settings.s3key, settings.s3secret, settings.s3host, settings.s3bucket, mediaPath)).pipe(res)
+
+        } catch (ex){
+            throw new Exception({
+                log : 'Unexpected error fetching media stream',
+                inner : {
+                    ex,
+                    profileId,
+                    mediaPath
+                }
+            })
+        }
     },
 
     
@@ -57,7 +101,15 @@ module.exports = {
      * Returns null if no file found.
      */
     async getIndexFileContent(source, profileId){
-        
+        const s3utils = require('madscience-s3helper').utils,
+            settings = require(_$+'helpers/settings')
+            
+        try{
+            return await s3utils.getStringFile(settings.s3key, settings.s3secret, settings.s3host, settings.s3bucket, '.tuna.dat' )
+        }catch(ex){
+            console.log(ex)
+            return null
+        }
     },
 
 

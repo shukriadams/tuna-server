@@ -75,7 +75,11 @@ const
         lastFmApiSecret : null,
         logLastFmResponses : false,
 
-        
+        s3key : null,
+        s3secret : null,
+        s3bucket : null,
+        s3host : null,
+
         nextCloudClientId : null,
         nextCloudSecret : null,
 

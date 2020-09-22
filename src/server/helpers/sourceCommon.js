@@ -22,13 +22,9 @@ module.exports = {
 
         // must ensure tokens before attempting search
         await sourceCommon.ensureTokensAreUpdated(profile.id)
-
-        const searchResults = await sourceCommon.search(source, '.tuna.json')
-        if (!searchResults.length)
-            return false
         
         // todo : harden json parse
-        let indexData = await sourceCommon.downloadAsString(source.accessToken, searchResults[0])
+        let indexData = await sourceCommon.downloadAsString(source.accessToken, '.tuna.json')
         const lastIndexData = jsonHelper.parse( indexData  )
 
         return source.indexImportDate < lastIndexData.date
