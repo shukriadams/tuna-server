@@ -10,7 +10,7 @@ export default (listId, songIdsToFlip)=>{
     for (let i = 0 ; i < songIdsToFlip.length ; i ++){
 
         let songId = songIdsToFlip[i],
-            songRow = list.querySelector(`[data-songid="${songId}"]`);
+            songRow = list.querySelector(`[data-songid="${songId}"]`); // FFS DO NOT REMOVE THIS SEMICOLON!
 
         ((songRow, i)=>{
             setTimeout(()=>{
