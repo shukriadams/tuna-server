@@ -66,7 +66,7 @@ class View extends React.Component {
         // clone the source array
         let rowData = this.props.items.slice(0)
 
-        // in browser mode, group songs by album, this might not be necessary
+        // in browser mode, group songs by album
         if(this.props.context === 'browser'){
             rowData.sort(function(song1, song2){
                 return song1.album > song2.album ? 1 :
@@ -99,8 +99,7 @@ class View extends React.Component {
 
 
         // put into variable for brevity
-        const selectedRowIds = listContextModel.selectedSongIds,
-            contextMenu = listContextModel.contextMenu
+        const contextMenu = listContextModel.contextMenu
 
         return (
             <div className={listClassNames}>

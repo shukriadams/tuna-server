@@ -7,33 +7,33 @@ module.exports = {
 
         // sort parameters alphabetically
         let sortedParameters = [],
-            apiSignature = '';
+            apiSignature = ''
 
         for (let property in parameters)
-            sortedParameters.push(property);
+            sortedParameters.push(property)
 
         sortedParameters.sort((a, b)=>{
-            if(a < b) return -1;
-            if(a > b) return 1;
-            return 0;
-        });
+            if(a < b) return -1
+            if(a > b) return 1
+            return 0
+        })
 
         for (let i = 0 ; i < sortedParameters.length; i ++)
-            apiSignature += sortedParameters[i] + parameters[sortedParameters[i]];
+            apiSignature += sortedParameters[i] + parameters[sortedParameters[i]]
 
-        apiSignature += settings.lastFmApiSecret;
-        apiSignature = crypto.createHash('md5').update(apiSignature, 'utf8').digest('hex');
+        apiSignature += settings.lastFmApiSecret
+        apiSignature = crypto.createHash('md5').update(apiSignature, 'utf8').digest('hex')
 
-        return apiSignature;
+        return apiSignature
     },
 
     getOauthUrl(authTokenId){
         const settings = require(_$+'helpers/settings')
         
-        if (settings.lastFmDevAuthKey)
-            return `${settings.sandboxUrl}/v1/sandbox/lastfmAuthenticate?&session=${authTokenId}`;
+        if (settings.sandboxMode)
+            return `${settings.sandboxUrl}/v1/sandbox/lastfmAuthenticate?&session=${authTokenId}`
         
-        return `http://www.last.fm/api/auth/?&api_key=${settings.lastFmApiKey}&cb=${settings.siteUrl}/api/catch/lastfm?session=${authTokenId}&state=none`;
+        return `http://www.last.fm/api/auth/?&api_key=${settings.lastFmApiKey}&cb=${settings.siteUrl}/v1/oauth/lastfm?session=${authTokenId}&state=none`
     },
 
     /* sends message to last fm about current playing song.  */
@@ -51,15 +51,15 @@ module.exports = {
             try {
 
                 if (!profile.scrobbleToken)
-                    resolve();
+                    resolve()
 
                 let cacheKey = profile.id + '_nowPlaying',
-                    playSession = PlaySession.new();
+                    playSession = PlaySession.new()
 
-                playSession.songId = song.id;
-                playSession.started = new Date().getTime();
+                playSession.songId = song.id
+                playSession.started = new Date().getTime()
 
-                await cache.add(cacheKey, playSession);
+                await cache.add(cacheKey, playSession)
 
                 let parameters = {
                         method : 'track.updateNowPlaying',
@@ -69,7 +69,7 @@ module.exports = {
                         sk : profile.scrobbleToken,
                         api_key : settings.lastFmApiKey
                     },
-                    signature = this.methodSignature(parameters);
+                    signature = this.methodSignature(parameters)
 
                 let options = {
                     url : 'http://ws.audioscrobbler.com/2.0/',
@@ -83,7 +83,7 @@ module.exports = {
                         api_key : settings.lastFmApiKey,
                         api_sig : signature
                     }
-                };
+                }
 
                 request(options, (err, response, body) => {
                     if (err)
@@ -117,6 +117,7 @@ module.exports = {
         const 
             request = require('request'),
             xmlreader = require('xmlreader'),
+            urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings'),
             log = require(_$+'logic/log')
 
@@ -133,7 +134,7 @@ module.exports = {
                 signature = this.methodSignature(parameters)
 
             let options = {
-                url : 'http://ws.audioscrobbler.com/2.0/',
+                url : settings.sandboxMode ? urljoin(settings.sandboxUrl, '/v1/sandbox/lastfmScrobble') : 'http://ws.audioscrobbler.com/2.0/',
                 method : 'POST',
                 form : {
                     method : 'track.scrobble',
@@ -190,12 +191,12 @@ module.exports = {
                         log : 'Empty last.fm token, swap not possible' 
                     })
 
-                let apiSignature = `api_key${settings.lastFmApiKey}methodauth.getSessiontoken${sessionToken}settings.lastFmApiSecret`
+                let apiSignature = `api_key${settings.lastFmApiKey}methodauth.getSessiontoken${sessionToken}${settings.lastFmApiSecret}`
 
                 apiSignature = crypto.createHash('md5').update(apiSignature, 'utf8').digest('hex')
 
                 let options = {
-                    url : settings.lastFmDevAuthKey ? urljoin(settings.sandboxUrl, '/v1/sandbox/lastfmTokenSwap') : `http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${settings.lastFmApiKey}&token=${sessionToken}&api_sig=${apiSignature}`,
+                    url : settings.sandboxMode ? urljoin(settings.sandboxUrl, '/v1/sandbox/lastfmTokenSwap') : `http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${settings.lastFmApiKey}&token=${sessionToken}&api_sig=${apiSignature}`,
                     method : 'GET'
                 }
 
@@ -207,7 +208,7 @@ module.exports = {
                     key = xml['lfm']['session'][0].key[0]
                     
                 } catch(ex) {
-                    return reject(ex)
+                    return reject({ex, body})
                 }
 
                 let profileLogic = require(_$+'logic/profiles'),
@@ -220,8 +221,7 @@ module.exports = {
                         log: 'Invalid profile, this shouldn\'t happen'
                     })
 
-                // bypass, set key directly
-                profile.scrobbleToken = settings.lastFmDevAuthKey || key
+                profile.scrobbleToken = key
 
                 await profileLogic.update(profile)
                 resolve()

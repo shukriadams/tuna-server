@@ -17,7 +17,7 @@ module.exports = {
                 return 'Password updated'
             },
             nextcloudCodeToToken = async(args)=>{
-                if (settings.musicSourceSandboxMode)
+                if (settings.sandboxMode)
                     return 'FAILED - code swapping cannot be done in sandbox mode.'
 
                 const profile = await profileLogic.getByIdentifier(settings.masterUsername)

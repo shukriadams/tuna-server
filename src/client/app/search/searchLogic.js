@@ -10,8 +10,6 @@ let filter = function(searchFor, maxResults){
         searchString = searchFor.toLowerCase().trim().split(' ').map(word => `(?=.*${word})`).join(''),
         reg = new RegExp(searchString, 'i') // i = case insensitive
 
-        console.log(searchString)
-
     for (let song of allSongs){
 
         if (!`${song.name} ${song.album} ${song.artist} ${song.tags.join('')}`.match(reg))

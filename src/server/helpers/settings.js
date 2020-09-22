@@ -61,7 +61,7 @@ const
 
         // if true, and a sandbox importer is available, will fallback to sandbox importer. This is for dev only
         // and will bypass true oauth in importer to use sandbox keys
-        musicSourceSandboxMode : false,
+        sandboxMode : false,
 
 
         dropboxAppId : null,
@@ -73,10 +73,7 @@ const
 
         lastFmApiKey : null,
         lastFmApiSecret : null,
-        // if set, this access token will always be returned when requesting a scrobble key from last.fm
-        lastFmDevAuthKey : null,
         logLastFmResponses : false,
-
 
         
         nextCloudClientId : null,

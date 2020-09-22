@@ -35,12 +35,12 @@ module.exports = {
                     songsLogic = require(_$+'logic/songs'),
                     authToken = await authHelper.authenticate(req)
            
-                await songsLogic.scrobble(
+                const scrobbled = await songsLogic.scrobble(
                     authToken.profileId, 
                     req.query.song, 
                     req.query.songDuration)
 
-                jsonHelper.returnPayload(res)
+                jsonHelper.returnPayload(res, { scrobbled })
 
             } catch(ex){
                 jsonHelper.returnException(res, ex)

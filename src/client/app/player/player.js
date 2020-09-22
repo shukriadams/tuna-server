@@ -27,6 +27,7 @@ class Player {
         this.player = null         // player - jplayer, phoengap or something else
         this.trackScrobbled = false
         this.triggeredStarted = false
+        this.ticks = 0
 
         let session = store.getState().session
         this.volume = session.volume
@@ -148,6 +149,7 @@ class Player {
             this.currentSongDuration = null
             this.trackScrobbled = false
             this.triggeredStarted = false
+            this.ticks = 0
 
             if (callback)
                 callback()
@@ -256,10 +258,11 @@ class Player {
     _onSongTick () {
 
         // set current and total time of song
-        let self = this,
-            profile = store.getState().session, //todo : assert profile, if null will explode
+        let profile = store.getState().session, //todo : assert profile, if null will explode
             time = this.player.getPosition(),
             duration = null
+        
+        this.ticks ++
 
         // trigger play start only once song has ticked, this is the only reliable way to do it
         if (!this.triggeredStarted)
@@ -285,21 +288,19 @@ class Player {
 
 
         // send a scrobble order to backend once the halfway point of the song has passed.
-        if (profile.isScrobbling && !this.trackScrobbled && time > (duration / 2)){
-            self.trackScrobbled = true
-
+        const debounceLimit = 10 // seconds
+        if (profile.isScrobbling && !this.trackScrobbled && time > 30 && this.ticks % debounceLimit === 0){
             let ajax = new Ajax(),
                 songDuration = this.currentSongDuration,
                 song = this.currentSong.id
 
-            ajax.auth(`${appSettings.serverUrl}/v1/lastfm/scrobble?song=${song}&songDuration=${songDuration}` , function(result){
-                if (!result.code){
+            ajax.auth(`${appSettings.serverUrl}/v1/lastfm/scrobble?song=${song}&songDuration=${songDuration}` , (result) =>{
+                if (!result.code && result.payload.scrobbled){
                     // todo inform user of teh win
                     console.log('track scrobbled') // todo : move this to ui console out
-                } else {
-                    console.log('scrobble failed : ' + result.message ) // todo : move this to ui console out
+                    this.trackScrobbled = true
                 }
-            })
+            })            
         }
 
         // try to prefetch next song

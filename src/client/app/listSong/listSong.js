@@ -18,11 +18,11 @@ class View extends React.Component {
             showContextMenu: false,
             functionInteractive : true
         }
-
-        this.selectedSongsHelper = new SelectedSongsHelper(this)
     }
 
     mainFunctionClicked(){
+        this.selectedSongsHelper = new SelectedSongsHelper(this)
+
         if (this.props.context === 'queue'){
             focusSongInQueue(this.props.song.id)
             playStart()

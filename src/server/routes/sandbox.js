@@ -7,7 +7,7 @@ module.exports = {
             jsonHelper = require(_$+'helpers/json')
 
         // prevent binding of dev routes if not explicitly enabled in settings
-        if (!settings.musicSourceSandboxMode)
+        if (!settings.sandboxMode)
             return
 
         /**
@@ -291,6 +291,30 @@ module.exports = {
                     '</session>' +
                     '</lfm>')
 
+            } catch(ex){
+                jsonHelper.returnException(res, ex)
+            }
+        })
+
+
+        /**
+         * 
+         */
+        app.post('/v1/sandbox/lastfmScrobble', async function(req, res){
+            try {
+                res.send(
+                    '<lfm status="ok">'+
+                        '<scrobbles accepted="1" ignored="0">'+
+                            '<scrobble>'+
+                            '<track corrected="0">Test Track</track>'+
+                            '<artist corrected="0">Test Artist</artist>'+
+                            '<album corrected="0"></album>'+
+                            '<albumArtist corrected="0"></albumArtist>'+
+                            '<timestamp>1287140447</timestamp>'+
+                            '<ignoredMessage code="0"></ignoredMessage>'+
+                            '</scrobble>'+
+                        '</scrobbles>'+
+                    '</lfm>')
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }

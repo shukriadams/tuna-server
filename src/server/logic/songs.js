@@ -102,12 +102,13 @@ module.exports = {
             Exception = require(_$+'types/exception'),
             profileLogic = require(_$+'logic/profiles'),
             lastFmHelper = require(_$+'helpers/lastfm'),
-            cache = require(_$+'helpers/cache'),
             settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath),
+            cache = require(_$+'helpers/cache'),
             song = await this._getById(songId, profileId)
 
         if (settings.demoMode)
-            return profile
+            return false
 
         if (!song)
             throw new Exception({ code: constants.ERROR_INVALID_SONG })
@@ -115,14 +116,9 @@ module.exports = {
         const cacheKey = `${profileId}_nowPlaying`,
             nowPlaying = await cache.get(cacheKey)
 
+        // song may have already been scrobbled
         if (!nowPlaying)
-            throw new Exception({ 
-                log : 'Expected playSession was not retrieved',
-                inner : {
-                    profileId,
-                    songId
-                }
-            })
+            return false
 
         if (nowPlaying.songId !== songId)
             throw new Exception({ 
@@ -134,18 +130,13 @@ module.exports = {
             })        
 
         // duration logic not working yet, disabling for now
-        const halfWayPoint = /*songDuration ? songDuration / 2 : song.duration ? (song.duration / 2) :*/ 30, // 30 bein lastfm minimum scrobble time
+        const halfWayPointInSeconds = /*songDuration ? songDuration / 2 : song.duration ? (song.duration / 2) :*/ 30, // 30 bein lastfm minimum scrobble time
             diff = new Date().getTime() - nowPlaying.started,
-            seconds = diff / 1000
+            elapsedSeconds = diff / 1000
 
-        if (seconds < halfWayPoint)
-            throw new Exception({ 
-                log : 'pre-halftime scrobble attempt',
-                inner : {
-                    playSession : nowPlaying,
-                    songId
-                }
-            })
+        // pre half-time scrobble attempt, ignore
+        if (elapsedSeconds < halfWayPointInSeconds)
+            return false 
 
         const profile = await profileLogic.getById(profileId)
 
@@ -158,6 +149,10 @@ module.exports = {
         const unixStart = Math.round(+nowPlaying.started / 1000)
         await lastFmHelper.scrobble(profile, song, unixStart)
         await cache.remove( cacheKey )
+        
+        logger.info.info(`user ${profileId} track ${songId} scrobbled after ${elapsedSeconds} seconds`)
+
+        return true
     },
 
 

@@ -16,7 +16,7 @@ module.exports = {
 
                 const 
                     body = JSON.stringify({ query, include_highlights : false }),
-                    url = settings.musicSourceSandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/find/${query}`) : urljoin(`https://api.dropbox.com/2/search_v2`),
+                    url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/find/${query}`) : urljoin(`https://api.dropbox.com/2/search_v2`),
                     result = await httputils.post(url, body, { 
                         headers : {
                             'Authorization' : `Bearer ${source.accessToken}`
@@ -53,7 +53,7 @@ module.exports = {
         return new Promise(async(resolve, reject)=>{
             try {
 
-                const url = settings.musicSourceSandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://api-content.dropbox.com/1/files/auto/${path}`,
+                const url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://api-content.dropbox.com/1/files/auto/${path}`,
                     body = JSON.stringify({ path }),
                     result = await httputils.post(url, body, { 
                         headers : {
@@ -126,7 +126,7 @@ module.exports = {
 
                 const 
                     body = JSON.stringify({ path }),
-                    url = settings.musicSourceSandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/getTemporaryPath/somefile`) : `https://api.dropboxapi.com/2/files/get_temporary_link`,
+                    url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/getTemporaryPath/somefile`) : `https://api.dropboxapi.com/2/files/get_temporary_link`,
                     result = await httputils.post(url, body, { 
                         headers : {
                             'Authorization' : `Bearer ${accessToken}`

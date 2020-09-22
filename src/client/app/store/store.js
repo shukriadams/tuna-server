@@ -52,4 +52,5 @@ store.subscribe(function(){
     wasAuthenticated = isAuthenticated
 })
 
+window.tunaStore = store
 export default store
