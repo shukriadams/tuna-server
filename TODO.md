@@ -24,6 +24,8 @@ DONE
 - remove all third party integrations
 
 TODO
+- dark theme!
+- queue autofocus current song
 - scrobbling should be done against a unique play instance instead of song id
 - look at https://github.com/krateng/maloja as another scrobbling option
 - add support for streaming from an s3 bucket
