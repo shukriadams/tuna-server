@@ -20,7 +20,7 @@ module.exports = {
             settings = require(_$+'helpers/settings')
             
         try{
-            return await s3utils.getStringFile(settings.s3key, settings.s3secret, settings.s3host, settings.s3bucket, path )
+            return await s3utils.getStringFile({ accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }, settings.s3bucket, path )
         }catch(ex){
             console.log(ex)
             return null
@@ -60,23 +60,29 @@ module.exports = {
     },
 
     async streamMedia (profileId, mediaPath, res){
+        
+        // s3 paths don't work the same as dropbox / nextcloud, they cannot have a leading slash
+        if (mediaPath.startsWith('/'))
+            mediaPath = mediaPath.substring(1, mediaPath.length)
 
-        const
+        const s3utils = require('madscience-s3helper').utils,
             urljoin = require('urljoin'),
             request = require('request'),
             Exception = require(_$+'types/exception'),
             settings = require(_$+'helpers/settings')
 
-        // ensure tokens are up-to-date before doing an API call
-        await this.ensureTokensAreUpdated(profileId)
-        // stream media from nextcloud back
         try {
             if (settings.sandboxMode)
                 request.get({ 
-                        url : urljoin(settings.sandboxUrl, '/v1/sandbox/s3/stream'), 
+                        url : urljoin(settings.sandboxUrl, '/v1/sandbox/stream'), 
                     }).pipe(res)
-            else
-                (await s3utils.getBinaryFile(settings.s3key, settings.s3secret, settings.s3host, settings.s3bucket, mediaPath)).pipe(res)
+            else {
+                const creds = { accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }
+                if (!await s3utils.fileExists(creds, settings.s3bucket, mediaPath))
+                    throw 'file not found'
+
+                await s3utils.streamFile(creds, settings.s3bucket, mediaPath, res)
+            }
 
         } catch (ex){
             throw new Exception({
@@ -105,7 +111,7 @@ module.exports = {
             settings = require(_$+'helpers/settings')
             
         try{
-            return await s3utils.getStringFile(settings.s3key, settings.s3secret, settings.s3host, settings.s3bucket, '.tuna.dat' )
+            return await s3utils.getStringFile({ accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }, settings.s3bucket, '.tuna.dat' )
         }catch(ex){
             console.log(ex)
             return null

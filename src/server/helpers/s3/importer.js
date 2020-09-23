@@ -37,7 +37,7 @@ class Importer extends ImporterBase {
             logger = require('winston-wrapper').instance(settings.logPath)
             
         try {
-            index = await s3utils.getStringFile(settings.s3key, settings.s3secret, settings.s3host, settings.s3bucket, '.tuna.dat')
+            index = await s3utils.getStringFile({ accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }, settings.s3bucket, '.tuna.dat')
         }catch (ex){
             logger.error.error(`Failed to retrieve index data from S3\nError : ${ex}`)
             return
@@ -52,8 +52,6 @@ class Importer extends ImporterBase {
             // skip empty items
             if (!raw)
                 continue
-
-            console.log(i, raw)
 
             try {
                 this.songsFromIndices.push(JSON.parse(raw))
