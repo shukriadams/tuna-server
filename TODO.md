@@ -25,6 +25,7 @@ DONE
 
 TODO
 - dark theme!
+- display version on UI
 - queue autofocus current song
 - scrobbling should be done against a unique play instance instead of song id
 - look at https://github.com/krateng/maloja as another scrobbling option
