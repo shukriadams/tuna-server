@@ -9,14 +9,26 @@ module.exports = {
             settings = require(_$+'helpers/settings'),
             logger = require('winston-wrapper').instance(settings.logPath),
             dataCache = require(_$+'cache/profile'),
+            constants = require(_$+'types/constants'),
+            S3Source = require(_$+'types/s3Source'),
             Profile = require(_$+'types/profile')
 
         if (!settings.masterUsername)
             throw `"masterUsername" not defined in system settings`
 
         let profile = await this.getByIdentifier(settings.masterUsername)
-        if (profile)
+        if (profile){
+
+            //  update user 
+            if (settings.musicSource === constants.SOURCES_S3 && !profile.sources[constants.SOURCES_S3]){
+                profile.sources = {}
+                profile.sources[constants.SOURCES_S3] = S3Source.new()
+                logger.info.info(`added S3 as source for user ${profile.id}`)
+                await dataCache.update(profile)
+            }
+
             return
+        }
 
         if (!settings.masterDefaultPassword)
             throw `"masterDefaultPassword" not defined in system settings`

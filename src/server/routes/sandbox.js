@@ -214,7 +214,7 @@ module.exports = {
         /**
          * streams a random file
          */
-        app.get('/v1/sandbox/nextcloud/stream', async (req, res) =>{
+        app.get('/v1/sandbox/stream', async (req, res) =>{
             try {
                 const 
                     fs = require('fs'), 
@@ -319,6 +319,7 @@ module.exports = {
                 jsonHelper.returnException(res, ex)
             }
         })
+
 
     }
 }

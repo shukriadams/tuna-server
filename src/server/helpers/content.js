@@ -21,6 +21,10 @@ module.exports = {
             session = Session.new()
         
         session.hash = source ? source.indexHash : ''
+        
+        let isSourceConnected = !!source
+        if (settings.musicSource === constants.SOURCES_S3)
+            isSourceConnected = true
 
         // return songs only if source is current, else force empty array, even if there are songs in DB.
         // if a source is changed songs from previous source might be present. This isn't likely, but still possible.
@@ -43,7 +47,7 @@ module.exports = {
             session.identifier = profile.identifier
             session.email = profile.email
             session.profileId  = profile.id
-            session.isSourceConnected = !!source
+            session.isSourceConnected = isSourceConnected
             session.token = authTokenId
             session.isScrobbling = profile.scrobbleToken !== null
         }

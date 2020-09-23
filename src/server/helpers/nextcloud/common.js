@@ -250,7 +250,7 @@ module.exports = {
 
         // ensure tokens are up-to-date before doing an API call
         await this.ensureTokensAreUpdated(profileId)
-        const url = settings.sandboxMode ? urljoin(settings.sandboxUrl, '/v1/sandbox/nextcloud/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
+        const url = settings.sandboxMode ? urljoin(settings.sandboxUrl, '/v1/sandbox/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
 
         // stream media from nextcloud back
         try {

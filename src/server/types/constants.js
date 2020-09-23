@@ -1,6 +1,7 @@
 module.exports = Object.freeze({
     SOURCES_DROPBOX : 'dropbox',
     SOURCES_NEXTCLOUD : 'nextcloud',
+    SOURCES_S3 : 'S3',
     LASTFM : 'lastfm',
 
     // no specific logic associated with this - logged internally, api exposes as 500, browser logs to console, user gets popunder alert in UI
@@ -47,4 +48,4 @@ module.exports = Object.freeze({
     // Manual oauth flow required by user
     SOURCE_CONNECTION_STATUS_USER_REAUTHORIZE : 'source_connection_status_user_reauthorize'
 
-});
+})
