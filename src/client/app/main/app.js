@@ -41,7 +41,7 @@ import contentHelper from './../helpers/contentHelper'
     gluActiveMediaQuery.initialize()
 
     await appSettings.update()
-
+    console.log(`Tuna : version ${appSettings.version}`)
     Pubsub.when('app', 'onRehydrated', async ()=>{
 
         // start the router to start the app
