@@ -4,18 +4,24 @@ module.exports = {
 
         const jsonHelper = require(_$+'helpers/json')
         
-        /** 
-         * Logs a song as now playing
+        /**
+         * Registers a play as complete. 
+         * todo : refactor to post
          */
-        app.post('/v1/playing', async function(req, res){
+        app.get('/v1/played', async function (req, res) {
             try {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
                     playMetricsHelper = require(_$+'helpers/playMetrics'),
                     authToken = await authHelper.authenticate(req)
-                    
-                await playMetricsHelper.playing(authToken.profileId, req.body.song)
-                jsonHelper.returnPayload(res)
+           
+                const result = await playMetricsHelper.played(
+                    authToken.profileId, 
+                    req.query.song, 
+                    req.query.songDuration)
+
+                jsonHelper.returnPayload(res, { result })
+
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }

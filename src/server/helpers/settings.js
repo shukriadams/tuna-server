@@ -57,6 +57,7 @@ const
         importInsertBlockSize : 100,
         debounceInterval : 500, // millseconds per import update socket push
 
+        logPlays : true,
 
 
         // if true, and a sandbox importer is available, will fallback to sandbox importer. This is for dev only

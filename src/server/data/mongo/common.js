@@ -75,7 +75,6 @@ module.exports = {
         })
     },
 
-
     async delete (collection, id){
         const 
             mongoHelper = require(_$+'helpers/mongo'),
@@ -101,24 +100,6 @@ module.exports = {
         })
     },
     
-    async deleteAll(collection, query){
-        return new Promise(async (resolve, reject) => {
-            try {
-
-                const db = await mongoHelper.getCollection(collection)
-                db.collection.deleteMany(query, err => {
-                    if (err)
-                        return reject(err)
-
-                    db.done()
-                    resolve()
-                })
-            } catch(ex) {
-                reject(ex)
-            }
-        })
-    },
-
     async deleteMany(collection, query){
         const 
             mongoHelper = require(_$+'helpers/mongo')
@@ -139,7 +120,6 @@ module.exports = {
             } catch (ex){
                 reject(ex)
             }
-    
         })
     },
 
