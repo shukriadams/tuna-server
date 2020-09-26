@@ -72,7 +72,7 @@ class Importer extends ImporterBase {
                     </d:basicsearch>
                 </d:searchrequest>`
 
-        const url = settings.sandboxMode ? `${this.settings.sandboxUrl}/v1/sandbox/nextcloud/find/.tuna.dat` : `${this.settings.nextCloudHost}/remote.php/dav`,
+        const url = settings.sandboxMode ? `${this.settings.siteUrl}/v1/sandbox/nextcloud/find/.tuna.dat` : `${this.settings.nextCloudHost}/remote.php/dav`,
             result = await this.httputils.post(url, body, options)
         // todo : handle server call timing out
 
@@ -150,7 +150,7 @@ class Importer extends ImporterBase {
         
         const 
             index = source.indexes[0],
-            url = this.settings.sandboxMode ? urljoin(this.settings.sandboxUrl, `/v1/sandbox/nextcloud/getfile/.tuna.dat`) : `${this.settings.nextCloudHost}${index.path}`,
+            url = this.settings.sandboxMode ? urljoin(this.settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.dat`) : `${this.settings.nextCloudHost}${index.path}`,
             indexRaw = await httputils.downloadString ({ 
                 url, 
                 headers : {

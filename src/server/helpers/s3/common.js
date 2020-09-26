@@ -74,7 +74,7 @@ module.exports = {
         try {
             if (settings.sandboxMode)
                 request.get({ 
-                        url : urljoin(settings.sandboxUrl, '/v1/sandbox/stream'), 
+                        url : urljoin(settings.siteUrl, '/v1/sandbox/stream'), 
                     }).pipe(res)
             else {
                 const creds = { accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }

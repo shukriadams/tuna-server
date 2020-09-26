@@ -16,7 +16,7 @@ module.exports = {
 
                 const 
                     body = JSON.stringify({ query, include_highlights : false }),
-                    url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/find/${query}`) : urljoin(`https://api.dropbox.com/2/search_v2`),
+                    url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/find/${query}`) : urljoin(`https://api.dropbox.com/2/search_v2`),
                     result = await httputils.post(url, body, { 
                         headers : {
                             'Authorization' : `Bearer ${source.accessToken}`
@@ -53,7 +53,7 @@ module.exports = {
         return new Promise(async(resolve, reject)=>{
             try {
 
-                const url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://api-content.dropbox.com/1/files/auto/${path}`,
+                const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://api-content.dropbox.com/1/files/auto/${path}`,
                     body = JSON.stringify({ path }),
                     result = await httputils.post(url, body, { 
                         headers : {
@@ -82,8 +82,8 @@ module.exports = {
             urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings')
 
-        if (settings.dropboxDevOauthToken)
-            return urljoin(settings.sandboxUrl, `/v1/sandbox/dropboxAuthenticate?&state=${authTokenId}_TARGETPAGE`)
+        if (settings.sandboxMode)
+            return urljoin(settings.siteUrl, `/v1/sandbox/dropboxAuthenticate?&state=${authTokenId}_TARGETPAGE`)
         else
             return `https://www.dropbox.com/oauth2/authorize?&response_type=code&client_id=${settings.dropboxAppId}&redirect_uri=${settings.siteUrl}/api/catch/dropbox&state=${authTokenId}_TARGETPAGE`
     },
@@ -126,7 +126,7 @@ module.exports = {
 
                 const 
                     body = JSON.stringify({ path }),
-                    url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/dropbox/getTemporaryPath/somefile`) : `https://api.dropboxapi.com/2/files/get_temporary_link`,
+                    url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getTemporaryPath/somefile`) : `https://api.dropboxapi.com/2/files/get_temporary_link`,
                     result = await httputils.post(url, body, { 
                         headers : {
                             'Authorization' : `Bearer ${accessToken}`
@@ -207,7 +207,7 @@ module.exports = {
                 let profileLogic = require(_$+'logic/profiles'),
                     profile = await profileLogic.getById(profileId),
                     options = {
-                        url : settings.dropboxDevOauthToken ? urljoin(settings.sandboxUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
+                        url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
                         method : 'POST',
                         form : {
                             code : token,
@@ -224,7 +224,7 @@ module.exports = {
 
                         if (response.statusCode === 200) {
 
-                            let json = JsonHelper.parse(body)
+                            let json = JsonHelper.parse(body),
                                 // if dev token set, always use that
                                 accessToken = settings.dropboxDevOauthToken || json.access_token
 
