@@ -14,7 +14,6 @@ class AppSettings{
             this.serverUrl = window.location.origin
 
         this.serverUrl = window.location.origin
-        this.emailVerificationDeadlineHours = 12
     }
 
 

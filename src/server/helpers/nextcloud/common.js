@@ -10,7 +10,7 @@ module.exports = {
             settings = require(_$+'helpers/settings')
 
         if (settings.sandboxMode)
-            return urljoin(settings.sandboxUrl, `/v1/sandbox/nextcloudAuthenticate?state=${authTokenId}_TARGETPAGE`)
+            return urljoin(settings.siteUrl, `/v1/sandbox/nextcloudAuthenticate?state=${authTokenId}_TARGETPAGE`)
         else
             return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
     },
@@ -20,7 +20,7 @@ module.exports = {
             urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             settings = require(_$+'helpers/settings'),
-            url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path),
+            url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path),
             response = await httputils.downloadString ({ 
                 url, 
                 headers : {
@@ -52,7 +52,7 @@ module.exports = {
             try {
                 const 
                     body = '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:permissions/></d:prop></d:propfind>',
-                    url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/nextcloud/find/.tuna.dat`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
+                    url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/.tuna.dat`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
                     method = settings.sandboxMode ? 'POST' : 'PROPFIND',
                     lookup = await httputils.post(url, body, { 
                         method,
@@ -78,7 +78,7 @@ module.exports = {
         // refresh token
         let 
             body = `grant_type=refresh_token&refresh_token=${source.refreshToken}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`,
-            url = settings.sandboxMode ? urljoin(settings.sandboxUrl, '/v1/sandbox/nextcloud/refresh') : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
+            url = settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/nextcloud/refresh') : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
             response = await httputils.postUrlString(url, body),
             content = null
         
@@ -154,7 +154,7 @@ module.exports = {
                     </d:basicsearch>
                 </d:searchrequest>`
 
-        const url = settings.sandboxMode ? urljoin(settings.sandboxUrl, `/v1/sandbox/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
+        const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
             result = await httputils.post(url, body, options)
             // todo : handle server call timing out
 
@@ -201,7 +201,7 @@ module.exports = {
 
         let url = `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`
         if (settings.sandboxMode){
-            url = urljoin(settings.sandboxUrl, 'v1/sandbox/nextcloudTokenSwap')
+            url = urljoin(settings.siteUrl, 'v1/sandbox/nextcloudTokenSwap')
             console.log(`SANDBOX enabled - token will be swapped locally`)
         }
 
@@ -250,7 +250,7 @@ module.exports = {
 
         // ensure tokens are up-to-date before doing an API call
         await this.ensureTokensAreUpdated(profileId)
-        const url = settings.sandboxMode ? urljoin(settings.sandboxUrl, '/v1/sandbox/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
+        const url = settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
 
         // stream media from nextcloud back
         try {

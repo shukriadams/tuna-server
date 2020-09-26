@@ -33,7 +33,7 @@ Tuna can be run in sandbox mode, whereby it simulates Dropbox, Nextcloud and any
 
 When you import music in sandbox mode, Tuna will import song listings from the /src/server/reference/.tuna.xml file - in live mode, this file would normally be in the root of your Dropbox or NextCloud folder.
 
-To stream music in sandbox box, add any mp3 songs to /src/server/reference/music. Random songs will be streamed back.
+To stream music in sandbox box, add any mp3 songs to /src/music. Random songs will be streamed back.
 
 #### Run
 

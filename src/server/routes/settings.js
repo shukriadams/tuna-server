@@ -2,7 +2,8 @@ module.exports ={
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'helpers/json'),
+            fs = require('fs-extra')
 
         /**
          * 
@@ -13,12 +14,14 @@ module.exports ={
                     sourceProvider = require(_$+'helpers/sourceProvider'),
                     constants = require(_$+'types/constants'),
                     settings = require(_$+'helpers/settings'),
-                    source = sourceProvider.get()
-
+                    source = sourceProvider.get(),
+                    versionfile = await fs.readJson('./version.json')
+                
                 jsonHelper.returnPayload(res, {
                     serverConstants : constants,
                     emailVerificationDeadlineHours : settings.emailVerificationDeadlineHours,
                     canConnectLastFM : !!settings.lastFmApiKey,
+                    version : versionfile.version,
                     sourceLabel : source.getLabel()
                 })
 

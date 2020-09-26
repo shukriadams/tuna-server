@@ -1,7 +1,6 @@
 module.exports = {
     
     normalize(mongoRecord){
-
         const profile = require(_$+'types/profile').new()
     
         for (const property in profile)
@@ -13,8 +12,7 @@ module.exports = {
     },
     
     denormalize(obj){
-        const 
-            ObjectID  = require('mongodb').ObjectID,
+        const ObjectID  = require('mongodb').ObjectID,
             clone = {}
     
         for (const prop in obj)
@@ -29,7 +27,6 @@ module.exports = {
     
         return clone
     },
-    
 
     async create(record){
         const mongoCommon = require(_$+'data/mongo/common'),
@@ -40,8 +37,7 @@ module.exports = {
     },
     
     async getById(id){
-        const 
-            mongoCommon = require(_$+'data/mongo/common'),
+        const mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
             record = await mongoCommon.findById(`${settings.mongoCollectionPrefix}profiles`, id)
         
@@ -49,8 +45,7 @@ module.exports = {
     },
     
     async getAll(){
-        const 
-            mongoCommon = require(_$+'data/mongo/common'),
+        const mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}profiles`, { }),
             results = []
@@ -62,8 +57,7 @@ module.exports = {
     },
     
     async getByIdentifier(identifier){
-        const 
-            mongoCommon = require(_$+'data/mongo/common'),
+        const mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
             record = await mongoCommon.findOne(`${settings.mongoCollectionPrefix}profiles`, { identifier })
 
@@ -71,8 +65,7 @@ module.exports = {
     },
     
     async getByPasswordResetKey(key){
-        const 
-            mongoCommon = require(_$+'data/mongo/common'),
+        const mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
             record = await mongoCommon.findOne(`${settings.mongoCollectionPrefix}profiles`, { passwordResetKey : key })
 

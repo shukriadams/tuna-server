@@ -11,6 +11,7 @@ src/public
 /src/client/css
 /src/client/lib
 /src/dist
+/src/music
 /src/client/icons-src/output
 /src/client/app/vc
 src/.scss-linters

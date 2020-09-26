@@ -47,6 +47,7 @@ module.exports = {
                     await db.collection(`${settings.mongoCollectionPrefix}profiles`).createIndex( { 'identifier': 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}profiles_unique` })
                     await db.collection(`${settings.mongoCollectionPrefix}songs`).createIndex( { 'path': 1 }, { unique: true, name : `${settings.mongoCollectionPrefix}songs_unique` })
                     await db.collection(`${settings.mongoCollectionPrefix}authTokens`).createIndex( { 'context': 1, 'profileId' : 1  }, { unique: true, name : `${settings.mongoCollectionPrefix}authTokens_unique` })
+                    await db.collection(`${settings.mongoCollectionPrefix}playlogs`).createIndex( { 'name': 1, 'artist' : 1, 'album' : 1, 'profileId' : 1, 'songId' : 1  }, { unique: false, name : `${settings.mongoCollectionPrefix}playlogs_nonunique` })
                     
                     client.close()
 

@@ -8,9 +8,6 @@ const
 
         // base url of your site. Default is for dev environments, you NEED to change this when going live
         siteUrl : 'http://localhost:48004',
-
-        // when running sandbox mode in a container with port aliasing, this will have to be set to the outward-facing port
-        sandboxUrl : 'http://localhost:48004',
         
         mongoConnectionString : 'mongodb://admin:secret@127.0.0.1:27017',
         mongoDBName : 'tuna',
@@ -57,7 +54,8 @@ const
         importInsertBlockSize : 100,
         debounceInterval : 500, // millseconds per import update socket push
 
-
+        logPlays : true,
+        musicSandboxFolder : './music',
 
         // if true, and a sandbox importer is available, will fallback to sandbox importer. This is for dev only
         // and will bypass true oauth in importer to use sandbox keys

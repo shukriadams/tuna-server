@@ -24,28 +24,5 @@ module.exports = {
             }
         })
 
-
-        /**
-         * Registers a play on lastfm
-         */
-        app.get('/v1/lastfm/scrobble', async function (req, res) {
-            try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
-                    songsLogic = require(_$+'logic/songs'),
-                    authToken = await authHelper.authenticate(req)
-           
-                const scrobbled = await songsLogic.scrobble(
-                    authToken.profileId, 
-                    req.query.song, 
-                    req.query.songDuration)
-
-                jsonHelper.returnPayload(res, { scrobbled })
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
-        })
-
     }
 }

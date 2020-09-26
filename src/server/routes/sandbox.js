@@ -68,10 +68,10 @@ module.exports = {
                     fsUtils = require('madscience-fsUtils'),
                     urljoin = require('urljoin'),
                     settings = require(_$+'helpers/settings'),                
-                    files = await fsUtils.readFilesUnderDir(_$+'reference/music', false, '.mp3')
+                    files = await fsUtils.readFilesUnderDir(settings.musicSandboxFolder, false, '.mp3')
 
                 if (!files.length)
-                    return jsonHelper.returnException(res, 'No local streamable files found - add mp3s to /src/reference/music folder')
+                    return jsonHelper.returnException(res, `No local streamable files found - add mp3s to music sandbox folder`)
 
                 const filename = files[Math.floor(Math.random() * files.length)]
 
@@ -90,15 +90,14 @@ module.exports = {
          */
         app.get('/v1/sandbox/dropbox/stream/:file', async (req, res) =>{
             try {
-                const 
-                    fs = require('fs'),
-                    readStream = fs.createReadStream(path.join(_$+'reference/music', req.params.file))
+                const fs = require('fs'),
+                    readStream = fs.createReadStream(path.join(settings.musicSandboxFolder, req.params.file))
 
                 // This will wait until we know the readable stream is actually valid before piping
-                readStream.on('open', function () {
+                readStream.on('open', ()=>{
                     // This just pipes the read stream to the response object (which goes to the client)
-                    readStream.pipe(res);
-                });
+                    readStream.pipe(res)
+                })
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
@@ -216,13 +215,12 @@ module.exports = {
          */
         app.get('/v1/sandbox/stream', async (req, res) =>{
             try {
-                const 
-                    fs = require('fs'), 
+                const fs = require('fs'), 
                     fsUtils = require('madscience-fsUtils'),
-                    files = await fsUtils.readFilesUnderDir(_$+'reference/music', true, '.mp3')
+                    files = await fsUtils.readFilesUnderDir(settings.musicSandboxFolder, true, '.mp3')
 
                 if (!files.length)
-                    return jsonHelper.returnException(res, 'No local streamable files found - add mp3s to /src/reference/music folder')
+                    return jsonHelper.returnException(res, 'No local streamable files found - add music to music sandbox folder')
 
                 const filename = files[Math.floor(Math.random() * files.length)],
                     readStream = fs.createReadStream(filename)
@@ -264,8 +262,7 @@ module.exports = {
         app.get('/v1/sandbox/lastfmAuthenticate', async function (req, res) {
             try {
         
-                const 
-                    settings = require(_$+'helpers/settings'),
+                const settings = require(_$+'helpers/settings'),
                     authToken = req.query.session
             
                 res.redirect(`${settings.siteUrl}/v1/oauth/lastfm?token=placeholder&session=${authToken}`)

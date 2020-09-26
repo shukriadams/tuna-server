@@ -45,6 +45,10 @@ sudo rm -rf .clone/src/node_modules &&
 # build 2: run a second container install, this one npm intalls "production" modules, these we want
 docker run -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /tmp/tuna/src && yarn --no-bin-links --ignore-engines --production" &&
 
+# write current tag to version file
+TAG=$(git describe --abbrev=0 --tags)
+echo "{\"version\": \"$TAG\"}" > .stage/version.json
+
 # combine artifacts from steps 1 and 2 and zip them
 rm -rf .stage &&
 mkdir -p .stage &&
@@ -56,8 +60,8 @@ cp -R .clone/src/scripts .stage &&
 cp -R .clone/src/public/css .stage/public &&
 cp -R .clone/src/client/media .stage/public &&
 cp .clone/src/index.js .stage &&
+cp .clone/src/version.json .stage &&
 cp .clone/src/package.json .stage &&
-rm -rf .stage/server/reference &&
 rm -f node/.stage.tar.gz &&
 tar -czvf node/.stage.tar.gz .stage &&
 

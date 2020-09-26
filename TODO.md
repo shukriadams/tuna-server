@@ -22,15 +22,18 @@ DONE
 - replace sendgrid with smtp
 - remove custom generated mongo ids, they're unnecessary
 - remove all third party integrations
+- display version on UI
+- add support for streaming from an s3 bucket
+- add internal play log for stats instead of relying on lastfm
 
 TODO
+- bug : updating songs breaks session
 - dark theme!
-- display version on UI
+- indexer : needs pause button
+- indexer : show/hide on tray icon double click
 - queue autofocus current song
 - scrobbling should be done against a unique play instance instead of song id
 - look at https://github.com/krateng/maloja as another scrobbling option
-- add support for streaming from an s3 bucket
-- add internal play log for stats instead of relying on lastfm
 - add player test section - store local blob, play remote mp3/ogg/mp3, play local mp3/ogg/mp4
 - local storage needs to be togglable
 - last fm : rewrite to allow any public instance to be its own lastfm app.
