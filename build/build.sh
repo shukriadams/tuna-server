@@ -60,6 +60,7 @@ cp -R .clone/src/scripts .stage &&
 cp -R .clone/src/public/css .stage/public &&
 cp -R .clone/src/client/media .stage/public &&
 cp .clone/src/index.js .stage &&
+cp .clone/src/version.json .stage &&
 cp .clone/src/package.json .stage &&
 rm -rf .stage/server/reference &&
 rm -f node/.stage.tar.gz &&
