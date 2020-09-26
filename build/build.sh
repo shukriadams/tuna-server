@@ -47,8 +47,6 @@ docker run -v $(pwd)/.clone:/tmp/tuna shukriadams/node10build:0.0.3 sh -c "cd /t
 
 # write current tag to version file
 TAG=$(git describe --abbrev=0 --tags)
-HASH=$(git rev-parse HEAD)
-HASHPIECE=${HASH:0:7}
 echo "{\"version\": \"$TAG\"}" > .stage/version.json
 
 # combine artifacts from steps 1 and 2 and zip them
