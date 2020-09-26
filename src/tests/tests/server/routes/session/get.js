@@ -2,9 +2,9 @@ const
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/session/isvalid', async(ctx)=>{
+mocha('route/session', async(ctx)=>{
     
-    it('route/session/isvalid::happy    gets a user session', async () => {
+    it('route/session::happy::gets a user session', async () => {
         
         let actualAuthTokenId,
             actualProfileId,
@@ -32,7 +32,7 @@ mocha('route/session/isvalid', async(ctx)=>{
             }
         })
 
-        await routeTester.get('/v1/session/isvalid')
+        await routeTester.get('/v1/session')
 
         ctx.assert.equal(actualAuthTokenId, 1234 )
         ctx.assert.equal(actualProfileId, 5678 )
@@ -42,7 +42,7 @@ mocha('route/session/isvalid', async(ctx)=>{
 
 
 
-    it('route/session/isvalid::unhappy    token does not exist', async () => {
+    it('route/session::unhappy::token does not exist', async () => {
         
         let tokenLookup = false,
             profileLookup = false,
@@ -67,7 +67,7 @@ mocha('route/session/isvalid', async(ctx)=>{
             }
         })
 
-        await routeTester.get('/v1/session/isvalid')
+        await routeTester.get('/v1/session')
 
         ctx.assert.true(tokenLookup)
         ctx.assert.false(profileLookup)
@@ -77,7 +77,7 @@ mocha('route/session/isvalid', async(ctx)=>{
     
 
 
-    it('route/session/isvalid::unhappy    user does not exist', async () => {
+    it('route/session::unhappy::user does not exist', async () => {
         
         let tokenLookup = false,
             profileLookup = false,
@@ -103,7 +103,7 @@ mocha('route/session/isvalid', async(ctx)=>{
             }
         })
 
-        await routeTester.get('/v1/session/isvalid')
+        await routeTester.get('/v1/session')
 
         ctx.assert.true(tokenLookup)
         ctx.assert.true(profileLookup)

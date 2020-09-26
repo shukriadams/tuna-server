@@ -8,9 +8,8 @@ mocha('helpers/nextcloud/importer/getSource', function(ctx){
 
 
     it('helpers/nextcloud/importer/getSource::happy    return profile and source', async () => {
-        let importer = mock.happyPath()
-
-        let result = async ()=> await importer._getSource('123')
+        let importer = mock.happyPath(),
+            result = async ()=> await importer._getSource('123')
 
         ctx.assert.notNull(result.profile)
         ctx.assert.notNull(result.source)

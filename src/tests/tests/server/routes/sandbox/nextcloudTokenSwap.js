@@ -4,11 +4,11 @@ const
 
 mocha('route/sandbox/nextcloudTokenSwap', async(ctx)=>{
     
-    it('route/sandbox/nextcloudTokenSwap::happy    route returns token object', async () => {
+    it('route/sandbox/nextcloudTokenSwap::happy::route returns token object', async () => {
         
         // enable sandbox mode to allow sandbox route binding
         ctx.inject.object(_$+'helpers/settings', {
-            musicSourceSandboxMode : true
+            sandboxMode : true
         })
         
         const route = require(_$+'routes/sandbox'),

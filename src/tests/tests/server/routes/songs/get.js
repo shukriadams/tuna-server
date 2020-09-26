@@ -1,11 +1,11 @@
 const 
-    route = require(_$+'routes/songs'),
+    route = require(_$+'routes/song'),
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/url', async(ctx)=>{
+mocha('route/song', async(ctx)=>{
     
-    it('route/songs/url::happy    gets a songs url', async ()=>{
+    it('route/song::happy::gets a songs url', async ()=>{
         
         let actualSongId,
             actualProfileId,
@@ -13,7 +13,7 @@ mocha('route/songs/url', async(ctx)=>{
             routeTester = await new RouteTester(route)
 
         routeTester.authenticate()
-        routeTester.req.query.song = 'blinded by fear'
+        routeTester.req.params.id = 'blinded by fear'
 
         ctx.inject.object(_$+'logic/songs', {
             getSongUrl (songId, profileId, authTokenId){
@@ -24,7 +24,7 @@ mocha('route/songs/url', async(ctx)=>{
             }
         }) 
 
-        await routeTester.get('/v1/songs/url')
+        await routeTester.get('/v1/song/:id')
 
         ctx.assert.equal(actualSongId, 'blinded by fear')
         ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )

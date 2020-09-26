@@ -5,7 +5,7 @@ const
 
 mocha('route/session/post', async(ctx)=>{
     
-    it('route/session/post::happy    logs user in, returns user content', async () => {
+    it('route/session/post::happy::logs user in, returns user content', async () => {
         
         let actualUsername,
             actualPassword,
@@ -38,7 +38,7 @@ mocha('route/session/post', async(ctx)=>{
 
         ctx.inject.object(_$+'logic/authToken', {
             create (profileId){            
-                return { profileId, id : 'myAuthtokenId'}
+                return { id : 'myAuthtokenId'}
             }
         })
 
@@ -47,7 +47,7 @@ mocha('route/session/post', async(ctx)=>{
         ctx.assert.equal(actualUsername, settings.masterUsername)
         ctx.assert.equal(actualPassword, 'mypass')
         ctx.assert.null(routeTester.res.content.code)
-        ctx.assert.equal(routeTester.res.content.payload.profileId, 'a-profile-id')
+        ctx.assert.equal(routeTester.res.content.payload.authToken, 'myAuthtokenId')
     })
     
 })

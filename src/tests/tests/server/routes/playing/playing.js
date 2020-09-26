@@ -1,11 +1,11 @@
 const 
-    route = require(_$+'routes/songs'),
+    route = require(_$+'routes/playing'),
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
-mocha('route/songs/nowplaying', async(ctx)=>{
+mocha('route/playing', async(ctx)=>{
     
-    it('route/songs/nowplaying::happy    sets which song is currently playing', async ()=>{
+    it('route/playing::happy::sets which song is currently playing', async ()=>{
         
         let actualSongId,
             actualProfileId,
@@ -14,14 +14,14 @@ mocha('route/songs/nowplaying', async(ctx)=>{
         routeTester.authenticate()
         routeTester.req.body.song = 'slaughter of the soul'
 
-        ctx.inject.object(_$+'logic/songs', {
-            nowPlaying (profileId, song){
+        ctx.inject.object(_$+'helpers/playMetrics', {
+            playing(profileId, song){
                 actualSongId = song
                 actualProfileId = profileId
             }
         }) 
 
-        await routeTester.post('/v1/songs/nowplaying')
+        await routeTester.post('/v1/playing')
 
         ctx.assert.equal(actualSongId, 'slaughter of the soul')
         ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )

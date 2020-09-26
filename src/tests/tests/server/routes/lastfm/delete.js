@@ -1,11 +1,11 @@
 const 
     route = require(_$+'routes/lastfm'),
     RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase');
+    mocha = require(_$t+'helpers/testbase')
 
 mocha('route/lastfm/delete', async(ctx)=>{
     
-    it('route/lastfm/delete:happy    removes lastfm integration', async () => {
+    it('route/lastfm/delete:happy::removes lastfm integration', async () => {
         ctx.inject.object(_$+'logic/profiles', {
             // prevent delete from cascading to db
             removeLastfm : ()=>{ } 
@@ -16,7 +16,7 @@ mocha('route/lastfm/delete', async(ctx)=>{
         routeTester.authenticate()
         routeTester.setUserContent({ someUserContent : 'left hand path'})
 
-        await routeTester.get('/v1/lastfm/delete')
+        await routeTester.delete('/v1/lastfm')
         ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'left hand path')
     })
 

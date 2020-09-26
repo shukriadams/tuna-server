@@ -1,11 +1,11 @@
 const 
-    route = require(_$+'routes/songs'),
+    route = require(_$+'routes/import'),
     RouteTester = require(_$t+'helpers/routeTester'),
     mocha = require(_$t+'helpers/testbase')
 
 mocha('route/songs/import', async(ctx)=>{
     
-    it('route/songs/import::happy    starts an import', async ()=>{
+    it('route/import::happy    starts an import', async ()=>{
         
         let routeTester = await new RouteTester(route),
             actualProfileId,
@@ -28,7 +28,7 @@ mocha('route/songs/import', async(ctx)=>{
 
         routeTester.setUserContent({ someUserContent : 'the somberlain' })
 
-        await routeTester.post('/v1/songs/import')
+        await routeTester.post('/v1/import')
 
         ctx.assert.equal(actualAuthTokenId, routeTester.authToken.id )
         ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )

@@ -8,7 +8,7 @@ mocha('route/sandbox/nextcloudAuthenticate', async(ctx)=>{
         
         // enable sandbox mode to allow sandbox route binding
         ctx.inject.object(_$+'helpers/settings', {
-            musicSourceSandboxMode : true
+            sandboxMode : true
         })
 
         const route = require(_$+'routes/sandbox'),
