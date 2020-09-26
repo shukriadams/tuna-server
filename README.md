@@ -4,7 +4,7 @@ Tuna lets you stream your music to any modern browser. It is open source and sel
 
 You can try out a [Tuna demo](https://tuna-demo.shukriadams.com/) - the username/password are demo/demo.
 
-Tuna has no social media or sharing capabilities of any kind, though it does let you post play stats to [Last.fm](http://last.fm). It works in browsers only, and it likely works badly on iOS due to how heavily Apple locks down in-browser cachine.
+Tuna has no social media or sharing capabilities of any kind, though it does let you post play stats to [Last.fm](http://last.fm). It works in browsers only, and it likely works badly on iOS due to how heavily Apple locks down in-browser caching.
 
 ## Requirements
 
