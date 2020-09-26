@@ -69,8 +69,6 @@ module.exports = {
         return await songsCache.getAll(profileId)
     },
 
-    
-
 
     /**
      * Presents a way to update song from client using JSON string.

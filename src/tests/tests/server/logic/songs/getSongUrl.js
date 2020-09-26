@@ -22,7 +22,7 @@ mocha('logic/songs/getSongUrl', async(ctx)=>{
         })
 
         ctx.inject.object(_$+'logic/songs', {
-            _getById(){
+            getById(){
                 return { }
             }
         })
@@ -84,7 +84,7 @@ mocha('logic/songs/getSongUrl', async(ctx)=>{
 
         // return no song to trigger exception
         ctx.inject.object(_$+'logic/songs', {
-            _getById(){
+            getById(){
                 return null
             }
         })

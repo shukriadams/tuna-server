@@ -27,7 +27,7 @@ module.exports = {
     },
 
     /**
-     * 
+     * Logs that a song has played in whatever way is needed.
      */
     async played(profileId, songId, songDuration){
         const 
@@ -77,15 +77,13 @@ module.exports = {
         if (!profile)
             throw new Exception({ code : constants.ERROR_INVALID_USER_OR_SESSION })
 
-        if (!profile.scrobbleToken)
-            throw new Exception({ log : 'profile not scrobbling'})
+        if (profile.scrobbleToken){
+            const unixStart = Math.round(+nowPlaying.started / 1000)
+            await lastFmHelper.scrobble(profile, song, unixStart)
+            logger.info.info(`user ${profileId} track ${songId} scrobbled after ${elapsedSeconds} seconds`)
+        }
 
-        const unixStart = Math.round(+nowPlaying.started / 1000)
-        await lastFmHelper.scrobble(profile, song, unixStart)
         await cache.remove( cacheKey )
-        
-        logger.info.info(`user ${profileId} track ${songId} scrobbled after ${elapsedSeconds} seconds`)
-
         return true
     },
 }

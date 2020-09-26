@@ -3,10 +3,10 @@ const constants = require(_$+'types/constants'),
 
 mocha('logic/songs/persistSong', async(ctx)=>{
 
-    it('logic/songs/persistSong::happy    persists song', async () => {
+    it('logic/songs/persistSong::happy::persists song', async () => {
         let persistedSong
         ctx.inject.object(_$+'logic/songs', {
-            _getById(){
+            getById(){
                 return {
                     foo : 'foo'
                 }
@@ -31,7 +31,7 @@ mocha('logic/songs/persistSong', async(ctx)=>{
         let persistedSong
         ctx.inject.object(_$+'logic/songs', {
             // return no song to trigger exception
-            _getById(){
+            getById(){
                 return null
             }
         })

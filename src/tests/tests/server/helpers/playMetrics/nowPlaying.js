@@ -1,3 +1,4 @@
+/*
 const constants = require(_$+'types/constants'),
     mocha = require(_$t+'helpers/testbase')
 
@@ -13,7 +14,7 @@ mocha('logic/songs/nowPlaying', async(ctx)=>{
 
         // return a song
         ctx.inject.object(_$+'logic/songs', {
-            _getById (){
+            getById (){
                 return { }
             }
         })
@@ -61,7 +62,7 @@ mocha('logic/songs/nowPlaying', async(ctx)=>{
 
         // return no song to trigger exception
         ctx.inject.object(_$+'logic/songs', {
-            _getById (){
+            getById (){
                 return null
             }
         })
@@ -72,3 +73,4 @@ mocha('logic/songs/nowPlaying', async(ctx)=>{
         ctx.assert.equal(exception.code, constants.ERROR_INVALID_SONG)
     })
 })
+*/
