@@ -58,7 +58,7 @@ const
         debounceInterval : 500, // millseconds per import update socket push
 
         logPlays : true,
-
+        musicSandboxFolder : './music',
 
         // if true, and a sandbox importer is available, will fallback to sandbox importer. This is for dev only
         // and will bypass true oauth in importer to use sandbox keys

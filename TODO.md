@@ -27,7 +27,10 @@ DONE
 - add internal play log for stats instead of relying on lastfm
 
 TODO
+- bug : updating songs breaks session
 - dark theme!
+- indexer : needs pause button
+- indexer : show/hide on tray icon double click
 - queue autofocus current song
 - scrobbling should be done against a unique play instance instead of song id
 - look at https://github.com/krateng/maloja as another scrobbling option
