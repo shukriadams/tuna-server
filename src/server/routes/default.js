@@ -18,16 +18,15 @@ module.exports = {
                     Handlebars = require('handlebars'),
                     path = require('path'),
                     fs = require('fs'),
-                    process = require('process'),
                     settings = require(_$+'helpers/settings'),
                     model = {
                         isJSBundled : settings.isJSBundled,
                         minModifier : settings.useMinifiedAssets ? '.min' : ''
                     }
 
-                // load and parse template - this is the only server-side template logic
+                // load and parse template - this is the only server-side template logic. Use path relative to this file so the route works in unit tests too
                 if (!indexTemplate){
-                    const indexHbs = await fs.promises.readFile( path.join(process.cwd(), 'server', 'templates', 'index.hbs') , 'utf8')
+                    const indexHbs = await fs.promises.readFile( path.join(__dirname, '..', 'templates', 'index.hbs') , 'utf8')
                     indexTemplate = Handlebars.compile(indexHbs)
                 }
 

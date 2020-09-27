@@ -46,7 +46,7 @@
     "madscience-s3helper": "https://github.com/shukriadams/madscience-s3helper.git#0.1.0",
     "timebelt": "https://github.com/shukriadams/timebelt.git#0.1.5",
     "madscience-httputils": "https://github.com/shukriadams/node-httputils.git#0.0.4",
-    "winston-wrapper": "https://github.com/shukriadams/winston-wrapper.git#0.0.4",
+    "winston-wrapper": "https://github.com/shukriadams/winston-wrapper.git#0.0.6",
     "xml2js": "0.4.23",
     "xmlreader": "0.2.3",
     "yarn": "https://github.com/shukriadams/yarn#0.0.5"
