@@ -10,6 +10,7 @@ sudo usermod -aG docker vagrant
 
 sudo npm install uglify-es -g
 sudo npm install yarn -g
+sudo npm install nyc@15.1.0 -g
 sudo npm install jspm@0.16x -g
 sudo npm install minify@5.1.1 -g
 
