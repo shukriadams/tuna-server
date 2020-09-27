@@ -170,6 +170,8 @@ module.exports = {
             try {
                 let 
                     fs = require('fs'),
+                    Exception = require(_$+'types/exception'),
+                    constants = require(_$+'types/constants'),
                     fileData = null
 
                 if (req.params.file === '.tuna.json')
@@ -177,7 +179,10 @@ module.exports = {
                 else if (req.params.file === '.tuna.dat')
                     fileData = await fs.promises.readFile(_$+'reference/.tuna.dat', 'utf8')
                 else
-                    throw `cannot sandbox get ${req.params.file}`
+                    throw new Exception({ 
+                        code: constants.ERROR_INVALID_ARGUMENT,
+                        public : `cannot sandbox get ${req.params.file}`
+                    })
 
                 res.send(fileData)
 
@@ -229,7 +234,7 @@ module.exports = {
                 readStream.on('open', function () {
                     // This just pipes the read stream to the response object (which goes to the client)
                     readStream.pipe(res);
-                });
+                })
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
