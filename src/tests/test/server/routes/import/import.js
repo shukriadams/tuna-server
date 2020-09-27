@@ -1,13 +1,11 @@
-const 
-    route = require(_$+'routes/import'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/songs/import', async(ctx)=>{
+describe('route/songs/import', async()=>{
     
-    it('route/import::happy    starts an import', async ()=>{
+    it('route/import::happy::starts an import', async ()=>{
         
-        let routeTester = await new RouteTester(route),
+        let ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/import'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            routeTester = await new RouteTester(route),
             actualProfileId,
             actualAuthTokenId
 

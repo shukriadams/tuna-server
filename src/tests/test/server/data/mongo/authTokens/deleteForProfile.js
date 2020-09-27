@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/authTokens/deleteForProfile', async()=>{
 
-mocha('mongo/authTokens/deleteForProfile', async(ctx)=>{
-
-    it('mongo/authTokens/deleteForProfile::happy    deletes authTokens for profile', async () => {
-        let authTokenMongo = require(_$+'data/mongo/authToken'),
+    it('mongo/authTokens/deleteForProfile::happy::deletes authTokens for profile', async () => {
+        let ctx = require(_$t+'testcontext'),
+            authTokenMongo = require(_$+'data/mongo/authToken'),
             actualQuery 
 
         // replace call to mongo

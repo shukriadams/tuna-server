@@ -1,10 +1,9 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/songs/delete', async()=>{
 
-mocha('mongo/songs/delete', async(ctx)=>{
+    it('mongo/songs/delete::happy::deletes song', async () => {
 
-    it('mongo/songs/delete::happy    deletes song', async () => {
-
-        let mongo = require(_$+'data/mongo/songs'),
+        let ctx = require(_$t+'testcontext'),
+            mongo = require(_$+'data/mongo/songs'),
             actualId 
 
         // replace call to mongo

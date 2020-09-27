@@ -1,8 +1,7 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/authTokens/getById', async()=>{
 
-mocha('mongo/authTokens/getById', async(ctx)=>{
-
-    it('mongo/authTokens/getById::happy    gets authToken by id', async () => {
+    it('mongo/authTokens/getById::happy::gets authToken by id', async () => {
+        const ctx = require(_$t+'testcontext')
 
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {

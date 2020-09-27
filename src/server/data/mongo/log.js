@@ -19,8 +19,10 @@ module.exports = {
         for (let property in newRecord)
             if (mongoRecord.hasOwnProperty(property))
                 newRecord[property] = mongoRecord[property]
-    
-        newRecord.id = mongoRecord._id.toString()
+
+        if (mongoRecord._id)                
+            newRecord.id = mongoRecord._id.toString()
+            
         return newRecord
     },
 

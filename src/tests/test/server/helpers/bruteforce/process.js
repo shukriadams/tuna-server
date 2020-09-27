@@ -1,10 +1,8 @@
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
+describe('helpers/bruteforce/process', function(){
 
-mocha('helpers/bruteforce/process', function(ctx){
-
-    it('helpers/bruteforce/process::happy    unprocessed call', async () => {
-        let result
+    it('helpers/bruteforce/process::happy::unprocessed call', async () => {
+        let result,
+            ctx = require(_$t+'testcontext')
        
         ctx.inject.object(_$+'helpers/cache', {
             isEnabled : true,
@@ -34,8 +32,10 @@ mocha('helpers/bruteforce/process', function(ctx){
 
 
 
-    it('helpers/bruteforce/process::happy    entry has expired', async () => {
-        let result
+    it('helpers/bruteforce/process::happy::entry has expired', async () => {
+        let result,
+            ctx = require(_$t+'testcontext')
+
         ctx.inject.object(_$+'helpers/cache', {
             isEnabled : true,
             // return record, but set its date far back for it to have timed out
@@ -69,8 +69,10 @@ mocha('helpers/bruteforce/process', function(ctx){
 
 
 
-    it('helpers/bruteforce/process::happy    lockout has expired', async () => {
-        let result
+    it('helpers/bruteforce/process::happy::lockout has expired', async () => {
+        let result,
+            ctx = require(_$t+'testcontext')
+
         ctx.inject.object(_$+'helpers/cache', {
             isEnabled : true,
             // return record, set it to locked out, but set its date far back for it to have expired
@@ -107,8 +109,10 @@ mocha('helpers/bruteforce/process', function(ctx){
 
 
 
-    it('helpers/bruteforce/process::happy    tally up, threshhold exceeded', async () => {
-        let result
+    it('helpers/bruteforce/process::happy::tally up, threshhold exceeded', async () => {
+        let result,
+            ctx = require(_$t+'testcontext')
+
         ctx.inject.object(_$+'helpers/cache', {
             isEnabled : true,
             // return record, set its date to current
@@ -146,8 +150,10 @@ mocha('helpers/bruteforce/process', function(ctx){
 
 
 
-    it('helpers/bruteforce/process::happy    tally up, threshhold not exceeded', async () => {
-        let result
+    it('helpers/bruteforce/process::happy::tally up, threshhold not exceeded', async () => {
+        let result,
+            ctx = require(_$t+'testcontext')
+
         ctx.inject.object(_$+'helpers/cache', {
             isEnabled : true,
             // return record, set its date to current
@@ -184,8 +190,10 @@ mocha('helpers/bruteforce/process', function(ctx){
 
 
 
-    it('helpers/bruteforce/process::unhappy    lockout in effect', async () => {
-        let result
+    it('helpers/bruteforce/process::unhappy::lockout in effect', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants')
+        
         ctx.inject.object(_$+'helpers/cache', {
             isEnabled : true,
             // return record, set it to locked out, set date to now so lockout is still active

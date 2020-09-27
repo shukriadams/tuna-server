@@ -1,4 +1,4 @@
-require('./testcontext')
+require('./../testcontext')
 
 describe('example', function () {
     it('demonstrates how to requiremock a core type', async () => {

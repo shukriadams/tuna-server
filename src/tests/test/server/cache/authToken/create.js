@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/authTokens/create', async()=>{
 
-mocha('cache/authTokens/create', async(ctx)=>{
-
-    it('cache/authTokens/create::happy    creates and caches authToken', async () => {
-        let actualAuthToken,
+    it('cache/authTokens/create::happy::creates and caches authToken', async () => {
+        let ctx = require(_$t+'testcontext'),
+            actualAuthToken,
             authTokenCache = require(_$+'cache/authToken')
 
         // replace call to mongo

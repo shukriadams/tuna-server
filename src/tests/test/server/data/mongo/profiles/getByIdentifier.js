@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/profiles/getByIdentifier', async()=>{
 
-mocha('mongo/profiles/getByIdentifier', async(ctx)=>{
-
-    it('mongo/profiles/getByIdentifier::happy    gets playlist by identifier', async () => {
-
+    it('mongo/profiles/getByIdentifier::happy::gets playlist by identifier', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {
             findOne (collection, query){

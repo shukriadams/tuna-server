@@ -1,18 +1,14 @@
+const assert = require('madscience-node-assert')
 
-const route = require(_$+'routes/default'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/default/default', async(ctx)=>{
-
-    // this is a simple route, it has only one outcome
-    it('route/default/default::happy    returns html', async () => {
+describe('route/default/default', () => {
+    it('route/default/default::happy::returns html', async () =>{
+        
+        const ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/default'),
+            RouteTester = require(_$t+'helpers/routeTester')
 
         let routeTester = await new RouteTester(route)
-
         await routeTester.get(/^[^.]+$/)
-
-        ctx.assert.includes(routeTester.res.content, '<html>')
+        assert.includes(routeTester.res.content, '<html>')
     })
-    
 })

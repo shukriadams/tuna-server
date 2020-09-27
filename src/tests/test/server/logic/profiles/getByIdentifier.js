@@ -1,8 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/profiles/getByIdentifier', async()=>{
 
-mocha('logic/profiles/getByIdentifier', async(ctx)=>{
-
-    it('logic/profiles/getByIdentifier::happy    gets all profiles', async () => {
+    it('logic/profiles/getByIdentifier::happy::gets all profiles', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'cache/profile', {
             getByIdentifier (){
                 return {id : 'some-id'}

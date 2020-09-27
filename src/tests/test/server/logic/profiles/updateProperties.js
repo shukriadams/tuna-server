@@ -1,8 +1,7 @@
-const mocha = require(_$t+'helpers/testbase')
-
-mocha('logic/profiles/updateProperties', async(ctx)=>{
+describe('logic/profiles/updateProperties', async()=>{
 
     it('logic/profiles/updateProperties::happy updates profile properties', async () => {
+        const ctx = require(_$t+'testcontext')
         
         ctx.inject.object(_$+'logic/profiles', {
             getById(){

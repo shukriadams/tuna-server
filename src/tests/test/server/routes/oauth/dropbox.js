@@ -1,15 +1,12 @@
-const 
-    constants = require(_$+'types/constants'),
-    route = require(_$+'routes/oauth'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/oauth/dropbox', async(ctx)=>{
+describe('route/oauth/dropbox', async()=>{
     
-    it('route/oauth/dropbox::happy    swap succeeds and redirects to next page', async () => {
+    it('route/oauth/dropbox::happy::swap succeeds and redirects to next page', async () => {
 
         // capture actual used profile and code
-        let actualProfileId,
+        let ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/oauth'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            actualProfileId,
             actualCode
 
         // override to return expect object
@@ -43,8 +40,12 @@ mocha('route/oauth/dropbox', async(ctx)=>{
 
 
 
-    it('route/oauth/dropbox::unhappy    throws auth error authtoken invalid', async () => {
-        
+    it('route/oauth/dropbox::unhappy::throws auth error authtoken invalid', async () => {
+        const ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/oauth'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            constants = require(_$+'types/constants')
+
         // ensure authtoken is null
         ctx.inject.object(_$+'logic/authToken', {
             getById : ()=> null

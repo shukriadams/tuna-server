@@ -1,10 +1,9 @@
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
+describe('logic/profiles/deleteSource', async(ctx)=>{
 
-mocha('logic/profiles/deleteSource', async(ctx)=>{
-
-    it('logic/profiles/deleteSource::happy    delete source', async () => {
-        let calls=0
+    it('logic/profiles/deleteSource::happy::delete source', async () => {
+        let ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants'),
+            calls=0
 
         ctx.inject.object(_$+'cache/profile', {
             getById (){
@@ -38,7 +37,9 @@ mocha('logic/profiles/deleteSource', async(ctx)=>{
 
     
 
-    it('logic/profiles/deleteSource::unhappy    delete source, profile not found', async () => {
+    it('logic/profiles/deleteSource::unhappy::delete source, profile not found', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants')
 
         ctx.inject.object(_$+'cache/profile', {
             getById (){

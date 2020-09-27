@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/songs/deleteAll', async()=>{
 
-mocha('cache/songs/deleteAll', async(ctx)=>{
-
-    it('cache/songs/deleteAll::happy    deletes all profile songs', async () => {
-        let called = false,
+    it('cache/songs/deleteAll::happy::deletes all profile songs', async () => {
+        let ctx = require(_$t+'testcontext'),
+            called = false,
             actualProfileId,
             songsCache = require(_$+'cache/songs')
 

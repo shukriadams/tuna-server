@@ -1,11 +1,10 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/profiles/update', async()=>{
 
-mocha('mongo/profiles/update', async(ctx)=>{
-
-    it('mongo/profiles/update::happy    updates profile', async () => {
+    it('mongo/profiles/update::happy::updates profile', async () => {
 
         // replace call to mongo
-        let updatedRecord,
+        let ctx = require(_$t+'testcontext'),
+            updatedRecord,
             updatedId
 
         ctx.inject.object(_$+'data/mongo/common', {

@@ -1,8 +1,7 @@
 /*
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
+const constants = require(_$+'types/constants')
 
-mocha('logic/songs/nowPlaying', async(ctx)=>{
+describe('logic/songs/nowPlaying', async(ctx)=>{
 
     it('logic/songs/nowPlaying::happy    registers currently playing song', async () => {
         // return a profile, this is required to proceed

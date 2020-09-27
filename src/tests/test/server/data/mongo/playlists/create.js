@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/playlists/create', async()=>{
 
-mocha('mongo/playlists/create', async(ctx)=>{
-
-    it('mongo/playlists/create::happy    creates playlist', async () => {
-
+    it('mongo/playlists/create::happy::creates playlist', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {
             create : (collection, record)=>{

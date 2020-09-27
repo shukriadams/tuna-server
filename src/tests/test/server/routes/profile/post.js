@@ -1,12 +1,9 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/profiles/post', async(ctx)=>{
+describe('route/profiles/post', async()=>{
     
-    it('route/profiles/post::happy    updates a profile, returns user content', async () => {
+    it('route/profiles/post::happy::updates a profile, returns user content', async () => {
         
-        let 
+        let ctx = require(_$t+'testcontext'), 
+            RouteTester = require(_$t+'helpers/routeTester'),
             actualProfileData,
             route = require(_$+'routes/profile'),
             routeTester = await new RouteTester(route)

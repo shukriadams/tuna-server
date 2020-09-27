@@ -1,8 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/profiles/getByPasswordResetKey', async()=>{
 
-mocha('cache/profiles/getByPasswordResetKey', async(ctx)=>{
+    it('cache/profiles/getByPasswordResetKey::happy::gets profile by identifier', async () => {
+        const ctx = require(_$t+'testcontext')
 
-    it('cache/profiles/getByPasswordResetKey::happy    gets profile by identifier', async () => {
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/profile', {
             getByPasswordResetKey (resetKey){

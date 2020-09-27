@@ -1,11 +1,10 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/logs/create', async()=>{
 
-mocha('logic/logs/create', async(ctx)=>{
-
-    it('logic/logs/create::happy    creates a log entry', async () => {
+    it('logic/logs/create::happy::creates a log entry', async () => {
 
         // replace call to mongo
-        let logic = require(_$+'logic/log'),
+        let ctx = require(_$t+'testcontext'),
+            logic = require(_$+'logic/log'),
             actualLogEntry
 
         // log logic writes straight to db without caching
@@ -21,6 +20,5 @@ mocha('logic/logs/create', async(ctx)=>{
         ctx.assert.equal(actualLogEntry.content.data, 'some-data')
         ctx.assert.equal(actualLogEntry.context, 'some-context')
     })
-
 
 })

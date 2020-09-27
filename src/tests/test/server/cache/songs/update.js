@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/songs/update', async()=>{
 
-mocha('cache/songs/update', async(ctx)=>{
-
-    it('cache/songs/update::happy    updates a profile', async () => {
-        let called = false,
+    it('cache/songs/update::happy::updates a profile', async () => {
+        let ctx = require(_$t+'testcontext'),
+            called = false,
             songsCache = require(_$+'cache/songs')
 
         // replace call to mongo

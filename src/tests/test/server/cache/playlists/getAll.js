@@ -1,8 +1,7 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/playlists/getAll', async(ctx)=>{
 
-mocha('cache/playlists/getAll', async(ctx)=>{
-
-    it('cache/playlists/getAll::happy    gets all playlists, already cached', async () => {
+    it('cache/playlists/getAll::happy::gets all playlists, already cached', async () => {
+        const ctx = require(_$t+'testcontext')
         
         // capture call to cache
         ctx.inject.object(_$+'helpers/cache', {
@@ -12,7 +11,7 @@ mocha('cache/playlists/getAll', async(ctx)=>{
         })
 
         const playlistCache = require(_$+'cache/playlist'),
-            playlist = await playlistCache.getAll('some-id')
+        playlist = await playlistCache.getAll('some-id')
 
         ctx.assert.equal(playlist.foo, 'bar')
     })
@@ -20,8 +19,9 @@ mocha('cache/playlists/getAll', async(ctx)=>{
 
 
 
-    it('cache/playlists/getAll::happy    gets all playlists, not cached', async () => {
-        let cachedPlaylist
+    it('cache/playlists/getAll::happy::gets all playlists, not cached', async () => {
+        let ctx = require(_$t+'testcontext'),
+            cachedPlaylist
 
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/playlist', {

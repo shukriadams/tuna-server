@@ -1,14 +1,12 @@
-const 
-    route = require(_$+'routes/stream'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/stream', async(ctx)=>{
+describe('route/stream', async()=>{
     
-    it('route/stream::happy    streams a song', async ()=>{
+    it('route/stream::happy::streams a song', async ()=>{
         
         let actualMediaPath,
             actualProfileId,
+            ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/stream'),
+            RouteTester = require(_$t+'helpers/routeTester'),
             routeTester = await new RouteTester(route)
 
         routeTester.authenticate()

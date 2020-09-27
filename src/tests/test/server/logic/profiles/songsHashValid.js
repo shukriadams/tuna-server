@@ -1,10 +1,8 @@
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
+describe('logic/profiles/songsHashValid', async(ctx)=>{
 
-mocha('logic/profiles/songsHashValid', async(ctx)=>{
-
-    it('logic/profiles/songsHashValid::happy    songs hash are valid', async () => {
-        let settings = require(_$+'helpers/settings'),
+    it('logic/profiles/songsHashValid::happy::songs hash are valid', async () => {
+        let ctx = require(_$t+'testcontext'),
+            settings = require(_$+'helpers/settings'),
             profile = {
                 sources : {}
             }
@@ -27,7 +25,10 @@ mocha('logic/profiles/songsHashValid', async(ctx)=>{
 
 
 
-    it('logic/profiles/songsHashValid::unhappy    no profile found', async () => {
+    it('logic/profiles/songsHashValid::unhappy::no profile found', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants')
+
         ctx.inject.object(_$+'cache/profile', {
             getById (){
                 return null
@@ -43,8 +44,9 @@ mocha('logic/profiles/songsHashValid', async(ctx)=>{
 
 
 
-    it('logic/profiles/songsHashValid::unhappy    path/no source', async () => {
-        let profile = {
+    it('logic/profiles/songsHashValid::unhappy::path/no source', async () => {
+        let ctx = require(_$t+'testcontext'),
+            profile = {
                 sources : {}
             }
 

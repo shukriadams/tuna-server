@@ -1,8 +1,7 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/authTokens/getById', async(ctx)=>{
 
-mocha('cache/authTokens/getById', async(ctx)=>{
-
-    it('cache/authTokens/getById::happy    gets authTokens by id, already cached', async () => {
+    it('cache/authTokens/getById::happy::gets authTokens by id, already cached', async () => {
+        const ctx = require(_$t+'testcontext')
         
         // capture call to cache
         ctx.inject.object(_$+'helpers/cache', {
@@ -12,16 +11,16 @@ mocha('cache/authTokens/getById', async(ctx)=>{
         })
 
         const authTokenCache = require(_$+'cache/authToken'),
-            authToken = await authTokenCache.getById('some-id')
+        authToken = await authTokenCache.getById('some-id')
 
         ctx.assert.equal(authToken.foo, 'bar')
     })
 
 
-
     
-    it('cache/authTokens/getById::happy    gets authTokens by id, not cached', async () => {
-        let cachedAuthToken
+    it('cache/authTokens/getById::happy::gets authTokens by id, not cached', async () => {
+        let ctx = require(_$t+'testcontext'),
+            cachedAuthToken
 
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/authToken', {

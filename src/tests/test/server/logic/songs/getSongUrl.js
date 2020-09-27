@@ -1,10 +1,8 @@
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
+describe('logic/songs/getSongUrl', async(ctx)=>{
 
-mocha('logic/songs/getSongUrl', async(ctx)=>{
-
-    it('logic/songs/getSongUrl::happy    gets song url', async () => {
-
+    it('logic/songs/getSongUrl::happy::gets song url', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'helpers/sourceProvider', {
             get(){
                 return {
@@ -36,7 +34,9 @@ mocha('logic/songs/getSongUrl', async(ctx)=>{
 
 
 
-    it('logic/songs/getSongUrl::unhappy    no profile found', async () => {
+    it('logic/songs/getSongUrl::unhappy::no profile found', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants')
 
         ctx.inject.object(_$+'helpers/sourceProvider', {
             get(){
@@ -64,7 +64,9 @@ mocha('logic/songs/getSongUrl', async(ctx)=>{
 
 
 
-    it('logic/songs/getSongUrl::unhappy    no song found', async () => {
+    it('logic/songs/getSongUrl::unhappy::no song found', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants')
 
         ctx.inject.object(_$+'helpers/sourceProvider', {
             get(){

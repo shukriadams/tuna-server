@@ -1,9 +1,8 @@
-const RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/profile/source/delete', async(ctx)=>{
+describe('route/profile/source/delete', async()=>{
     
     it('route/profile/source/delete::happy::route removes dropbox integration from profile and returns updated user content', async () => {
+        const ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester')
 
         ctx.inject.object(_$+'logic/profiles', {
             // prevent deleteSource from cascading further down stack

@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/profiles/update', async()=>{
 
-mocha('cache/profiles/update', async(ctx)=>{
-
-    it('cache/profiles/update::happy    updates a profile', async () => {
-        let added = false,
+    it('cache/profiles/update::happy::updates a profile', async () => {
+        let ctx = require(_$t+'testcontext'),
+            added = false,
             actualProfile,
             profilesCache = require(_$+'cache/profile')
 

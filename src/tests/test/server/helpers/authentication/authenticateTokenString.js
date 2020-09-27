@@ -1,10 +1,8 @@
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
+describe('helpers/authentication/authenticateToken', function(){
 
-mocha('helpers/authentication/authenticateToken', function(ctx){
+    it('helpers/authentication/authenticateToken::happy::authenticates a token string', async () => {
+        const ctx = require(_$t+'testcontext')
 
-    it('helpers/authentication/authenticateToken::happy    authenticates a token string', async () => {
-        
         ctx.inject.object(_$+'logic/authToken', {
             getById (){ 
                 return { foo : 'bar'}
@@ -20,8 +18,10 @@ mocha('helpers/authentication/authenticateToken', function(ctx){
     
 
 
-    it('helpers/authentication/authenticateToken::unhappy    no token string', async () => {
-        const authentication = require(_$+'helpers/authentication'),
+    it('helpers/authentication/authenticateToken::unhappy::no token string', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants'),
+            authentication = require(_$+'helpers/authentication'),
             exception = await ctx.assert.throws(async () => await authentication.authenticateTokenString(/* no string here */) )
 
         ctx.assert.equal(exception.code, constants.ERROR_INVALID_USER_OR_SESSION)
@@ -30,7 +30,10 @@ mocha('helpers/authentication/authenticateToken', function(ctx){
     
 
 
-    it('helpers/authentication/authenticateToken::unhappy    invalid auth token', async () => {
+    it('helpers/authentication/authenticateToken::unhappy::invalid auth token', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants')
+
         // return null to trigger invalid auth token exception
         ctx.inject.object(_$+'logic/authToken', {
             getById (){ 

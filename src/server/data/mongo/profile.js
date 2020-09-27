@@ -7,7 +7,9 @@ module.exports = {
             if (mongoRecord.hasOwnProperty(property))
                 profile[property] = mongoRecord[property]
     
-        profile.id = mongoRecord._id.toString()
+        if (mongoRecord._id)
+            profile.id = mongoRecord._id.toString()
+            
         return profile
     },
     

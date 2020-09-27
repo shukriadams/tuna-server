@@ -1,10 +1,9 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/playlists/deleteAll', async()=>{
 
-mocha('logic/playlists/deleteAll', async(ctx)=>{
+    it('logic/playlists/deleteAll::happy::deletes playlists for a profile', async () => {
 
-    it('logic/playlists/deleteAll::happy    deletes playlists for a profile', async () => {
-
-        let logic = require(_$+'logic/playlists'),
+        let ctx = require(_$t+'testcontext'),
+            logic = require(_$+'logic/playlists'),
             actualProfileId
 
         ctx.inject.object(_$+'cache/playlist', {

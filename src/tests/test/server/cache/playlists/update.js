@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/playlists/update', async(ctx)=>{
 
-mocha('cache/playlists/update', async(ctx)=>{
-
-    it('cache/playlists/update::happy    updates a playlist', async () => {
-        let called = false,
+    it('cache/playlists/update::happy::updates a playlist', async () => {
+        let ctx = require(_$t+'testcontext'),
+            called = false,
             actualPlaylist,
             playlistCache = require(_$+'cache/playlist')
 

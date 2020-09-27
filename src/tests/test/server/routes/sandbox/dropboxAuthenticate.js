@@ -1,10 +1,8 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/sandbox/dropboxAuthenticate', async(ctx)=>{
+describe('route/sandbox/dropboxAuthenticate', async()=>{
     
-    it('route/sandbox/dropboxAuthenticate::happy    route directs', async () => {
+    it('route/sandbox/dropboxAuthenticate::happy::route directs', async () => {
+        const ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester')
 
         // enable sandbox mode to allow sandbox route binding
         ctx.inject.object(_$+'helpers/settings', {

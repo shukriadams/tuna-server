@@ -1,13 +1,10 @@
-const 
-    assert = require('madscience-node-assert'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/playlists/delete', async(ctx)=>{
+describe('route/playlists/delete', async()=>{
     
-    it('route/playlists/delete::happy    deletes a playlist, returns user content', async () => {
+    it('route/playlists/delete::happy::deletes a playlist, returns user content', async () => {
 
-        let actualPlaylistId,
+        let ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            actualPlaylistId,
             actualTokenId,
             actualProfileId,
             route = require(_$+'routes/playlists'),

@@ -1,15 +1,13 @@
-const 
-    route = require(_$+'routes/song'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/song', async(ctx)=>{
+describe('route/song', async()=>{
     
     it('route/song::happy::gets a songs url', async ()=>{
         
         let actualSongId,
             actualProfileId,
             actualAuthTokenId,
+            ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/song'),
+            RouteTester = require(_$t+'helpers/routeTester'),
             routeTester = await new RouteTester(route)
 
         routeTester.authenticate()

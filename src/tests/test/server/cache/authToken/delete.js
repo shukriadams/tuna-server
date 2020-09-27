@@ -1,10 +1,9 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/authTokens/delete', async()=>{
 
-mocha('cache/authTokens/delete', async(ctx)=>{
+    it('cache/authTokens/delete::happy::deletes an authToken', async () => {
 
-    it('cache/authTokens/delete::happy    deletes an authToken', async () => {
-
-        let authTokenCache = require(_$+'cache/authToken'),
+        let ctx = require(_$t+'testcontext'),
+            authTokenCache = require(_$+'cache/authToken'),
             actualId = null, 
             actualKey = null
 

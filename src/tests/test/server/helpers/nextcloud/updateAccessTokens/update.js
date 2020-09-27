@@ -1,15 +1,13 @@
 
-const 
-    mocha = require(_$t+ 'helpers/testbase'),
-    constants = require(_$+'types/constants'),
-    nextCloudCommon = require(_$+'helpers/nextcloud/common'),
-    inject = require(_$t+'helpers/inject'),
-    assert = require('madscience-node-assert')
+const assert = require('madscience-node-assert')
 
 function mock(){
 
     // deep clone  so we do't pollute across tests (mocha does not isolate) 
-    let mock = Object.assign({}, nextCloudCommon)
+    let constants = require(_$+'types/constants'),
+        inject = require(_$t+'helpers/inject'),
+        nextCloudCommon = require(_$+'helpers/nextcloud/common'),
+        mock = Object.assign({}, nextCloudCommon)
     
     mock.mockProfile = { sources : { nextcloud : { 
         indexes : [],
@@ -41,12 +39,14 @@ function mock(){
 }
 
 
-mocha('test', function(testArgs){
+describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testArgs){
 
 
-    it('happypath : new bearer token is written to profile object', async () => {
+    it('helpers/nextcloud/importer/updateAccessTokens::happypath::new bearer token is written to profile object', async () => {
 
-        let updater = mock()
+        let updater = mock(),
+            constants = require(_$+'types/constants'),
+            ctx = require(_$t+'testcontext')
 
         // add new bearer token info to body content
         updater.mockPostUrlStringResponse.body = JSON.stringify({ 
@@ -69,8 +69,10 @@ mocha('test', function(testArgs){
     })
     
 
-    it('unhappypath : exits if token has not expired', async () => {
-        let updater = mock()
+    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::exits if token has not expired', async () => {
+        let ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants'),
+            updater = mock()
 
         // set token date so it hasn't expired yet
         updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].tokenDate = new Date().getTime()
@@ -87,8 +89,9 @@ mocha('test', function(testArgs){
 
     
 
-    it('unhappypath : throws invalid json error on invalid json', async () => {
-        let updater = mock()
+    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::throws invalid json error on invalid json', async () => {
+        let ctx = require(_$t+'testcontext'),
+            updater = mock()
 
         // set body response to be invalid json
         updater.mockPostUrlStringResponse.body = '---'
@@ -99,8 +102,10 @@ mocha('test', function(testArgs){
     })
 
 
-    it('unhappypath : invalid_request response flags source as broken', async () => {
-        let updater = mock()
+    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::invalid_request response flags source as broken', async () => {
+        let ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants'),
+            updater = mock()
 
         // set body response to 'invalid_request', this is known to happen with unvalid refresh tokens
         updater.mockPostUrlStringResponse.body = JSON.stringify({ 
@@ -117,8 +122,9 @@ mocha('test', function(testArgs){
     })
 
 
-    it('unhappypath : status 400 flags source as broken', async () => {
-        let updater = mock()
+    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::status 400 flags source as broken', async () => {
+        let updater = mock(),
+            constants = require(_$+'types/constants')
 
         // set body response to 'invalid_request', this is known to happen with unvalid refresh tokens
         updater.mockPostUrlStringResponse.raw.statusCode = 400
@@ -133,8 +139,9 @@ mocha('test', function(testArgs){
     })
 
 
-    it('unhappypath : unexpected error content throws exception', async () => {
-        let updater = mock()
+    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::unexpected error content throws exception', async () => {
+        let updater = mock(),
+            constants = require(_$+'types/constants')
 
         // set body response to 'invalid_request', this is known to happen with unvalid refresh tokens
         updater.mockPostUrlStringResponse.body = JSON.stringify({ 
@@ -153,8 +160,10 @@ mocha('test', function(testArgs){
     })
 
 
-    it('unhappypath : throw an exception during token check', async () => {
-        let updater = mock()
+    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::throw an exception during token check', async () => {
+        let updater = mock(),
+            inject = require(_$t+'helpers/inject'),
+            constants = require(_$+'types/constants')
 
         // set tokens to not expired
         updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].tokenDate = new Date().getTime()
@@ -172,8 +181,9 @@ mocha('test', function(testArgs){
     })
 
 
-    it('unhappypath : error 401 on token check forces token update', async () => {
-        let updater = mock()
+    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::error 401 on token check forces token update', async () => {
+        let updater = mock(),
+            inject = require(_$t+'helpers/inject')
 
         // make token brand new and expires way off in future
         updater.mockPostUrlStringResponse.body = JSON.stringify({ 

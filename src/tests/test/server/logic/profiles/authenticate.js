@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/profiles/authenticate', async()=>{
 
-mocha('logic/profiles/authenticate', async(ctx)=>{
-
-    it('logic/profiles/authenticate::happy    authenticates profile', async () => {
-
+    it('logic/profiles/authenticate::happy::authenticates profile', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'cache/profile', {
             getByIdentifier (){
                 return { id : 'some-id' }
@@ -25,8 +24,9 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
 
 
 
-    it('logic/profiles/authenticate::unhappy    no identifier', async () => {
-        const logic = require(_$+'logic/profiles'),
+    it('logic/profiles/authenticate::unhappy::no identifier', async () => {
+        const ctx = require(_$t+'testcontext'),
+            logic = require(_$+'logic/profiles'),
             exception = await ctx.assert.throws(async () => await logic.authenticate(null, 'mypass') )
 
         ctx.assert.equal(exception.public, 'Email required')
@@ -35,8 +35,9 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
 
 
 
-    it('logic/profiles/authenticate::unhappy    no password', async () => {
-        const logic = require(_$+'logic/profiles'),
+    it('logic/profiles/authenticate::unhappy::no password', async () => {
+        const ctx = require(_$t+'testcontext'),
+            logic = require(_$+'logic/profiles'),
             exception = await ctx.assert.throws(async () => await logic.authenticate('my-id', null) )
 
         ctx.assert.equal(exception.public, 'Invalid username / password')
@@ -45,7 +46,9 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
 
 
 
-    it('logic/profiles/authenticate::unhappy    profile not found', async () => {
+    it('logic/profiles/authenticate::unhappy::profile not found', async () => {
+        const ctx = require(_$t+'testcontext')
+
         ctx.inject.object(_$+'cache/profile', {
             getByIdentifier (){
                 return null
@@ -61,7 +64,9 @@ mocha('logic/profiles/authenticate', async(ctx)=>{
 
 
 
-    it('logic/profiles/authenticate::unhappy    invalid password', async () => {
+    it('logic/profiles/authenticate::unhappy::invalid password', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'cache/profile', {
             getByIdentifier (){
                 return { id : 'some-id' }

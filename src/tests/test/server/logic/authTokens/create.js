@@ -1,11 +1,10 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/authTokens/create', async()=>{
 
-mocha('logic/authTokens/create', async(ctx)=>{
-
-    it('logic/authTokens/create::happy    creates auth token, no existing sessions', async () => {
+    it('logic/authTokens/create::happy::creates auth token, no existing sessions', async () => {
 
         // replace call to mongo
-        let logic = require(_$+'logic/authToken'),
+        let ctx = require(_$t+'testcontext'),
+            logic = require(_$+'logic/authToken'),
             actualProfileId,
             actualBrowserUID
 
@@ -34,10 +33,11 @@ mocha('logic/authTokens/create', async(ctx)=>{
 
 
 
-    it('logic/authTokens/create::happy    creates auth token, too many existing sessions', async () => {
+    it('logic/authTokens/create::happy::creates auth token, too many existing sessions', async () => {
 
         // replace call to mongo
-        let logic = require(_$+'logic/authToken'),
+        let ctx = require(_$t+'testcontext'),
+            logic = require(_$+'logic/authToken'),
             actualDeletedId
 
         // lower amount so we can trigger cleanup logic

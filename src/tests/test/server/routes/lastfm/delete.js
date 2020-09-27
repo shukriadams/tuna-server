@@ -1,11 +1,10 @@
-const 
-    route = require(_$+'routes/lastfm'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/lastfm/delete', async(ctx)=>{
+describe('route/lastfm/delete', async()=>{
     
     it('route/lastfm/delete:happy::removes lastfm integration', async () => {
+        const ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/lastfm'),
+            RouteTester = require(_$t+'helpers/routeTester')
+    
         ctx.inject.object(_$+'logic/profiles', {
             // prevent delete from cascading to db
             removeLastfm : ()=>{ } 

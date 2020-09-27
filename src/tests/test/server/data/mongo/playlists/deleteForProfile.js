@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/playlists/deleteForProfile', async()=>{
 
-mocha('mongo/playlists/deleteForProfile', async(ctx)=>{
-
-    it('mongo/playlists/deleteForProfile::happy    deletes playlists for profile', async () => {
-        let mongo = require(_$+'data/mongo/playlist'),
+    it('mongo/playlists/deleteForProfile::happy::deletes playlists for profile', async () => {
+        let ctx = require(_$t+'testcontext'),
+            mongo = require(_$+'data/mongo/playlist'),
             actualQuery
 
         // replace call to mongo

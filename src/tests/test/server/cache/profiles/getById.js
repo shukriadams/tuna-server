@@ -1,8 +1,7 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/profiles/getById', async()=>{
 
-mocha('cache/profiles/getById', async(ctx)=>{
-
-    it('cache/profiles/getById::happy    gets profile by id, already cached', async () => {
+    it('cache/profiles/getById::happy::gets profile by id, already cached', async () => {
+        const ctx = require(_$t+'testcontext')
         
         // capture call to cache
         ctx.inject.object(_$+'helpers/cache', {
@@ -20,8 +19,9 @@ mocha('cache/profiles/getById', async(ctx)=>{
 
 
 
-    it('cache/profiles/getById::happy    gets profile by id, not cached', async () => {
-        let cachedProfile
+    it('cache/profiles/getById::happy::gets profile by id, not cached', async () => {
+        let ctx = require(_$t+'testcontext'),
+            cachedProfile
 
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/profile', {

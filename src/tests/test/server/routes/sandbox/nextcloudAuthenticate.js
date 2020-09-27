@@ -1,11 +1,9 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/sandbox/nextcloudAuthenticate', async(ctx)=>{
+describe('route/sandbox/nextcloudAuthenticate', async(ctx)=>{
     
-    it('route/sandbox/nextcloudAuthenticate::happy    route directs', async () => {
-        
+    it('route/sandbox/nextcloudAuthenticate::happy::route directs', async () => {
+        const ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester')
+
         // enable sandbox mode to allow sandbox route binding
         ctx.inject.object(_$+'helpers/settings', {
             sandboxMode : true

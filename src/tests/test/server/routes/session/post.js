@@ -1,13 +1,11 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    settings = require(_$+'helpers/settings'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/session/post', async(ctx)=>{
+describe('route/session/post', async(ctx)=>{
     
     it('route/session/post::happy::logs user in, returns user content', async () => {
         
-        let actualUsername,
+        let ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            settings = require(_$+'helpers/settings'),
+            actualUsername,
             actualPassword,
             route = require(_$+'routes/session'),
             routeTester = await new RouteTester(route)

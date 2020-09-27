@@ -1,10 +1,9 @@
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('logic/songs/persistSong', async(ctx)=>{
+describe('logic/songs/persistSong', async(ctx)=>{
 
     it('logic/songs/persistSong::happy::persists song', async () => {
-        let persistedSong
+        let ctx = require(_$t+'testcontext'),
+            persistedSong
+
         ctx.inject.object(_$+'logic/songs', {
             getById(){
                 return {
@@ -27,8 +26,10 @@ mocha('logic/songs/persistSong', async(ctx)=>{
 
 
     
-    it('logic/songs/persistSong::unhappy    persists song', async () => {
-        let persistedSong
+    it('logic/songs/persistSong::unhappy::persists song', async () => {
+        let ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants')
+
         ctx.inject.object(_$+'logic/songs', {
             // return no song to trigger exception
             getById(){

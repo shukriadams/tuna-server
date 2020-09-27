@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/songs/streamSong', async()=>{
 
-mocha('logic/songs/streamSong', async(ctx)=>{
-
-    it('logic/songs/streamSong::happy    streams song', async () => {
-        let actualProfileId,  
+    it('logic/songs/streamSong::happy::streams song', async () => {
+        let ctx = require(_$t+'testcontext'),
+            actualProfileId,  
             actualMediaPath
 
         ctx.inject.object(_$+'helpers/sourceProvider', {

@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
-
-mocha('logic/profiles/autoCreateMaster', async(ctx)=>{
+describe('logic/profiles/autoCreateMaster', async()=>{
 
     it('logic/profiles/autoCreateMaster::happy::creates master profile', async () => {
-
+        const ctx = require(_$t+'testcontext')
+        
         ctx.suppressLogs()
 
         // replace call to mongo

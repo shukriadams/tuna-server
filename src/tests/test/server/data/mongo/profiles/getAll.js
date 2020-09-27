@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/profiles/getAll', async()=>{
 
-mocha('mongo/profiles/getAll', async(ctx)=>{
-
-    it('mongo/profiles/getAll::happy    gets all profiles', async () => {
-
+    it('mongo/profiles/getAll::happy::gets all profiles', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {
             find (collection, query){

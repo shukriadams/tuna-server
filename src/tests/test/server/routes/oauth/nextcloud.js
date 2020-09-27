@@ -1,14 +1,11 @@
-const 
-    constants = require(_$+'types/constants'),
-    route = require(_$+'routes/oauth'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/oauth/nextcloud', async(ctx)=>{
+describe('route/oauth/nextcloud', async()=>{
     
-    it('route/oauth/nextcloud::happy    swap succeeds and redirects to next page ', async () => {
+    it('route/oauth/nextcloud::happy::swap succeeds and redirects to next page ', async () => {
         
-        let actualProfileId,
+        let ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/oauth'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            actualProfileId,
             actualCode
 
         // capture actual used profile and code
@@ -42,7 +39,12 @@ mocha('route/oauth/nextcloud', async(ctx)=>{
 
 
 
-    it('route/oauth/nextcloud::unhappy    throws auth error authtoken invalid', async () => {
+    it('route/oauth/nextcloud::unhappy::throws auth error authtoken invalid', async () => {
+        const ctx = require(_$t+'testcontext'),
+            constants = require(_$+'types/constants'),
+            route = require(_$+'routes/oauth'),
+            RouteTester = require(_$t+'helpers/routeTester')
+
         ctx.inject.object(_$+'logic/authToken', {
             // ensure authtoken is null
             getById (){ 

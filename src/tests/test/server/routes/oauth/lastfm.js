@@ -1,13 +1,10 @@
-const 
-    constants = require(_$+'types/constants'),
-    route = require(_$+'routes/oauth'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/oauth/lastfm', async(ctx)=>{
+describe('route/oauth/lastfm', async()=>{
     
-    it('route/oauth/lastfm::happy    swap succeeds and redirects to next page', async () => {
-        let actualProfileId,
+    it('route/oauth/lastfm::happy::swap succeeds and redirects to next page', async () => {
+        let ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/oauth'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            actualProfileId,
             actualCode
         
         ctx.inject.object(_$+'logic/authToken', {
@@ -40,7 +37,12 @@ mocha('route/oauth/lastfm', async(ctx)=>{
 
 
 
-    it('route/oauth/lastfm::unhappy    throws auth error authtoken invalid', async () => {
+    it('route/oauth/lastfm::unhappy::throws auth error authtoken invalid', async () => {
+        const ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/oauth'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            constants = require(_$+'types/constants')
+
         ctx.inject.object(_$+'logic/authToken', {
             getById(){ 
                 return null 

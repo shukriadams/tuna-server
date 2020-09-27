@@ -1,11 +1,10 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/songs/create', async()=>{
 
-mocha('mongo/songs/create', async(ctx)=>{
-
-    it('mongo/songs/create::happy    creates songs', async () => {
+    it('mongo/songs/create::happy::creates songs', async () => {
 
         // replace call to mongo
-        let mongo = require(_$+'data/mongo/songs'),
+        let ctx = require(_$t+'testcontext'),
+            mongo = require(_$+'data/mongo/songs'),
             actualRecords
 
         ctx.inject.object(_$+'data/mongo/common', {

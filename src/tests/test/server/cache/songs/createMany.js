@@ -1,10 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('cache/songs/createMany', async()=>{
 
-mocha('cache/songs/createMany', async(ctx)=>{
-
-    it('cache/songs/createMany::happy    creates and caches profile', async () => {
-
-        let called = false,
+    it('cache/songs/createMany::happy::creates and caches profile', async () => {
+        let ctx = require(_$t+'testcontext'),
+            called = false,
             songsCache = require(_$+'cache/songs')
 
         // replace call to mongo

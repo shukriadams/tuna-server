@@ -1,10 +1,9 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/authTokens/deleteForProfile', async()=>{
 
-mocha('logic/authTokens/deleteForProfile', async(ctx)=>{
+    it('logic/authTokens/deleteForProfile::happy::deletes authTokens for a profile', async () => {
 
-    it('logic/authTokens/deleteForProfile::happy    deletes authTokens for a profile', async () => {
-
-        let logic = require(_$+'logic/authToken'),
+        let ctx = require(_$t+'testcontext'),
+            logic = require(_$+'logic/authToken'),
             actualProfileId
 
         ctx.inject.object(_$+'cache/authToken', {

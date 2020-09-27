@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/profiles/getByPasswordResetKey', async()=>{
 
-mocha('mongo/profiles/getByPasswordResetKey', async(ctx)=>{
-
-    it('mongo/profiles/getByPasswordResetKey::happy    gets playlist by password reset key', async () => {
-
+    it('mongo/profiles/getByPasswordResetKey::happy::gets playlist by password reset key', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {
             findOne (collection, query){

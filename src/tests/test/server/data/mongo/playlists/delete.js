@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/playlists/delete', async()=>{
 
-mocha('mongo/playlists/delete', async(ctx)=>{
-
-    it('mongo/playlists/delete::happy    deletes playlist', async () => {
-
+    it('mongo/playlists/delete::happy::deletes playlist', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {
             delete (collection, id){

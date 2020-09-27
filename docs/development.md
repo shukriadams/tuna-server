@@ -96,21 +96,38 @@ To run all tests use
 
     npm test
 
+To run all tests in the tests folder directly use
+
+    cd tests
+    ./../node_modules/mocha/bin/mocha --recursive
+
 To run a single test use
 
-    npm test "test name"
+    cd tests
+    ./../node_modules/mocha/bin/mocha --recursive -g "test name"
+
+or
+
+    npm test -- -g "test name"
 
 where "test name" can be either a group of tests as defined in 
  
-    mocha("group name") 
+    describe("group name") 
     
 at the top of a test file, or an individual test's name in 
 
     it("test name")
 
-To debug a single test use
+To debug use
 
-    npm run testdebug "test name" 
+    npm run testdebug 
+    npm run testdebug -- -g "test name" 
+
+or
+
+    cd tests
+    ./../node_modules/mocha/bin/mocha --recursive --inspect-brk=0.0.0.0:48003
+    ./../node_modules/mocha/bin/mocha --recursive --inspect-brk=0.0.0.0:48003 -g "test name"
 
 ## Concepts
 

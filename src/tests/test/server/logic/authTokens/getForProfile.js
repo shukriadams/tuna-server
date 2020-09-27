@@ -1,8 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/authTokens/getForProfile', async()=>{
 
-mocha('logic/authTokens/getForProfile', async(ctx)=>{
-
-    it('logic/authTokens/getForProfile::happy    gets authToken for profile', async () => {
+    it('logic/authTokens/getForProfile::happy::gets authToken for profile', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'cache/authToken', {
             getForProfile (profileId){
                 return { profileId }

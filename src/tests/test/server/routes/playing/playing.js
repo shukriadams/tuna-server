@@ -1,13 +1,11 @@
-const 
-    route = require(_$+'routes/playing'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/playing', async(ctx)=>{
+describe('route/playing', async()=>{
     
     it('route/playing::happy::sets which song is currently playing', async ()=>{
         
-        let actualSongId,
+        let ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/playing'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            actualSongId,
             actualProfileId,
             routeTester = await new RouteTester(route)
 

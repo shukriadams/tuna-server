@@ -1,14 +1,11 @@
-
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/playlists/post', async(ctx)=>{
+describe('route/playlists/post', async()=>{
     
-    it('route/playlists/post:: happy    creates a playlist, returns user content', async () => {
+    it('route/playlists/post::happy::creates a playlist, returns user content', async () => {
         // read back actual values sent to playlist create
-        let actualPlaylist,
+        let ctx = require(_$t+'testcontext'),
+            actualPlaylist,
             actualProfileId,
+            RouteTester = require(_$t+'helpers/routeTester'),
             route = require(_$+'routes/playlists'),
             routeTester = await new RouteTester(route)
 
@@ -36,10 +33,12 @@ mocha('route/playlists/post', async(ctx)=>{
 
 
     
-    it('route/playlists/post::happy    updates a playlist, returns user content', async () => {
+    it('route/playlists/post::happy::updates a playlist, returns user content', async () => {
 
         // read back actual values sent to playlist create
-        let actualPlaylist,
+        let ctx = require(_$t+'testcontext'),
+            actualPlaylist,
+            RouteTester = require(_$t+'helpers/routeTester'),
             route = require(_$+'routes/playlists'),
             routeTester = await new RouteTester(route)
 

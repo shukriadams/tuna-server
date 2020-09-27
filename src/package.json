@@ -10,8 +10,8 @@
     "build": "npm run sass",
     "dev": "node ./build/dev.js",
     "sass": "node ./build/build-all-sass && minify ./public/css/style.css > ./public/css/style.min.css",
-    "test": "node tests/run-all.js",
-    "testdebug": "node --inspect-brk=0.0.0.0:48003 tests/run-all.js"
+    "test": "cd tests && ./../node_modules/mocha/bin/mocha --recursive",
+    "testdebug": "cd tests && ./../node_modules/mocha/bin/mocha --inspect-brk=0.0.0.0:48003 --recursive"
   },
   "dependencies": {
     "body-parser": "1.18.3",

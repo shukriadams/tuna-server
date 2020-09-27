@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/profiles/resetPassword', async()=>{
 
-mocha('logic/profiles/resetPassword', async(ctx)=>{
-
-    it('logic/profiles/resetPassword::happy    requests password reset, key given', async () => {
-        let updatedProfile = null
+    it('logic/profiles/resetPassword::happy::requests password reset, key given', async () => {
+        let ctx = require(_$t+'testcontext'),
+            updatedProfile = null
 
         ctx.inject.object(_$+'cache/profile', {
             getByPasswordResetKey(){
@@ -25,8 +24,9 @@ mocha('logic/profiles/resetPassword', async(ctx)=>{
 
 
 
-    it('logic/profiles/resetPassword::happy    requests password reset, profileId given', async () => {
-        let updatedProfile = null
+    it('logic/profiles/resetPassword::happy::requests password reset, profileId given', async () => {
+        let ctx = require(_$t+'testcontext'),
+            updatedProfile = null
 
         ctx.inject.object(_$+'cache/profile', {
             getById (){
@@ -54,7 +54,9 @@ mocha('logic/profiles/resetPassword', async(ctx)=>{
 
 
 
-    it('logic/profiles/resetPassword::unhappy    requests password reset, no profile found', async () => {
+    it('logic/profiles/resetPassword::unhappy::requests password reset, no profile found', async () => {
+        const ctx = require(_$t+'testcontext')
+
         ctx.inject.object(_$+'cache/profile', {
             getById (){
                 return null
@@ -70,8 +72,9 @@ mocha('logic/profiles/resetPassword', async(ctx)=>{
 
 
 
-    it('logic/profiles/resetPassword::unhappy    requests password reset, session instead of key, password invalid', async () => {
-
+    it('logic/profiles/resetPassword::unhappy::requests password reset, session instead of key, password invalid', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'cache/profile', {
             getById (){
                 return {}

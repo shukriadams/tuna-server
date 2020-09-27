@@ -1,8 +1,7 @@
 /*
-const constants = require(_$+'types/constants'),
-    mocha = require(_$t+'helpers/testbase')
+const constants = require(_$+'types/constants')
 
-mocha('logic/songs/scrobble', async(ctx)=>{
+describe('logic/songs/scrobble', async(ctx)=>{
 
     it('logic/songs/scrobble::happy::scrobbles a play', async () => {
         let calls = 0

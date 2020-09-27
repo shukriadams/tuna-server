@@ -1,11 +1,9 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/sandbox/nextcloudTokenSwap', async(ctx)=>{
+describe('route/sandbox/nextcloudTokenSwap', async()=>{
     
     it('route/sandbox/nextcloudTokenSwap::happy::route returns token object', async () => {
-        
+        const ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester')
+
         // enable sandbox mode to allow sandbox route binding
         ctx.inject.object(_$+'helpers/settings', {
             sandboxMode : true

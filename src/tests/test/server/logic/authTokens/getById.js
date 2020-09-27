@@ -1,8 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/authTokens/getById', async()=>{
 
-mocha('logic/authTokens/getById', async(ctx)=>{
-
-    it('logic/authTokens/getById::happy    gets authToken by id', async () => {
+    it('logic/authTokens/getById::happy::gets authToken by id', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'cache/authToken', {
             getById (id){
                 return { id }
@@ -18,7 +18,9 @@ mocha('logic/authTokens/getById', async(ctx)=>{
 
 
 
-    it('logic/authTokens/getById::happy    gets authToken by null id', async () => {
+    it('logic/authTokens/getById::happy::gets authToken by null id', async () => {
+        const ctx = require(_$t+'testcontext')
+
         ctx.inject.object(_$+'cache/authToken', {
             getById (id){
                 return { id }
@@ -34,8 +36,9 @@ mocha('logic/authTokens/getById', async(ctx)=>{
 
 
 
-    it('logic/authTokens/getById::happy    gets authToken by empty id', async () => {
-
+    it('logic/authTokens/getById::happy::gets authToken by empty id', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         ctx.inject.object(_$+'cache/authToken', {
             getById (id){
                 return { id }

@@ -1,10 +1,10 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('helpers/bruteforce/clear', function(){
 
-mocha('helpers/bruteforce/clear', function(ctx){
+    it('helpers/bruteforce/clear::happy::clears log', async () => {
 
-    it('helpers/bruteforce/clear::happy    clears log', async () => {
-
-        let removed = false
+        let removed = false,
+            ctx = require(_$t+'testcontext')
+            
         ctx.inject.object(_$+'helpers/cache', {
             remove (key){ 
                 removed = true

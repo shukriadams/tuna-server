@@ -1,12 +1,10 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/profiles/resetPassword', async(ctx)=>{
+describe('route/profiles/resetPassword', async(ctx)=>{
     
-    it('route/profiles/resetpassword::happy    request a password reset if not logged in', async () => {
+    it('route/profiles/resetpassword::happy::request a password reset if not logged in', async () => {
         
-        let actualPassword,
+        let ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            actualPassword,
             actualKey,
             actualProfileId,
             actualCurrentPassword,
@@ -44,9 +42,11 @@ mocha('route/profiles/resetPassword', async(ctx)=>{
 
 
 
-    it('route/profiles/resetpassword::happy    request a password reset if logged in', async () => {
+    it('route/profiles/resetpassword::happy::request a password reset if logged in', async () => {
         
-        let route = require(_$+'routes/profile'),
+        let ctx = require(_$t+'testcontext'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            route = require(_$+'routes/profile'),
             routeTester = await new RouteTester(route),
             actualPassword,
             actualKey,

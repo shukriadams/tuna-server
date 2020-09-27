@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/songs/getAll', async()=>{
 
-mocha('logic/songs/getAll', async(ctx)=>{
-
-    it('logic/songs/getAll::happy    gets all songs for profile', async () => {
-        let actualProfileId
+    it('logic/songs/getAll::happy::gets all songs for profile', async () => {
+        let ctx = require(_$t+'testcontext'),
+            actualProfileId
         
         ctx.inject.object(_$+'cache/songs', {
             getAll (profileId){

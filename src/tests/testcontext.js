@@ -1,10 +1,10 @@
 const path = require('path'),
     clonedeep = require('lodash.clonedeep'),
     assert = require('madscience-node-assert'),
-    requireMock = require('./../helpers/require')
+    requireMock = require('./helpers/require')
 
-global._$ = path.resolve(`${__dirname}/../../server`) + '/'
-global._$t = path.resolve(`${__dirname}/../`) + '/'
+//global._$ = path.resolve(`${__dirname}/../server`) + '/'
+//global._$t = path.resolve(`${__dirname}/`) + '/'
 
 module.exports = {
 
@@ -26,6 +26,21 @@ module.exports = {
         function : (path, override)=>{
             requireMock.add(path, override)
         }
+    },
+    
+    suppressLogs (){
+        this.inject.object('winston-wrapper', {
+            instance : ()=>{
+                return {
+                    info : {
+                        info : ()=>{}
+                    },
+                    error : {
+                        error : ()=>{}
+                    }
+                }
+            }
+        })
     },
 
     requireMock,

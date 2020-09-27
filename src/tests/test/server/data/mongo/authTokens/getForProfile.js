@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('mongo/authTokens/getForProfile', async()=>{
 
-mocha('mongo/authTokens/getForProfile', async(ctx)=>{
-
-    it('mongo/authTokens/getForProfile::happy    gets authTokens for profile', async () => {
-
+    it('mongo/authTokens/getForProfile::happy::gets authTokens for profile', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {
             find (collection, query){

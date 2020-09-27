@@ -1,10 +1,7 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/sandbox/lastfmAuthenticate', async(ctx)=>{
+describe('route/sandbox/lastfmAuthenticate', async(ctx)=>{
     
-    it('route/sandbox/lastfmAuthenticate::happy    route directs', async () => {
+    it('route/sandbox/lastfmAuthenticate::happy::route directs', async () => {
+        const ctx = require(_$t+'testcontext')
 
         // enable sandbox mode to allow sandbox route binding
         ctx.inject.object(_$+'helpers/settings', {
@@ -12,6 +9,7 @@ mocha('route/sandbox/lastfmAuthenticate', async(ctx)=>{
         })
 
         const route = require(_$+'routes/sandbox'),
+            RouteTester = require(_$t+'helpers/routeTester'),
             routeTester = await new RouteTester(route)
 
         await routeTester.get('/v1/sandbox/lastfmAuthenticate')

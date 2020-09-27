@@ -6,8 +6,10 @@ module.exports = {
         for (const property in playlog)
             if (mongoRecord.hasOwnProperty(property))
                 playlog[property] = mongoRecord[property]
-    
-        playlog.id = mongoRecord._id.toString()
+
+        if (mongoRecord._id)
+            playlog.id = mongoRecord._id.toString()
+            
         return playlog
     },
     

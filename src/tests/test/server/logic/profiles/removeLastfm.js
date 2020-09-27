@@ -1,9 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('logic/profiles/removeLastfm', async()=>{
 
-mocha('logic/profiles/removeLastfm', async(ctx)=>{
-
-    it('logic/profiles/removeLastfm::happy    removes lastfm', async () => {
-        let actualProfile
+    it('logic/profiles/removeLastfm::happy::removes lastfm', async () => {
+        let ctx = require(_$t+'testcontext'),
+            actualProfile
 
         ctx.inject.object(_$+'cache/profile', {
             getById (profileId){

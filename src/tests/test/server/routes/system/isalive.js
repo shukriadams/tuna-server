@@ -1,13 +1,10 @@
-const 
-    route = require(_$+'routes/system'),
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/system/isalive', async(ctx)=>{
+describe('route/system/isalive', async()=>{
     
-    it('route/system/isalive::happy    gets alive status', async () => {
-        
-        const routeTester = await new RouteTester(route)
+    it('route/system/isalive::happy::gets alive status', async () => {
+        const ctx = require(_$t+'testcontext'),
+            route = require(_$+'routes/system'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            routeTester = await new RouteTester(route)
        
         await routeTester.get('/v1/system/isalive')
 

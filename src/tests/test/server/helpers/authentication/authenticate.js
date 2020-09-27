@@ -1,8 +1,8 @@
-const mocha = require(_$t+'helpers/testbase')
+describe('helpers/authentication/authenticate', ()=>{
 
-mocha('helpers/authentication/authenticate', function(ctx){
+    it('helpers/authentication/authenticate::happy::authenticates a request', async () => {
+        const ctx = require(_$t+'testcontext')
 
-    it('helpers/authentication/authenticate::happy    authenticates a request', async () => {
         // completely bypass all logic in this, we just want the input back
         ctx.inject.object(_$+'helpers/authentication', {
             authenticateTokenString (token){ 
@@ -24,7 +24,9 @@ mocha('helpers/authentication/authenticate', function(ctx){
 
 
 
-    it('helpers/authentication/authenticate::unhappy    malformed header', async () => {
+    it('helpers/authentication/authenticate::unhappy::malformed header', async () => {
+        const ctx = require(_$t+'testcontext')
+        
         // completely bypass all logic in this, we just want the input back
         ctx.inject.object(_$+'helpers/authentication', {
             authenticateTokenString (token){ 

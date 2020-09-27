@@ -1,14 +1,12 @@
-const 
-    RouteTester = require(_$t+'helpers/routeTester'),
-    mocha = require(_$t+'helpers/testbase')
-
-mocha('route/session', async(ctx)=>{
+describe('route/session', async()=>{
     
     it('route/session::happy::gets a user session', async () => {
         
-        let actualAuthTokenId,
+        let ctx = require(_$t+'testcontext'),
+            actualAuthTokenId,
             actualProfileId,
             route = require(_$+'routes/session'),
+            RouteTester = require(_$t+'helpers/routeTester'),
             routeTester = await new RouteTester(route)
 
         routeTester.authenticate()
@@ -44,9 +42,11 @@ mocha('route/session', async(ctx)=>{
 
     it('route/session::unhappy::token does not exist', async () => {
         
-        let tokenLookup = false,
+        let ctx = require(_$t+'testcontext'),
+            tokenLookup = false,
             profileLookup = false,
             route = require(_$+'routes/session'),
+            RouteTester = require(_$t+'helpers/routeTester'),
             routeTester = await new RouteTester(route)
 
         routeTester.authenticate()
@@ -79,9 +79,11 @@ mocha('route/session', async(ctx)=>{
 
     it('route/session::unhappy::user does not exist', async () => {
         
-        let tokenLookup = false,
+        let ctx = require(_$t+'testcontext'),
+            tokenLookup = false,
             profileLookup = false,
             route = require(_$+'routes/session'),
+            RouteTester = require(_$t+'helpers/routeTester'),
             routeTester = await new RouteTester(route)
 
         routeTester.authenticate()
