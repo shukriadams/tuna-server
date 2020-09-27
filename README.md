@@ -1,10 +1,10 @@
 # Tuna
 
-Tuna lets you stream your music to any modern browser. It is open source and self-hosted, and uses popular storage platforms like Dropbox and NextCloud to host music files.
+Tuna lets you stream your music to any modern browser. It is open source and self-hosted, and uses popular web-based storage platforms like Dropbox, NextCloud, S3 and similar to host music files. It also tries to focus on the player and the music library.
 
 You can try out a [Tuna demo](https://tuna-demo.shukriadams.com/) - the username/password are demo/demo.
 
-Tuna has no social media or sharing capabilities of any kind, though it does let you post play stats to [Last.fm](http://last.fm). It works in browsers only, and it likely works badly on iOS due to how heavily Apple locks down in-browser cachine.
+Tuna has no social media or sharing capabilities of any kind, though it does let you post play stats to [Last.fm](http://last.fm). It works in browsers only. A standalone Electron desktop player is planned, but not a mobile (Android/iOS) version.
 
 ## Requirements
 
