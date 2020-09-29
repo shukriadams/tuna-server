@@ -28,6 +28,7 @@ DONE
 
 TODO
 - bug : updating songs breaks session
+- onedrive support
 - dark theme!
 - indexer : needs pause button
 - indexer : show/hide on tray icon double click

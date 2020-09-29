@@ -146,6 +146,14 @@ module.exports = {
 
     async findById(collection, id){
         const ObjectID  = require('mongodb').ObjectID
+        let objId 
+
+        try {
+            objId = new ObjectID(id)
+        } catch {
+            // invalid id, we don't care about exception
+            return null
+        }
 
         return this.findOne(collection, { _id : new ObjectID(id) })
     },

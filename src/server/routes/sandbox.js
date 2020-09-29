@@ -196,8 +196,7 @@ module.exports = {
          * simulates search api, always returns single result
          */
         app.post('/v1/sandbox/nextcloud/find/:query', async (req, res) =>{
-            try {
-                res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
+            res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
                 <d:response>
                     <d:href>/remote.php/dav/files/dummyuser/.tuna.dat</d:href>
                     <d:propstat>
@@ -208,10 +207,6 @@ module.exports = {
                     </d:propstat>
                 </d:response>
             </d:multistatus>`)
-
-            } catch(ex){
-                jsonHelper.returnException(res, ex)
-            }
         })
 
 

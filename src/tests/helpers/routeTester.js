@@ -3,27 +3,27 @@ const requireMock = require(_$t+'helpers/require')
 class ExpressShim{
     
     constructor(){
-        this.capturedRoutes = {};
+        this.capturedRoutes = {}
     }
 
     // mimics express 'get' 
     get (routeDefinition, routeHandler){
-        this.capturedRoutes[`GET ${routeDefinition}`] = routeHandler;
+        this.capturedRoutes[`GET ${routeDefinition}`] = routeHandler
     }
 
     // mimics express 'post' 
     post (routeDefinition, routeHandler){
-        this.capturedRoutes[`POST ${routeDefinition}`] = routeHandler;
+        this.capturedRoutes[`POST ${routeDefinition}`] = routeHandler
     }
 
     // mimics express 'delete' 
     delete (routeDefinition, routeHandler){
-        this.capturedRoutes[`DELETE ${routeDefinition}`] = routeHandler;
+        this.capturedRoutes[`DELETE ${routeDefinition}`] = routeHandler
     }
 
     // mimics express 'put' 
     put (routeDefinition, routeHandler){
-        this.capturedRoutes[`PUT ${routeDefinition}`] = routeHandler;
+        this.capturedRoutes[`PUT ${routeDefinition}`] = routeHandler
     }
 }
 
@@ -48,7 +48,7 @@ module.exports = class RouteTester{
             }
 
             // if user is logged in, this will be set a valid token { id : 'placeholder', profileId : 'placeholder' }
-            this.authToken = null; 
+            this.authToken = null 
 
             this.res = {
                 sent : null,
@@ -57,27 +57,27 @@ module.exports = class RouteTester{
                 content: null,
 
                 send(content){
-                    this.content = content;
+                    this.content = content
                 },
                 redirect(r){
-                    this.redirected = r;
+                    this.redirected = r
                 },
                 status(s){
-                    this.status = s;
+                    this.status = s
                 },
                 json(content){
-                    this.content = content;
+                    this.content = content
                 }
             }
     
             // always clone tested structures so our test monkeypatching doesn't pollute the source,
             // mocha does not isolate tests
-            this.route = Object.assign({}, route);
-            this.express = new ExpressShim(this);
-            await this.route.bind(this.express);
+            this.route = Object.assign({}, route)
+            this.express = new ExpressShim(this)
+            await this.route.bind(this.express)
 
-            return this; 
-        })();
+            return this
+        })()
     }
     
     authenticate(token = 'placeholder'){
@@ -86,47 +86,53 @@ module.exports = class RouteTester{
         this.authToken = { id : 'placeholder-tokenId', profileId : 'placeholder-profileId' }
         
         // override authHelper to approve authentication
-        const authTokenLogic = require(_$+'logic/authToken')
-        authTokenLogic.getById =()=>{ return this.authToken }
-        requireMock.add(_$+'logic/authToken', authTokenLogic)
+        const authTokenLogic = require(_$+'logic/authToken'),
+            clonedeep = require('lodash.clonedeep'),
+            clone = clonedeep(authTokenLogic)
+
+        clone.getById =()=>{ return this.authToken }
+        requireMock.add(_$+'logic/authToken', clone)
     }
 
     setUserContent(userContent){
         if (!this.route)
-            throw 'route not bound yet';
+            throw 'route not bound yet'
 
         // need to override both profilelogic and content helper as they can both be used to generated content
         const profileLogic = require(_$+'logic/profiles'),
-            contentHelper = require(_$+'helpers/content')
+            contentHelper = require(_$+'helpers/content'),
+            clonedeep = require('lodash.clonedeep'),
+            profileLogicClone = clonedeep(profileLogic),
+            contentHelperClone = clonedeep(contentHelper)
 
-        contentHelper.build = ()=>{ return userContent }
-        requireMock.add(_$+'helpers/content', contentHelper)
+        contentHelperClone.build = ()=>{ return userContent }
+        requireMock.add(_$+'helpers/content', contentHelperClone)
 
-        profileLogic.buildUserContent =()=>{ return userContent }
-        requireMock.add(_$+'logic/profiles', profileLogic)
+        profileLogicClone.buildUserContent =()=>{ return userContent }
+        requireMock.add(_$+'logic/profiles', profileLogicClone)
     }
 
     async get(routePattern){
-        await this.execute(`GET ${routePattern}`);
+        await this.execute(`GET ${routePattern}`)
     }
 
     async post(routePattern){
-        await this.execute(`POST ${routePattern}`);
+        await this.execute(`POST ${routePattern}`)
     }
 
     async delete(routePattern){
-        await this.execute(`DELETE ${routePattern}`);
+        await this.execute(`DELETE ${routePattern}`)
     }
 
     async put(routePattern){
-        await this.execute(`PUT ${routePattern}`);
+        await this.execute(`PUT ${routePattern}`)
     }
 
     async execute(routePattern){
         if (!this.express.capturedRoutes[routePattern])
-            throw `route pattern ${routePattern} has not been captured`;
+            throw `route pattern ${routePattern} has not been captured`
 
-        await this.express.capturedRoutes[routePattern](this.req, this.res);
+        await this.express.capturedRoutes[routePattern](this.req, this.res)
     }
 
-};
+}

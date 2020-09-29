@@ -1,5 +1,4 @@
-const path = require('path'),
-    clonedeep = require('lodash.clonedeep'),
+const clonedeep = require('lodash.clonedeep'),
     assert = require('madscience-node-assert'),
     requireMock = require('./helpers/require')
 
@@ -7,8 +6,10 @@ const path = require('path'),
 //global._$t = path.resolve(`${__dirname}/`) + '/'
 
 module.exports = {
+    mongoId: '5349b4ddd2781d08c09890f4', // real BSON id for when ObjectID expects to parse the id
 
     inject : {
+
         /**
          * Overwrites an object
          */

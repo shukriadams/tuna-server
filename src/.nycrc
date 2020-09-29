@@ -2,5 +2,8 @@
     "all": true,
     "include": [
         "server/**/*.js"
+    ],
+    "exclude": [
+        "**/types/**"
     ]
 }

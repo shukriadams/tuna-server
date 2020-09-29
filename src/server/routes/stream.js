@@ -12,11 +12,11 @@ module.exports = {
             try {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
-                    songsLogic = require(_$+'logic/songs')                
+                    songsLogic = require(_$+'logic/songs'),
                     authToken = await authHelper.authenticateTokenString(req.params.authToken),
                     buffer = Buffer.from(req.params.mediaPath, 'base64'),
                     mediaPath = buffer.toString('ascii')
-                
+
                 await songsLogic.streamSong(authToken.profileId, mediaPath, res)
 
             } catch(ex){
