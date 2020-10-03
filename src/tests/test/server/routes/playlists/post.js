@@ -60,6 +60,12 @@ describe('route/playlists/post', async()=>{
         ctx.assert.equal(actualPlaylist.bar, 'foo')
         ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'soulless' )
     })
+
+    
+    it('route/playing::unhappy::auth failure', async ()=>{
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        await authedRouteTest(_$+'routes/playlists','post', '/v1/playlists')
+    })
     
 })
 

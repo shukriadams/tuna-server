@@ -39,7 +39,7 @@ describe('route/oauth/lastfm', async()=>{
 
     it('route/oauth/lastfm::unhappy::throws auth error authtoken invalid', async () => {
         const authedRouteTest = require(_$t+'helpers/authedRouteTester')
-        authedRouteTest(_$+'routes/oauth','get', '/v1/oauth/lastfm')
+        await authedRouteTest(_$+'routes/oauth','get', '/v1/oauth/lastfm')
     })
 
 })

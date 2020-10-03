@@ -42,7 +42,7 @@ describe('route/oauth/dropbox', async()=>{
 
     it('route/oauth/dropbox::unhappy::throws auth error authtoken invalid', async () => {
         const authedRouteTest = require(_$t+'helpers/authedRouteTester')
-        authedRouteTest(_$+'routes/oauth', 'get', '/v1/oauth/dropbox')
+        await authedRouteTest(_$+'routes/oauth', 'get', '/v1/oauth/dropbox')
     })
 
 })

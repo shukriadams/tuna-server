@@ -29,7 +29,7 @@ describe('route/playing', async()=>{
     
     it('route/playing::unhappy::auth failure', async ()=>{
         const authedRouteTest = require(_$t+'helpers/authedRouteTester')
-        authedRouteTest(_$+'routes/playing','post', '/v1/playing')
+        await authedRouteTest(_$+'routes/playing','post', '/v1/playing')
     })
 })
 

@@ -84,6 +84,6 @@ describe('route/profiles/resetPassword', async(ctx)=>{
 
     it('route/playing::unhappy::auth failure', async ()=>{
         const authedRouteTest = require(_$t+'helpers/authedRouteTester')
-        authedRouteTest(_$+'routes/profile','get', '/v1/profile/resetPassword')
+        await authedRouteTest(_$+'routes/profile','get', '/v1/profile/resetPassword')
     })
 })

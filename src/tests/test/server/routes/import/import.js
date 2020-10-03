@@ -33,4 +33,9 @@ describe('route/songs/import', async()=>{
         ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'the somberlain' )
     })
     
+
+    it('route/playing::unhappy::auth failure', async ()=>{
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        await authedRouteTest(_$+'routes/import','post', '/v1/import')
+    })
 })

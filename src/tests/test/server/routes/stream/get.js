@@ -30,7 +30,7 @@ describe('route/stream', async()=>{
 
     it('route/stream::unhappy::auth failure', async ()=>{
         const authedRouteTest = require(_$t+'helpers/authedRouteTester')
-        authedRouteTest(_$+'routes/stream','get', '/v1/stream/:authToken/:mediaPath')
+        await authedRouteTest(_$+'routes/stream','get', '/v1/stream/:authToken/:mediaPath')
     })
     
 

@@ -34,4 +34,8 @@ describe('route/playlists/delete', async()=>{
         ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'shadows in the deep' )
     })
     
+    it('route/playing::unhappy::auth failure', async ()=>{
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        await authedRouteTest(_$+'routes/playlists','delete', '/v1/playlists/:playlistId')
+    })
 })

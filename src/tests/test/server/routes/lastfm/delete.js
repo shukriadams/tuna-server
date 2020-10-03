@@ -19,4 +19,9 @@ describe('route/lastfm/delete', async()=>{
         ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'left hand path')
     })
 
+    it('route/playing::unhappy::auth failure', async ()=>{
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        await authedRouteTest(_$+'routes/lastfm','delete', '/v1/lastfm')
+    })
+
 })

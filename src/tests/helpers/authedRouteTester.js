@@ -15,7 +15,7 @@ module.exports = async (routeFilePath, method, route)=> {
 
     if (!routeFunc)
         throw `Route ${routeFilePath} does not have a method ${method}`
-
+        
     await routeTester[method](route)
 
     ctx.assert.equal(routeTester.res.content.code, constants.ERROR_INVALID_USER_OR_SESSION)

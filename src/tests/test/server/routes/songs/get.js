@@ -33,7 +33,7 @@ describe('route/song', async()=>{
 
     it('route/song::unhappy::auth failure', async ()=>{
         const authedRouteTest = require(_$t+'helpers/authedRouteTester')
-        authedRouteTest(_$+'routes/song','get', '/v1/song/:id')
+        await authedRouteTest(_$+'routes/song','get', '/v1/song/:id')
     })
 
 })

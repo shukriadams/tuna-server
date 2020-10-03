@@ -41,7 +41,7 @@ describe('route/oauth/nextcloud', async()=>{
 
     it('route/oauth/nextcloud::unhappy::throws auth error authtoken invalid', async () => {
         const authedRouteTest = require(_$t+'helpers/authedRouteTester')
-        authedRouteTest(_$+'routes/oauth','get', '/v1/oauth/nextcloud')
+        await authedRouteTest(_$+'routes/oauth','get', '/v1/oauth/nextcloud')
     })
 
 })
