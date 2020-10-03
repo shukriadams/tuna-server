@@ -21,7 +21,7 @@ module.exports ={
 
                 try {
                     versionfile = await fs.readJson('./version.json')
-                }catch(ex){
+                } catch(ex){
                     logger.error.error(`failed to load version.json : ${ex}`)
                 }
 
