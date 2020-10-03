@@ -112,5 +112,26 @@ describe('route/session', async()=>{
         ctx.assert.false(routeTester.res.content.payload.isValid)
     })
 
+    /**
+     * Force an error to be sure that error handling code in route is covered
+     */
+    it('route/session::unhappy::forced error', async () => {
+        const ctx = require(_$t+'testcontext')
+
+        ctx.inject.object(_$+'logic/authToken', {
+            getById (){
+                throw 'whatever'
+            }
+        })
+
+        const constants = require(_$+'types/constants'),
+            route = require(_$+'routes/session'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            routeTester = await new RouteTester(route)
+        
+        await routeTester.get('/v1/session')
+        ctx.assert.equal(routeTester.res.content.code, constants.ERROR_DEFAULT)
+    })
+
 })
 

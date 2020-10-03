@@ -29,4 +29,8 @@ describe('route/profiles/post', async()=>{
         ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'thorns of crimson death' )
     })
     
+    it('route/playing::unhappy::auth failure', async ()=>{
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        authedRouteTest(_$+'routes/profile','post', '/v1/profile')
+    })
 })

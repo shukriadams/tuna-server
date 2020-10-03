@@ -40,22 +40,8 @@ describe('route/oauth/nextcloud', async()=>{
 
 
     it('route/oauth/nextcloud::unhappy::throws auth error authtoken invalid', async () => {
-        const ctx = require(_$t+'testcontext'),
-            constants = require(_$+'types/constants'),
-            route = require(_$+'routes/oauth'),
-            RouteTester = require(_$t+'helpers/routeTester')
-
-        ctx.inject.object(_$+'logic/authToken', {
-            // ensure authtoken is null
-            getById (){ 
-                return null 
-            }
-
-        })        
-
-        const routeTester = await new RouteTester(route)
-        await routeTester.get('/v1/oauth/nextcloud')
-        ctx.assert.equal(routeTester.res.content.code, constants.ERROR_INVALID_USER_OR_SESSION)
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        authedRouteTest(_$+'routes/oauth','get', '/v1/oauth/nextcloud')
     })
 
 })

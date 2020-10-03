@@ -19,6 +19,7 @@ describe('route/settings/get', async()=>{
         ctx.assert.equal(routeTester.res.content.payload.sourceLabel, 5678 )
     })
 
+    
     /**
      * Force an error to be sure that error handling code in route is covered
      */

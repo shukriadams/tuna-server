@@ -25,6 +25,11 @@ describe('route/playing', async()=>{
         ctx.assert.equal(actualProfileId, routeTester.authToken.profileId )
         ctx.assert.null(routeTester.res.content.code)
     })
+
     
+    it('route/playing::unhappy::auth failure', async ()=>{
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        authedRouteTest(_$+'routes/playing','post', '/v1/playing')
+    })
 })
 

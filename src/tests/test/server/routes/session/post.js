@@ -48,4 +48,24 @@ describe('route/session/post', async(ctx)=>{
         ctx.assert.equal(routeTester.res.content.payload.authToken, 'myAuthtokenId')
     })
     
+
+    /**
+     * Force an error to be sure that error handling code in route is covered
+     */
+    it('route/session/post::unhappy::forced error', async () => {
+        const ctx = require(_$t+'testcontext')
+        ctx.inject.object(_$+'helpers/bruteForce', {
+            process (){ 
+                throw 'whatever'
+            } 
+        }) 
+
+        const constants = require(_$+'types/constants'),
+            route = require(_$+'routes/session'),
+            RouteTester = require(_$t+'helpers/routeTester'),
+            routeTester = await new RouteTester(route)
+            
+        await routeTester.post('/v1/session')
+        ctx.assert.equal(routeTester.res.content.code, constants.ERROR_DEFAULT)
+    })
 })

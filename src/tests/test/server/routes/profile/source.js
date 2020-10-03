@@ -21,4 +21,9 @@ describe('route/profile/source/delete', async()=>{
         ctx.assert.equal(routeTester.res.content.payload.someUserContent, 'new content')
     })
 
+    it('route/playing::unhappy::auth failure', async ()=>{
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        authedRouteTest(_$+'routes/profile','delete', '/v1/profile/source')
+    })
+
 })

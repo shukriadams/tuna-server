@@ -32,16 +32,8 @@ describe('route/song', async()=>{
 
 
     it('route/song::unhappy::auth failure', async ()=>{
-        let ctx = require(_$t+'testcontext'),
-            route = require(_$+'routes/song'),
-            constants = require(_$+'types/constants'),
-            RouteTester = require(_$t+'helpers/routeTester'),
-            routeTester = await new RouteTester(route)
-
-        routeTester.req.params.id = 'blinded by fear'
-
-        await routeTester.get('/v1/song/:id')
-        ctx.assert.equal(routeTester.res.content.code, constants.ERROR_INVALID_USER_OR_SESSION)
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        authedRouteTest(_$+'routes/song','get', '/v1/song/:id')
     })
 
 })

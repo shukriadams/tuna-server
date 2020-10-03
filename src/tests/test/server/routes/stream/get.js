@@ -29,19 +29,8 @@ describe('route/stream', async()=>{
 
 
     it('route/stream::unhappy::auth failure', async ()=>{
-        
-        let ctx = require(_$t+'testcontext'),
-            route = require(_$+'routes/stream'),
-            RouteTester = require(_$t+'helpers/routeTester'),
-            constants = require(_$+'types/constants'),
-            routeTester = await new RouteTester(route)
-
-        routeTester.req.params.authToken = 'an-invalid-token'
-        routeTester.req.params.mediaPath = Buffer.from('some/path').toString('base64')
-
-        await routeTester.get('/v1/stream/:authToken/:mediaPath')
-
-        ctx.assert.equal(routeTester.res.content.code, constants.ERROR_INVALID_USER_OR_SESSION)
+        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        authedRouteTest(_$+'routes/stream','get', '/v1/stream/:authToken/:mediaPath')
     })
     
 
