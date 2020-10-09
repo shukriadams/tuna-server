@@ -6,9 +6,8 @@ module.exports = {
         
         /**
          * Registers a play as complete. 
-         * todo : refactor to post
          */
-        app.get('/v1/played', async function (req, res) {
+        app.post('/v1/played', async function (req, res) {
             try {
                 const 
                     authHelper = require(_$+'helpers/authentication'),

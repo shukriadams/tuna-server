@@ -14,7 +14,7 @@ module.exports = {
                     authHelper = require(_$+'helpers/authentication'),
                     contentHelper = require(_$+'helpers/content'),
                     authToken = await authHelper.authenticate(req),
-                    requestedContent = req.params.requestedContent.split(','),
+                    requestedContent = req.params.requestedContent ? req.params.requestedContent.split(',') : [],
                     content = await contentHelper.build(authToken.profileId, authToken.id,  requestedContent)
 
                 jsonHelper.returnPayload(res, content)
