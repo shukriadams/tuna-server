@@ -4,8 +4,7 @@ module.exports = {
      *
      */    
     async create(collection, record){
-        const 
-            mongoHelper = require(_$+'helpers/mongo'),
+        const mongoHelper = require(_$+'helpers/mongo'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception')
 
@@ -101,8 +100,7 @@ module.exports = {
     },
     
     async deleteMany(collection, query){
-        const 
-            mongoHelper = require(_$+'helpers/mongo')
+        const mongoHelper = require(_$+'helpers/mongo')
 
         return new Promise(async (resolve, reject) => {
     
@@ -145,8 +143,8 @@ module.exports = {
     },
 
     async findById(collection, id){
-        const ObjectID  = require('mongodb').ObjectID
-        let objId 
+        let ObjectID  = require('mongodb').ObjectID,
+            objId 
 
         try {
             objId = new ObjectID(id)
@@ -155,7 +153,7 @@ module.exports = {
             return null
         }
 
-        return this.findOne(collection, { _id : new ObjectID(id) })
+        return await this.findOne(collection, { _id : objId })
     },
 
     async findOne(collection, query){

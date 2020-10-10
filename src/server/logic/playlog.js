@@ -19,9 +19,12 @@ module.exports = {
         return await playlogCache.page(page, pageSize)
     },
 
-    async deleteAll(profile){
+    /**
+     * Deletes all playlogs for the give profileId
+     */
+    async deleteAll(profileId){
         const playlogCache = require(_$+'cache/playlog')
-        return await playlogCache.deleteAll(profile)
+        return await playlogCache.deleteAll(profileId)
     },
 
     async delete(id){

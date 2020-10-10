@@ -10,7 +10,7 @@ describe('mongo/playlists/getForProfile', async()=>{
             }
         })
         
-        let mongo = require(_$+'data/mongo/authToken'),
+        let mongo = require(_$+'data/mongo/playlist'),
             records = await mongo.getForProfile('dafda')
 
         ctx.assert.equal(records[0].id, 'some-id')

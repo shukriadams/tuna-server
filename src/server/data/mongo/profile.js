@@ -4,8 +4,7 @@ module.exports = {
         const profile = require(_$+'types/profile').new()
     
         for (const property in profile)
-            if (mongoRecord.hasOwnProperty(property))
-                profile[property] = mongoRecord[property]
+            profile[property] = mongoRecord[property]
     
         if (mongoRecord._id)
             profile.id = mongoRecord._id.toString()
