@@ -32,9 +32,7 @@ module.exports = {
     async start (httpServer){
         
         await fs.ensureDir(settings.dataFolder)
-
-        cache.initialize()
-
+ 
         if (settings.flushCacheOnStart)
             await cache.flush()
     
