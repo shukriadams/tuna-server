@@ -1,6 +1,6 @@
-describe('mongo/common/createMany', async()=>{
+describe('mongo/common/delete', async()=>{
 
-    it('mongo/common/createMany::happy::create record id', async () => {
+    it('mongo/common/delete::happy::deletes record', async () => {
         const ctx = require(_$t+'testcontext')
         
         ctx.inject.object(_$+'helpers/mongo', {
@@ -8,21 +8,22 @@ describe('mongo/common/createMany', async()=>{
                 return {
                     done(){ },
                     collection : {
-                        insertMany (query, callback){
-                            callback(null,  [ 'created many'] )
+                        deleteOne (query, callback){
+                            callback(null)
                         }
                     }
                 }
             }
         })
 
-        const mongo = require(_$+'data/mongo/common'),
-            records = await mongo.createMany('collection', ['123', 456] )
+        const mongo = require(_$+'data/mongo/common')
+        await mongo.delete('collection', ctx.mongoId, {})
 
-        ctx.assert.equal(records, 2) // length of array passed to createMany
+        // no assert, this is for test coverage
     })
 
-    it('mongo/common/createMany::unhappy::returns query error', async () => {
+
+    it('mongo/common/delete::unhappy::returns query error', async () => {
         const ctx = require(_$t+'testcontext')
         
         ctx.inject.object(_$+'helpers/mongo', {
@@ -30,7 +31,7 @@ describe('mongo/common/createMany', async()=>{
                 return {
                     done(){ },
                     collection : {
-                        insertMany (query, callback){
+                        deleteOne (query,  callback){
                             callback('an error')
                         }
                     }
@@ -39,7 +40,7 @@ describe('mongo/common/createMany', async()=>{
         })
 
         const common = require(_$+'data/mongo/common'),
-            exception = await ctx.assert.throws(async() => await common.createMany('collection',  ['123', 456]) )    
+            exception = await ctx.assert.throws(async() => await common.delete('collection', ctx.mongoId, {}))
 
         ctx.assert.equal(exception, 'an error')
     })
@@ -48,7 +49,7 @@ describe('mongo/common/createMany', async()=>{
     /**
      * forces error to cover exception code
      */
-    it('mongo/common/createMany::unhappy::throws unhandled exception', async () => {
+    it('mongo/common/delete::unhappy::throws unhandled exception', async () => {
         const ctx = require(_$t+'testcontext')
         
         // replace call to mongo
@@ -59,9 +60,8 @@ describe('mongo/common/createMany', async()=>{
         })
 
         const common = require(_$+'data/mongo/common'),
-            exception = await ctx.assert.throws(async() => await common.createMany('collection', ['123', 456]) )        
+            exception = await ctx.assert.throws(async() => await common.delete('collection', ctx.mongoId, {}))
 
         ctx.assert.equal(exception, 'whatever')
-    })    
-    
+    })  
 })

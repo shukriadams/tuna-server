@@ -17,9 +17,9 @@ module.exports = {
                 const db = await mongoHelper.getCollection(collection)
     
                 db.collection.insertOne(record, (err, result) => {
-                    if (err || !result.ops.length)
+                    if (err)
                         return reject(err)
-
+                        
                     db.done()
                     resolve(result.ops[0])
                 })
