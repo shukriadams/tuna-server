@@ -36,7 +36,7 @@ module.exports = {
         if (settings.flushCacheOnStart)
             await cache.flush()
     
-        sourceProvider.validate()
+        sourceProvider.validateSettings()
         
         if (settings.enableCrossProcessScripts)
             interprocess.initialize()

@@ -1,6 +1,6 @@
 module.exports = {
 
-    validate (){
+    validateSettings (){
         const 
             settings = require(_$+'helpers/settings'),
             Exception = require(_$+'types/exception'),
@@ -16,40 +16,34 @@ module.exports = {
         const 
             settings = require(_$+'helpers/settings'),
             Exception = require(_$+'types/exception'),
-            dropboxImporter = require(_$+'helpers/dropbox/importer'),
-            nextcloudImporter = require(_$+'helpers/nextcloud/importer'),
-            s3Importer = require(_$+'helpers/s3/importer'),
             constants = require(_$+'types/constants')
         
         if(settings.musicSource === constants.SOURCES_DROPBOX)
-            return dropboxImporter
+            return require(_$+'helpers/dropbox/importer')
 
         if(settings.musicSource === constants.SOURCES_NEXTCLOUD)
-            return nextcloudImporter
+            return require(_$+'helpers/nextcloud/importer')
 
         if(settings.musicSource === constants.SOURCES_S3)
-            return s3Importer
+            return require(_$+'helpers/s3/importer')
 
         throw new Exception({ log: `Invalid setup - source ${settings.musicSource} could not be matched to an importer` })
     },
 
-    get (){
+    getSource (){
         const 
             settings = require(_$+'helpers/settings'),
             Exception = require(_$+'types/exception'),
-            dropbox = require(_$+'helpers/dropbox/common'),
-            nextcloud = require(_$+'helpers/nextcloud/common'),
-            s3 = require(_$+'helpers/s3/common'),
             constants = require(_$+'types/constants')
                 
         if(settings.musicSource === constants.SOURCES_DROPBOX)
-            return dropbox
+            return require(_$+'helpers/dropbox/common')
 
         if(settings.musicSource === constants.SOURCES_NEXTCLOUD)
-            return nextcloud
+            return require(_$+'helpers/nextcloud/common')
 
         if(settings.musicSource === constants.SOURCES_S3)
-            return s3
+            return require(_$+'helpers/s3/common')
 
         throw new Exception({ log: `Invalid setup - source ${settings.musicSource} could not be matched to a helper` })
     }

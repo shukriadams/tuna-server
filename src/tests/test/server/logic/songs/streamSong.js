@@ -6,7 +6,7 @@ describe('logic/songs/streamSong', async()=>{
             actualMediaPath
 
         ctx.inject.object(_$+'helpers/sourceProvider', {
-            get (){
+            getSource (){
                 return {
                     streamMedia(profileId, mediaPath){
                         actualProfileId = profileId

@@ -15,7 +15,7 @@ module.exports ={
                     constants = require(_$+'types/constants'),
                     settings = require(_$+'helpers/settings'),
                     logger = require('winston-wrapper').instance(settings.logPath),
-                    source = sourceProvider.get()
+                    source = sourceProvider.getSource()
 
                 let versionfile = { version : '0.0.0'}
 

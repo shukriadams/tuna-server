@@ -40,7 +40,7 @@ module.exports = {
                 if (!profile.sources || !profile.sources[settings.musicSource])
                     continue
 
-                const source = sourceProvider.get()
+                const source = sourceProvider.getSource()
 
                 if (await sourceCommon.isRemoteNewer(profile.id, source)){
 

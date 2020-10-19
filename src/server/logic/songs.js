@@ -24,7 +24,7 @@ module.exports = {
      */
     async streamSong(profileId, mediaPath, res){
         const sourceProvider = require(_$+'helpers/sourceProvider'),
-            source = sourceProvider.get()
+            source = sourceProvider.getSource()
 
         await source.streamMedia(profileId, mediaPath, res)
     },
@@ -103,7 +103,7 @@ module.exports = {
             sourceProvider = require(_$+'helpers/sourceProvider'),
             Exception = require(_$+'types/exception'),
             profileLogic = require(_$+'logic/profiles'),
-            source = sourceProvider.get(),
+            source = sourceProvider.getSource(),
             profile = await profileLogic.getById(profileId),
             song = await this.getById(songId, profileId)
 

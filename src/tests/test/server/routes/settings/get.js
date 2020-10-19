@@ -4,7 +4,7 @@ describe('route/settings/get', async()=>{
         const ctx = require(_$t+'testcontext')
 
         ctx.inject.object(_$+'helpers/sourceProvider', {
-            get (){ 
+            getSource (){ 
                 return {
                     getLabel(){ return 5678 }
                 }
@@ -26,7 +26,7 @@ describe('route/settings/get', async()=>{
     it('route/settings/get::unhappy::forced error', async () => {
         const ctx = require(_$t+'testcontext')
         ctx.inject.object(_$+'helpers/sourceProvider', {
-            get(){
+            getSource(){
                 throw 'whatever'
             }
         })

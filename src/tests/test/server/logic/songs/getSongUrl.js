@@ -4,7 +4,7 @@ describe('logic/songs/getSongUrl', async(ctx)=>{
         const ctx = require(_$t+'testcontext')
         
         ctx.inject.object(_$+'helpers/sourceProvider', {
-            get(){
+            getSource(){
                 return {
                     getFileLink(){
                         return 'my-url'
