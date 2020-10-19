@@ -42,7 +42,7 @@ describe('helpers/authentication/authenticateToken', function(){
         })
 
         const authentication = require(_$+'helpers/authentication'),
-             exception = await ctx.assert.throws(async () => await authentication.authenticateTokenString(/* no string here */) )
+             exception = await ctx.assert.throws(async () => await authentication.authenticateTokenString('my-token'))
 
         ctx.assert.equal(exception.code, constants.ERROR_INVALID_USER_OR_SESSION)
     })

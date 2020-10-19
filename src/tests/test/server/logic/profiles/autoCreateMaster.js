@@ -2,8 +2,6 @@ describe('logic/profiles/autoCreateMaster', async()=>{
 
     it('logic/profiles/autoCreateMaster::happy::creates master profile', async () => {
         const ctx = require(_$t+'testcontext')
-        
-        ctx.suppressLogs()
 
         // replace call to mongo
         let logic = require(_$+'logic/profiles')

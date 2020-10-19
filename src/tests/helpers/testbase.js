@@ -4,10 +4,8 @@
 const path = require('path')
 
 // bind globals for easy module importing
-// I have no idea how this is getting loaded before the files which depend on it.
-// This is likely a circular dependency error waiting to happen!
-global._$ = path.resolve(`${__dirname}/../../server`) + '/'
-global._$t = path.resolve(`${__dirname}/../`) + '/'
+global._$ = `${path.resolve(`${__dirname}/../../server`)}/`
+global._$t = `${path.resolve(`${__dirname}/../`)}/`
 
 const clonedeep = require('lodash.clonedeep'),
     assert = require('madscience-node-assert'),

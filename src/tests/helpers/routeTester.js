@@ -105,7 +105,7 @@ module.exports = class RouteTester{
             profileLogicClone = clonedeep(profileLogic),
             contentHelperClone = clonedeep(contentHelper)
 
-        contentHelperClone.build = ()=>{ return userContent }
+        contentHelperClone.build =()=>{ return userContent }
         requireMock.add(_$+'helpers/content', contentHelperClone)
 
         profileLogicClone.buildUserContent =()=>{ return userContent }

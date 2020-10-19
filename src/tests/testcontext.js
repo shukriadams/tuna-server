@@ -5,6 +5,29 @@ const clonedeep = require('lodash.clonedeep'),
 //global._$ = path.resolve(`${__dirname}/../server`) + '/'
 //global._$t = path.resolve(`${__dirname}/`) + '/'
 
+const injectObject = (path, override)=>{
+    const target = require(path),
+        clone = clonedeep(target),
+        overridden = Object.assign(clone, override)
+
+    requireMock.add(path, overridden)
+}
+
+// suppress logs for all tests
+injectObject('winston-wrapper', {
+    instance : ()=>{
+        return {
+            info : {
+                info : ()=>{}
+            },
+            error : {
+                error : ()=>{}
+            }
+        }
+    }
+})
+
+
 module.exports = {
     mongoId: '5349b4ddd2781d08c09890f4', // real BSON id for when ObjectID expects to parse the id
 
@@ -13,13 +36,7 @@ module.exports = {
         /**
          * Overwrites an object
          */
-        object : (path, override)=>{
-            const target = require(path),
-                clone = clonedeep(target),
-                overridden = Object.assign(clone, override)
-
-            requireMock.add(path, overridden)
-        },
+        object : injectObject,
 
         /**
          * Overwrites a function
@@ -27,21 +44,6 @@ module.exports = {
         function : (path, override)=>{
             requireMock.add(path, override)
         }
-    },
-    
-    suppressLogs (){
-        this.inject.object('winston-wrapper', {
-            instance : ()=>{
-                return {
-                    info : {
-                        info : ()=>{}
-                    },
-                    error : {
-                        error : ()=>{}
-                    }
-                }
-            }
-        })
     },
 
     requireMock,
