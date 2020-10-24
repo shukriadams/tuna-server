@@ -17,7 +17,7 @@ describe('route/oauth/dropbox', async()=>{
         })
 
         // override to capture input
-        ctx.inject.object(_$+'sources/dropbox/common', {
+        ctx.inject.object(_$+'sources/dropbox/helper', {
             swapCodeForToken (profileId, code){ 
                 actualProfileId = profileId
                 actualCode = code

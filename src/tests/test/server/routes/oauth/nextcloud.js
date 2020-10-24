@@ -9,7 +9,7 @@ describe('route/oauth/nextcloud', async()=>{
             actualCode
 
         // capture actual used profile and code
-        ctx.inject.object(_$+'sources/nextcloud/common', {
+        ctx.inject.object(_$+'sources/nextcloud/helper', {
             swapCodeForToken (profileId, code){ 
                 actualProfileId = profileId
                 actualCode = code

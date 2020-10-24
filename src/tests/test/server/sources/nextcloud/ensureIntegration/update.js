@@ -6,7 +6,7 @@ function mock(){
     // deep clone  so we do't pollute across tests (mocha does not isolate) 
     let constants = require(_$+'types/constants'),
         inject = require(_$t+'helpers/inject'),
-        nextCloudCommon = require(_$+'sources/nextcloud/common'),
+        nextCloudCommon = require(_$+'sources/nextcloud/helper'),
         mock = Object.assign({}, nextCloudCommon)
     
     mock.mockProfile = { sources : { nextcloud : { 

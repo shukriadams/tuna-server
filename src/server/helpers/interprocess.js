@@ -24,7 +24,7 @@ module.exports = {
     
     async nextcloudCodeToToken (args){
         const profileLogic = require(_$+'logic/profiles'),
-            nextcloudCommon = require(_$+'sources/nextcloud/common'),
+            nextcloudCommon = require(_$+'sources/nextcloud/helper'),
             settings = require(_$+'helpers/settings')
 
         if (settings.sandboxMode)

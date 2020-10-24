@@ -37,13 +37,13 @@ module.exports = {
             constants = require(_$+'types/constants')
                 
         if(settings.musicSource === constants.SOURCES_DROPBOX)
-            return require(_$+'sources/dropbox/common')
+            return require(_$+'sources/dropbox/helper')
 
         if(settings.musicSource === constants.SOURCES_NEXTCLOUD)
-            return require(_$+'sources/nextcloud/common')
+            return require(_$+'sources/nextcloud/helper')
 
         if(settings.musicSource === constants.SOURCES_S3)
-            return require(_$+'sources/s3/common')
+            return require(_$+'sources/s3/helper')
 
         throw new Exception({ log: `Invalid setup - source ${settings.musicSource} could not be matched to a helper` })
     }
