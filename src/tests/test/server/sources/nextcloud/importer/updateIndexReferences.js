@@ -1,11 +1,11 @@
 
 const fs = require('fs-extra')
 
-describe('helpers/nextcloud/importer/getSource/updateIndexReferences', function(){
+describe('sources/nextcloud/importer/getSource/updateIndexReferences', function(){
     
     
-    it('helpers/nextcloud/importer/getSource/updateIndexReferences::happy::should list multiple index files found', async () => {
-        let mock = require(_$t+'test/server/helpers/nextcloud/importer/mock'),
+    it('sources/nextcloud/importer/getSource/updateIndexReferences::happy::should list multiple index files found', async () => {
+        let mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath(),
             ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
@@ -23,9 +23,9 @@ describe('helpers/nextcloud/importer/getSource/updateIndexReferences', function(
 
 
 
-    it('helpers/nextcloud/importer/getSource/updateIndexReferences::unhappy::throws expected exception on invalid bearer token', async () => {
+    it('sources/nextcloud/importer/getSource/updateIndexReferences::unhappy::throws expected exception on invalid bearer token', async () => {
         let ctx = require(_$t+'testcontext'),
-            mock = require(_$t+'test/server/helpers/nextcloud/importer/mock'),
+            mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath()
 
         // http call to nextcloud returns 401 code to simulate invalid bearer token
@@ -39,9 +39,9 @@ describe('helpers/nextcloud/importer/getSource/updateIndexReferences', function(
 
 
 
-    it('helpers/nextcloud/importer/getSource/updateIndexReferences::unhappy::marks profile\'s nextcloud source as broken if unexpected status code is returned', async () => {
+    it('sources/nextcloud/importer/getSource/updateIndexReferences::unhappy::marks profile\'s nextcloud source as broken if unexpected status code is returned', async () => {
         let ctx = require(_$t+'testcontext'),
-            mock = require(_$t+'test/server/helpers/nextcloud/importer/mock'),
+            mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath(),
             constants = require(_$+'types/constants')
 
@@ -57,9 +57,9 @@ describe('helpers/nextcloud/importer/getSource/updateIndexReferences', function(
 
 
 
-    it('helpers/nextcloud/importer/getSource/updateIndexReferences::unhappy::should gracefully handle no index files found', async () => {
+    it('sources/nextcloud/importer/getSource/updateIndexReferences::unhappy::should gracefully handle no index files found', async () => {
         let ctx = require(_$t+'testcontext'),
-            mock = require(_$t+'test/server/helpers/nextcloud/importer/mock'),
+            mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath(),
             constants = require(_$+'types/constants')
 

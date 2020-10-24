@@ -61,7 +61,7 @@ module.exports = {
                 const
                     constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
-                    nextCloudHelper = require(_$+'helpers/nextcloud/common'),
+                    nextCloudHelper = require(_$+'sources/nextcloud/common'),
                     authTokenLogic = require(_$+'logic/authToken'),
                     settings = require(_$+'helpers/settings'),
                     code = req.query.code,
@@ -102,7 +102,7 @@ module.exports = {
                 const 
                     constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
-                    dropboxHelper = require(_$+'helpers/dropbox/common'),
+                    dropboxHelper = require(_$+'sources/dropbox/common'),
                     authTokenLogic = require(_$+'logic/authToken'),
                     settings = require(_$+'helpers/settings'),
                     code = req.query.code,

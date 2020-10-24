@@ -3,7 +3,7 @@ module.exports = {
      * Returns a nextcloud importer that will pass happy path testing
      */
     happyPath(){
-        const NextcloudImporter = require(_$+`helpers/nextcloud/importer`),
+        const NextcloudImporter = require(_$+`sources/nextcloud/importer`),
             importer = new NextcloudImporter('123') // userid 123,
     
         // deep clone members so we do't pollute across tests (mocha does not isolate) 

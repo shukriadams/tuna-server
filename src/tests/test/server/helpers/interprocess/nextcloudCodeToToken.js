@@ -9,7 +9,7 @@ describe('helpers/interprocess/nextcloudCodeToToken', function(){
             } 
         })
 
-        ctx.inject.object(_$+'helpers/nextcloud/common', {
+        ctx.inject.object(_$+'sources/nextcloud/common', {
             swapCodeForToken (){ 
                 return {}
             } 

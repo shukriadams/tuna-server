@@ -6,7 +6,7 @@ function mock(){
     // deep clone  so we do't pollute across tests (mocha does not isolate) 
     let constants = require(_$+'types/constants'),
         inject = require(_$t+'helpers/inject'),
-        nextCloudCommon = require(_$+'helpers/nextcloud/common'),
+        nextCloudCommon = require(_$+'sources/nextcloud/common'),
         mock = Object.assign({}, nextCloudCommon)
     
     mock.mockProfile = { sources : { nextcloud : { 
@@ -39,10 +39,10 @@ function mock(){
 }
 
 
-describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testArgs){
+describe('sources/nextcloud/importer/updateAccessTokens/update', function(testArgs){
 
 
-    it('helpers/nextcloud/importer/updateAccessTokens::happypath::new bearer token is written to profile object', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::happypath::new bearer token is written to profile object', async () => {
 
         let updater = mock(),
             constants = require(_$+'types/constants'),
@@ -69,7 +69,7 @@ describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
     
 
-    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::exits if token has not expired', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::exits if token has not expired', async () => {
         let ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants'),
             updater = mock()
@@ -89,7 +89,7 @@ describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testAr
 
     
 
-    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::throws invalid json error on invalid json', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::throws invalid json error on invalid json', async () => {
         let ctx = require(_$t+'testcontext'),
             updater = mock()
 
@@ -102,7 +102,7 @@ describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
 
 
-    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::invalid_request response flags source as broken', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::invalid_request response flags source as broken', async () => {
         let ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants'),
             updater = mock()
@@ -122,7 +122,7 @@ describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
 
 
-    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::status 400 flags source as broken', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::status 400 flags source as broken', async () => {
         let updater = mock(),
             constants = require(_$+'types/constants')
 
@@ -139,7 +139,7 @@ describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
 
 
-    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::unexpected error content throws exception', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::unexpected error content throws exception', async () => {
         let updater = mock(),
             constants = require(_$+'types/constants')
 
@@ -160,7 +160,7 @@ describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
 
 
-    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::throw an exception during token check', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::throw an exception during token check', async () => {
         let updater = mock(),
             inject = require(_$t+'helpers/inject'),
             constants = require(_$+'types/constants')
@@ -181,7 +181,7 @@ describe('helpers/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
 
 
-    it('helpers/nextcloud/importer/updateAccessTokens::unhappypath::error 401 on token check forces token update', async () => {
+    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::error 401 on token check forces token update', async () => {
         let updater = mock(),
             inject = require(_$t+'helpers/inject')
 

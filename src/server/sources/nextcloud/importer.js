@@ -16,7 +16,7 @@ class Importer extends ImporterBase {
     }
 
     async ensureTokens(){
-        const nextCloudCommon = require(_$+'helpers/nextcloud/common')
+        const nextCloudCommon = require(_$+'sources/nextcloud/common')
         await nextCloudCommon.ensureTokensAreUpdated(this.profileId)
     }
    

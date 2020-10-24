@@ -1,9 +1,9 @@
-describe('helpers/nextcloud/importer/getSource', ()=>{
+describe('sources/nextcloud/importer/getSource', ()=>{
 
 
-    it('helpers/nextcloud/importer/getSource::happy::return profile and source', async () => {
+    it('sources/nextcloud/importer/getSource::happy::return profile and source', async () => {
         let ctx = require(_$t+'testcontext'),
-            mock = require(_$t+'test/server/helpers/nextcloud/importer/mock'),
+            mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath(),
             result = async ()=> await importer._getSource('123')
 
@@ -14,8 +14,8 @@ describe('helpers/nextcloud/importer/getSource', ()=>{
 
 
 
-    it('helpers/nextcloud/importer/getSource::unhappy::throws expected exception on invalid profile', async () => {
-        let mock = require(_$t+'test/server/helpers/nextcloud/importer/mock'),
+    it('sources/nextcloud/importer/getSource::unhappy::throws expected exception on invalid profile', async () => {
+        let mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath(),
             ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
@@ -30,8 +30,8 @@ describe('helpers/nextcloud/importer/getSource', ()=>{
 
 
 
-    it('helpers/nextcloud/importer/getSource::unhappy::throws expected exception on profile with no nextcloud source', async () => {
-        let mock = require(_$t+'test/server/helpers/nextcloud/importer/mock'),
+    it('sources/nextcloud/importer/getSource::unhappy::throws expected exception on profile with no nextcloud source', async () => {
+        let mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath(),
             ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')

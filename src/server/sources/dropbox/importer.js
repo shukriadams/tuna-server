@@ -21,7 +21,7 @@ module.exports = class extends ImporterBase {
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
-        let common = require(_$+'helpers/dropbox/common'),
+        let common = require(_$+'sources/dropbox/common'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
             s = await this._getSource(),
@@ -64,7 +64,7 @@ module.exports = class extends ImporterBase {
      */
     async _readIndices(){
         const
-            common = require(_$+'helpers/dropbox/common'),
+            common = require(_$+'sources/dropbox/common'),
             constants = require(_$+'types/constants'),
             settings = require(_$+'helpers/settings'),
             logger = require('winston-wrapper').instance(settings.logPath),
