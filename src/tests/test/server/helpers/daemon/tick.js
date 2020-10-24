@@ -23,7 +23,7 @@ describe('helpers/daemon/tick', function(){
             }
         })
 
-        ctx.inject.object(_$+'helpers/sourceCommon', {
+        ctx.inject.object(_$+'sources/common', {
             isRemoteNewer(){ 
                 return true
             }
@@ -62,7 +62,7 @@ describe('helpers/daemon/tick', function(){
             }
         })
 
-        ctx.inject.object(_$+'helpers/sourceCommon', {
+        ctx.inject.object(_$+'sources/common', {
             isRemoteNewer(){ 
                 return true
             }

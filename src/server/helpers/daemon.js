@@ -23,7 +23,7 @@ module.exports = {
             profileLogic = require(_$+'logic/profiles'),
             logger = require('winston-wrapper').instance(settings.logPath),
             sourceProvider = require(_$+'sources/provider'),
-            sourceCommon = require(_$+'helpers/sourceCommon')
+            sourceCommon = require(_$+'sources/common')
 
         if (busy)
             return
