@@ -15,11 +15,7 @@ module.exports = class extends ImporterBase {
         this.integrationName = constants.SOURCES_DROPBOX
     }
 
-    async _ensureTokens(){
-        // dropbox doesn't need this
-    }
-
-
+    
     /**
      * Searches for .tuna.dat files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 
      * step for importing music, the next step will be to read the contents of those index files.

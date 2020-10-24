@@ -21,13 +21,6 @@ class Importer extends ImporterBase {
     }
 
     /**
-     * Not used for s3
-     */
-    async _ensureTokens(){
-        
-    }
-
-    /**
      * Reads data from remote index files, into temp local array
      */
     async _readIndices(){

@@ -72,7 +72,7 @@ class Importer {
             // write flag to cache so we can prevent user from doing overlapping imports
             await this.cache.add( this.cacheKey, { date : new Date().getTime() })
 
-            await this._ensureTokens()
+            await this.ensureTokens()
             await this._updateIndexReferences()
             await this._readIndices()
 
@@ -87,10 +87,10 @@ class Importer {
 
 
     /**
-     * Call this to ensure valid tokens for whatever platform you're calling
+     * Override this to ensure valid tokens for whatever platform you're calling
      */
-    async _ensureTokens(){
-        throw 'Not implemented';        
+    async ensureTokens(){
+
     }
 
 

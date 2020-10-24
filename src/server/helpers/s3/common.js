@@ -41,14 +41,6 @@ module.exports = {
 
 
     /**
-     * Not used for s3 (not oauth flow)
-     */
-    async ensureTokensAreUpdated (profileId){
-        
-    },
-
-
-    /**
      * Gets a link to streamable source. In the case of s3, we stream from our own API, which in turn retrieves the file from s3.
      */
     async getFileLink(sources, path, authToken){

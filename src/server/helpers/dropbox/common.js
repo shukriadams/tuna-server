@@ -188,7 +188,7 @@ module.exports = {
 
 
     /**
-     * Retrieves a raw token from a dropbox oauth response, verifies it, and stores the result to the profile
+     * Final stage of oauth connection - converts time-limited code for long-term token.
      */
     async swapCodeForToken(profileId, token){
         const 
