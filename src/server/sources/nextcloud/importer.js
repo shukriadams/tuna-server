@@ -15,11 +15,6 @@ class Importer extends ImporterBase {
         this.integrationName = constants.SOURCES_NEXTCLOUD
     }
 
-    async ensureTokens(){
-        const nextCloudCommon = require(_$+'sources/nextcloud/common')
-        await nextCloudCommon.ensureTokensAreUpdated(this.profileId)
-    }
-   
     
     /**
      * Searches for .tuna.dat files in user's nextcloud files and adds / updates their references in profile.sources object. This is the first 

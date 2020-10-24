@@ -1,6 +1,11 @@
 
 
 module.exports = {
+
+    /**
+     * Downloads and parses .tuna.json from source, compares date in that vs last known import date.
+     * Returns true if remote .tuna.json is newer. 
+     */
     async isRemoteNewer(profileId, sourceCommon){
         const
             profileLogic = require(_$+'logic/profiles'),
@@ -21,7 +26,7 @@ module.exports = {
             })
 
         // must ensure tokens before attempting search
-        await sourceCommon.ensureTokensAreUpdated(profile.id)
+        await sourceCommon.ensureIntegration(profile.id)
         
         // todo : harden json parse
         let indexData = await sourceCommon.downloadAsString(source.accessToken, '.tuna.json')

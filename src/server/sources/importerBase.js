@@ -72,7 +72,11 @@ class Importer {
             // write flag to cache so we can prevent user from doing overlapping imports
             await this.cache.add( this.cacheKey, { date : new Date().getTime() })
 
-            await this.ensureTokens()
+            // ensure integration + tokens before proceeeding
+            const provider = require(_$+'sources/common'),
+                source = provider.getSource()
+            source.ensureIntegration(this.profileId)
+
             await this._updateIndexReferences()
             await this._readIndices()
 
@@ -84,15 +88,6 @@ class Importer {
             throw ex
         }
     }
-
-
-    /**
-     * Override this to ensure valid tokens for whatever platform you're calling
-     */
-    async ensureTokens(){
-
-    }
-
 
     
     /**

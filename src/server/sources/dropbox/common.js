@@ -90,9 +90,9 @@ module.exports = {
 
 
     /**
-     * Deliberately empty
+     * not neededon dropbox
      */
-    async ensureTokensAreUpdated (profileId){
+    async ensureIntegration (profileId){
         
     },
 

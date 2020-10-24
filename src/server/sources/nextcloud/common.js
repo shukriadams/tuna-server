@@ -33,7 +33,7 @@ module.exports = {
     /**
      * Ensures access tokens for a given user have been updated. should be called as often as possible
      */
-    async ensureTokensAreUpdated (profileId){
+    async ensureIntegration (profileId){
         let 
             urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
@@ -249,7 +249,7 @@ module.exports = {
             })
 
         // ensure tokens are up-to-date before doing an API call
-        await this.ensureTokensAreUpdated(profileId)
+        await this.ensureIntegration(profileId)
         const url = settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/stream') : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}`, mediaPath)
 
         // stream media from nextcloud back

@@ -42,7 +42,7 @@ function mock(){
 describe('sources/nextcloud/importer/updateAccessTokens/update', function(testArgs){
 
 
-    it('sources/nextcloud/importer/updateAccessTokens::happypath::new bearer token is written to profile object', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::happypath::new bearer token is written to profile object', async () => {
 
         let updater = mock(),
             constants = require(_$+'types/constants'),
@@ -58,7 +58,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
         // ensure token is very, very old
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].tokenDate, new Date('1970-1-1').getTime())
 
-        await updater.ensureTokensAreUpdated()
+        await updater.ensureIntegration()
 
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].accessToken, 'new_token')
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].refreshToken, 'new_refresh_token')
@@ -69,7 +69,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
     
 
-    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::exits if token has not expired', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::unhappypath::exits if token has not expired', async () => {
         let ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants'),
             updater = mock()
@@ -82,27 +82,27 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
         // have nextcloud approve token
         updater.mockPostResponse.raw.statusCode = 200
 
-        await updater.ensureTokensAreUpdated()
+        await updater.ensureIntegration()
 
         assert.null(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].accessToken)
     })
 
     
 
-    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::throws invalid json error on invalid json', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::unhappypath::throws invalid json error on invalid json', async () => {
         let ctx = require(_$t+'testcontext'),
             updater = mock()
 
         // set body response to be invalid json
         updater.mockPostUrlStringResponse.body = '---'
 
-        const exception = await assert.throws(async() => await updater.ensureTokensAreUpdated() )
+        const exception = await assert.throws(async() => await updater.ensureIntegration() )
         assert.equal(exception.inner.raw, '---')
         assert.equal(exception.log, 'invalid JSON string')
     })
 
 
-    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::invalid_request response flags source as broken', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::unhappypath::invalid_request response flags source as broken', async () => {
         let ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants'),
             updater = mock()
@@ -115,14 +115,14 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
         // ensure that connection is valid
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_WORKING)
 
-        await updater.ensureTokensAreUpdated()
+        await updater.ensureIntegration()
 
         // connection flagged as broken
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_USER_REAUTHORIZE )
     })
 
 
-    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::status 400 flags source as broken', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::unhappypath::status 400 flags source as broken', async () => {
         let updater = mock(),
             constants = require(_$+'types/constants')
 
@@ -132,14 +132,14 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
         // ensure that connection is valid
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_WORKING)
 
-        await updater.ensureTokensAreUpdated()
+        await updater.ensureIntegration()
 
         // connection flagged as broken
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_USER_REAUTHORIZE )
     })
 
 
-    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::unexpected error content throws exception', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::unhappypath::unexpected error content throws exception', async () => {
         let updater = mock(),
             constants = require(_$+'types/constants')
 
@@ -151,7 +151,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
         // ensure that connection is valid
         assert.equal(updater.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_WORKING)
 
-        const exception = await assert.throws(async() => await updater.ensureTokensAreUpdated() )
+        const exception = await assert.throws(async() => await updater.ensureIntegration() )
 
         assert.equal(exception.code, constants.ERROR_DEFAULT)
 
@@ -160,7 +160,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
     })
 
 
-    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::throw an exception during token check', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::unhappypath::throw an exception during token check', async () => {
         let updater = mock(),
             inject = require(_$t+'helpers/inject'),
             constants = require(_$+'types/constants')
@@ -174,14 +174,14 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
             post : function(){ throw '1234' }
         })
 
-        const exception = await assert.throws(async() => await updater.ensureTokensAreUpdated() )
+        const exception = await assert.throws(async() => await updater.ensureIntegration() )
 
         assert.equal(exception.log, 'Unexpected error doing token check')
         assert.equal(exception.inner, '1234' )
     })
 
 
-    it('sources/nextcloud/importer/updateAccessTokens::unhappypath::error 401 on token check forces token update', async () => {
+    it('sources/nextcloud/importer/ensureIntegration::unhappypath::error 401 on token check forces token update', async () => {
         let updater = mock(),
             inject = require(_$t+'helpers/inject')
 
@@ -199,7 +199,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
             postUrlString : ()=>{ throw 'this was reached' }
         })
 
-        const exception = await assert.throws(async() => await updater.ensureTokensAreUpdated() )
+        const exception = await assert.throws(async() => await updater.ensureIntegration() )
 
         assert.equal(exception, 'this was reached')
     })
