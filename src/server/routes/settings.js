@@ -11,7 +11,7 @@ module.exports ={
         app.get('/v1/settings', async function (req, res) {
             try {
                 const 
-                    sourceProvider = require(_$+'helpers/sourceProvider'),
+                    sourceProvider = require(_$+'sources/provider'),
                     constants = require(_$+'types/constants'),
                     settings = require(_$+'helpers/settings'),
                     logger = require('winston-wrapper').instance(settings.logPath),

@@ -1,6 +1,6 @@
-describe('helpers/sourceProvider/getImporter', ()=>{
+describe('sources/provider/getImporter', ()=>{
     
-    it('helpers/sourceProvider/getImporter::happy::gets dropbox importer', async () => {
+    it('sources/provider/getImporter::happy::gets dropbox importer', async () => {
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
@@ -8,14 +8,14 @@ describe('helpers/sourceProvider/getImporter', ()=>{
             musicSource : constants.SOURCES_DROPBOX
         })
 
-        const sourceProvider = require(_$+'helpers/sourceProvider'),
+        const sourceProvider = require(_$+'sources/provider'),
             importer = await await sourceProvider.getImporter() 
 
         ctx.assert.notNull(importer)
     })
 
 
-    it('helpers/sourceProvider/getImporter::happy::gets nextcloud', async () => {
+    it('sources/provider/getImporter::happy::gets nextcloud', async () => {
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
@@ -23,14 +23,14 @@ describe('helpers/sourceProvider/getImporter', ()=>{
             musicSource : constants.SOURCES_NEXTCLOUD
         })
 
-        const sourceProvider = require(_$+'helpers/sourceProvider'),
+        const sourceProvider = require(_$+'sources/provider'),
             importer = await await sourceProvider.getImporter() 
 
         ctx.assert.notNull(importer)
     })
 
 
-    it('helpers/sourceProvider/getImporter::happy::gets s3', async () => {
+    it('sources/provider/getImporter::happy::gets s3', async () => {
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
@@ -38,21 +38,21 @@ describe('helpers/sourceProvider/getImporter', ()=>{
             musicSource : constants.SOURCES_S3
         })
 
-        const sourceProvider = require(_$+'helpers/sourceProvider'),
+        const sourceProvider = require(_$+'sources/provider'),
             importer = await await sourceProvider.getImporter() 
 
         ctx.assert.notNull(importer)
     })
 
     
-    it('helpers/sourceProvider/getImporter::unhappy::handles invalid source', async () => {
+    it('sources/provider/getImporter::unhappy::handles invalid source', async () => {
         const ctx = require(_$t+'testcontext')
 
         ctx.inject.object(_$+'helpers/settings', {
             musicSource : 'an-invalid-source'
         })
 
-        const sourceProvider = require(_$+'helpers/sourceProvider'),
+        const sourceProvider = require(_$+'sources/provider'),
             exception = await ctx.assert.throws(async() => await sourceProvider.getImporter() )
 
         ctx.assert.notNull(exception)

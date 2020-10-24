@@ -12,7 +12,7 @@ describe('route/songs/import', async()=>{
         routeTester.authenticate()
 
         // need to return a fake importer
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             getImporter (){
                 return class {
                     constructor(profile, authTokenId){

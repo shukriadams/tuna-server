@@ -14,7 +14,7 @@ describe('helpers/daemon/tick', function(){
             } 
         })
 
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             get(){ },
             getImporter(){
                 return class{
@@ -51,7 +51,7 @@ describe('helpers/daemon/tick', function(){
             } 
         })
 
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             get(){ },
             getImporter(){
                 return class{

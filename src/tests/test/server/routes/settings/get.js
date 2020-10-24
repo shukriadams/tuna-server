@@ -3,7 +3,7 @@ describe('route/settings/get', async()=>{
     it('route/settings/get::happy::gets settings', async () => {
         const ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             getSource (){ 
                 return {
                     getLabel(){ return 5678 }
@@ -25,7 +25,7 @@ describe('route/settings/get', async()=>{
      */
     it('route/settings/get::unhappy::forced error', async () => {
         const ctx = require(_$t+'testcontext')
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             getSource(){
                 throw 'whatever'
             }

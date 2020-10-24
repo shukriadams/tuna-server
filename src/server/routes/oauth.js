@@ -16,7 +16,7 @@ module.exports = {
         app.get('/v1/oauth/source/start', async (req, res)=>{
             let 
                 authHelper = require(_$+'helpers/authentication'),
-                sourceProvider = require(_$+'helpers/sourceProvider'),
+                sourceProvider = require(_$+'sources/provider'),
                 settings = require(_$+'helpers/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token),
                 url = sourceProvider.get().getOauthUrl(authToken.id)

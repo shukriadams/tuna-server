@@ -1,5 +1,5 @@
 const
-    ImporterBase = require(_$+'helpers/importerBase'),
+    ImporterBase = require(_$+'sources/importerBase'),
     constants = require(_$+'types/constants')
 
 /**

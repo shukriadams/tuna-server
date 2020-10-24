@@ -3,7 +3,7 @@ describe('logic/songs/getSongUrl', async(ctx)=>{
     it('logic/songs/getSongUrl::happy::gets song url', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             getSource(){
                 return {
                     getFileLink(){
@@ -38,7 +38,7 @@ describe('logic/songs/getSongUrl', async(ctx)=>{
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             get(){
                 return {
                     getFileLink(){
@@ -68,7 +68,7 @@ describe('logic/songs/getSongUrl', async(ctx)=>{
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
-        ctx.inject.object(_$+'helpers/sourceProvider', {
+        ctx.inject.object(_$+'sources/provider', {
             get(){
                 return {
                     getFileLink(){
