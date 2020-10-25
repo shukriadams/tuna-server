@@ -8,7 +8,7 @@ describe('sources/importerBase/start', ()=>{
             add(){ }
         })
 
-        ctx.inject.object(_$+'sources/common', {
+        ctx.inject.object(_$+'sources/provider', {
             getSource(){ 
                 return {
                     ensureIntegration(){
@@ -43,14 +43,13 @@ describe('sources/importerBase/start', ()=>{
      * For test coverage
      */
     it('sources/importerBase/start::unhappy::throws error', async () => {
-        let ctx = require(_$t+'testcontext'),
-            called = false
+        let ctx = require(_$t+'testcontext')
 
         ctx.inject.object(_$+'helpers/cache', {
             add(){ }
         })
 
-        ctx.inject.object(_$+'sources/common', {
+        ctx.inject.object(_$+'sources/provider', {
             getSource(){ 
                 throw 'some error'
             }
@@ -80,7 +79,7 @@ describe('sources/importerBase/start', ()=>{
             add(){ }
         })
 
-        ctx.inject.object(_$+'sources/common', {
+        ctx.inject.object(_$+'sources/provider', {
             getSource(){ 
                 throw 'some error'
             }

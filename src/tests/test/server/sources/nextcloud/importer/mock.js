@@ -14,7 +14,7 @@ module.exports = {
 
         // replace profile logic, return an object with valid nextcloud source
         importer.mockProfile = { sources : { nextcloud : { 
-            indexes : [],
+            index : null,
         }}}
 
         importer.profileLogic.getById =()=>{ return importer.mockProfile }

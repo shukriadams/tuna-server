@@ -123,7 +123,7 @@ class Importer extends ImporterBase {
 
         source.index = newIndex
         await this.profileLogic.update(profile)
-        await this.log.create({ result: `success, ${newIndices.length} index files found` }, `profile:${this.profileId}_nextcloud_indexupdate_success`)
+        await this.log.create({ result: `success, index found` }, `profile:${this.profileId}_nextcloud_indexupdate_success`)
     }
 
 

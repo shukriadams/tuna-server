@@ -4,20 +4,19 @@ const fs = require('fs-extra')
 describe('sources/nextcloud/importer/getSource/updateIndexReferences', function(){
     
     
-    it('sources/nextcloud/importer/getSource/updateIndexReferences::happy::should list multiple index files found', async () => {
+    it('sources/nextcloud/importer/getSource/updateIndexReferences::happy::should create single index from multiple found files', async () => {
         let mock = require(_$t+'test/server/sources/nextcloud/importer/mock'),
             importer = mock.happyPath(),
             ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
-        // body xml i reference xml for multiple search results
+        // body xml is reference xml for multiple search results
         importer.mockPostResponse.body = await fs.readFile(_$+'reference/nextcloud/multipleResults.xml', 'utf8')
 
         await importer._updateIndexReferences('123')
 
-        // mock xml had 2 results in it, and known id 62599
-        ctx.assert.length(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes, 2)
-        ctx.assert.notNull(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes.find(item => item.fileid === '62599'))
+        // mock xml had 2 results in it, first had id 62599
+        ctx.assert.equal(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].index.id, '62599')
     })
 
 
@@ -63,16 +62,16 @@ describe('sources/nextcloud/importer/getSource/updateIndexReferences', function(
             importer = mock.happyPath(),
             constants = require(_$+'types/constants')
 
-        // force a bogus object into indexes, we want to confirm this has been deleted
-        importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes.push({})
+        // force a bogus object into index, we want to confirm this has been deleted
+        importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].index = {}
 
         // body xml is reference XML for empty search results
         importer.mockPostResponse.body = await fs.readFile(_$+'reference/nextcloud/noResult.xml', 'utf8')
 
         await importer._updateIndexReferences('123')
 
-        // indexes collection must be set to empty, but integration is working
-        ctx.assert.empty(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].indexes)
+        // index must be empty, but integration is working
+        ctx.assert.null(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].index)
         ctx.assert.equal(importer.mockProfile.sources[constants.SOURCES_NEXTCLOUD].status, constants.SOURCE_CONNECTION_STATUS_WORKING)
     })
     

@@ -10,7 +10,7 @@ function mock(){
         mock = Object.assign({}, nextCloudCommon)
     
     mock.mockProfile = { sources : { nextcloud : { 
-        indexes : [],
+        index : [],
         status : constants.SOURCE_CONNECTION_STATUS_WORKING,
         // set token date to expired
         tokenDate : new Date('1970-1-1').getTime(),
