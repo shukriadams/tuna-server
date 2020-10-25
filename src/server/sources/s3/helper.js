@@ -1,7 +1,7 @@
 module.exports = {
     
     /**
-     * Searches for files on s3, returns an array of string path for matches.
+     * Searches for files, returns an array of string path for matches
      * Search in this case is limited to an exact query - tuna.dat must be in the root of the given bucket.
      * source : profiles.sources.source object for s3
      * query : 'tuna.dat'

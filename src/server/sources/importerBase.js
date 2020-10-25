@@ -4,7 +4,7 @@ const
     Song = require(_$+'types/song'),
     songsLogic = require(_$+'logic/songs'),
     playlistLogic = require(_$+'logic/playlists'),    
-    debounce = require(_$+'helpers/debounce')
+    debounce = require(_$+'helpers/debounce').debounce
 
 /**
  * Imports song data from source platform like nextcloud, dropbox etc. This process consists of multiple steps. It exposes which step it's on, 
@@ -184,12 +184,13 @@ class Importer {
                             text : `Importing '${name}' by ${artist}`
                         })
                     })
-                
+
                 await this.onSongProcessed({ file })
 
                 this._processNextSong.call(this)
     
             } catch(ex){
+                
                 // clean out cached session, this should be last step and frees up the cache queue for this user
                 await this.cache.remove( this.cacheKey )
 

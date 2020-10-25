@@ -1,5 +1,87 @@
 module.exports = { 
+
     
+    /**
+     * Searches for files, returns an array of string path for matches
+     */
+    async search(source, query) {
+        const
+            urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            constants = require(_$+'types/constants'),
+            Exception = require(_$+'types/exception'),
+            settings = require(_$+'helpers/settings'),
+            xmlHelper = require(_$+'helpers/xml'),
+            accessToken = source.accessToken,
+            nextCloudUserId = source.userId,
+            options = {
+                method: settings.sandboxMode ? 'POST' : 'SEARCH',
+                headers: {
+                    'Content-Type': 'application/xml',
+                    'Authorization' : `Bearer ${accessToken}`
+                }
+            },
+            body = 
+                `<?xml version="1.0" encoding="UTF-8"?>
+                <d:searchrequest xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+                    <d:basicsearch>
+                        <d:select>
+                            <d:prop>
+                                <oc:fileid/>
+                            </d:prop>
+                        </d:select>
+                        <d:from>
+                            <d:scope>
+                                <d:href>/files/${nextCloudUserId}</d:href>
+                                <d:depth>infinity</d:depth>
+                            </d:scope>
+                        </d:from>
+                        <d:where>
+                            <d:like>
+                                <d:prop>
+                                    <d:displayname/>
+                                </d:prop>
+                                <d:literal>${query}</d:literal>
+                            </d:like>
+                        </d:where>
+                        <d:orderby/>
+                    </d:basicsearch>
+                </d:searchrequest>`
+
+        const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
+            result = await httputils.post(url, body, options)
+            // todo : handle server call timing out
+
+        // auth failure : This should not happen - we should have explicitly checked tokens just before this. Log explicit because
+        // we will want to know if this is happening
+        if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
+            throw new Exception({ 
+                code : constants.ERROR_INVALID_SOURCE_INTEGRATION,
+                forceLog : true,
+                log: '401 despite explicit token testing',
+                inner : {
+                    token : accessToken,
+                    body : result.body
+                }
+            })
+
+        const resultXml = await xmlHelper.toDoc(result.body)
+            
+        // no files found
+        if (!resultXml['d:multistatus']['d:response'])
+            return []
+
+        // write new index files, preserve existing ones so we keep their history properties
+        let results = []
+
+        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].length; i ++){
+            const item = resultXml['d:multistatus']['d:response'][i]
+            results.push(item['d:href'][0])
+        }
+
+        return results
+    },
+
     getLabel(){
         return 'NextCloud'
     },
@@ -107,86 +189,6 @@ module.exports = {
         await profileLogic.update(profile)
     },
 
-    /**
-     * Searchs for files, returns string array of paths found, empty array if none
-     */
-    async search(source, query) {
-        const
-            urljoin = require('urljoin'),
-            httputils = require('madscience-httputils'),
-            constants = require(_$+'types/constants'),
-            Exception = require(_$+'types/exception'),
-            settings = require(_$+'helpers/settings'),
-            xmlHelper = require(_$+'helpers/xml'),
-            accessToken = source.accessToken,
-            nextCloudUserId = source.userId,
-            options = {
-                method: settings.sandboxMode ? 'POST' : 'SEARCH',
-                headers: {
-                    'Content-Type': 'application/xml',
-                    'Authorization' : `Bearer ${accessToken}`
-                }
-            },
-            body = 
-                `<?xml version="1.0" encoding="UTF-8"?>
-                <d:searchrequest xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
-                    <d:basicsearch>
-                        <d:select>
-                            <d:prop>
-                                <oc:fileid/>
-                            </d:prop>
-                        </d:select>
-                        <d:from>
-                            <d:scope>
-                                <d:href>/files/${nextCloudUserId}</d:href>
-                                <d:depth>infinity</d:depth>
-                            </d:scope>
-                        </d:from>
-                        <d:where>
-                            <d:like>
-                                <d:prop>
-                                    <d:displayname/>
-                                </d:prop>
-                                <d:literal>${query}</d:literal>
-                            </d:like>
-                        </d:where>
-                        <d:orderby/>
-                    </d:basicsearch>
-                </d:searchrequest>`
-
-        const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
-            result = await httputils.post(url, body, options)
-            // todo : handle server call timing out
-
-        // auth failure : This should not happen - we should have explicitly checked tokens just before this. Log explicit because
-        // we will want to know if this is happening
-        if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
-            throw new Exception({ 
-                code : constants.ERROR_INVALID_SOURCE_INTEGRATION,
-                forceLog : true,
-                log: '401 despite explicit token testing',
-                inner : {
-                    token : accessToken,
-                    body : result.body
-                }
-            })
-
-        const resultXml = await xmlHelper.toDoc(result.body)
-            
-        // no files found
-        if (!resultXml['d:multistatus']['d:response'])
-            return []
-
-        // write new index files, preserve existing ones so we keep their history properties
-        let results = []
-
-        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].length; i ++){
-            const item = resultXml['d:multistatus']['d:response'][i]
-            results.push(item['d:href'][0])
-        }
-
-        return results
-    },
 
     async swapCodeForToken(profileId, code){
         const 

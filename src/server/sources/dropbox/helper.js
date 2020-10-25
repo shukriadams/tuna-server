@@ -1,7 +1,7 @@
 module.exports = {
     
     /**
-     * Searches for files on dropbox, returns an array of string path for matches
+     * Searches for files, returns an array of string path for matches
      * 
      */
     async search(source, query){
