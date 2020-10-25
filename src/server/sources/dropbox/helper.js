@@ -5,38 +5,46 @@ module.exports = {
      * Note : dropbox paths MUST start with leading /, egs "/.tuna.dat"
      */
     async downloadAsString(accessToken, path){
-        const Exception = require(_$+'types/exception'),
+        let Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             httputils = require('madscience-httputils'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'helpers/settings'),
+            result
 
-        if (!path.startsWith('/'))
-            path = `/${path}`
+        try {
+            if (!path.startsWith('/'))
+                path = `/${path}`
+                
+            const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://content.dropboxapi.com/2/files/download`
             
-        return new Promise(async(resolve, reject)=>{
+            result = await httputils.post(url, null, { 
+                headers : {
+                    'Authorization' : `Bearer ${accessToken}`,
+                    'Dropbox-API-Arg': `{"path": "${path}"}`
+                }})
+
+        } catch (ex){
+            throw new Exception({ forceLog : true, inner : ex })
+        }
+
+        
+        if (result.raw.statusCode < 200 || result.raw.statusCode > 299){
+            let body
+
+            // try to parse body JSON, dropbox's API always returns JSON but wrap it just to be sure
             try {
-
-                const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://content.dropboxapi.com/2/files/download`,
-                    result = await httputils.post(url, null, { 
-                        headers : {
-                            'Authorization' : `Bearer ${accessToken}`,
-                            'Dropbox-API-Arg': `{"path": "${path}"}`
-                        }})
-
-                if (result.raw.statusCode < 200 || result.raw.statusCode > 299){
-                    let body = JSON.parse(result.body)
-                    if (body.error_summary && body.error_summary.includes('path/not_found'))
-                        return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, public : `${path} not found on Dropbox, rerun indexer` }))
-                    
-                    return reject(result.body)
-                }
-
-                resolve(result.body)
-
+                body = JSON.parse(result.body)
             } catch(ex){
-                reject(ex)
+                throw new Exception({ forceLog : true, log : result })
             }
-        })
+
+            if (body.error_summary && body.error_summary.includes('path/not_found'))
+                throw new Exception({ code : constants.ERROR_NO_INDEX_FILE, public : `${path} not found on Dropbox, rerun indexer` })
+
+            throw new Exception({ forceLog : true, log : result.body })
+        }
+
+        return result.body
     },
 
 
@@ -46,8 +54,7 @@ module.exports = {
 
 
     getOauthUrl (authTokenId){
-        const 
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings')
 
         if (settings.sandboxMode)
@@ -58,7 +65,7 @@ module.exports = {
 
 
     /**
-     * not neededon dropbox
+     * not needed on dropbox
      */
     async ensureIntegration (profileId){
         
@@ -110,30 +117,6 @@ module.exports = {
             }
 
         })
-    },
-
-    
-    /**
-     * Gets the contents of the index file. This is normally the .tuna.dat file in the dropbox folder root, but in
-     * for dev purposes can also be:
-     * - .tunaTest.dat on the dropbox root
-     * - tuna.dat in the local /server/reference folder
-     * - null, to simulate a user that has no index file.
-     *
-     * Returns null if no file found.
-     */
-    async getIndexFileContent(source, profileId){
-        
-        let accessToken = source.accessToken,
-            Exception = require(_$+'types/exception')
-
-        // this is currently a known issue, and dropbox deals with the error badly, so try to catch it first
-        if (!accessToken)
-            throw new Exception({
-                log : 'getIndexFileContent received an empty dropbox access token, user data is likely corrupted'
-            })
-
-        return await this.downloadAsString(accessToken, '.tuna.dat')
     },
 
 

@@ -78,27 +78,6 @@ module.exports = {
 
     
     /**
-     * Gets the contents of the index file. This is normally the .tuna.dat file in the dropbox folder root, but in
-     * for dev purposes can also be:
-     * - .tunaTest.dat on the dropbox root
-     * - tuna.dat in the local /server/reference folder
-     * - null, to simulate a user that has no index file.
-     *
-     * Returns null if no file found.
-     */
-    async getIndexFileContent(){
-        const s3utils = require('madscience-s3helper').utils,
-            settings = require(_$+'helpers/settings')
-            
-        return await s3utils.getStringFile({ 
-            accessKeyId : settings.s3key, 
-            secretAccessKey : settings.s3secret, 
-            endpoint : settings.s3host 
-        }, settings.s3bucket, '.tuna.dat' )
-    },
-
-
-    /**
      * Not used for s3 (not oauth flow)
      */
     async swapCodeForToken(profileId, token){
