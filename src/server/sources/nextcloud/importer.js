@@ -87,7 +87,7 @@ class Importer extends ImporterBase {
 
         // if non-200 code returned, something is wrong, flag source connection as broken so user can reauthorize
         if (result.raw.statusCode < 200 || result.raw.statusCode > 299){
-            source.indexes = [] // wipe existing
+            source.index = null // wipe existing
             source.status = constants.SOURCE_CONNECTION_STATUS_USER_REAUTHORIZE
             
             await this.profileLogic.update(profile)
@@ -99,29 +99,29 @@ class Importer extends ImporterBase {
             
         // no index files found
         if (!resultXml['d:multistatus']['d:response']){
-            source.indexes = [] // wipe existing
+            source.index = null // wipe existing
             await this.profileLogic.update(profile)
             await this.log.create({ result: 'success, no index files found' }, `profile:${this.profileId}_nextcloud_indexupdate_success`)
             return
         }
 
         // write new index files, preserve existing ones so we keep their history properties
-        let newIndices = []
+        let newIndex = null
         for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].length; i ++){
             const response = resultXml['d:multistatus']['d:response'][i]
             
-            let newIndex = {
+            newIndex = {
                 path : response['d:href'][0],
                 id : response['d:propstat'][0]['d:prop'][0]['oc:fileid'][0],
                 status :  ''
             }
 
             // if same index already exists, use that one again
-            newIndex = source.indexes.find(index => index.path === newIndex.path && index.id === newIndex.id) || newIndex
-            newIndices.push(newIndex)
+            // take first only
+            break
         }
 
-        source.indexes = newIndices
+        source.index = newIndex
         await this.profileLogic.update(profile)
         await this.log.create({ result: `success, ${newIndices.length} index files found` }, `profile:${this.profileId}_nextcloud_indexupdate_success`)
     }
@@ -139,11 +139,11 @@ class Importer extends ImporterBase {
             s = await this._getSource(),
             source = s.source
 
-        if (!source.indexes.length)
+        if (!source.index)
             return
         
         const 
-            index = source.indexes[0],
+            index = source.index,
             url = this.settings.sandboxMode ? urljoin(this.settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.dat`) : `${this.settings.nextCloudHost}${index.path}`,
             indexRaw = await httputils.downloadString ({ 
                 url, 

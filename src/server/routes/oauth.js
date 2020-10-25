@@ -19,7 +19,7 @@ module.exports = {
                 sourceProvider = require(_$+'sources/provider'),
                 settings = require(_$+'helpers/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token),
-                url = sourceProvider.get().getOauthUrl(authToken.id)
+                url = sourceProvider.getSource().getOauthUrl(authToken.id)
 
             if (settings.demoMode)
                 return res.redirect('/')  

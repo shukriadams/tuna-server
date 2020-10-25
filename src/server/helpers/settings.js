@@ -64,10 +64,9 @@ const
 
         dropboxAppId : null,
         dropboxAppSecret : null,
-        // if set, this token will always be used for "dev" oauth flow on dropbox. Use this to test workflow around dropbox.
-        // Token can be copied from the dropbox API management page - dropbox are really developer-friendly this way.
-        dropboxDevOauthToken : null,
 
+        // if set, and if system source is set to "dropbox", dropbox integration will be created automatically 
+        dropboxOauthToken : null,
 
         lastFmApiKey : null,
         lastFmApiSecret : null,

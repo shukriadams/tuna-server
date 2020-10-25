@@ -29,28 +29,15 @@ module.exports = class extends ImporterBase {
             source = s.source,
             newIndices = [],
             accessToken = source.accessToken
-            
-        if (!accessToken)
-            return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION }))
-
-        // even thought Tuna index file is prefixed with '.' we omit that as it seems to confuse dropbox's api
-        let matches = await common.search(source, 'tuna.dat')
-
-        if (matches.length){
-            let path = matches[0],
-                newIndex = {
-                    path,
-                    id : null,
-                    status :  ''
-                }
-
-            // if same index already exists, use that one again
-            newIndex = source.indexes.find(index => index.path === newIndex.path && index.id === newIndex.id) || newIndex
-            newIndices.push(newIndex)
-        }
+           
 
         // write new index files, preserve existing ones so we keep their history properties
-        source.indexes = newIndices
+        source.index = {
+            path : '.tuna.dat',
+            id : null,
+            status :  ''
+        }
+
         source.indexHash = this.indexHash
         source.indexImportDate = new Date().getTime()
 
@@ -76,11 +63,11 @@ module.exports = class extends ImporterBase {
         if (!source.accessToken)
             throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION })
 
-        if (!source.indexes.length)
+        if (!source.index)
             throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, public : 'No index found - please run the Tuna indexer in your Dropbox folder' })
 
         // we're taking only the first index here, still no logic for handling multiple
-        let indexData = await common.downloadAsString(source.accessToken, source.indexes[0].path) 
+        let indexData = await common.downloadAsString(source.accessToken, source.index.path) 
         const indexDoc = indexData.split('\n')
         
         this.indexHash = JSON.parse(indexDoc[0]).hash

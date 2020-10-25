@@ -42,26 +42,35 @@ module.exports = {
 
 
     /**
-     * Downloads a file from dropbox as a string. This should be used for accessing Tuna xml and json index files
+     * Downloads a file from dropbox as a string. This should be used for accessing Tuna xml and json index files.
+     * Note : dropbox paths MUST start with leading /, egs "/.tuna.dat"
      */
     async downloadAsString(accessToken, path){
-        const 
-            urljoin = require('urljoin'),
+        const Exception = require(_$+'types/exception'),
+            constants = require(_$+'types/constants'),
             httputils = require('madscience-httputils'),
             settings = require(_$+'helpers/settings')
 
+        if (!path.startsWith('/'))
+            path = `/${path}`
+            
         return new Promise(async(resolve, reject)=>{
             try {
 
-                const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://api-content.dropbox.com/1/files/auto/${path}`,
-                    body = JSON.stringify({ path }),
-                    result = await httputils.post(url, body, { 
+                const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://content.dropboxapi.com/2/files/download`,
+                    result = await httputils.post(url, null, { 
                         headers : {
-                            'Authorization' : `Bearer ${accessToken}`
+                            'Authorization' : `Bearer ${accessToken}`,
+                            'Dropbox-API-Arg': `{"path": "${path}"}`
                         }})
 
-                if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
+                if (result.raw.statusCode < 200 || result.raw.statusCode > 299){
+                    let body = JSON.parse(result.body)
+                    if (body.error_summary && body.error_summary.includes('path/not_found'))
+                        return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, public : `${path} not found on Dropbox, rerun indexer` }))
+                    
                     return reject(result.body)
+                }
 
                 resolve(result.body)
 
@@ -157,8 +166,6 @@ module.exports = {
     async getIndexFileContent(source, profileId){
         
         let accessToken = source.accessToken,
-            settings = require(_$+'helpers/settings'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             Exception = require(_$+'types/exception')
 
         return new Promise(async (resolve, reject)=>{
@@ -170,16 +177,8 @@ module.exports = {
                 }))
 
             try {
-
-                // even thought Tuna index file is prefixed with '.' we omit that as it seems to confuse dropbox's api
-                let hits = this.search(source, 'tuna.dat')
-                if (!hits.length){
-                    logger.info.info(`Dropbox import : No matches found.`)
-                    return resolve(null)
-                }
-                
-                return await this.downloadAsString(accessToken, hits[0])
-                
+                // todo : explicitly handle data file not existing, as we're just assuming it's there
+                return await this.downloadAsString(accessToken, '.tuna.dat')
             } catch (ex) {
                 reject(ex)
             }
@@ -226,7 +225,7 @@ module.exports = {
 
                             let json = JsonHelper.parse(body),
                                 // if dev token set, always use that
-                                accessToken = settings.dropboxDevOauthToken || json.access_token
+                                accessToken = json.access_token
 
                             profile.sources[constants.SOURCES_DROPBOX] = Object.assign(profile.sources[constants.SOURCES_DROPBOX] || {}, DropboxSource.new())
                             profile.sources[constants.SOURCES_DROPBOX].accessToken = accessToken

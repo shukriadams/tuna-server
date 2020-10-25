@@ -73,7 +73,7 @@ class Importer {
             await this.cache.add( this.cacheKey, { date : new Date().getTime() })
 
             // ensure integration + tokens before proceeeding
-            const provider = require(_$+'sources/common'),
+            const provider = require(_$+'sources/provider'),
                 source = provider.getSource()
 
             source.ensureIntegration(this.profileId)

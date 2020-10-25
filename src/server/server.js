@@ -41,6 +41,7 @@ module.exports = {
         if (settings.enableCrossProcessScripts)
             interprocess.initialize()
 
+        // ensure mongo structures, this is required on first load
         mongoHelper.initialize()
 
         daemon.start()
