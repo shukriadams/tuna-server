@@ -1,94 +1,11 @@
 module.exports = { 
 
-    
-    /**
-     * Searches for files, returns an array of string path for matches
-     */
-    async search(source, query) {
-        const
-            urljoin = require('urljoin'),
-            httputils = require('madscience-httputils'),
-            constants = require(_$+'types/constants'),
-            Exception = require(_$+'types/exception'),
-            settings = require(_$+'helpers/settings'),
-            xmlHelper = require(_$+'helpers/xml'),
-            accessToken = source.accessToken,
-            nextCloudUserId = source.userId,
-            options = {
-                method: settings.sandboxMode ? 'POST' : 'SEARCH',
-                headers: {
-                    'Content-Type': 'application/xml',
-                    'Authorization' : `Bearer ${accessToken}`
-                }
-            },
-            body = 
-                `<?xml version="1.0" encoding="UTF-8"?>
-                <d:searchrequest xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
-                    <d:basicsearch>
-                        <d:select>
-                            <d:prop>
-                                <oc:fileid/>
-                            </d:prop>
-                        </d:select>
-                        <d:from>
-                            <d:scope>
-                                <d:href>/files/${nextCloudUserId}</d:href>
-                                <d:depth>infinity</d:depth>
-                            </d:scope>
-                        </d:from>
-                        <d:where>
-                            <d:like>
-                                <d:prop>
-                                    <d:displayname/>
-                                </d:prop>
-                                <d:literal>${query}</d:literal>
-                            </d:like>
-                        </d:where>
-                        <d:orderby/>
-                    </d:basicsearch>
-                </d:searchrequest>`
-
-        const url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/${query}`) : `${settings.nextCloudHost}/remote.php/dav`,
-            result = await httputils.post(url, body, options)
-            // todo : handle server call timing out
-
-        // auth failure : This should not happen - we should have explicitly checked tokens just before this. Log explicit because
-        // we will want to know if this is happening
-        if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
-            throw new Exception({ 
-                code : constants.ERROR_INVALID_SOURCE_INTEGRATION,
-                forceLog : true,
-                log: '401 despite explicit token testing',
-                inner : {
-                    token : accessToken,
-                    body : result.body
-                }
-            })
-
-        const resultXml = await xmlHelper.toDoc(result.body)
-            
-        // no files found
-        if (!resultXml['d:multistatus']['d:response'])
-            return []
-
-        // write new index files, preserve existing ones so we keep their history properties
-        let results = []
-
-        for (let i = 0 ; i < resultXml['d:multistatus']['d:response'].length; i ++){
-            const item = resultXml['d:multistatus']['d:response'][i]
-            results.push(item['d:href'][0])
-        }
-
-        return results
-    },
-
     getLabel(){
         return 'NextCloud'
     },
 
     getOauthUrl (authTokenId){
-        const
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings')
 
         if (settings.sandboxMode)
@@ -98,8 +15,7 @@ module.exports = {
     },
 
     async downloadAsString(accessToken, path){
-        const 
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             settings = require(_$+'helpers/settings'),
             url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path),
@@ -116,8 +32,7 @@ module.exports = {
      * Ensures access tokens for a given user have been updated. should be called as often as possible
      */
     async ensureIntegration (profileId){
-        let 
-            urljoin = require('urljoin'),
+        let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
@@ -191,8 +106,7 @@ module.exports = {
 
 
     async swapCodeForToken(profileId, code){
-        const 
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
@@ -207,8 +121,7 @@ module.exports = {
             console.log(`SANDBOX enabled - token will be swapped locally`)
         }
 
-        const
-            tokenSwap = await httputils.postUrlString(url, `grant_type=authorization_code&code=${code}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`),
+        const tokenSwap = await httputils.postUrlString(url, `grant_type=authorization_code&code=${code}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`),
             profile = await profileLogic.getById(profileId),
             swapResult = jsonHelper.parse(tokenSwap.body)
 
@@ -234,8 +147,7 @@ module.exports = {
      */
      async streamMedia (profileId, mediaPath, res){
 
-        const
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             request = require('request'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
@@ -281,8 +193,7 @@ module.exports = {
      * The media path is returned as base64 string because it's a URL itself
      */
     async getFileLink(sources, path, authToken){
-        const
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings')
 
         return urljoin(settings.siteUrl, `/v1/stream/${authToken}/${Buffer.from(path).toString('base64')}`)

@@ -45,8 +45,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
     it('sources/nextcloud/importer/ensureIntegration::happypath::new bearer token is written to profile object', async () => {
 
         let updater = mock(),
-            constants = require(_$+'types/constants'),
-            ctx = require(_$t+'testcontext')
+            constants = require(_$+'types/constants')
 
         // add new bearer token info to body content
         updater.mockPostUrlStringResponse.body = JSON.stringify({ 
@@ -70,8 +69,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
     
 
     it('sources/nextcloud/importer/ensureIntegration::unhappypath::exits if token has not expired', async () => {
-        let ctx = require(_$t+'testcontext'),
-            constants = require(_$+'types/constants'),
+        let constants = require(_$+'types/constants'),
             updater = mock()
 
         // set token date so it hasn't expired yet
@@ -90,8 +88,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
     
 
     it('sources/nextcloud/importer/ensureIntegration::unhappypath::throws invalid json error on invalid json', async () => {
-        let ctx = require(_$t+'testcontext'),
-            updater = mock()
+        let updater = mock()
 
         // set body response to be invalid json
         updater.mockPostUrlStringResponse.body = '---'
@@ -103,8 +100,7 @@ describe('sources/nextcloud/importer/updateAccessTokens/update', function(testAr
 
 
     it('sources/nextcloud/importer/ensureIntegration::unhappypath::invalid_request response flags source as broken', async () => {
-        let ctx = require(_$t+'testcontext'),
-            constants = require(_$+'types/constants'),
+        let constants = require(_$+'types/constants'),
             updater = mock()
 
         // set body response to 'invalid_request', this is known to happen with unvalid refresh tokens

@@ -1,4 +1,6 @@
 module.exports = {
+
+    
     /**
      * Returns a nextcloud importer that will pass happy path testing
      */

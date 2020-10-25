@@ -1,45 +1,4 @@
 module.exports = {
-    
-    /**
-     * Searches for files, returns an array of string path for matches
-     * 
-     */
-    async search(source, query){
-        const 
-            urljoin = require('urljoin'),
-            httputils = require('madscience-httputils'),
-            settings = require(_$+'helpers/settings')
-        
-        return new Promise(async (resolve, reject)=> {
-
-            try {
-
-                const 
-                    body = JSON.stringify({ query, include_highlights : false }),
-                    url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/find/${query}`) : urljoin(`https://api.dropbox.com/2/search_v2`),
-                    result = await httputils.post(url, body, { 
-                        headers : {
-                            'Authorization' : `Bearer ${source.accessToken}`
-                        }})
-
-                if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
-                    return reject(result.body)
-
-                const json = JSON.parse(result.body),
-                    paths = []
-
-                if (json && json.matches && json.matches.length)
-                    for (let item of json.matches)
-                        paths.push(item.metadata.path_display)
-
-                resolve(paths)
-
-            } catch (ex) {
-                reject(ex)
-            }
-        })
-    },
-
 
     /**
      * Downloads a file from dropbox as a string. This should be used for accessing Tuna xml and json index files.
@@ -168,21 +127,13 @@ module.exports = {
         let accessToken = source.accessToken,
             Exception = require(_$+'types/exception')
 
-        return new Promise(async (resolve, reject)=>{
+        // this is currently a known issue, and dropbox deals with the error badly, so try to catch it first
+        if (!accessToken)
+            throw new Exception({
+                log : 'getIndexFileContent received an empty dropbox access token, user data is likely corrupted'
+            })
 
-            // this is currently a known issue, and dropbox deals with the error badly, so try to catch it first
-            if (!accessToken)
-                return reject(new Exception({
-                    log : 'getIndexFileContent received an empty dropbox access token, user data is likely corrupted'
-                }))
-
-            try {
-                // todo : explicitly handle data file not existing, as we're just assuming it's there
-                return await this.downloadAsString(accessToken, '.tuna.dat')
-            } catch (ex) {
-                reject(ex)
-            }
-        })
+        return await this.downloadAsString(accessToken, '.tuna.dat')
     },
 
 

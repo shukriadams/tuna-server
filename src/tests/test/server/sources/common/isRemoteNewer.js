@@ -2,10 +2,10 @@ describe('sources/common/isRemoteNewer', ()=>{
     
     it('sources/common/isRemoteNewer::happy::returns true', async () => {
         const ctx = require(_$t+'testcontext'),
-            settings = require(_$+'helpers/settings')
-
-        // set up profile with valid source, with old last import
-        const profile = { sources : {} }
+            settings = require(_$+'helpers/settings'),
+            // set up profile with valid source, with old last import
+            profile = { sources : {} }
+        
         profile.sources[settings.musicSource] = {
             indexImportDate : new Date('1970').getTime()
         }

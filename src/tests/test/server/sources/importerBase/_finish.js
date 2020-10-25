@@ -46,8 +46,6 @@ describe('sources/importerBase/_finish', ()=>{
             Importer = require(_$+'sources/importerBase'),
             importer = new Importer()
 
-
-
         // can't override class so do the instance of it instance
         importer = Object.assign(importer, {
             insertQueue : [theSong],

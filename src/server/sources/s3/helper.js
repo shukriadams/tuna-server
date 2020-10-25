@@ -1,16 +1,4 @@
 module.exports = {
-    
-    /**
-     * Searches for files, returns an array of string path for matches
-     * Search in this case is limited to an exact query - tuna.dat must be in the root of the given bucket.
-     * source : profiles.sources.source object for s3
-     * query : 'tuna.dat'
-     */
-    async search(source, query){
-        //  s3 must have the index file in the bucket root
-        return ['.tuna.dat']
-    },
-
 
     /**
      * Downloads a file from s3 as a string. This should be used for accessing Tuna dat and json index files
@@ -98,16 +86,15 @@ module.exports = {
      *
      * Returns null if no file found.
      */
-    async getIndexFileContent(source, profileId){
+    async getIndexFileContent(){
         const s3utils = require('madscience-s3helper').utils,
             settings = require(_$+'helpers/settings')
             
-        try{
-            return await s3utils.getStringFile({ accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }, settings.s3bucket, '.tuna.dat' )
-        }catch(ex){
-            console.log(ex)
-            return null
-        }
+        return await s3utils.getStringFile({ 
+            accessKeyId : settings.s3key, 
+            secretAccessKey : settings.s3secret, 
+            endpoint : settings.s3host 
+        }, settings.s3bucket, '.tuna.dat' )
     },
 
 

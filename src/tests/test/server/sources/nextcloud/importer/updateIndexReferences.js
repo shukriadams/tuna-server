@@ -1,7 +1,7 @@
 
 const fs = require('fs-extra')
 
-describe('sources/nextcloud/importer/getSource/updateIndexReferences', function(){
+describe('sources/nextcloud/importer/getSource/updateIndexReferences', ()=>{
     
     
     it('sources/nextcloud/importer/getSource/updateIndexReferences::happy::should create single index from multiple found files', async () => {

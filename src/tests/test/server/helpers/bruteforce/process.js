@@ -9,7 +9,8 @@ describe('helpers/bruteforce/process', function(){
             // return null for a hitherto unprocessed key
             get (){ 
                 return null
-            },add(key, json){
+            },
+            add(key, json){
                 result = JSON.parse(json)
             } 
         })
@@ -46,7 +47,8 @@ describe('helpers/bruteforce/process', function(){
                     isLockedOut : false,
                     lockedOutDate : null
                 })
-            },add(key, json){
+            },
+            add(key, json){
                 result = JSON.parse(json)
             } 
         })
@@ -83,7 +85,8 @@ describe('helpers/bruteforce/process', function(){
                     isLockedOut : true,
                     lockedOutDate : new Date('2000-1-1'),
                 })
-            },add(key, json){
+            },
+            add(key, json){
                 result = JSON.parse(json)
             } 
         })

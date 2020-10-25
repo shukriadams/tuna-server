@@ -5,7 +5,7 @@ describe('mongo/playlists/create', async()=>{
         
         // replace call to mongo
         ctx.inject.object(_$+'data/mongo/common', {
-            create : (collection, record)=>{
+            create(collection, record){
                 return record
             }
         })

@@ -4,7 +4,7 @@ describe('mongo/common/update', async()=>{
         const ctx = require(_$t+'testcontext')
         
         ctx.inject.object(_$+'helpers/mongo', {
-            getCollection : ()=>{
+            getCollection(){
                 return {
                     done(){ },
                     collection : {
@@ -27,7 +27,7 @@ describe('mongo/common/update', async()=>{
         const ctx = require(_$t+'testcontext')
         
         ctx.inject.object(_$+'helpers/mongo', {
-            getCollection : ()=>{
+            getCollection(){
                 return {
                     done(){ },
                     collection : {
@@ -54,7 +54,7 @@ describe('mongo/common/update', async()=>{
         
         // replace call to mongo
         ctx.inject.object(_$+'helpers/mongo', {
-            getCollection : ()=>{
+            getCollection (){
                 throw 'whatever'
             }
         })
