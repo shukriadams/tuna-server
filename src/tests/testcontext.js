@@ -13,6 +13,16 @@ const injectObject = (path, override)=>{
     requireMock.add(path, overridden)
 }
 
+const injectClass = (path, override)=>{
+    const target = require(path),
+        clone = Object.assign(Object.create(Object.getPrototypeOf(target)), target)
+
+   //for (const member in override)
+   //    clone[member] = override[member]
+
+    requireMock.add(path, clone)
+}
+
 // suppress logs for all tests
 injectObject('winston-wrapper', {
     instance : ()=>{

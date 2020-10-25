@@ -36,13 +36,13 @@ class Importer {
         // lets user get status of import job will it's running
         this.cacheKey = `${profileId}_importProgress`
         // populated with data from xml index files
-        this.songsFromIndices = []
+        this.queuedSongs = []
         // keys of songs to import - used to remove orphans
         this.songKeysToImport = []
         // hash (string)
         this.indexHash
-        // counter to enumerate through this.songsFromIndices      
-        this.importCounter = 0
+        // counter to enumerate through this.queuedSongs      
+        this.completedSongsCount = 0
         // array of songs user already has in db
         this.existingSongs = [] // need??
         this.insertQueue = []
@@ -66,7 +66,7 @@ class Importer {
     async start(){
 
         if (await this.inProgress())
-            throw new Exception({ code :constants.ERROR_IMPORT_IN_PROGRESS })
+            throw new Exception({ code : constants.ERROR_IMPORT_IN_PROGRESS })
 
         try {
             // write flag to cache so we can prevent user from doing overlapping imports
@@ -75,6 +75,7 @@ class Importer {
             // ensure integration + tokens before proceeeding
             const provider = require(_$+'sources/common'),
                 source = provider.getSource()
+
             source.ensureIntegration(this.profileId)
 
             await this._updateIndexReferences()
@@ -108,7 +109,7 @@ class Importer {
     
 
     /**
-     * Processes file in this.songsFromIndexes @ index this.importCounter. 
+     * Processes file in this.songsFromIndexes @ index this.completedSongsCount. 
      * 
      * This method can be called to start processing songs, it will call itself after each song, then call this._finish when
      * there are no more songs to process.
@@ -118,11 +119,11 @@ class Importer {
         setImmediate(async ()=>{
             try {
     
-                if (this.importCounter >= this.songsFromIndices.length)
+                if (this.completedSongsCount >= this.queuedSongs.length)
                     return await this._finish()
 
                 let path = require('path'),
-                    item = this.songsFromIndices[this.importCounter],
+                    item = this.queuedSongs[this.completedSongsCount],
                     itemPath = item.path || null,
                     extension = path.extname(itemPath).replace('.', ''),
                     name = (item.name || '').trim(),
@@ -132,7 +133,7 @@ class Importer {
                     duration = parseInt(item.duration) || 0,
                     fileSize = Math.floor(parseInt(item.size) || 0)
     
-                this.importCounter ++
+                this.completedSongsCount ++
     
                 // if songs missing required values, skip
                 if (!itemPath || !name || !album || !artist)
@@ -179,7 +180,7 @@ class Importer {
                 if (this.authTokenId)
                     debounce(`import.progress.${this.profileId}`, this.settings.debounceInterval, async () => {
                         this.socketHelper.send(this.authTokenId, 'import.progress', {
-                            percent : Math.floor((this.importCounter / this.songsFromIndices.length) * 100),
+                            percent : Math.floor((this.completedSongsCount / this.queuedSongs.length) * 100),
                             text : `Importing '${name}' by ${artist}`
                         })
                     })
@@ -207,7 +208,9 @@ class Importer {
     /**
      * Called at the end of the process of each song. Use this to extend process logic in derived classes.
      */
-    async onSongProcessed(args){ }
+    async onSongProcessed(args){ 
+
+    }
 
     onDone(callback){
         this._onDone = callback
@@ -215,24 +218,24 @@ class Importer {
 
     areArraysIdentical(array1, array2){
         if (array1.length !== array2.length)
-            return false;
+            return false
     
         if (!array1 && array2 || array1 && !array2)
-            return false;
+            return false
     
         for (var i = 0 ; i < array1.length ; i ++){
-            var item1 = array1[i];
-            var item2 = array2[i];
+            var item1 = array1[i]
+            var item2 = array2[i]
     
             if (item1 && !item2 || !item1 && item2)
-                return false;
+                return false
     
             for (var property in item1){
                 if (!item1.hasOwnProperty(property) || !item2.hasOwnProperty(property))
-                    continue;
+                    continue
     
                 if (item1[property] !== item2[property])
-                    return false;
+                    return false
             }
     
         }
@@ -241,7 +244,7 @@ class Importer {
     }
 
     /**
-     * Called after the last song in this.songsFromIndices is processed. Writes in-memory data to database,
+     * Called after the last song in this.queuedSongs is processed. Writes in-memory data to database,
      * cleans out orphan songs etc.
      */
     async _finish(){
@@ -260,8 +263,7 @@ class Importer {
 
                 if (this.authTokenId)
                     debounce(`import.progress.${this.profileId}`, this.settings.debounceInterval, async () => {
-                        this.socketHelper.send(this.authTokenId, 'import.progress', 
-                        { 
+                        this.socketHelper.send(this.authTokenId, 'import.progress', { 
                             text : `Saving new songs`,
                             percent : Math.floor(((total - this.insertQueue.length)/total) * 100)
                         })
@@ -282,10 +284,10 @@ class Importer {
                     })
             }
         
-            let allSongs = await songsLogic.getAll(this.profileId)
-    
             // remove orphaned songs
-            let songsToDelete = []
+            let allSongs = await songsLogic.getAll(this.profileId),
+                songsToDelete = []
+
             for (const song of allSongs){
                 const songKey = `${song.name}:${song.album}:${song.artist}`
                 if (!this.songKeysToImport.find(nameKey => nameKey === songKey))
@@ -316,6 +318,7 @@ class Importer {
                         const playlistSongId = playlist.songs[i]
         
                         if (songsToDelete.find( existingSong => existingSong.id === playlistSongId )) {
+                            // remove song from playlist
                             playlist.songs.splice(i, 1)
                             changed = true
                         }
@@ -327,8 +330,7 @@ class Importer {
             }
             
             // update indexes
-            let 
-                s = await this._getSource(),
+            let s = await this._getSource(),
                 profile = s.profile, 
                 source = s.source,
                 now = new Date()
@@ -349,7 +351,7 @@ class Importer {
                 })
             
             if (this._onDone)
-                this._onDone()
+                await this._onDone()
 
         } finally {
             // clean out cached session, this should be last step and frees up the cache queue for this user

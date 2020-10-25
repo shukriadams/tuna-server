@@ -92,7 +92,7 @@ module.exports = class extends ImporterBase {
                 continue
 
             try {
-                this.songsFromIndices.push(JSON.parse(raw))
+                this.queuedSongs.push(JSON.parse(raw))
             } catch (ex){
                 logger.error.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
             }
