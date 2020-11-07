@@ -48,18 +48,16 @@ describe('sources/importerBase/_finish', ()=>{
 
         // can't override class so do the instance of it instance
         importer = Object.assign(importer, {
-            insertQueue : [theSong],
-            updateQueue : [theSong],
             _onDone(){
                 isDone = true
             },
+            
             _getSource(){
                 return {
                     profile : {},
                     source : {}
                 }
             }
-
         })
 
         // start, wait for _finish() to get called

@@ -21,15 +21,10 @@ module.exports = class extends ImporterBase {
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
-        let common = require(_$+'sources/dropbox/helper'),
-            constants = require(_$+'types/constants'),
-            Exception = require(_$+'types/exception'),
-            s = await this._getSource(),
+        let s = await this._getSource(),
             profile = s.profile, 
             source = s.source,
-            newIndices = [],
-            accessToken = source.accessToken
-           
+            newIndices = []
 
         // write new index files, preserve existing ones so we keep their history properties
         source.index = {
@@ -50,25 +45,23 @@ module.exports = class extends ImporterBase {
      * Reads data from remote index files, into temp local array
      */
     async _readIndices(){
-        const
-            common = require(_$+'sources/dropbox/helper'),
+        let common = require(_$+'sources/dropbox/helper'),
             constants = require(_$+'types/constants'),
             settings = require(_$+'helpers/settings'),
             logger = require('winston-wrapper').instance(settings.logPath),
-            Exception = require(_$+'types/exception')
-
-        let s = await this._getSource(),
+            Exception = require(_$+'types/exception'),
+            s = await this._getSource(),
             source = s.source
 
         if (!source.accessToken)
-            throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION })
+            throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, log : 'accessToken not found' })
 
         if (!source.index)
             throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, public : 'No index found - please run the Tuna indexer in your Dropbox folder' })
 
         // we're taking only the first index here, still no logic for handling multiple
-        let indexData = await common.downloadAsString(source.accessToken, source.index.path) 
-        const indexDoc = indexData.split('\n')
+        let indexData = await common.downloadAsString(source.accessToken, source.index.path),
+            indexDoc = indexData.split('\n')
         
         this.indexHash = JSON.parse(indexDoc[0]).hash
 
