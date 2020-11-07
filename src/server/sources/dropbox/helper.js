@@ -86,12 +86,12 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
 
             if (!sources[constants.SOURCES_DROPBOX])
-                return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION}))
+                return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, log : 'no source defined' }))
 
             const accessToken = sources[constants.SOURCES_DROPBOX].accessToken
 
             if (!accessToken)
-                return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION}))
+                return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, log : 'no access token' }))
 
             try {
 
@@ -124,8 +124,7 @@ module.exports = {
      * Final stage of oauth connection - converts time-limited code for long-term token.
      */
     async swapCodeForToken(profileId, token){
-        const 
-            request = require('request'),
+        const request = require('request'),
             urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings'),
             Exception = require(_$+'types/exception'),
@@ -137,7 +136,7 @@ module.exports = {
 
             try {
                 // must do require here, if at start of file get close-file import tangle
-                let profileLogic = require(_$+'logic/profiles'),
+                const profileLogic = require(_$+'logic/profiles'),
                     profile = await profileLogic.getById(profileId),
                     options = {
                         url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
@@ -170,8 +169,9 @@ module.exports = {
                             } catch(ex){
                                 reject(ex)
                             }
+                            
                         } else {
-                            reject(new Exception({ log : `Invalid response on 2nd stage dropbox call : ${response.statusCode}` }))
+                            reject(new Exception({ log : `Invalid response on 2nd stage dropbox call : ${response.statusCode}, body ${body}` }))
                         }
                     })
 
