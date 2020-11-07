@@ -23,8 +23,8 @@ module.exports = {
      * Streams a song from a source like nextcloud
      */
     async streamSong(profileId, mediaPath, res){
-        const sourceProvider = require(_$+'helpers/sourceProvider'),
-            source = sourceProvider.get()
+        const sourceProvider = require(_$+'sources/provider'),
+            source = sourceProvider.getSource()
 
         await source.streamMedia(profileId, mediaPath, res)
     },
@@ -69,8 +69,6 @@ module.exports = {
         return await songsCache.getAll(profileId)
     },
 
-    
-
 
     /**
      * Presents a way to update song from client using JSON string.
@@ -102,10 +100,10 @@ module.exports = {
         // dont make member, causes cross-import tangle
         const 
             constants = require(_$+'types/constants'),
-            sourceProvider = require(_$+'helpers/sourceProvider'),
+            sourceProvider = require(_$+'sources/provider'),
             Exception = require(_$+'types/exception'),
             profileLogic = require(_$+'logic/profiles'),
-            source = sourceProvider.get(),
+            source = sourceProvider.getSource(),
             profile = await profileLogic.getById(profileId),
             song = await this.getById(songId, profileId)
 

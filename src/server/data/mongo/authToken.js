@@ -5,15 +5,14 @@ module.exports = {
      *
      */    
     normalize(mongoRecord){
-        const 
-            AuthToken = require(_$+'types/authToken'),
-            newRecord = AuthToken.new()
+        const newRecord = require(_$+'types/authToken').new()
 
         for (let property in newRecord)
-            if (mongoRecord.hasOwnProperty(property))
-                newRecord[property] = mongoRecord[property]
+            newRecord[property] = mongoRecord[property]
 
-        newRecord.id = mongoRecord._id.toString()
+        if (mongoRecord._id)                
+            newRecord.id = mongoRecord._id.toString()
+            
         return newRecord
     },
 

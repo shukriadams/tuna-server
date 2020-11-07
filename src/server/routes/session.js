@@ -22,9 +22,9 @@ module.exports = {
                     threshold : settings.bruteForceThreshold,
                     period : settings.bruteForcePeriod,
                     cooldown : settings.bruteForceCooldown
-                });
+                })
             
-                let profileId = await profileLogic.authenticate(req.body.username, req.body.password),
+                const profileId = await profileLogic.authenticate(req.body.username, req.body.password),
                     authToken = await authTokenLogic.create(profileId, req.body.browserUID, req.get('User-Agent'))
             
                 await bruteForce.clear({ request : req, route : route })

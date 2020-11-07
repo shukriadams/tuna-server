@@ -4,8 +4,7 @@ module.exports = {
      *
      */    
     async create(collection, record){
-        const 
-            mongoHelper = require(_$+'helpers/mongo'),
+        const mongoHelper = require(_$+'helpers/mongo'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception')
 
@@ -18,9 +17,9 @@ module.exports = {
                 const db = await mongoHelper.getCollection(collection)
     
                 db.collection.insertOne(record, (err, result) => {
-                    if (err || !result.ops.length)
+                    if (err)
                         return reject(err)
-
+                        
                     db.done()
                     resolve(result.ops[0])
                 })
@@ -101,8 +100,7 @@ module.exports = {
     },
     
     async deleteMany(collection, query){
-        const 
-            mongoHelper = require(_$+'helpers/mongo')
+        const mongoHelper = require(_$+'helpers/mongo')
 
         return new Promise(async (resolve, reject) => {
     
@@ -145,9 +143,17 @@ module.exports = {
     },
 
     async findById(collection, id){
-        const ObjectID  = require('mongodb').ObjectID
+        let ObjectID  = require('mongodb').ObjectID,
+            objId 
 
-        return this.findOne(collection, { _id : new ObjectID(id) })
+        try {
+            objId = new ObjectID(id)
+        } catch {
+            // invalid id, we don't care about exception
+            return null
+        }
+
+        return await this.findOne(collection, { _id : objId })
     },
 
     async findOne(collection, query){

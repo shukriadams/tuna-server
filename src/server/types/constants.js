@@ -16,6 +16,9 @@ module.exports = Object.freeze({
     // user is brute forcing, lock out    
     ERROR_TOO_MANY_ATTEMPTS : 'error_too_many_attempts',
 
+    // integration is valid, but files have not been indexed
+    ERROR_NO_INDEX_FILE : 'error_no_index_file',
+
     // user is attempting to perform a function on some external site (dropbox etc), but does not have an integration, or their
     // integration is broken. Regardless, user will have to manually go through oauth flow to add connection.
     ERROR_INVALID_SOURCE_INTEGRATION : 'error_invalid_source_integration',

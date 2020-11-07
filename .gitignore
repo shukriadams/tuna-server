@@ -3,6 +3,7 @@
 /.tmp
 src/.tmp
 src/.env
+src/.nyc_output
 src/public
 /.scss-linters
 /__deploy

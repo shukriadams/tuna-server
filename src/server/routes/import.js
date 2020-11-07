@@ -11,7 +11,7 @@ module.exports = {
             try {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
-                    sourceProvider = require(_$+'helpers/sourceProvider'),
+                    sourceProvider = require(_$+'sources/provider'),
                     contentHelper = require(_$+'helpers/content'),
                     authToken = await authHelper.authenticate(req),
                     Importer = sourceProvider.getImporter(),

@@ -51,7 +51,7 @@ module.exports = {
         const cache = require(_$+'cache/authToken')
         if (!key || key === 'null') // string null check if workaround for shitty stuff that should be properly fixed in frontend
             return null
-    
+
         return await cache.getById(key)
     },
     

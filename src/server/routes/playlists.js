@@ -12,7 +12,7 @@ module.exports = {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
                     contentHelper = require(_$+'helpers/content'),
-                    playlistLogic = require(_$+'logic/playlists')                
+                    playlistLogic = require(_$+'logic/playlists'),
                     authToken = await authHelper.authenticate(req),
                     playlist = req.body
             
@@ -38,7 +38,7 @@ module.exports = {
                 const 
                     authHelper = require(_$+'helpers/authentication'),
                     contentHelper = require(_$+'helpers/content'),
-                    playlistLogic = require(_$+'logic/playlists')                
+                    playlistLogic = require(_$+'logic/playlists'),
                     authToken = await authHelper.authenticate(req),
                     playlistId = decodeURIComponent(req.params.playlistId)
         

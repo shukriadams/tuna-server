@@ -11,7 +11,7 @@ const
     interprocess = require(_$+'helpers/interprocess'),
     mongoHelper = require(_$+'helpers/mongo'),
     socketHelper = require(_$+'helpers/socket'),
-    sourceProvider = require(_$+'helpers/sourceProvider')
+    sourceProvider = require(_$+'sources/provider')
 
 let express = null
 
@@ -32,17 +32,16 @@ module.exports = {
     async start (httpServer){
         
         await fs.ensureDir(settings.dataFolder)
-
-        cache.initialize()
-
+ 
         if (settings.flushCacheOnStart)
             await cache.flush()
     
-        sourceProvider.validate()
+        sourceProvider.validateSettings()
         
         if (settings.enableCrossProcessScripts)
             interprocess.initialize()
 
+        // ensure mongo structures, this is required on first load
         mongoHelper.initialize()
 
         daemon.start()

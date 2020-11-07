@@ -4,10 +4,11 @@ module.exports = {
         const playlog = require(_$+'types/playlog').new()
     
         for (const property in playlog)
-            if (mongoRecord.hasOwnProperty(property))
-                playlog[property] = mongoRecord[property]
-    
-        playlog.id = mongoRecord._id.toString()
+            playlog[property] = mongoRecord[property]
+
+        if (mongoRecord._id)
+            playlog.id = mongoRecord._id.toString()
+            
         return playlog
     },
     
@@ -36,7 +37,7 @@ module.exports = {
     },
     
     async page(page, pageSize){
-        const mongoCommon = require(_$+'data/mongo/common'),
+        let mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}playlogs`, { }),
             results = []
@@ -49,11 +50,11 @@ module.exports = {
         return results
     },
     
-    async deleteAll(profile){
-        const mongoCommon = require(_$+'data/mongo/common')
+    async deleteAll(profileId){
+        const mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings')
             
-        return await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}playlogs`, profile.id)
+        return await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}playlogs`, profileId)
     },
 
     /**

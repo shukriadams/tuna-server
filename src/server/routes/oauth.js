@@ -16,10 +16,10 @@ module.exports = {
         app.get('/v1/oauth/source/start', async (req, res)=>{
             let 
                 authHelper = require(_$+'helpers/authentication'),
-                sourceProvider = require(_$+'helpers/sourceProvider'),
+                sourceProvider = require(_$+'sources/provider'),
                 settings = require(_$+'helpers/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token),
-                url = sourceProvider.get().getOauthUrl(authToken.id)
+                url = sourceProvider.getSource().getOauthUrl(authToken.id)
 
             if (settings.demoMode)
                 return res.redirect('/')  
@@ -61,7 +61,7 @@ module.exports = {
                 const
                     constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
-                    nextCloudHelper = require(_$+'helpers/nextcloud/common'),
+                    nextCloudHelper = require(_$+'sources/nextcloud/helper'),
                     authTokenLogic = require(_$+'logic/authToken'),
                     settings = require(_$+'helpers/settings'),
                     code = req.query.code,
@@ -102,7 +102,7 @@ module.exports = {
                 const 
                     constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
-                    dropboxHelper = require(_$+'helpers/dropbox/common'),
+                    dropboxHelper = require(_$+'sources/dropbox/helper'),
                     authTokenLogic = require(_$+'logic/authToken'),
                     settings = require(_$+'helpers/settings'),
                     code = req.query.code,

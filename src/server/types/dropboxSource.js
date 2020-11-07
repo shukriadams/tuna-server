@@ -5,7 +5,7 @@ module.exports = {
             accessToken : null,
 
             /**
-             * Array of tuna.dat index files found 
+             * tuna.dat index files found 
              * {
              *     id : 1234                    (nextcloud file integer file)
              *     path: /test/.tuna.dat        (nextcloud file path, )
@@ -13,7 +13,7 @@ module.exports = {
              *     status: ''                   (string, enduser-readable. result of import. 'success' | 'not a valid index file' | 'no songs found' etc)
              * }
              */
-            indexes : [],
+            index : null,
 
             // date indexes last imported. MILLISECONDS. Nullable. If this value set but .indexes array is empty, we can tell user they have not indexed their music
             indexImportDate : null,

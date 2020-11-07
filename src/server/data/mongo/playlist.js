@@ -1,18 +1,14 @@
 module.exports = {
    
     normalize(mongoRecord){
-        const Playlist = require(_$+'types/playlist')
-
-        if (!mongoRecord)
-            return null
-    
-        const record = Playlist.new()
+        const record = require(_$+'types/playlist').new()
     
         for (const property in record)
-            if (mongoRecord.hasOwnProperty(property))
-                record[property] = mongoRecord[property]
-    
-        record.id = mongoRecord._id.toString()
+            record[property] = mongoRecord[property]
+
+        if (mongoRecord._id)
+            record.id = mongoRecord._id.toString()
+            
         return record
     },
     

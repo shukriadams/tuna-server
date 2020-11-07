@@ -11,6 +11,7 @@ module.exports = {
             dataCache = require(_$+'cache/profile'),
             constants = require(_$+'types/constants'),
             S3Source = require(_$+'types/s3Source'),
+            DropboxSource = require(_$+'types/dropboxSource'),
             Profile = require(_$+'types/profile')
 
         if (!settings.masterUsername)
@@ -19,11 +20,19 @@ module.exports = {
         let profile = await this.getByIdentifier(settings.masterUsername)
         if (profile){
 
-            //  update user 
+            // auto add s3 as source, s3 doesn't require oath flow, so it must be created automatically
             if (settings.musicSource === constants.SOURCES_S3 && !profile.sources[constants.SOURCES_S3]){
                 profile.sources = {}
                 profile.sources[constants.SOURCES_S3] = S3Source.new()
                 logger.info.info(`added S3 as source for user ${profile.id}`)
+                await dataCache.update(profile)
+            }
+
+            if (settings.musicSource === constants.SOURCES_DROPBOX && settings.dropboxOauthToken && !profile.sources[constants.SOURCES_DROPBOX]){
+                profile.sources = {}
+                profile.sources[constants.SOURCES_DROPBOX] = DropboxSource.new()
+                profile.sources[constants.SOURCES_DROPBOX].accessToken = settings.dropboxOauthToken
+                logger.info.info(`added Dropbox as source for user ${profile.id}`)
                 await dataCache.update(profile)
             }
 

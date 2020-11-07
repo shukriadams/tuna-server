@@ -8,7 +8,7 @@ let modules = {},
 
 // do NOT make this arrow func, it will break "this" reference 
 Module.prototype.require = function(){
-    //do your thing here
+
     if (arguments.length && modules[arguments[0]])
         return modules[arguments[0]]
    
