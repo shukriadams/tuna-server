@@ -53,6 +53,7 @@
     "yarn": "https://github.com/shukriadams/yarn#0.0.5"
   },
   "devDependencies": {
+    "puppeteer" : "5.4.1",
     "clean-css": "4.2.1",
     "chokidar": "2.1.5",
     "node-sass": "4.11.0",
