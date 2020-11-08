@@ -8,7 +8,7 @@ describe('sources/dropbox/helper/getLabel', ()=>{
             helper = require(_$+'sources/dropbox/helper'),
             label = await helper.getLabel() 
         
-        ctx.assert.notNull(label)
+            ctx.assert.equal(label, 'Dropbox')
     })
 
 })

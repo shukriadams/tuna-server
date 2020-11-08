@@ -1,5 +1,20 @@
 module.exports = { 
 
+    async downloadAsString(accessToken, path){
+        const urljoin = require('urljoin'),
+            httputils = require('madscience-httputils'),
+            settings = require(_$+'helpers/settings'),
+            url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path),
+            response = await httputils.downloadString ({ 
+                url, 
+                headers : {
+                    'Authorization' : `Bearer ${accessToken}`
+                }})
+
+        return response.body
+    },
+
+    
     getLabel(){
         return 'NextCloud'
     },
@@ -14,19 +29,6 @@ module.exports = {
             return `${settings.nextCloudHost}${settings.nextCloudAuthorizeUrl}?response_type=code&client_id=${settings.nextCloudClientId}&state=${authTokenId}_TARGETPAGE&redirect_uri=${settings.siteUrl}${settings.nextCloudCodeCatchUrl}`
     },
 
-    async downloadAsString(accessToken, path){
-        const urljoin = require('urljoin'),
-            httputils = require('madscience-httputils'),
-            settings = require(_$+'helpers/settings'),
-            url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path),
-            response = await httputils.downloadString ({ 
-                url, 
-                headers : {
-                    'Authorization' : `Bearer ${accessToken}`
-                }})
-
-        return response.body
-    },
 
     /**
      * Ensures access tokens for a given user have been updated. should be called as often as possible
