@@ -8,6 +8,7 @@ module.exports = {
         let Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             httputils = require('madscience-httputils'),
+            urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings'),
             result
 

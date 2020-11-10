@@ -27,7 +27,10 @@ services:
             # connecting as root is only guaranteed method, mongo is pure garbage
             mongoConnectionString: "mongodb://admin:secret@mongo:27017"
             mongoDBName: "tuna"
-            musicSourceSandboxMode: "true"
+            sandboxMode: "true"
+            masterUsername : "test"
+            port: 58002
+            masterDefaultPassword : "test"
         ports:
-        - "58002:48004"
+        - "58002:58002"
   

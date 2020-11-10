@@ -48,3 +48,4 @@ build/data
 src/data
 src/.cache-require-paths.json
 !src/client/app/localLib/**
+src/tests/remote/.env

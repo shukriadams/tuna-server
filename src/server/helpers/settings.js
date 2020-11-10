@@ -118,7 +118,7 @@ const
 
 // apply custom .env settings - place an ".env" file in app root folder (where index.js/package.json) is
 if (!process.env['IGNORE_DEV_ENV'])
-    customEnv.env() // 5ms
+    customEnv.env() 
 
 // override defaults with env variables
 for (let property in settings){

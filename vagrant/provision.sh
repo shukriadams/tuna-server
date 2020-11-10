@@ -18,6 +18,8 @@ sudo npm install minify@5.1.1 -g
 cd /vagrant/build
 docker-compose -f docker-compose-dev.yml up -d 
 
+# install chromium, require by puppeteer
+sudo apt-get install chromium-browser -y
 
 # force startup folder to /src folder in project
 echo "cd /vagrant/src" >> /home/vagrant/.bashrc
