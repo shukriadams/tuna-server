@@ -70,7 +70,7 @@ class View extends React.Component {
                 </h1>
 
                 <div className="form-row">
-                    <input ref="username" className="form-textField" placeholder="Username" type="text" />
+                    <input ref="username" className="login-username form-textField" placeholder="Username" type="text" />
                 </div>
 
                 <div className="form-row">
@@ -78,7 +78,7 @@ class View extends React.Component {
                 </div>
 
                 <div className="form-row">
-                    <Button isDisabled={this.state.disable} text="Login" disabledText="Fetching data" onClick={this.login.bind(this)} />
+                    <Button className="login-login" isDisabled={this.state.disable} text="Login" disabledText="Fetching data" onClick={this.login.bind(this)} />
                 </div>
 
                 <div className="form-row">

@@ -29,4 +29,4 @@ sudo echo "tuna" > /etc/hostname
 sudo echo "127.0.0.1 tuna" >> /etc/hosts
 
 # add local dev url to hosts, this is to test nginx responses
-sudo -- sh -c "echo 127.0.0.1 play.tuna.local >> /etc/hosts"
+sudo echo "127.0.0.1 play.tuna.local" >> /etc/hosts

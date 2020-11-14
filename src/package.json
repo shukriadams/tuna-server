@@ -11,7 +11,7 @@
     "dev": "node ./build/dev.js",
     "sass": "node ./build/build-all-sass && minify ./public/css/style.css > ./public/css/style.min.css",
     "test": "cd tests/local && ./../../node_modules/mocha/bin/mocha --recursive --timeout 5000",
-    "test-remote": "cd tests/remote && ./../../node_modules/mocha/bin/mocha --recursive --timeout 5000",
+    "test-remote": "cd tests/remote && ./../../node_modules/mocha/bin/mocha --recursive --timeout 10000",
     "testdebug": "cd tests/local && ./../../node_modules/mocha/bin/mocha --inspect-brk=0.0.0.0:48003 --recursive --timeout 5000",
     "cover": "nyc npm run test"
   },
