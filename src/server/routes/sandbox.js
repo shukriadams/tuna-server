@@ -118,7 +118,7 @@ module.exports = {
                 else if (req.params.file.includes('tuna.dat'))
                     fileData = await fs.promises.readFile(_$+'reference/.tuna.dat', 'utf8')
                 else
-                    throw `cannot sandbox get ${req.params.file}`
+                    throw `cannot get file ${req.params.file}, must be tuna.json or tuna.dat`
 
                 res.send(fileData)
 

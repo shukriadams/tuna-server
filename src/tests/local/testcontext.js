@@ -2,9 +2,6 @@ const clonedeep = require('lodash.clonedeep'),
     assert = require('madscience-node-assert'),
     requireMock = require('./helpers/require')
 
-//global._$ = path.resolve(`${__dirname}/../server`) + '/'
-//global._$t = path.resolve(`${__dirname}/`) + '/'
-
 const injectObject = (path, override)=>{
     const target = require(path),
         clone = clonedeep(target),
@@ -16,9 +13,6 @@ const injectObject = (path, override)=>{
 const injectClass = (path, override)=>{
     const target = require(path),
         clone = Object.assign(Object.create(Object.getPrototypeOf(target)), target)
-
-   //for (const member in override)
-   //    clone[member] = override[member]
 
     requireMock.add(path, clone)
 }

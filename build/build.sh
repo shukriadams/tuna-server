@@ -31,9 +31,9 @@ else
     # copy everything from src but exclude 
     if [ $JSPM -eq 1 ]; then
         # exclude node modules, jspm lib and all hidden files in project root
-        rsync -v -r --exclude=node_modules --exclude=client/lib --exclude=.* ./../src .clone 
+        rsync -v -r --exclude=node_modules --exclude=client/lib --exclude=./../src/.* ./../src .clone 
     else
-        rsync -v -r --exclude=node_modules --exclude=.* ./../src .clone 
+        rsync -v -r --exclude=node_modules --exclude=./../src/.* ./../src .clone 
     fi
 fi
 
