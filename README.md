@@ -31,7 +31,7 @@ If you're using Nextcloud you'll need admin access to your Nextcloud server to m
 
 Use the Oauth callback url `https://[yourtunaurl.com]/v1/oauth/nextcloud`
 
-### Server 
+### Server install
 
 Tuna is currently distributed via [Docker](https://hub.docker.com/repository/docker/shukriadams/tuna-server). Tuna does not build `latest` tags, so you'll need to visit this page to find a tag to use.
 
