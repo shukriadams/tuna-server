@@ -32,7 +32,6 @@
     "node-cache": "4.1.1",
     "custom-env": "1.0.0",
     "node-ipc": "9.1.1",
-    "pem": "1.13.2",
     "pguid": "https://github.com/shukriadams/pguid#0.0.1",
     "randomstring": "1.1.5",
     "request": "2.88.2",
