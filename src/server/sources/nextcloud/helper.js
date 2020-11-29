@@ -1,23 +1,27 @@
 module.exports = { 
 
-    async downloadAsString(accessToken, path){
+    async downloadAsString(sourceIntegration, path){
         const urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             settings = require(_$+'helpers/settings'),
-            url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, path),
+            url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, `remote.php/dav/files/${sourceIntegration.userId}/${path}`),
             response = await httputils.downloadString ({ 
                 url, 
                 headers : {
-                    'Authorization' : `Bearer ${accessToken}`
+                    'Authorization' : `Bearer ${sourceIntegration.accessToken}`
                 }})
+
+        if (response.statusCode !== 200)
+            throw 'Failed to download file'
 
         return response.body
     },
-
     
+
     getLabel(){
         return 'NextCloud'
     },
+
 
     getOauthUrl (authTokenId){
         const urljoin = require('urljoin'),
@@ -107,16 +111,16 @@ module.exports = {
 
 
     async swapCodeForToken(profileId, code){
-        const urljoin = require('urljoin'),
+        let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
             settings = require(_$+'helpers/settings'),
             profileLogic = require(_$+'logic/profiles'),
             jsonHelper = require(_$+'helpers/json'),
-            NextCloudSource = require(_$+'types/nextcloudSource')
+            NextCloudSource = require(_$+'types/nextcloudSource'),
+            url = `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`
 
-        let url = `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`
         if (settings.sandboxMode){
             url = urljoin(settings.siteUrl, 'v1/sandbox/nextcloudTokenSwap')
             console.log(`SANDBOX enabled - token will be swapped locally`)

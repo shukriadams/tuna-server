@@ -21,17 +21,13 @@ class Importer extends ImporterBase {
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
-        const 
-            settings = require(_$+'helpers/settings'),
+        let settings = require(_$+'helpers/settings'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
-            xmlHelper = require(_$+'helpers/xml')
-
-        let s = await this._getSource(),
+            xmlHelper = require(_$+'helpers/xml'),
+            s = await this._getSource(),
             profile = s.profile, 
-            source = s.source
-
-        const 
+            source = s.source,
             options = {
                 method: settings.sandboxMode ? 'POST' : 'SEARCH',
                 headers: {

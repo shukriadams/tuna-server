@@ -3,7 +3,7 @@ module.exports = {
     /**
      * Downloads a file from s3 as a string. This should be used for accessing Tuna dat and json index files
      */
-    async downloadAsString(accessToken, path){
+    async downloadAsString(sourceIntegration, path){
         const s3utils = require('madscience-s3helper').utils,
             settings = require(_$+'helpers/settings')
             

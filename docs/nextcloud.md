@@ -25,4 +25,6 @@ If you're running Tuna locally for dev purposes and want to test your integratio
 
     substituting in the code you got from your browser. This should swap the code for a token and persist this in your Tuna server. You will now be able to access your shared music on NextCloud, and Tuna will keep the token updated forever. Note that if you delete the authorization on either NextCloud or on Tuna, you'll need to repeat this entire process.
 
+    5. Reload Tuna in your browser for the new code to take affect. Re-import music.
+
 

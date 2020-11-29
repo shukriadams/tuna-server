@@ -4,7 +4,7 @@ module.exports = {
      * Downloads a file from dropbox as a string. This should be used for accessing Tuna xml and json index files.
      * Note : dropbox paths MUST start with leading /, egs "/.tuna.dat"
      */
-    async downloadAsString(accessToken, path){
+    async downloadAsString(sourceIntegration, path){
         let Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             httputils = require('madscience-httputils'),
@@ -20,7 +20,7 @@ module.exports = {
             
             result = await httputils.post(url, null, { 
                 headers : {
-                    'Authorization' : `Bearer ${accessToken}`,
+                    'Authorization' : `Bearer ${sourceIntegration.accessToken}`,
                     'Dropbox-API-Arg': `{"path": "${path}"}`
                 }})
 

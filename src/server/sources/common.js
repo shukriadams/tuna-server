@@ -28,7 +28,7 @@ module.exports = {
         await source.ensureIntegration(profile.id)
         
         // todo : harden json parse
-        let indexData = await source.downloadAsString(sourceIntegration.accessToken, '.tuna.json')
+        let indexData = await source.downloadAsString(sourceIntegration, '.tuna.json')
         const lastIndexData = jsonHelper.parse( indexData  )
 
         return sourceIntegration.indexImportDate < lastIndexData.date
