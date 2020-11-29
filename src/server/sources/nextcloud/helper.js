@@ -46,11 +46,10 @@ module.exports = {
             source = profile.sources[constants.SOURCES_NEXTCLOUD],
             hasExpired = new Date().getTime() > timebelt.addSeconds(source.tokenDate, source.expiresIn).getTime()
 
-        // If we suspect token has not expired and we're not going to force an update anyway, do a pre-emptive simple properties lookup on a fake file to test token 
+        // if token time has not yet run out, do a pre-emptive simple properties lookup on a fake file to test token 
         if (!hasExpired){
             try {
-                const 
-                    body = '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:permissions/></d:prop></d:propfind>',
+                const body = '<?xml version="1.0" encoding="UTF-8"?><d:propfind xmlns:d="DAV:"><d:prop xmlns:oc="http://owncloud.org/ns"><oc:permissions/></d:prop></d:propfind>',
                     url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/find/.tuna.dat`) : urljoin(settings.nextCloudHost, `/remote.php/dav/files/${source.userId}/whatever`),
                     method = settings.sandboxMode ? 'POST' : 'PROPFIND',
                     lookup = await httputils.post(url, body, { 
@@ -58,11 +57,12 @@ module.exports = {
                         headers : {
                             'Authorization' : `Bearer ${source.accessToken}`
                         }})
-
+                        
+                // use
                 if (lookup.raw.statusCode === 401)
                     hasExpired  = true
 
-            } catch(ex){
+            } catch(ex) {
                 throw new Exception({
                     log: `Unexpected error doing token check`,
                     inner : ex
@@ -75,8 +75,7 @@ module.exports = {
             return
 
         // refresh token
-        let 
-            body = `grant_type=refresh_token&refresh_token=${source.refreshToken}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`,
+        let body = `grant_type=refresh_token&refresh_token=${source.refreshToken}&client_id=${settings.nextCloudClientId}&client_secret=${settings.nextCloudSecret}`,
             url = settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/nextcloud/refresh') : urljoin(settings.nextCloudHost, settings.nextCloudTokenExchangeUrl),
             response = await httputils.postUrlString(url, body),
             content = null
