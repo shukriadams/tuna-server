@@ -3,6 +3,7 @@ module.exports = {
     async downloadAsString(sourceIntegration, path){
         const urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
+            Exception = require(_$+'types/exception'),
             settings = require(_$+'helpers/settings'),
             url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, `remote.php/dav/files/${sourceIntegration.userId}/${path}`),
             response = await httputils.downloadString ({ 
@@ -12,7 +13,7 @@ module.exports = {
                 }})
 
         if (response.statusCode !== 200)
-            throw 'Failed to download file'
+            throw new Exception({ inner : `Failed to download file ${path} : ${response.body}` })
 
         return response.body
     },

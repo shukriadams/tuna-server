@@ -28,6 +28,8 @@ module.exports = {
             throw new Exception({ forceLog : true, inner : ex })
         }
 
+        if (response.statusCode !== 200)
+            throw new Exception({ inner : `Failed to download file ${path} : ${response.body}` })
         
         if (result.raw.statusCode < 200 || result.raw.statusCode > 299){
             let body

@@ -11,14 +11,13 @@ module.exports = {
      * profile : profile object
      */
     async isRemoteNewer(profile){
-        const
-            settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'helpers/settings'),
             jsonHelper = require(_$+'helpers/json'),
             constants = require(_$+'types/constants'),
             sourceProvider = require(_$+'sources/provider'),
-            source = sourceProvider.getSource()
+            source = sourceProvider.getSource(),
+            sourceIntegration = profile.sources[settings.musicSource]
 
-        const sourceIntegration = profile.sources[settings.musicSource]
         if (!sourceIntegration)
             throw new Exception({
                 code : constants.ERROR_INVALID_SOURCE_INTEGRATION
@@ -28,8 +27,8 @@ module.exports = {
         await source.ensureIntegration(profile.id)
         
         // todo : harden json parse
-        let indexData = await source.downloadAsString(sourceIntegration, '.tuna.json')
-        const lastIndexData = jsonHelper.parse( indexData  )
+        const indexData = await source.downloadAsString(sourceIntegration, '.tuna.json'),
+            lastIndexData = jsonHelper.parse( indexData  )
 
         return sourceIntegration.indexImportDate < lastIndexData.date
     }
