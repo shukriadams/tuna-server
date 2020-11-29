@@ -1,6 +1,6 @@
-describe('remote.login', function () {
+describe('remote/login', function () {
     
-    it('remote.login::happy:log user in', async () => {
+    it('remote/login::happy:logs user in', async () => {
         const puppeteer = require('puppeteer'),
             settings = require(_$+'helpers/settings'),
             browser = await puppeteer.launch(),

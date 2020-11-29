@@ -44,8 +44,11 @@ const
         await tunaServer.start(httpServer) // 1200ms
 
         httpServer.listen(settings.port, ()=>{
-            console.log(`Tuna started, listening on port ${httpServer.address().port}`)
-            console.log(`Tuna started in ${Math.floor(stopwatch.read())} ms`)
+            console.log(`Tuna Server started, listening on port ${httpServer.address().port}`)
+            if (settings.sandboxMode)
+                console.log(`Tuna is running in sandbox mode - all calls to external services will be shimmed internally.`)
+
+            console.log(`Server started in ${Math.floor(stopwatch.read())} ms`)
         })
         
     } catch(ex) {

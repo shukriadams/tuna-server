@@ -53,7 +53,7 @@ module.exports = {
 
         profile = await dataCache.create(profile)
         
-        logger.info.info('master user generated')
+        logger.info.info(`master user ${profile.identifier} generated`)
 
         return profile
     },

@@ -27,6 +27,7 @@ DONE
 - add internal play log for stats instead of relying on lastfm
 
 TODO
+- log creation on mounted volume failing with default docker volume mount; figure out permissions and add to example compose
 - bug : updating songs breaks session
 - onedrive support
 - dark theme!

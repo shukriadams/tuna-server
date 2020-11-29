@@ -29,8 +29,8 @@ services:
             mongoDBName: "tuna"
             sandboxMode: "true"
             masterUsername : "test"
-            port: 58002
             masterDefaultPassword : "test"
+            port: 58002
         ports:
         - "58002:58002"
   

@@ -127,6 +127,8 @@ for (let property in settings){
     if (!process.env[property])
         continue
 
+    console.log(`Property ${property} set from env var`)
+    
     settings[property] = process.env[property]
 
     // parse env bools
