@@ -12,7 +12,7 @@ module.exports = {
                     'Authorization' : `Bearer ${sourceIntegration.accessToken}`
                 }})
 
-        if (response.statusCode !== 200)
+        if (response.raw.statusCode !== 200)
             throw new Exception({ inner : `Failed to download file ${path} : ${response.body}` })
 
         return response.body
