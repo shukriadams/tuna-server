@@ -120,6 +120,24 @@ module.exports = {
         })
     },
 
+    async post(options){
+
+        return new Promise((resolve, reject)=>{
+            try {
+                const request = require('request')
+
+                request(options, (err, response, body) => {
+                    if (err)
+                        return reject (err)
+
+                    resolve({ body, response })
+                })
+    
+            } catch(ex){
+                reject(ex)
+            }
+        })
+    },
 
     /**
      * Final stage of oauth connection - converts time-limited code for long-term token.
@@ -133,53 +151,36 @@ module.exports = {
             DropboxSource = require(_$+'types/dropboxSource'),
             JsonHelper = require(_$+'helpers/json')
 
-        return new Promise(async (resolve, reject) => {
-
-            try {
-                // must do require here, if at start of file get close-file import tangle
-                const profileLogic = require(_$+'logic/profiles'),
-                    profile = await profileLogic.getById(profileId),
-                    options = {
-                        url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
-                        method : 'POST',
-                        form : {
-                            code : token,
-                            grant_type : 'authorization_code',
-                            client_id : settings.dropboxAppId,
-                            client_secret : settings.dropboxAppSecret,
-                            redirect_uri : urljoin(settings.siteUrl, '/v1/oauth/dropbox') 
-                        }
-                    }
-
-                request(options, async (err, response, body) => {
-                        if (err)
-                            return reject(err)
-
-                        if (response.statusCode === 200) {
-
-                            let json = JsonHelper.parse(body),
-                                // if dev token set, always use that
-                                accessToken = json.access_token
-
-                            profile.sources[constants.SOURCES_DROPBOX] = Object.assign(profile.sources[constants.SOURCES_DROPBOX] || {}, DropboxSource.new())
-                            profile.sources[constants.SOURCES_DROPBOX].accessToken = accessToken
-                            
-                            try {
-                                await profileLogic.update(profile)
-                                resolve()
-                            } catch(ex){
-                                reject(ex)
-                            }
-                            
-                        } else {
-                            reject(new Exception({ log : `Invalid response on 2nd stage dropbox call : ${response.statusCode}, body ${body}` }))
-                        }
-                    })
-
-            } catch (ex) {
-                reject (ex)
+        // must do require here, if at start of file get close-file import tangle
+        const profileLogic = require(_$+'logic/profiles'),
+            profile = await profileLogic.getById(profileId),
+            options = {
+                url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
+                method : 'POST',
+                form : {
+                    code : token,
+                    grant_type : 'authorization_code',
+                    client_id : settings.dropboxAppId,
+                    client_secret : settings.dropboxAppSecret,
+                    redirect_uri : urljoin(settings.siteUrl, '/v1/oauth/dropbox') 
+                }
             }
 
-        })
+        const r = await this.post(options)
+
+        if (r.response.statusCode === 200) {
+
+            let json = JsonHelper.parse(r.body),
+                // if dev token set, always use that
+                accessToken = json.access_token
+
+            profile.sources[constants.SOURCES_DROPBOX] = Object.assign(profile.sources[constants.SOURCES_DROPBOX] || {}, DropboxSource.new())
+            profile.sources[constants.SOURCES_DROPBOX].accessToken = accessToken
+            
+            await profileLogic.update(profile)
+        } else {
+            throw new Exception({ log : `Invalid response on 2nd stage dropbox call : ${r.response.statusCode}, body ${r.body}` })
+        }
+
     }
 }
