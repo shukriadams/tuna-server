@@ -77,47 +77,36 @@ module.exports = {
      * Gets a temporary link to a file on dropbox. This link is used to stream the file to the browser.
      */
     async getFileLink(sources, path){
-        const 
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             settings = require(_$+'helpers/settings'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')
 
-        return new Promise(async (resolve, reject) => {
-
             if (!sources[constants.SOURCES_DROPBOX])
-                return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, log : 'no source defined' }))
+                throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, log : 'no source defined' })
 
             const accessToken = sources[constants.SOURCES_DROPBOX].accessToken
 
             if (!accessToken)
-                return reject(new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, log : 'no access token' }))
+                throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, log : 'no access token' })
 
-            try {
+            // paths must not contain double slashes, this is a temporary workaround
+            // and should be fixed at the indexer side
+            path = path.replace('//', '/')
 
-                // paths must not contain double slashes, this is a temporary workaround
-                // and should be fixed at the indexer side
-                path = path.replace('//', '/')
+            const body = JSON.stringify({ path }),
+                url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getTemporaryPath/somefile`) : `https://api.dropboxapi.com/2/files/get_temporary_link`,
+                result = await httputils.post(url, body, { 
+                    headers : {
+                        'Authorization' : `Bearer ${accessToken}`
+                    }})
 
-                const 
-                    body = JSON.stringify({ path }),
-                    url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getTemporaryPath/somefile`) : `https://api.dropboxapi.com/2/files/get_temporary_link`,
-                    result = await httputils.post(url, body, { 
-                        headers : {
-                            'Authorization' : `Bearer ${accessToken}`
-                        }})
+            if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
+                throw new Exception({ log : `${result.body}` })
 
-                if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
-                    return reject(result.body)
-
-                const json = JSON.parse(result.body)
-                resolve(json.link)
-            } catch (ex) {
-                reject(ex)
-            }
-
-        })
+            const json = JSON.parse(result.body)
+            return json.link
     },
 
     async post(options){
@@ -143,8 +132,7 @@ module.exports = {
      * Final stage of oauth connection - converts time-limited code for long-term token.
      */
     async swapCodeForToken(profileId, token){
-        const request = require('request'),
-            urljoin = require('urljoin'),
+        const urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),

@@ -84,7 +84,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
         }
 
         const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'some-path') )    
-        ctx.assert.equal(exception, 'some-error')
+        ctx.assert.equal(exception.log, 'some-error')
     })
 
     
