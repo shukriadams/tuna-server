@@ -1,3 +1,7 @@
+/**
+ * Log is a general record log that is mostly for debugging. The user is not required to interact with this, no user-interactive
+ * events are written here.
+ */
 module.exports = {
     new : function(){
         return {

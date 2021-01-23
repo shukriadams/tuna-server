@@ -1,3 +1,6 @@
+/**
+ * Log of music played. Will be used for stats. currently not used.
+ */
 module.exports = {
     new : function(){
         return {
