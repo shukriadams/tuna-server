@@ -5,7 +5,7 @@ module.exports = {
     new : function(){
         return {
             profileId : null,   //string
-            type : null,        //string
+            code : null,        // string. constant. error code.
             date : null,
             text : null
         }

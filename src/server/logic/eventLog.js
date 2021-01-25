@@ -1,11 +1,11 @@
 module.exports = {
     
-    async create(profileId, type, text){
+    async create(profileId, code, text){
         const cache = require(_$+'cache/eventLog'),
             Type = require(_$+'types/eventLog')
             record = Type.new()
 
-        record.type = type
+        record.code = code
         record.profileId = profileId
         record.text = text
         record.date = new Date().getTime()

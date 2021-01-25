@@ -28,7 +28,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
             accessToken : 'some-token'
         }
 
-        const link = await helper.getFileLink(sources, 'some-path') 
+        const link = await helper.getFileLink(sources, 'my-profile', 'some-path') 
         ctx.assert.equal(link, 'the-link')
     })
 
@@ -51,7 +51,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
         const sources = {}
         sources[constants.SOURCES_DROPBOX] = {}            
 
-        const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources) )    
+        const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'my-profile', 'my-path') )    
         ctx.assert.equal(exception.log, 'no access token')
     })
 
@@ -83,7 +83,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
             accessToken : 'some-token'
         }
 
-        const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'some-path') )    
+        const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'my-profile', 'some-path') )    
         ctx.assert.equal(exception.log, 'some-error')
     })
 
@@ -108,7 +108,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
             accessToken : 'some-token'
         }
 
-        const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'some-path') )    
+        const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'my-profile', 'some-path') )    
         ctx.assert.equal(exception, 'some-unexpected-error')
 
     })

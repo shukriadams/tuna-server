@@ -15,7 +15,7 @@ describe('sources/dropbox/helper/downloadAsString', ()=>{
         })
 
         const helper = require(_$+'sources/dropbox/helper'),
-            result = await helper.downloadAsString('my-token', 'some-path') 
+            result = await helper.downloadAsString('my-token', 'my-profile', 'some-path') 
 
         ctx.assert.equal(result, 'my-string')
     })
@@ -39,9 +39,11 @@ describe('sources/dropbox/helper/downloadAsString', ()=>{
 
         const constants = require(_$+'types/constants'),
             helper = require(_$+'sources/dropbox/helper'),
-            exception = await ctx.assert.throws(async() =>  await helper.downloadAsString('my-token', 'some-path')  )    
+            exception = await ctx.assert.throws(async() => 
+                await helper.downloadAsString('my-token', 'my-profile', 'some-path')  
+            )    
 
-        ctx.assert.equal(exception.code, constants.ERROR_NO_INDEX_FILE)
+        ctx.assert.equal(exception.inner.code, constants.ERROR_NO_INDEX_FILE)
     })
 
 
@@ -61,9 +63,9 @@ describe('sources/dropbox/helper/downloadAsString', ()=>{
 
         const constants = require(_$+'types/constants'),
             helper = require(_$+'sources/dropbox/helper'),
-            exception = await ctx.assert.throws(async() =>  await helper.downloadAsString('my-token', 'some-path')  )    
+            exception = await ctx.assert.throws(async() =>  await helper.downloadAsString('my-token', 'my-profile', 'some-path')  )    
             
-        ctx.assert.equal(exception.code, constants.ERROR_DEFAULT)
+        ctx.assert.equal(exception.inner.code, constants.ERROR_NO_INDEX_FILE)
     })
 
 
@@ -73,7 +75,6 @@ describe('sources/dropbox/helper/downloadAsString', ()=>{
         ctx.inject.object('madscience-httputils', {
             post(){
                 return {
-                    body : 'this-is-not-json',
                     raw : { 
                         statusCode : 500,
                     }
@@ -82,9 +83,11 @@ describe('sources/dropbox/helper/downloadAsString', ()=>{
         })
 
         const helper = require(_$+'sources/dropbox/helper'),
-            exception = await ctx.assert.throws(async() =>  await helper.downloadAsString('my-token', 'some-path')  )    
+            exception = await ctx.assert.throws(async() =>
+            await helper.downloadAsString('my-token', 'my-profile', 'some-path')
+        )
         
-        ctx.assert.equal(JSON.stringify(exception.log.body), '"this-is-not-json"')
+        ctx.assert.includes(JSON.stringify(exception.inner.text), 'invalid JSON')
     })
 
 
@@ -94,13 +97,13 @@ describe('sources/dropbox/helper/downloadAsString', ()=>{
         ctx.inject.object('madscience-httputils', {
             post(){
                 throw 'post-error'
-             }
+            }
         })
 
         const helper = require(_$+'sources/dropbox/helper'),
-            exception = await ctx.assert.throws(async() =>  await helper.downloadAsString('my-token', 'some-path')  )    
+            exception = await ctx.assert.throws(async() => await helper.downloadAsString('my-token', 'my-profile',  'some-path')  )    
         
-        ctx.assert.equal(JSON.stringify(exception.inner), '"post-error"')
+        ctx.assert.includes(JSON.stringify(exception.inner.text), 'threw http error')
     })
 })
 

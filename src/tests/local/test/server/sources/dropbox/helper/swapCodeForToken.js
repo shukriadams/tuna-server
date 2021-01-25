@@ -74,11 +74,14 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
             })
 
         ctx.inject.function('request', (options, callback)=>{
-            callback('some-err')
+            // 1ist arg is error, 2nd is response 
+            callback(null, { 
+                statusCode : 499
+            })
         })
 
         const exception = await ctx.assert.throws(async() => await helper.swapCodeForToken('profile-id', 'some-token') )    
-        ctx.assert.equal(exception, 'some-err')
+        ctx.assert.includes(exception.inner.text, '499')
     })
 
     it('sources/dropbox/helper/swapCodeForToken::unhappy::dropbox error', async () => {
@@ -99,16 +102,15 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
 
             ctx.inject.function('request', (options, callback)=>{
                 const response = {
-                        statusCode : 500
-                    }, 
-                    body = 'some-dropbox-error' 
+                    statusCode : 501
+                }
     
                 // null err @ response level, but with dropbox error code
                 callback(null, response, body)
             })
 
         const exception = await ctx.assert.throws(async() => await helper.swapCodeForToken('profile-id', 'some-token') )    
-        ctx.assert.includes(exception.log, 'some-dropbox-error')
+        ctx.assert.includes(exception.inner.text, 'threw http error')
     })
 
 

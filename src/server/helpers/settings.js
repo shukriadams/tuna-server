@@ -33,6 +33,11 @@ const
 
         // interval the internal daemon runs at
         daemonInterval : '* * * * *',
+        
+        // number of times to rety a standard external integration on error
+        retriesOnConnectError : 3,
+        // milliseconds to wait before retrying after error
+        retryOnErrorWait : 200,
 
         bruteForceThreshold : 20,
         bruteForcePeriod : 15,

@@ -1,6 +1,6 @@
 module.exports = { 
 
-    async downloadAsString(sourceIntegration, path){
+    async downloadAsString(sourceIntegration, profileId, path){
         const urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             Exception = require(_$+'types/exception'),

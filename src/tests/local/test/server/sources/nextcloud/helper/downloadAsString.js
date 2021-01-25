@@ -15,7 +15,7 @@ describe('sources/nextcloud/helper/downloadAsString', ()=>{
         })
 
         const helper = require(_$+'sources/nextcloud/helper'),
-            result = await helper.downloadAsString('my-token', 'some-path') 
+            result = await helper.downloadAsString('my-token', 'my-profile',  'some-path') 
 
         ctx.assert.equal(result, 'my-string')
     })

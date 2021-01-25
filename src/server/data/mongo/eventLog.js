@@ -1,7 +1,7 @@
 module.exports = {
    
     normalize(mongoRecord){
-        const record = require(_$+'types/playlist').new()
+        const record = require(_$+'types/eventLog').new()
     
         for (const property in record)
             record[property] = mongoRecord[property]
@@ -30,7 +30,7 @@ module.exports = {
 
     
     /**
-     * Creates a playlist. Returns the full object created.
+     * Creates an eventLog. Returns the full object created.
      */
     async create(record){
         const mongoCommon = require(_$+'data/mongo/common'),

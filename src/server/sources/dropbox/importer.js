@@ -60,7 +60,7 @@ module.exports = class extends ImporterBase {
             throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, public : 'No index found - please run the Tuna indexer in your Dropbox folder' })
 
         // we're taking only the first index here, still no logic for handling multiple
-        let indexData = await common.downloadAsString(source, source.index.path),
+        let indexData = await common.downloadAsString(source, s.profile.id, source.index.path),
             indexDoc = indexData.split('\n')
         
         this.indexHash = JSON.parse(indexDoc[0]).hash

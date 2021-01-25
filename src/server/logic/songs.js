@@ -113,7 +113,7 @@ module.exports = {
         if (!song)
            throw new Exception({ code : constants.ERROR_INVALID_SONG })
 
-        return await source.getFileLink(profile.sources, song.path, authTokenId)
+        return await source.getFileLink(profile.sources, profileId, song.path, authTokenId)
     },
 
 
