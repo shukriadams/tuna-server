@@ -6,6 +6,7 @@ src/.env
 src/.nyc_output
 src/public
 /.scss-linters
+.vscode/launch.json
 /__deploy
 /src/node_modules
 /mongo/mongo

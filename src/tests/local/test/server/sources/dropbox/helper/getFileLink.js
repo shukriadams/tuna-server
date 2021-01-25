@@ -36,9 +36,10 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
     it('sources/dropbox/helper/getFileLink::unhappy::no source', async () => {
         const ctx = require(_$t+'testcontext'),
             helper = require(_$+'sources/dropbox/helper'),
+            constants = require(_$+'types/constants')
             exception = await ctx.assert.throws(async() => await helper.getFileLink({}) )    
 
-        ctx.assert.equal(exception.log, 'no source defined')
+        ctx.assert.equal(exception.inner.code, constants.ERROR_INVALID_SOURCE_INTEGRATION)
     })
 
 
@@ -52,7 +53,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
         sources[constants.SOURCES_DROPBOX] = {}            
 
         const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'my-profile', 'my-path') )    
-        ctx.assert.equal(exception.log, 'no access token')
+        ctx.assert.equal(exception.inner.code, constants.ERROR_INVALID_SOURCE_INTEGRATION)
     })
 
 
@@ -71,9 +72,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
                 return {
                     raw : {
                         statusCode : 500
-                    },
-                    body : 'some-error'
-                    
+                    }
                 }
             }
         })
@@ -84,7 +83,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
         }
 
         const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'my-profile', 'some-path') )    
-        ctx.assert.equal(exception.log, 'some-error')
+        ctx.assert.equal(exception.inner.code, constants.ERROR_NO_INDEX_FILE)
     })
 
     
@@ -109,7 +108,7 @@ describe('sources/dropbox/helper/getFileLink', ()=>{
         }
 
         const exception = await ctx.assert.throws(async() => await helper.getFileLink(sources, 'my-profile', 'some-path') )    
-        ctx.assert.equal(exception, 'some-unexpected-error')
+        ctx.assert.equal(exception.inner.code, constants.ERROR_DEFAULT)
 
     })
 
