@@ -73,11 +73,17 @@ module.exports = {
     },
 
 
+    /**
+     * 
+     */
     getLabel(){
         return 'Dropbox'
     }, 
 
 
+    /**
+     * 
+     */
     getOauthUrl (authTokenId){
         const urljoin = require('urljoin'),
             settings = require(_$+'helpers/settings')
@@ -166,28 +172,6 @@ module.exports = {
 
 
     /**
-     * 
-     */
-    async post(options){
-        return new Promise((resolve, reject)=>{
-            try {
-                const request = require('request')
-
-                request(options, (err, response, body) => {
-                    if (err)
-                        return reject (err)
-
-                    resolve({ body, response })
-                })
-    
-            } catch(ex){
-                reject(ex)
-            }
-        })
-    },
-
-
-    /**
      * Final stage of oauth connection - converts time-limited code for long-term token.
      */
     async swapCodeForToken(profileId, token){
@@ -195,26 +179,24 @@ module.exports = {
             settings = require(_$+'helpers/settings'),
             constants = require(_$+'types/constants'),
             DropboxSource = require(_$+'types/dropboxSource'),
+            httputils = require('madscience-httputils'),
             JsonHelper = require(_$+'helpers/json'),
             profileLogic = require(_$+'logic/profiles'),
             errorHelper = require(_$+'helpers/error'),
             profile = await profileLogic.getById(profileId),
-            options = {
-                url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
-                method : 'POST',
-                form : {
-                    code : token,
-                    grant_type : 'authorization_code',
-                    client_id : settings.dropboxAppId,
-                    client_secret : settings.dropboxAppSecret,
-                    redirect_uri : urljoin(settings.siteUrl, '/v1/oauth/dropbox') 
-                }
-            }
+            url = settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
+            body = JSON.stringify({
+                code : token,
+                grant_type : 'authorization_code',
+                client_id : settings.dropboxAppId,
+                client_secret : settings.dropboxAppSecret,
+                redirect_uri : urljoin(settings.siteUrl, '/v1/oauth/dropbox') 
+            })
         
         let r = null
 
         try {
-            r = await this.post(options)
+            r = await httputils.post(url, body)
         } catch (exception){
             return errorHelper.throwUnexpectedError(
                 profileId, 

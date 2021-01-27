@@ -23,8 +23,8 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
             }
         })
 
-        ctx.inject.object(_$+'sources/dropbox/helper', {
-            post(options){
+        ctx.inject.object('madscience-httputils', {
+            post(){
                 const response = {
                         statusCode : 200
                     }, 
@@ -73,11 +73,13 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
                 }
             })
 
-        ctx.inject.function('request', (options, callback)=>{
-            // 1ist arg is error, 2nd is response 
-            callback(null, { 
-                statusCode : 499
-            })
+        ctx.inject.object('madscience-httputils', { 
+            post(){
+                return { 
+                    response : {
+                        statusCode : 499
+                    }}
+            }
         })
 
         const exception = await ctx.assert.throws(async() => await helper.swapCodeForToken('profile-id', 'some-token') )    
@@ -100,13 +102,15 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
                 }
             })
 
-            ctx.inject.function('request', (options, callback)=>{
-                const response = {
-                    statusCode : 501
-                }
+            ctx.inject.object('madscience-httputils',{ 
+                post(){
+                    const response = {
+                        statusCode : 501
+                    }
     
-                // null err @ response level, but with dropbox error code
-                callback(null, response, body)
+                    // null err @ response level, but with dropbox error code
+                    return { response, body}
+                }
             })
 
         const exception = await ctx.assert.throws(async() => await helper.swapCodeForToken('profile-id', 'some-token') )    
@@ -138,16 +142,17 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
             }
         })
 
-        ctx.inject.function('request', (options, callback)=>{
-            const response = {
-                    statusCode : 200
-                }, 
-                body = JSON.stringify({
-                    access_token : 'some-token'
-                }) 
+        ctx.inject.object('madscience-httputils', { 
+            post(){
+                const response = {
+                        statusCode : 200
+                    }, 
+                    body = JSON.stringify({
+                        access_token : 'some-token'
+                    }) 
 
-            // null err
-            callback(null, response, body)
+                return{ response, body }
+            }
         })
 
         const exception = await ctx.assert.throws(async() => await helper.swapCodeForToken('profile-id', 'some-token') )    
