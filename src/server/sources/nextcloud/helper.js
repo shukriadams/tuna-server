@@ -1,19 +1,35 @@
 module.exports = { 
 
     async downloadAsString(sourceIntegration, profileId, path){
-        const urljoin = require('urljoin'),
+        let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
-            Exception = require(_$+'types/exception'),
             settings = require(_$+'helpers/settings'),
+            errorHelper = require(_$+'helpers/error'),
+            constants = require(_$+'types/constants'),
             url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, `remote.php/dav/files/${sourceIntegration.userId}/${path}`),
+            response = null
+
+        try {
             response = await httputils.downloadString ({ 
                 url, 
                 headers : {
                     'Authorization' : `Bearer ${sourceIntegration.accessToken}`
                 }})
+        } catch (exception) {
+            return errorHelper.throwUnexpectedError(
+                profileId, 
+                `Attempting to get "${path}" threw http error.`, 
+                constants.ERROR_DEFAULT, 
+                { exception, path })
+        }
 
+        // todo : explicitly handle not-found
         if (response.raw.statusCode !== 200)
-            throw new Exception({ inner : `Failed to download file ${path} : ${response.body}` })
+            return errorHelper.throwUnexpectedError(
+                profileId, 
+                `Attempting to get "${path}" returned status code ${response.raw.statusCode}.`, 
+                constants.ERROR_DEFAULT, 
+                { response, path })
 
         return response.body
     },
