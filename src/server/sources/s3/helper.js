@@ -48,7 +48,7 @@ module.exports = {
         const s3utils = require('madscience-s3helper').utils,
             urljoin = require('urljoin'),
             request = require('request'),
-            Exception = require(_$+'types/exception'),
+            errorHelper = require(_$+'helpers/error'),
             settings = require(_$+'helpers/settings')
 
         try {
@@ -64,15 +64,12 @@ module.exports = {
                 await s3utils.streamFile(creds, settings.s3bucket, mediaPath, res)
             }
 
-        } catch (ex){
-            throw new Exception({
-                log : 'Unexpected error fetching media stream',
-                inner : {
-                    ex,
-                    profileId,
-                    mediaPath
-                }
-            })
+        } catch (exception){
+            return errorHelper.throwUnexpectedError(
+                profileId, 
+                `Unexpected error fetching media stream`, 
+                constants.ERROR_DEFAULT, 
+                { exception, profileId, mediaPath })
         }
     },
 

@@ -58,10 +58,10 @@ module.exports = {
         let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
-            Exception = require(_$+'types/exception'),
             settings = require(_$+'helpers/settings'),
             profileLogic = require(_$+'logic/profiles'),
             jsonHelper = require(_$+'helpers/json'),
+            errorHelper = require(_$+'helpers/error'),
             timebelt = require('timebelt'),
             profile = await profileLogic.getById(profileId), 
             source = profile.sources[constants.SOURCES_NEXTCLOUD],
@@ -83,11 +83,12 @@ module.exports = {
                 if (lookup.raw.statusCode === 401)
                     hasExpired  = true
 
-            } catch(ex) {
-                throw new Exception({
-                    log: `Unexpected error doing token check`,
-                    inner : ex
-                })
+            } catch(exception) {
+                return errorHelper.throwUnexpectedError(
+                    profileId, 
+                    `Unexpected error doing token check`, 
+                    constants.ERROR_DEFAULT, 
+                    { exception })
             }
         }
 
@@ -113,10 +114,11 @@ module.exports = {
 
         // Well that was unexpected
         if (content.error)
-            throw new Exception({
-                log: `Unexpected content`,
-                inner: content.error
-            })
+            return errorHelper.throwUnexpectedError(
+                profileId, 
+                `Unexpected error doing token check`, 
+                constants.ERROR_DEFAULT, 
+                { error : content.error })
 
         source.accessToken = content.access_token
         source.refreshToken = content.refresh_token
@@ -131,8 +133,8 @@ module.exports = {
         let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
-            Exception = require(_$+'types/exception'),
             settings = require(_$+'helpers/settings'),
+            errorHelper = require(_$+'helpers/error'),
             profileLogic = require(_$+'logic/profiles'),
             jsonHelper = require(_$+'helpers/json'),
             NextCloudSource = require(_$+'types/nextcloudSource'),
@@ -148,7 +150,11 @@ module.exports = {
             swapResult = jsonHelper.parse(tokenSwap.body)
 
         if (swapResult.error)
-            throw new Exception({ code : constants.ERROR_INVALID_SOURCE_INTEGRATION, inner : swapResult.error })
+            return errorHelper.throwUnexpectedError(
+                profileId, 
+                `Token swap failed - you should redo your Nextcloud authorization`, 
+                constants.ERROR_INVALID_SOURCE_INTEGRATION, 
+                { swapResult })        
 
         profile.sources[constants.SOURCES_NEXTCLOUD] = Object.assign(profile.sources[constants.SOURCES_NEXTCLOUD] || {}, NextCloudSource.new())
         profile.sources[constants.SOURCES_NEXTCLOUD].accessToken = swapResult.access_token
@@ -172,17 +178,18 @@ module.exports = {
         const urljoin = require('urljoin'),
             request = require('request'),
             constants = require(_$+'types/constants'),
-            Exception = require(_$+'types/exception'),
+            errorHelper = require(_$+'helpers/error'),
             settings = require(_$+'helpers/settings'),
             profileLogic = require(_$+'logic/profiles'),
             profile = await profileLogic.getById(profileId),
             source = profile.sources[constants.SOURCES_NEXTCLOUD]
 
         if (source.status !== constants.SOURCE_CONNECTION_STATUS_WORKING)
-            throw new Exception({ 
-                code : constants.ERROR_INVALID_SOURCE_INTEGRATION,
-                params: constants.SOURCES_NEXTCLOUD
-            })
+            return errorHelper.throwUnexpectedError(
+                profileId, 
+                `Unexpected error doing token check`, 
+                constants.ERROR_INVALID_SOURCE_INTEGRATION, 
+                { source, profile, mediaPath })        
 
         // ensure tokens are up-to-date before doing an API call
         await this.ensureIntegration(profileId)
@@ -196,15 +203,12 @@ module.exports = {
                     'Authorization' : `Bearer ${source.accessToken}`
                 }}).pipe(res)
     
-        } catch (ex){
-            throw new Exception({
-                log : 'Unexpected error fetching media stream',
-                inner : {
-                    ex,
-                    profileId,
-                    mediaPath
-                }
-            })
+        } catch (exception){
+            return errorHelper.throwUnexpectedError(
+                profileId, 
+                `Unexpected error doing token check`, 
+                constants.ERROR_INVALID_SOURCE_INTEGRATION, 
+                { exception, profileId, mediaPath })   
         }
     },
 
