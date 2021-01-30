@@ -54,7 +54,7 @@ class Player {
 
         // handle song removal from queue
         store.subscribe(watch(store.getState, 'queue.songs')((songs)=>{
-            debug('player > queue.songs');
+            debug('player > queue.songs')
             // this was breaking lots of weird things, so commented out
             // if queue no longer contains currently playing song, force a next
             //if (this.currentSong && !songs.includes( this.currentSong.id))
@@ -63,7 +63,7 @@ class Player {
 
         // handle forward or back in queue
         store.subscribe(watch(store.getState, 'queue.index')(()=>{
-            debug('player > queue.index');
+            debug('player > queue.index')
 
             if (this.isPlaying)
                 this._playCurrentSong(false, ()=>{

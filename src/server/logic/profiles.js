@@ -5,9 +5,7 @@ module.exports = {
      */
     async autoCreateMaster(){
 
-        let 
-            settings = require(_$+'helpers/settings'),
-            logger = require('winston-wrapper').instance(settings.logPath),
+        let settings = require(_$+'helpers/settings'),
             dataCache = require(_$+'cache/profile'),
             constants = require(_$+'types/constants'),
             S3Source = require(_$+'types/s3Source'),
@@ -24,7 +22,7 @@ module.exports = {
             if (settings.musicSource === constants.SOURCES_S3 && !profile.sources[constants.SOURCES_S3]){
                 profile.sources = {}
                 profile.sources[constants.SOURCES_S3] = S3Source.new()
-                logger.info.info(`added S3 as source for user ${profile.id}`)
+                __log.info(`added S3 as source for user ${profile.id}`)
                 await dataCache.update(profile)
             }
 
@@ -32,7 +30,7 @@ module.exports = {
                 profile.sources = {}
                 profile.sources[constants.SOURCES_DROPBOX] = DropboxSource.new()
                 profile.sources[constants.SOURCES_DROPBOX].accessToken = settings.dropboxOauthToken
-                logger.info.info(`added Dropbox as source for user ${profile.id}`)
+                __log.info(`added Dropbox as source for user ${profile.id}`)
                 await dataCache.update(profile)
             }
 
@@ -53,7 +51,7 @@ module.exports = {
 
         profile = await dataCache.create(profile)
         
-        logger.info.info(`master user ${profile.identifier} generated`)
+        _log.info(`master user ${profile.identifier} generated`)
 
         return profile
     },

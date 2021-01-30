@@ -130,8 +130,6 @@ class Importer extends ImporterBase {
         const 
             httputils = require('madscience-httputils'),
             urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             s = await this._getSource(),
             source = s.source
 
@@ -159,7 +157,7 @@ class Importer extends ImporterBase {
             try {
                 this.queuedSongs.push(JSON.parse(raw))
             } catch (ex){
-                logger.error.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
+                __log.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
             }
         }
     }

@@ -26,13 +26,12 @@ class Importer extends ImporterBase {
     async _readIndices(){
         let s3utils = require('madscience-s3helper').utils,
             index,
-            settings = require(_$+'helpers/settings'),
-            logger = require('winston-wrapper').instance(settings.logPath)
+            settings = require(_$+'helpers/settings')
             
         try {
             index = await s3utils.getStringFile({ accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }, settings.s3bucket, '.tuna.dat')
         }catch (ex){
-            logger.error.error(`Failed to retrieve index data from S3\nError : ${ex}`)
+            __log.error(`Failed to retrieve index data from S3\nError : ${ex}`)
             return
         }
         
@@ -49,7 +48,7 @@ class Importer extends ImporterBase {
             try {
                 this.queuedSongs.push(JSON.parse(raw))
             } catch (ex){
-                logger.error.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
+                __log.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
             }
         }
 

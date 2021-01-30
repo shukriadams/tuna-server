@@ -21,7 +21,6 @@ module.exports = {
     async tick(){
         const settings = require(_$+'helpers/settings'),
             profileLogic = require(_$+'logic/profiles'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             sourceProvider = require(_$+'sources/provider'),
             sourceCommon = require(_$+'sources/common')
 
@@ -52,11 +51,11 @@ module.exports = {
                         // find some form of staggered parallel call
                         await importer.start()
 
-                        logger.info.info(`songs autoimported for user ${profile.identifier}`)
+                        __log.info(`songs autoimported for user ${profile.identifier}`)
 
                     } catch (ex){
 
-                        logger.error.error(ex)
+                        __log.error(ex)
 
                     }
                 }
@@ -65,7 +64,7 @@ module.exports = {
 
         } catch (ex) {
 
-            logger.error.error(ex)
+            __log.error(ex)
 
         } finally {
 

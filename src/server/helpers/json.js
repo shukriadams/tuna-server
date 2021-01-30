@@ -43,15 +43,13 @@ module.exports = {
      */
     returnException(res, ex){
         const constants = require(_$+'types/constants'),
-            settings = require(_$+'helpers/settings'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             // get some behaviour based on exception code. Don't assume code has been set.
             behaviour = errorBehaviourMap[ex.code || '--'] || errorBehaviourMap[constants.ERROR_DEFAULT]
 
         // most logging happens here - errors that happen deep in the application stack are thrown as Exception and should always
         // bubble up to API interface, which ends up in this JSON helper, where we decide logging and how to inform client.
         if (behaviour.log || ex.forceLog)
-            logger.error.error(ex)
+            __log.error(ex)
     
         res.status(behaviour.status)
         res.json({

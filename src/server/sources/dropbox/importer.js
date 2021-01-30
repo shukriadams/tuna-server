@@ -47,8 +47,6 @@ module.exports = class extends ImporterBase {
     async _readIndices(){
         let common = require(_$+'sources/dropbox/helper'),
             constants = require(_$+'types/constants'),
-            settings = require(_$+'helpers/settings'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             Exception = require(_$+'types/exception'),
             s = await this._getSource(),
             source = s.source
@@ -74,7 +72,7 @@ module.exports = class extends ImporterBase {
             try {
                 this.queuedSongs.push(JSON.parse(raw))
             } catch (ex){
-                logger.error.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
+                __log.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
             }
         }
 

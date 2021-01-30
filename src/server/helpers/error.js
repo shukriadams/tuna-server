@@ -5,16 +5,14 @@ module.exports = {
      * code changes to fix. 
      */
     async throwUnexpectedError(profileId, text, eventType, args){
-        const settings = require(_$+'helpers/settings'),
-            Exception = require(_$+'types/exception'),
+        const Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             eventLog = require(_$+'logic/eventLog')
 
         // append values intented to use to log data too
         args.profileId = profileId
         args.text = text
-        logger.error.error(args)
+        __log.error(args)
         
         text = `${text} Please contact Tuna devs. Check log table for details.` 
 
@@ -32,16 +30,14 @@ module.exports = {
      * Handles throwing an error that the user can fix by some action at the UI.
      */
     async throwUserError(profileId, text, eventType, args){
-        const settings = require(_$+'helpers/settings'),
-            Exception = require(_$+'types/exception'),
+        const Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             eventLog = require(_$+'logic/eventLog')
 
         // append values intented to use to log data too
         args.profileId = profileId
         args.text = text
-        logger.error.error(args)
+        __log.error(args)
         
         const logItem = await eventLog.create(
             profileId,

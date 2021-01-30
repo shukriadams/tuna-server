@@ -27,8 +27,6 @@ class Importer {
         this.cache = require(_$+'helpers/cache')
         this.settings = require(_$+'helpers/settings')
         this.profileLogic = require(_$+'logic/profiles')
-
-        this.logger = require('winston-wrapper').instance(settings.logPath)
         this.profileId = profileId
         this.authTokenId = authTokenId
         this.integrationName = null
@@ -194,7 +192,7 @@ class Importer {
                 // clean out cached session, this should be last step and frees up the cache queue for this user
                 await this.cache.remove( this.cacheKey )
 
-                this.logger.error.error(ex)
+                __log.error(ex)
 
                 if (this.authTokenId)
                     this.socketHelper.send(this.authTokenId, 'import.progress', {

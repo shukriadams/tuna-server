@@ -37,7 +37,6 @@ module.exports = {
             songsLogic = require(_$+'logic/songs'),
             lastFmHelper = require(_$+'helpers/lastfm'),
             settings = require(_$+'helpers/settings'),
-            logger = require('winston-wrapper').instance(settings.logPath),
             cache = require(_$+'helpers/cache'),
             song = await songsLogic.getById(songId, profileId)
 
@@ -80,7 +79,7 @@ module.exports = {
         if (profile.scrobbleToken){
             const unixStart = Math.round(+nowPlaying.started / 1000)
             await lastFmHelper.scrobble(profile, song, unixStart)
-            logger.info.info(`user ${profileId} track ${songId} scrobbled after ${elapsedSeconds} seconds`)
+            __log.info(`user ${profileId} track ${songId} scrobbled after ${elapsedSeconds} seconds`)
         }
 
         await cache.remove( cacheKey )
