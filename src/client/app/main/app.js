@@ -40,7 +40,7 @@ import contentHelper from './../helpers/contentHelper'
 
     gluActiveMediaQuery.initialize()
 
-    await appSettings.update()
+    await appSettings.fetch()
     console.log(`Tuna : version ${appSettings.version}`)
     Pubsub.when('app', 'onRehydrated', async ()=>{
 

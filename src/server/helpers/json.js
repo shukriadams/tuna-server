@@ -57,8 +57,7 @@ module.exports = {
         res.json({
             errorCode : ex.code || constants.ERROR_DEFAULT,
             payload : null,
-            message : ex.public || behaviour.public || 'An unexpected error occurred',
-            
+            message : ex.public || behaviour.public || 'An unexpected error occurred'
         })
     },
 
