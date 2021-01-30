@@ -1,5 +1,4 @@
-const 
-    Express = require('express'), // 160ms
+let Express = require('express'), // 160ms
     fs = require('fs-extra'),   // 77ms
     path = require('path'),     // 0ms
     bodyParser = require('body-parser'),    // 7ms
@@ -11,9 +10,8 @@ const
     interprocess = require(_$+'helpers/interprocess'),
     mongoHelper = require(_$+'helpers/mongo'),
     socketHelper = require(_$+'helpers/socket'),
-    sourceProvider = require(_$+'sources/provider')
-
-let express = null
+    sourceProvider = require(_$+'sources/provider'),
+    express = null
 
 module.exports = {
 

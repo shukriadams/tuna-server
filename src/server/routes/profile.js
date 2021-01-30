@@ -8,9 +8,10 @@ module.exports = {
          * Updates a profile
          */    
         app.post('/v1/profile', async function (req, res) {
+            __log.info(`ROUTE:/v1/profile`)
+
             try {
-                const
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     profileLogic = require(_$+'logic/profiles'),
                     contentHelper = require(_$+'helpers/content'),
                     authToken = await authHelper.authenticate(req),
@@ -31,9 +32,10 @@ module.exports = {
          * Used by BOTH the normal change password page, and the emergency password recovery page.
          */    
         app.get('/v1/profile/resetPassword', async function (req, res) {
+            __log.info(`ROUTE:/v1/profile/resetPassword`)
+
             try {
-                let 
-                    authHelper = require(_$+'helpers/authentication'),
+                let authHelper = require(_$+'helpers/authentication'),
                     bruteForce = require(_$+'helpers/bruteForce'),
                     profileLogic = require(_$+'logic/profiles'),
                     settings = require(_$+'helpers/settings'),
@@ -71,9 +73,10 @@ module.exports = {
 
 
         app.delete('/v1/profile/source', async function (req, res) {
+            __log.info(`ROUTE:/v1/profile/source`)
+
             try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     profileLogic = require(_$+'logic/profiles'),
                     contentHelper = require(_$+'helpers/content'),
                     authToken = await authHelper.authenticate(req)

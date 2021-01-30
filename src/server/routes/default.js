@@ -4,8 +4,7 @@ module.exports = {
 
     async bind(app) {
 
-        let 
-            jsonHelper = require(_$+'helpers/json'),
+        let jsonHelper = require(_$+'helpers/json'),
             indexTemplate = null
 
         /**
@@ -13,9 +12,10 @@ module.exports = {
          * or it will overwrite all other routes. This is also the only route in the app that doesn't return JSON
          */    
         app.get(/^[^.]+$/, async function (req, res) {
+            __log.info(`ROUTE:/^[^.]+$/`)
+
             try {
-                const 
-                    Handlebars = require('handlebars'),
+                const Handlebars = require('handlebars'),
                     path = require('path'),
                     fs = require('fs'),
                     settings = require(_$+'helpers/settings'),

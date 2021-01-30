@@ -1,5 +1,5 @@
 import player from './playerWrapper'
-import Ajax from './../ajax/ajax'
+import ajax from './../ajax/asyncAjax'
 import appSettings from './../appSettings/appSettings'
 import BlobStore from './../blobStore/blobStore'
 import store from './../store/store'
@@ -33,8 +33,8 @@ class Player {
         this.volume = session.volume
         this.repeatMode = session.repeatMode
         this.player = new player({
-            onPlay : ()=>{
-                this._onSongTick()
+            onPlay : async ()=>{
+                await this._onSongTick()
             },
             onReady : ()=>{
                 this.player.onEnd =()=>{
@@ -88,13 +88,13 @@ class Player {
 
         // handles play order - this will be triggered when playHash is set, this is done by clicking play button or
         // double clicking on a song in list for ex.
-        store.subscribe(watch(store.getState, 'playing.playKey')((playKey)=>{
-            debug('player > playing.playKey');
+        store.subscribe(watch(store.getState, 'playing.playKey')(playKey =>{
+            debug('player > playing.playKey')
 
             if (!playKey)
-                return this.stopPlay();
+                return this.stopPlay()
 
-            this._playCurrentSong(true);
+            this._playCurrentSong(true)
         }))
 
 
@@ -139,7 +139,7 @@ class Player {
 
         this.isPlaying = true
         playDownloading()
-        this._getOrDownloadSong(nextSong, (mediaUrl)=>{
+        this._getOrDownloadSong(nextSong, async (mediaUrl) =>{
             this.currentSong = nextSong
 
             this.nextSongLoaded = false
@@ -153,16 +153,8 @@ class Player {
 
             if (callback)
                 callback()
-
-            let ajax = new Ajax();
-            ajax.postAuth(`${appSettings.serverUrl}/v1/playing`,
-                {
-                    song : this.currentSong.id
-                },
-                function(response){
-                    // todo : write this to user on-screen log
-                }
-            )
+            
+           await ajax.post(`${appSettings.serverUrl}/v1/playing`, { song : this.currentSong.id })
         })
 
         // common logic for after play has started
@@ -175,32 +167,33 @@ class Player {
      */
     _getOrDownloadSong(song, callback){
         (async function(){
-            let blobStore = new BlobStore()
+            let blobStore = new BlobStore(),
+                response = null,
+                localMediaUrl = await blobStore.getLocalMediaUrl(song.id)
 
-            let localMediaUrl = await blobStore.getLocalMediaUrl(song.id)
             // if localMediaUrl exists, song is already present in browser and there's no need to proceed with download
             if (localMediaUrl)
                 return callback ? callback(localMediaUrl) : null
             
 
             // get media url from server
-            new Ajax().auth(
-                `${appSettings.serverUrl}/v1/song/${song.id}`,
-                function(response){
-                    // on ios never download locally as this isn't allowed
-                    if (!!navigator.userAgent.match(/iPhone|iPod|iPad/) || !!navigator.platform.match(/iPhone|iPod|iPad/))
-                        return callback ? callback(response.payload.url) : null
+            try {
+                response = await ajax.authGet(`${appSettings.serverUrl}/v1/song/${song.id}`)
+            } catch (ex){
+                // song id is invalid
+                blobStore.remove(song.id)
+                return 
+            }
 
-                    blobStore.getOrDownload(song, song.id /* no longer using hashId here */, response.payload.url, function(localMediaUrl){
+            // on ios never download locally as this isn't allowed
+            if (!!navigator.userAgent.match(/iPhone|iPod|iPad/) || !!navigator.platform.match(/iPhone|iPod|iPad/))
+                return callback ? callback(response.payload.url) : null
 
-                        if (callback)
-                            callback(localMediaUrl)
-                    })
-                },
-                function(response){
-                    // song id is invalid
-                    blobStore.flush()
-                })
+            blobStore.getOrDownload(song, song.id /* no longer using hashId here */, response.payload.url, function(localMediaUrl){
+                if (callback)
+                    callback(localMediaUrl)
+            })
+            
         }())
     }
 
@@ -255,7 +248,7 @@ class Player {
     /**
      * Fired each second the player ticks forward in a song
      */
-    _onSongTick () {
+    async _onSongTick () {
 
         // set current and total time of song
         let profile = store.getState().session, //todo : assert profile, if null will explode
@@ -290,17 +283,15 @@ class Player {
         // send a scrobble order to backend once the halfway point of the song has passed.
         const debounceLimit = 10 // seconds
         if (profile.isScrobbling && !this.trackScrobbled && time > 30 && this.ticks % debounceLimit === 0){
-            let ajax = new Ajax(),
-                songDuration = this.currentSongDuration,
+            let songDuration = this.currentSongDuration,
                 song = this.currentSong.id
 
-            ajax.postAuth(`${appSettings.serverUrl}/v1/played?song=${song}&songDuration=${songDuration}` , (result) =>{
-                if (!result.errorCode && result.payload.scrobbled){
-                    // todo inform user of teh win
-                    console.log('track scrobbled') // todo : move this to ui console out
-                    this.trackScrobbled = true
-                }
-            })            
+            const result = await ajax.post(`${appSettings.serverUrl}/v1/played?song=${song}&songDuration=${songDuration}`)
+            if (!result.errorCode && result.payload.scrobbled){
+                // todo inform user of teh win
+                console.log('track scrobbled') // todo : move this to ui console out
+                this.trackScrobbled = true
+            }
         }
 
         // try to prefetch next song

@@ -8,9 +8,9 @@ module.exports = {
          * Removes lastfm integration
          */    
         app.delete('/v1/lastfm', async function (req, res) {
+            __log.info(`ROUTE:/v1/lastfm`)
             try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     contentHelper = require(_$+'helpers/content'),
                     profileLogic = require(_$+'logic/profiles'),
                     authToken = await authHelper.authenticate(req)

@@ -127,7 +127,10 @@ const
         smtpPort: 587,
         fromEmail : 'no-reply@example.com',
         forceEmailVerification : false,
-        emailVerificationDeadlineHours : 12
+        emailVerificationDeadlineHours : 12,
+
+        // enable for noisy logging
+        verbose : false
 
     }
 

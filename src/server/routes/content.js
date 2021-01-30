@@ -9,9 +9,10 @@ module.exports = {
          * server under high load. use /content/songs to get song data 
          */
         app.get('/v1/content/all/:requestedContent', async function(req, res){
+            __log.info(`ROUTE:/v1/content/all/:requestedContent`)
+
             try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     contentHelper = require(_$+'helpers/content'),
                     authToken = await authHelper.authenticate(req),
                     requestedContent = req.params.requestedContent ? req.params.requestedContent.split(',') : [],
@@ -28,10 +29,11 @@ module.exports = {
          * Gets a user's songs. use ?page=INTEGER to specify a page
          */
         app.get('/v1/content/songs', async function(req, res){
+            __log.info(`ROUTE:/v1/content/songs`)
+
             try {
                 
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     settings = require(_$+'helpers/settings'),
                     songsLogic = require(_$+'logic/songs'),
                     authToken = await authHelper.authenticate(req),

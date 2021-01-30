@@ -8,9 +8,9 @@ module.exports = {
          * starts an import process
          */
         app.post('/v1/import', async function(req, res){
+            __log.info(`ROUTE:/v1/import`)
             try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     sourceProvider = require(_$+'sources/provider'),
                     contentHelper = require(_$+'helpers/content'),
                     authToken = await authHelper.authenticate(req),

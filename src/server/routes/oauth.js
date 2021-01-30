@@ -14,8 +14,9 @@ module.exports = {
          * Starts music source oauth flow
          */
         app.get('/v1/oauth/source/start', async (req, res)=>{
-            let 
-                authHelper = require(_$+'helpers/authentication'),
+            __log.info(`ROUTE:/v1/oauth/source/start`)
+           
+            let authHelper = require(_$+'helpers/authentication'),
                 sourceProvider = require(_$+'sources/provider'),
                 settings = require(_$+'helpers/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token),
@@ -35,8 +36,9 @@ module.exports = {
          * Starts last fm oauth flow
          */
         app.get('/v1/oauth/lastfm/start', async (req, res)=>{
-            const 
-                authHelper = require(_$+'helpers/authentication'),
+            __log.info(`ROUTE:/v1/oauth/lastfm/start`)
+
+            const authHelper = require(_$+'helpers/authentication'),
                 lastFmHelper = require(_$+'helpers/lastfm'),
                 settings = require(_$+'helpers/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token)
@@ -53,13 +55,14 @@ module.exports = {
          * This route handler is anonymous - authtoken will be passed back as the querystring "state".
          */    
         app.get('/v1/oauth/nextcloud', async function (req, res) {
+            __log.info(`ROUTE:/v1/oauth/nextcloud`)
+
             try {
 
                 // todo : ensure referrer is localhost or dropbox.com
 
                 // state contains two values, authTokenId, and the page the user was on when starting the authorization process
-                const
-                    constants = require(_$+'types/constants'),
+                const constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
                     nextCloudHelper = require(_$+'sources/nextcloud/helper'),
                     authTokenLogic = require(_$+'logic/authToken'),
@@ -96,11 +99,12 @@ module.exports = {
          * This route handler is anonymous - authtoken will be passed back via state.
          */
         app.get('/v1/oauth/dropbox', async function(req, res){
+            __log.info(`ROUTE:/v1/oauth/dropbox`)
+
             try {
                 // todo : ensure referrer is localhost or dropbox.com
 
-                const 
-                    constants = require(_$+'types/constants'),
+                const constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
                     dropboxHelper = require(_$+'sources/dropbox/helper'),
                     authTokenLogic = require(_$+'logic/authToken'),
@@ -137,11 +141,12 @@ module.exports = {
          * This route handler is anonymous - authtokenId will be passed back via state.
          */
         app.get('/v1/oauth/lastfm', async function(req, res){
+            __log.info(`ROUTE:/v1/oauth/lastfm`)
+
             try {
                 // todo : ensure referrer is localhost or lastfm.com
             
-                const 
-                    lastFmHelper = require(_$+'helpers/lastfm'),
+                const lastFmHelper = require(_$+'helpers/lastfm'),
                     constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
                     authTokenLogic = require(_$+'logic/authToken'),

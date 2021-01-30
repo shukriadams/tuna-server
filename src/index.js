@@ -6,8 +6,21 @@
  * Perf : raw startup time (node index) is 3200 ms
  */
 
+// First thing - set globals, these can be used from anywhere, so they must be set first
 // set shortcut global for easier module imports. Modules are loaded relative to "server" directory
 global._$ = `${__dirname}/server/`
+global.__log = {
+    info(data){
+        const settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath)
+        logger.info.info(data)
+    },
+    error(data){
+        const settings = require(_$+'helpers/settings'),
+            logger = require('winston-wrapper').instance(settings.logPath)
+        logger.error.error(data)
+    }
+}
 
 // load first to speed up app loads. Note that all module lode times in comments are with cache enabled
 require('cache-require-paths')

@@ -8,9 +8,10 @@ module.exports = {
          * Logs a user in. Returns a full user session, including all user songs
          */
         app.post('/v1/session', async function (req, res) {
+            __log.info(`ROUTE:/v1/session`)
+
             try {
-                const 
-                    bruteForce = require(_$+'helpers/bruteForce'),
+                const bruteForce = require(_$+'helpers/bruteForce'),
                     settings = require(_$+'helpers/settings'),
                     authTokenLogic = require(_$+'logic/authToken'),
                     profileLogic = require(_$+'logic/profiles'),
@@ -40,9 +41,10 @@ module.exports = {
          * tests if a session is valid. this is done on client load, and a relog is forced if this returns false
          */    
         app.get('/v1/session', async function (req, res) {
+            __log.info(`ROUTE:/v1/session`)
+
             try {
-                let 
-                   authTokenLogic = require(_$+'logic/authToken'),
+                let authTokenLogic = require(_$+'logic/authToken'),
                     profileLogic = require(_$+'logic/profiles'),
                     tokenRecord = await authTokenLogic.getById(req.query.token || ''),
                     isValid = false

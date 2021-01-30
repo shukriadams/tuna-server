@@ -8,9 +8,10 @@ module.exports = {
          * Creates/updates playlist, returns updated usercontent
          */
         app.post('/v1/playlists', async function (req, res) {
+            __log.info(`ROUTE:/v1/playlists`)
+
             try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     contentHelper = require(_$+'helpers/content'),
                     playlistLogic = require(_$+'logic/playlists'),
                     authToken = await authHelper.authenticate(req),
@@ -34,9 +35,10 @@ module.exports = {
          * 
          */    
         app.delete('/v1/playlists/:playlistId', async function (req, res) {
+            __log.info(`ROUTE:/v1/playlists/:playlistId`)
+
             try {
-                const 
-                    authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'helpers/authentication'),
                     contentHelper = require(_$+'helpers/content'),
                     playlistLogic = require(_$+'logic/playlists'),
                     authToken = await authHelper.authenticate(req),

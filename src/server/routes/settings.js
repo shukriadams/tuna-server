@@ -2,22 +2,22 @@ module.exports ={
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json'),
-            fs = require('fs-extra')
+        const jsonHelper = require(_$+'helpers/json')
 
         /**
          * 
          */    
         app.get('/v1/settings', async function (req, res) {
+            __log.info(`ROUTE:/v1/settings`)
+
             try {
-                const 
-                    sourceProvider = require(_$+'sources/provider'),
+                let sourceProvider = require(_$+'sources/provider'),
                     constants = require(_$+'types/constants'),
+                    fs = require('fs-extra'),
                     settings = require(_$+'helpers/settings'),
                     logger = require('winston-wrapper').instance(settings.logPath),
-                    source = sourceProvider.getSource()
-
-                let versionfile = { version : '0.0.0'}
+                    source = sourceProvider.getSource(),
+                    versionfile = { version : '0.0.0'}
 
                 try {
                     versionfile = await fs.readJson('./version.json')
@@ -30,6 +30,7 @@ module.exports ={
                     emailVerificationDeadlineHours : settings.emailVerificationDeadlineHours,
                     canConnectLastFM : !!settings.lastFmApiKey,
                     version : versionfile.version,
+                    verbose : settings.verbose,
                     sourceLabel : source.getLabel()
                 })
 
