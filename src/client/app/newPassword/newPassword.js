@@ -60,10 +60,10 @@ class View extends React.Component {
             return this.setState({ errorMessage : 'Current password required'})
 
         const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/resetPassword?password=${password}&currentPassword=${current}`)
-        if (!response.code)
-            this.setState({ authSuccessMessage : 'Your password has been updated.'})
-        else 
+        if (response.errorCode)
             this.setState({errorMessage : response.message})
+        else 
+            this.setState({ authSuccessMessage : 'Your password has been updated.'})
 
     }
 

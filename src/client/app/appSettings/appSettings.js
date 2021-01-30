@@ -20,7 +20,7 @@ class AppSettings{
     async update(){
         const settings = await ajax.anonGet(`${this.serverUrl}/v1/settings`)
 
-        if (!settings.code)
+        if (!settings.errorCode)
             for (const prop in settings.payload)
                 this[prop] = settings.payload[prop]
     }

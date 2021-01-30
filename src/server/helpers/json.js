@@ -30,7 +30,7 @@ module.exports = {
      */
     returnPayload(res, payload = {}){
         res.send({
-            code : null,
+            errorCode : null,
             message: null,
             payload : payload
         })
@@ -42,8 +42,7 @@ module.exports = {
      * All errors must be routed through here - errors which bypass should be handled as fatal server errors by the client
      */
     returnException(res, ex){
-        const 
-            constants = require(_$+'types/constants'),
+        const constants = require(_$+'types/constants'),
             settings = require(_$+'helpers/settings'),
             logger = require('winston-wrapper').instance(settings.logPath),
             // get some behaviour based on exception code. Don't assume code has been set.
@@ -56,9 +55,10 @@ module.exports = {
     
         res.status(behaviour.status)
         res.json({
+            errorCode : ex.code || constants.ERROR_DEFAULT,
             payload : null,
             message : ex.public || behaviour.public || 'An unexpected error occurred',
-            code : ex.code || constants.ERROR_DEFAULT
+            
         })
     },
 
@@ -76,7 +76,7 @@ module.exports = {
             return JSON.parse(raw)
         }catch (ex){
             throw new Exception({
-                code : constants.ERROR_INVALID_ARGUMENT,
+                errorCode : constants.ERROR_INVALID_ARGUMENT,
                 log : 'invalid JSON string',
                 inner : {
                     ex,

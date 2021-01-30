@@ -295,7 +295,7 @@ class Player {
                 song = this.currentSong.id
 
             ajax.postAuth(`${appSettings.serverUrl}/v1/played?song=${song}&songDuration=${songDuration}` , (result) =>{
-                if (!result.code && result.payload.scrobbled){
+                if (!result.errorCode && result.payload.scrobbled){
                     // todo inform user of teh win
                     console.log('track scrobbled') // todo : move this to ui console out
                     this.trackScrobbled = true

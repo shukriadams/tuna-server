@@ -52,10 +52,10 @@ export default class extends React.Component {
 
         ajax.postCallback(`${appSettings.serverUrl}/v1/import`, {}, 
             response => {
-                if (!response.code)
-                    sessionSet(response.payload)
-                else 
+                if (response.errorCode)
                     alertSet(response)
+                else 
+                    sessionSet(response.payload)
             }, 
             error => {
                 console.log(error)

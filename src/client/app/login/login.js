@@ -48,7 +48,7 @@ class View extends React.Component {
                 browserUID
             })
 
-            if (result.code)
+            if (result.errorCode)
                 this.setState({ disable : false, message : result.message })            
             else {
                 await contentHelper.fetchSessionByTokenId(result.payload.authToken)

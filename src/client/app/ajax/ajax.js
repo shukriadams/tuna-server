@@ -77,16 +77,16 @@ export default class {
                 try {
                     const result = JSON.parse(json)
 
-                    // some kind of "expected" error has been returned from server, display it to user and do nothing else
-                    if (result.code)
-                        return alertSet(result)
-        
                     // intercept common errors
-                    if (result.code === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
+                    if (result.errorCode === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
                         // auth token no longer value
                         clearSession()
                         history.push('/login')
                     }
+                    
+                    // some kind of "expected" error has been returned from server, display it to user and do nothing else
+                    if (result.errorCode)
+                        return alertSet(result)
 
                     if (resolve)
                         await resolve(result)

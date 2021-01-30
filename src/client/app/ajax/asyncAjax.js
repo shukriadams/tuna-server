@@ -109,7 +109,7 @@ export default {
                         const result = JSON.parse(json)
                         // auth token no longer value. Because we fetch serverConstants with this method, we need
                         // to bypass serverConstants checks on anon to let serverConstants through.
-                        if (isAuth && result.code === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
+                        if (isAuth && result.errorCode === appSettings.serverConstants.ERROR_INVALID_USER_OR_SESSION){
                             clearSession()
                             history.push('/login')
                             return resolve(null)

@@ -26,10 +26,10 @@ export default class extends React.Component {
             this.setState({keyCheckMode: true, status : 'Checking your key, hold on ...' })
 
             new Ajax().anon(`${appSettings.serverUrl}/v1/profile/verifyEmail?key=${key}`, (result)=>{
-                if (!result.code)
-                    this.setState({ hasPassed : true, status : null })
-                else 
+                if (result.errorCode)
                     this.setState({status : result.message })
+                else
+                    this.setState({ hasPassed : true, status : null }) 
             })
         }
     }
@@ -42,10 +42,10 @@ export default class extends React.Component {
         this.setState({ isProcessing : true })
 
         new Ajax().anon(`${appSettings.serverUrl}/v1/profile/requestValidationEmail?email=${email}`, (result)=>{
-            if (!result.code)
-                this.setState({ emailError : null, keySent: true, isProcessing : false})
-            else 
+            if (result.errorCode)
                 this.setState({ emailError : result.message, isProcessing : false })
+            else
+                this.setState({ emailError : null, keySent: true, isProcessing : false})
         })
     }
 

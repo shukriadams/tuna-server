@@ -69,11 +69,13 @@ class View extends React.Component {
     async onLastFmDisconnectAccept(){
         const response = await ajax.delete(`${appSettings.serverUrl}/v1/lastfm`)
         this.setState({ showConfirmLastfmDisconnect : false })
-        if (!response.code)
-            return removeLastfm()
+        if (response.errorCode){
+            // todo : handle error better
+             console.log(response.message)
+             return
+        }
 
-        // todo : handle error better
-        console.log(response.message)
+        removeLastfm()
     }
 
     async onUpdateProfile(){
@@ -83,23 +85,24 @@ class View extends React.Component {
         }
 
         const response = await ajax.post(`${appSettings.serverUrl}/v1/profile`, data)
-        if (!response.code){
-            sessionSet(response.payload.session)
-            alert('Updated')
-        } else {
+        if (response.errorCode){
             // todo : better handle error
             console.log(response.message )
+        } else {
+            sessionSet(response.payload.session)
+            alert('Updated')
         }
 
     }
 
     async resendValidationEmail(){
         const response = await ajax.authGet(`${appSettings.serverUrl}/v1/profile/resendValidationEmail`)
-        if (!response.code)
-            alert('Email sent')
-        else 
+        if (response.errorCode)
             // todo : better handle error
             console.log(response.message)
+        else {
+            alert('Email sent')
+        }
     }
 
     changeDropbox(willConnect){
@@ -124,13 +127,13 @@ class View extends React.Component {
     async onDropboxDisconnectAccept(){
         const response = await ajax.delete(`${appSettings.serverUrl}/v1/profile/source`)
         this.setState({ showConfirmDropboxDisconnect : false })
-        if (!response.code){
-            sessionSet(response.payload)
+        if (response.errorCode){
+            // todo : handle error
+            console.log(response.message)
             return
         }
 
-        // todo : handle error
-        console.log(response.message)
+        sessionSet(response.payload)
     }
 
     onDropboxDisconnectReject(){

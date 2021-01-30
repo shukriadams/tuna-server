@@ -33,14 +33,16 @@ export default class View extends React.Component {
             this.setState({ deleteError : ex })
         }
 
-        if (!response.code) {
+        if (response.errorCode) {
+            this.setState({ deleteError : response.message })
+        } else {
             // log user out
             clearSession()
 
             // redirect to confirmation page
             history.push('/deleted')
-        } else
-            this.setState({ deleteError : response.message })
+        }
+
     }
 
     render(){
