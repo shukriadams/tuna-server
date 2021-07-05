@@ -17,6 +17,7 @@ module.exports = {
                     
                 await playMetricsHelper.playing(authToken.profileId, req.body.song)
                 jsonHelper.returnPayload(res)
+
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }

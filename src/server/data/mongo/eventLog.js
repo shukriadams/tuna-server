@@ -59,7 +59,33 @@ module.exports = {
         const 
             mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
-            records = await mongoCommon.find(`${settings.mongoCollectionPrefix}eventLogs`, { profileId }),
+            records = await mongoCommon.find(`${settings.mongoCollectionPrefix}eventLogs`, [
+                { 
+                    $match:{
+                        $or: [ 
+                            {'profileId' :{ $eq : profileId } }
+                        ] 
+                    }
+                },
+                
+                {
+                    $sort : { 'date' : -1 } 
+                },
+                
+                {
+                    $group:
+                    {
+                        "_id":{
+                            "code":"$code"
+                        },
+                        "content": {$first:"$$ROOT"}
+                    }
+                },
+
+                {
+                    $limit : 1
+                }              
+            ]),
             results = []
 
         for (const record of records)

@@ -9,7 +9,7 @@ module.exports = {
          * server under high load. use /content/songs to get song data 
          */
         app.get('/v1/content/all/:requestedContent', async function(req, res){
-            __log.info(`ROUTE:/v1/content/all/:requestedContent`)
+            __log.info(`ROUTE:/v1/content/all/${req.params.requestedContent}`)
 
             try {
                 const authHelper = require(_$+'helpers/authentication'),
@@ -25,6 +25,7 @@ module.exports = {
             }
         })
 
+        
         /**
          * Gets a user's songs. use ?page=INTEGER to specify a page
          */

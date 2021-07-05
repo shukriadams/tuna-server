@@ -9,7 +9,7 @@ module.exports = {
          * resemble dropbox's, so we put the authoken in the url itself. It also returns a stream instead of JSON.
          */
         app.get('/v1/stream/:authToken/:mediaPath', async function (req, res) {
-            __log.info(`ROUTE:/v1/stream/:authToken/:mediaPaths`)
+            __log.info(`ROUTE:/v1/stream/:authToken/${req.params.mediaPath}`)
             
             try {
                 const authHelper = require(_$+'helpers/authentication'),

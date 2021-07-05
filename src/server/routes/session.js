@@ -38,7 +38,7 @@ module.exports = {
 
 
         /**
-         * tests if a session is valid. this is done on client load, and a relog is forced if this returns false
+         * returns true if a session is valid. this is done on client load, and a relog is forced if this returns false
          */    
         app.get('/v1/session', async function (req, res) {
             __log.info(`ROUTE:/v1/session`)

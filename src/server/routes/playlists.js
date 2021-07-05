@@ -35,7 +35,7 @@ module.exports = {
          * 
          */    
         app.delete('/v1/playlists/:playlistId', async function (req, res) {
-            __log.info(`ROUTE:/v1/playlists/:playlistId`)
+            __log.info(`ROUTE:/v1/playlists/:${req.params.playlistId}`)
 
             try {
                 const authHelper = require(_$+'helpers/authentication'),
