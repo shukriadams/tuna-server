@@ -18,7 +18,6 @@ import Import from './../import/import'; // can't display this yet, it triggers 
 import { View as GluSimpleHeader} from './../glu_simpleHeader/index'
 import { View as GluTextIntro } from './../glu_textIntro/index'
 import { View as GluMediaElement } from './../glu_mediaElement/index'
-import { View as GluSimpleFooter } from './../glu_simpleFooter/index'
 import { View as GluMultiColumnText } from './../glu_multiColumnText/index'
 import { View as GluPicture} from './../glu_picture/index'
 import { View as GluFeaturePriceMatrix } from './../glu_featurePriceMatrix/index'
@@ -78,10 +77,6 @@ export default class extends React.Component {
 
                 <Presenter title="glu_mediaElement with image" fullBleed={true}>
                     <GluMediaElement video={null} />
-                </Presenter>
-
-                <Presenter title="glu_simpleFooter" fullBleed={true} >
-                    <GluSimpleFooter {...footerModel} />
                 </Presenter>
 
                 <Presenter title="glu_multiColumnText">

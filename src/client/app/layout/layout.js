@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { View as GluSimpleHeader, Model as HeaderModel, ItemModel as HeaderItemModel } from './../glu_simpleHeader/index'
-import { View as GluSimpleFooter } from './../glu_simpleFooter/index'
 import { search } from './../actions/actions'
 import PlayingStrip from './../playingStrip/playingStrip'
 import ClassNames from 'classnames'
@@ -67,22 +66,6 @@ function authenticatedHeaderModel(){
     return model
 }
 
-let footModel = {
-    sections : [
-        {
-            subTitle : null,
-            links : [
-                {
-                    href : '/help',
-                    text : 'Need help?',
-                    isRoute : true
-                }
-            ]
-        }
-    ],
-    secondaryText : ''
-}
-
 class View extends React.Component {
 
     onSearchChange(arg){
@@ -120,7 +103,6 @@ class View extends React.Component {
                     {this.props.children}
                 </div>
 
-                <GluSimpleFooter {...footModel} />
             </div>
         )
     }
