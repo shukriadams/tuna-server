@@ -1,8 +1,7 @@
 module.exports = {
 
     denormalize(obj){
-        const   
-            ObjectID  = require('mongodb').ObjectID,
+        const ObjectID  = require('mongodb').ObjectID,
             clone = Object.assign({}, obj)
     
         if (obj.id)
@@ -26,8 +25,7 @@ module.exports = {
     },
 
     async create(record){
-        const
-            mongoCommon = require(_$+'data/mongo/common'),
+        const mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
             newRecord = await mongoCommon.create(`${settings.mongoCollectionPrefix}logs`, this.denormalize(record))
 

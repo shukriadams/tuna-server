@@ -75,8 +75,7 @@ module.exports = {
     },
 
     async delete (collection, id){
-        const 
-            mongoHelper = require(_$+'helpers/mongo'),
+        const mongoHelper = require(_$+'helpers/mongo'),
             ObjectID = require('mongodb').ObjectID
 
         return new Promise(async (resolve, reject) => {

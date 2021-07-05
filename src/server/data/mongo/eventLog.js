@@ -13,8 +13,7 @@ module.exports = {
     },
     
     denormalize(obj){
-        const 
-            ObjectID = require('mongodb').ObjectID,
+        const ObjectID = require('mongodb').ObjectID,
             clone = {}
 
         for (const prop in obj)
@@ -56,8 +55,7 @@ module.exports = {
      *
      */
     async getActive(profileId){
-        const 
-            mongoCommon = require(_$+'data/mongo/common'),
+        const mongoCommon = require(_$+'data/mongo/common'),
             settings = require(_$+'helpers/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}eventLogs`, [
                 { 
