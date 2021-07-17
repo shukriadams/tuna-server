@@ -2,10 +2,10 @@ describe('route/sandbox/nextcloudGetfile', async()=>{
     
     it('route/sandbox/nextcloudGetfile::happy::gets metadata  file', async () => {
         const ctx = require(_$t+'testcontext'),
-            RouteTester = require(_$t+'helpers/routeTester')
+            RouteTester = require(_$t+'lib/routeTester')
 
         // enable sandbox mode to allow sandbox route binding
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
         
@@ -21,10 +21,10 @@ describe('route/sandbox/nextcloudGetfile', async()=>{
 
     it('route/sandbox/nextcloudGetfile::happy::gets index file', async () => {
         const ctx = require(_$t+'testcontext'),
-            RouteTester = require(_$t+'helpers/routeTester')
+            RouteTester = require(_$t+'lib/routeTester')
 
         // enable sandbox mode to allow sandbox route binding
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
         
@@ -43,7 +43,7 @@ describe('route/sandbox/nextcloudGetfile', async()=>{
         const ctx = require(_$t+'testcontext')
 
         // enable sandbox mode to allow sandbox route binding
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
         

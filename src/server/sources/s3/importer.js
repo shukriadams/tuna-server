@@ -26,7 +26,7 @@ class Importer extends ImporterBase {
     async _readIndices(){
         let s3utils = require('madscience-s3helper').utils,
             index,
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
             
         try {
             index = await s3utils.getStringFile({ accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }, settings.s3bucket, '.tuna.dat')
@@ -51,7 +51,6 @@ class Importer extends ImporterBase {
                 __log.error(`JSON parse error for imported song data. \nJSON : ${raw}\nError : ${ex}`)
             }
         }
-
 
     }
 

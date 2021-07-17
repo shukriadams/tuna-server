@@ -3,7 +3,7 @@ describe('sources/nextcloud/helper/getOauthUrl', ()=>{
     it('sources/nextcloud/helper/getOauthUrl::happy::gets sandbox url', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
 

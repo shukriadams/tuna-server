@@ -1,4 +1,4 @@
-const requireMock = require(_$t+'helpers/require'),
+const requireMock = require(_$+'lib/require'),
     clonedeep = require('lodash.clonedeep')
 
 module.exports = {

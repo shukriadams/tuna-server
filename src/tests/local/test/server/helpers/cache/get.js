@@ -3,7 +3,7 @@ describe('helpers/cache/get', function(){
     it('helpers/cache/get::happy::get item from cache', async () => {
         const ctx = require(_$t+'testcontext')
        
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             _initialize (){ 
                 return {
                     get(key, callback){
@@ -13,7 +13,7 @@ describe('helpers/cache/get', function(){
             } 
         })
 
-        const cache = require(_$+'helpers/cache')
+        const cache = require(_$+'lib/cache')
         await cache.get('key')
         
         // no assert, this test is for coverage only
@@ -23,7 +23,7 @@ describe('helpers/cache/get', function(){
     it('helpers/cache/get::unhappy::throws unhandled exception query error', async () => {
         const ctx = require(_$t+'testcontext')
        
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             _initialize (){ 
                 return {
                     get(){
@@ -33,7 +33,7 @@ describe('helpers/cache/get', function(){
             } 
         })
 
-        const cache = require(_$+'helpers/cache')
+        const cache = require(_$+'lib/cache')
         await ctx.assert.throws(async() => await cache.get('key') )
         // no assert, this test is for coverage only
     })
@@ -42,7 +42,7 @@ describe('helpers/cache/get', function(){
     it('helpers/cache/get::unhappy::returns query error', async () => {
         const ctx = require(_$t+'testcontext')
        
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             _initialize (){ 
                 return {
                     get(key, callback){
@@ -52,7 +52,7 @@ describe('helpers/cache/get', function(){
             } 
         })
 
-        const cache = require(_$+'helpers/cache')
+        const cache = require(_$+'lib/cache')
         await ctx.assert.throws(async() => await cache.get('key') )    
         // no assert, this test is for coverage only
     })
@@ -61,13 +61,13 @@ describe('helpers/cache/get', function(){
     it('helpers/cache/get::unhappy::cache create fail', async () => {
         const ctx = require(_$t+'testcontext')
        
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             _initialize (){ 
                 return null
             } 
         })
 
-        const cache = require(_$+'helpers/cache')
+        const cache = require(_$+'lib/cache')
         await cache.get('key')
         
         // no assert, this test is for coverage only

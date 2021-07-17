@@ -5,7 +5,7 @@ module.exports = {
      */
     async autoCreateMaster(){
 
-        let settings = require(_$+'helpers/settings'),
+        let settings = require(_$+'lib/settings'),
             dataCache = require(_$+'cache/profile'),
             constants = require(_$+'types/constants'),
             S3Source = require(_$+'types/s3Source'),
@@ -76,7 +76,7 @@ module.exports = {
      * Writes an object's propeties onto an existing profile 
      */
     async updateProperties(properties){
-        const settings = require(_$+'helpers/settings')
+        const settings = require(_$+'lib/settings')
 
         if (!properties.id)
             throw 'properties must have an id'
@@ -99,8 +99,7 @@ module.exports = {
      *
      */
     async update(profile){
-        const 
-            dataCache = require(_$+'cache/profile'),
+        const dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')       
 
@@ -160,8 +159,7 @@ module.exports = {
      * Logs user in. returns profile id of the user that was logged in
      */
     async authenticate(identifier, password){
-        const 
-            dataCache = require(_$+'cache/profile'),
+        const dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')
 
@@ -199,9 +197,8 @@ module.exports = {
      *
      */
     async resetPassword(key, password, currentPassword, profileId){
-        let 
-            fs = require('fs-extra'),
-            settings = require(_$+'helpers/settings'),
+        let fs = require('fs-extra'),
+            settings = require(_$+'lib/settings'),
             dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
@@ -252,7 +249,7 @@ module.exports = {
      */
     async removeLastfm(profileId){
         const dataCache = require(_$+'cache/profile'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             profile = await dataCache.getById(profileId)
 
         if (settings.demoMode)
@@ -267,8 +264,7 @@ module.exports = {
      *
      */
     async songsHashValid(profileId, hash){
-        const 
-            settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
@@ -289,8 +285,7 @@ module.exports = {
      *
      */
     async deleteSource(profileId){
-        const 
-            settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             dataCache = require(_$+'cache/profile'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
@@ -319,7 +314,7 @@ module.exports = {
      * reaches the database and is thus never stored openly.
      */
     _processPassword(profile){
-        const settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             randomstring = require('randomstring'),
             crypto = require('crypto')
 

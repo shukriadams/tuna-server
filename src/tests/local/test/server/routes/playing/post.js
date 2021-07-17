@@ -4,7 +4,7 @@ describe('route/playing', async()=>{
         
         let ctx = require(_$t+'testcontext'),
             route = require(_$+'routes/playing'),
-            RouteTester = require(_$t+'helpers/routeTester'),
+            RouteTester = require(_$t+'lib/routeTester'),
             actualSongId,
             actualProfileId,
             routeTester = await new RouteTester(route)
@@ -12,7 +12,7 @@ describe('route/playing', async()=>{
         routeTester.authenticate()
         routeTester.req.body.song = 'slaughter of the soul'
 
-        ctx.inject.object(_$+'helpers/playMetrics', {
+        ctx.inject.object(_$+'lib/playMetrics', {
             playing(profileId, song){
                 actualSongId = song
                 actualProfileId = profileId
@@ -28,7 +28,7 @@ describe('route/playing', async()=>{
 
     
     it('route/playing::unhappy::auth failure', async ()=>{
-        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        const authedRouteTest = require(_$t+'lib/authedRouteTester')
         await authedRouteTest(_$+'routes/playing','post', '/v1/playing')
     })
 })

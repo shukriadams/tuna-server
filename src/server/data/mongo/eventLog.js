@@ -1,6 +1,9 @@
 module.exports = {
    
     normalize(mongoRecord){
+        if (!mongoRecord)
+            return mongoRecord
+            
         const record = require(_$+'types/eventLog').new()
     
         for (const property in record)
@@ -33,7 +36,7 @@ module.exports = {
      */
     async create(record){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             newRecord = await mongoCommon.create(`${settings.mongoCollectionPrefix}eventLogs`, this.denormalize(record))
 
         return this.normalize(newRecord)
@@ -45,9 +48,69 @@ module.exports = {
      */
     async clear(profileId, type){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         return await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}eventLogs`, { profileId, type })
+    },
+
+
+    async getByKey(profile, type, text){
+        const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'lib/settings')
+
+        const record = await mongoCommon.find(`${settings.mongoCollectionPrefix}eventLogs`, { profile, type, text })
+        return this.normalize(record)
+    },
+
+
+    /**
+     *
+     */
+    async prune(profileId){
+        const mongoCommon = require(_$+'data/mongo/common'),
+            settings = require(_$+'lib/settings'),
+            groups = await mongoCommon.aggregate(`${settings.mongoCollectionPrefix}eventLogs`, [
+                { 
+                    $match:{
+                        $and: [ 
+                            {'profileId' :{ $eq : profileId } }
+                        ] 
+                    }
+                },
+                
+                // sort newest first
+                {
+                    $sort : { 'date' : -1 } 
+                },
+                
+                // allow 10 newest
+                {
+                    $skip : 10
+                },
+
+                {
+                    $group:
+                    {
+                        _id : {
+                            type: "$type"
+                        },
+                        content: { $first: "$$ROOT" }
+                    }
+                }
+            ])
+
+        for (const group of groups){
+            await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}eventLogs`, 
+                { 
+                    $and: [ 
+                        { profileId :{ $eq : profileId } },
+                        { date : { $lt : group.content.date } },
+                        { type: { $eq : group.content.type }}
+                    ] 
+                }
+            )
+            
+        }
     },
 
 
@@ -56,7 +119,7 @@ module.exports = {
      */
     async getActive(profileId){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}eventLogs`, [
                 { 
                     $match:{
@@ -74,9 +137,9 @@ module.exports = {
                     $group:
                     {
                         "_id":{
-                            "code":"$code"
+                            "type":"$type"
                         },
-                        "content": {$first:"$$ROOT"}
+                        "content": { $first:"$$ROOT" }
                     }
                 },
 

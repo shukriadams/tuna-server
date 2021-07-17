@@ -5,9 +5,8 @@ module.exports = {
     },
 
     async create(record){
-        const
-            profileData = require(_$+'data/mongo/profile'),
-            cache = require(_$+'helpers/cache'),
+        const profileData = require(_$+'data/mongo/profile'),
+            cache = require(_$+'lib/cache'),
             profile = await profileData.create(record),
             key = this._getIdKey(profile.id)
 
@@ -16,10 +15,9 @@ module.exports = {
     },
 
     async getById(profileId){
-        const 
-            profileData = require(_$+'data/mongo/profile'),
-            JsonHelper = require(_$+'helpers/json'),
-            cache = require(_$+'helpers/cache'),
+        const profileData = require(_$+'data/mongo/profile'),
+            JsonHelper = require(_$+'lib/json'),
+            cache = require(_$+'lib/cache'),
             key = this._getIdKey(profileId),
             reply = await cache.get(key)
 
@@ -59,8 +57,7 @@ module.exports = {
     
 
     async update(profile){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             profileData = require(_$+'data/mongo/profile')
 
         await profileData.update(profile)
@@ -70,8 +67,7 @@ module.exports = {
     
     
     async delete (profile){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             profileData = require(_$+'data/mongo/profile')
 
         await profileData.delete(profile)

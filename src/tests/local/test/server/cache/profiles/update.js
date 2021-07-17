@@ -14,7 +14,7 @@ describe('cache/profiles/update', async()=>{
         })
         
         // capture call to cache
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             add (){
                 added = true
             }

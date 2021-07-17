@@ -9,6 +9,7 @@ class AppSettings{
     constructor (){
         this.windowTitle = 'Tuna'
         this.verbose = false
+        this.enableBrowserCaching = true
         this.serverUrl = window.location.origin
     }
 

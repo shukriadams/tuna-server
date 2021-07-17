@@ -1,7 +1,7 @@
 module.exports = {
     async create(profileId, songId, name, artist, album){
         const playlogCache = require(_$+'cache/playlog'),
-            Playlog = require(_$+'types/playlog')
+            Playlog = require(_$+'types/playlog'),
             playlog = Playlog.new()
 
         playlog.name = name
@@ -16,6 +16,7 @@ module.exports = {
 
     async page(page, pageSize){
         const playlogCache = require(_$+'cache/playlog')
+
         return await playlogCache.page(page, pageSize)
     },
 
@@ -24,11 +25,13 @@ module.exports = {
      */
     async deleteAll(profileId){
         const playlogCache = require(_$+'cache/playlog')
+
         return await playlogCache.deleteAll(profileId)
     },
 
     async delete(id){
         const playlogCache = require(_$+'cache/playlog')
+        
         return await playlogCache.delete(id)
     }
 }

@@ -9,10 +9,10 @@ module.exports = {
             playlog = require(_$+'logic/playlog'),
             profileLogic = require(_$+'logic/profiles'),
             songsLogic = require(_$+'logic/songs'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             profile = await profileLogic.getById(profileId),
             song = await songsLogic.getById(songId, profileId),
-            lastFmHelper = require(_$+'helpers/lastfm')
+            lastFmHelper = require(_$+'lib/lastfm')
 
         if (!profile)
                 throw new Exception({ code: constants.ERROR_INVALID_USER_OR_SESSION })
@@ -30,14 +30,13 @@ module.exports = {
      * Logs that a song has played in whatever way is needed.
      */
     async played(profileId, songId, songDuration){
-        const 
-            constants = require(_$+'types/constants'),
+        const constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
             profileLogic = require(_$+'logic/profiles'),
             songsLogic = require(_$+'logic/songs'),
-            lastFmHelper = require(_$+'helpers/lastfm'),
-            settings = require(_$+'helpers/settings'),
-            cache = require(_$+'helpers/cache'),
+            lastFmHelper = require(_$+'lib/lastfm'),
+            settings = require(_$+'lib/settings'),
+            cache = require(_$+'lib/cache'),
             song = await songsLogic.getById(songId, profileId)
 
         if (settings.demoMode)

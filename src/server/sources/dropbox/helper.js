@@ -10,31 +10,34 @@ module.exports = {
 
         let constants = require(_$+'types/constants'),
             urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings'),
-            errorHelper = require(_$+'helpers/error'),
+            settings = require(_$+'lib/settings'),
+            errorHelper = require(_$+'lib/error'),
             httputils = require('madscience-httputils'),
             result = null,
-            url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}}` ) : `https://content.dropboxapi.com/2/files/download`,
+            url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/dropbox/getFile/${path}` ) : `https://content.dropboxapi.com/2/files/download`,
             connectInfo = { 
                 headers : {
                     'Authorization' : `Bearer ${sourceIntegration.accessToken}`,
-                    'Dropbox-API-Arg': `{"path": "${path}"}`
+                    'Dropbox-API-Arg': `{ "path" : "${path}" }`
                 }}
 
         try {
             result = await httputils.post(url, null, connectInfo)
         } catch (exception) {
-            return errorHelper.throwUnexpectedError(
-                profileId, 
+            throw await errorHelper.unexpectedError(
+                profileId,
+                'dropbox access',
                 `Attempting to get "${path}" threw http error.`, 
                 constants.ERROR_DEFAULT, 
                 { exception, path })
         }
 
+        // response must havee .raw.statusCode value
         if (!result.raw || !result.raw.statusCode) 
-            return errorHelper.throwUnexpectedError(
-                profileId, 
-                `Attempting to get "${path}" returned a response that was badly formatted.`, 
+            throw await errorHelper.unexpectedError(
+                profileId,
+                'dropbox access',
+                `Attempting downloadAsString for path "${path}" returned unexpected response format.`, 
                 constants.ERROR_DEFAULT, 
                 { path, result })
 
@@ -47,8 +50,9 @@ module.exports = {
                 body = JSON.parse(result.body)
             } catch(ex){
                 // dropbox API returned result that couldn't be parsed, this is unusual
-                return errorHelper.throwUnexpectedError(
+                throw await errorHelper.unexpectedError(
                     profileId, 
+                    'dropbox access',
                     `Attempting to get "${path}" returned a response with invalid JSON.`, 
                     constants.ERROR_DEFAULT, 
                     { path, raw : result.body })
@@ -56,14 +60,16 @@ module.exports = {
 
             // no index found, user should generate index 
             if (body.error_summary && body.error_summary.includes('path/not_found')) 
-                return errorHelper.throwUserError(
+                throw await errorHelper.userError(
                     profileId, 
+                    'dropbox access',
                     `"${path}" to found on Dropbox folder.`, 
                     constants.ERROR_NO_INDEX_FILE, 
                     { path, body })
 
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'dropbox access',
                 `"${path}" returned unhandled statuscode ${result.raw.statusCode}.`, 
                 constants.ERROR_NO_INDEX_FILE, 
                 { path, body })    
@@ -86,7 +92,7 @@ module.exports = {
      */
     getOauthUrl (authTokenId){
         const urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         if (settings.sandboxMode)
             return urljoin(settings.siteUrl, `/v1/sandbox/dropboxAuthenticate?&state=${authTokenId}_TARGETPAGE`)
@@ -109,12 +115,12 @@ module.exports = {
     async getFileLink(sources, profileId, path){
         const urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
-            settings = require(_$+'helpers/settings'),
-            errorHelper = require(_$+'helpers/error'),
+            settings = require(_$+'lib/settings'),
+            errorHelper = require(_$+'lib/error'),
             constants = require(_$+'types/constants')
 
         if (!sources[constants.SOURCES_DROPBOX])
-            return errorHelper.throwUserError(
+            throw await errorHelper.userError(
                 profileId, 
                 `Dropbox is not defined as a music source. Please set it up.`, 
                 constants.ERROR_INVALID_SOURCE_INTEGRATION, 
@@ -122,7 +128,7 @@ module.exports = {
 
         const accessToken = sources[constants.SOURCES_DROPBOX].accessToken
         if (!accessToken)
-            return errorHelper.throwUserError(
+            throw await errorHelper.userError(
                 profileId, 
                 `Dropbox is defined but integration is invalid. Try removing and reconnecting to Dropbox in profile setup. If this error persists, please file a bug report with Tuna devs.`, 
                 constants.ERROR_INVALID_SOURCE_INTEGRATION, 
@@ -142,7 +148,7 @@ module.exports = {
                     'Authorization' : `Bearer ${accessToken}`
                 }})
         } catch (exception){
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
                 `Attempting to get fileLink for "${path}" returned a response that isn't beeing properly handled.`, 
                 constants.ERROR_DEFAULT, 
@@ -151,8 +157,9 @@ module.exports = {
 
 
         if (result.raw.statusCode < 200 || result.raw.statusCode > 299)
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'dropbox access',
                 `"${path}" returned unhandled statuscode ${result.raw.statusCode}.`, 
                 constants.ERROR_NO_INDEX_FILE, 
                 { path, body })  
@@ -162,8 +169,9 @@ module.exports = {
             return json.link
     
         } catch (exception){
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'dropbox access',
                 `Attempting to get fileLink for "${path}" returned a response with invalid JSON.`, 
                 constants.ERROR_DEFAULT, 
                 { exception, raw : result.body })
@@ -176,13 +184,13 @@ module.exports = {
      */
     async swapCodeForToken(profileId, token){
         const urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             constants = require(_$+'types/constants'),
             DropboxSource = require(_$+'types/dropboxSource'),
             httputils = require('madscience-httputils'),
-            JsonHelper = require(_$+'helpers/json'),
+            JsonHelper = require(_$+'lib/json'),
             profileLogic = require(_$+'logic/profiles'),
-            errorHelper = require(_$+'helpers/error'),
+            errorHelper = require(_$+'lib/error'),
             profile = await profileLogic.getById(profileId),
             url = settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/dropboxTokenSwap') : 'https://api.dropboxapi.com/oauth2/token',
             body = JSON.stringify({
@@ -198,7 +206,7 @@ module.exports = {
         try {
             r = await httputils.post(url, body)
         } catch (exception){
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
                 `Attempting to swap token threw http error.`, 
                 constants.ERROR_DEFAULT, 
@@ -206,8 +214,9 @@ module.exports = {
         }
 
         if (r.response.statusCode !== 200)
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'dropbox access',
                 `Token swap returned unexpected code ${r.response.statusCode}. You can try connecting to Dropbox again. If the problem persists, check logs.`, 
                 constants.ERROR_INVALID_SOURCE_INTEGRATION, 
                 { response : r.response })
@@ -216,8 +225,9 @@ module.exports = {
         try {
             json = JsonHelper.parse(r.body)
         } catch (exception){
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'dropbox access',
                 `Failed to parse expected JSON response. You can try connecting to Dropbox again. If the problem persists, check logs.`, 
                 constants.ERROR_DEFAULT, 
                 { exception, raw : r.body })            

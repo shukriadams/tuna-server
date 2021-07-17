@@ -2,7 +2,7 @@ module.exports = {
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
 
         /**
          * Logs a user in. Returns a full user session, including all user songs
@@ -11,8 +11,8 @@ module.exports = {
             __log.info(`ROUTE:/v1/session`)
 
             try {
-                const bruteForce = require(_$+'helpers/bruteForce'),
-                    settings = require(_$+'helpers/settings'),
+                const bruteForce = require(_$+'lib/bruteForce'),
+                    settings = require(_$+'lib/settings'),
                     authTokenLogic = require(_$+'logic/authToken'),
                     profileLogic = require(_$+'logic/profiles'),
                     route = 'sessions/post'

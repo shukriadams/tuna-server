@@ -21,10 +21,10 @@ class Importer extends ImporterBase {
      * step for importing music, the next step will be to read the contents of those index files.
      */
     async _updateIndexReferences(){
-        let settings = require(_$+'helpers/settings'),
+        let settings = require(_$+'lib/settings'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
-            xmlHelper = require(_$+'helpers/xml'),
+            xmlHelper = require(_$+'lib/xml'),
             s = await this._getSource(),
             profile = s.profile, 
             source = s.source,

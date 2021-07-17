@@ -2,7 +2,7 @@ module.exports = {
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
         
         /** 
          * Logs a song as now playing
@@ -11,8 +11,8 @@ module.exports = {
             __log.info(`ROUTE:/v1/playing`)
 
             try {
-                const authHelper = require(_$+'helpers/authentication'),
-                    playMetricsHelper = require(_$+'helpers/playMetrics'),
+                const authHelper = require(_$+'lib/authentication'),
+                    playMetricsHelper = require(_$+'lib/playMetrics'),
                     authToken = await authHelper.authenticate(req)
                     
                 await playMetricsHelper.playing(authToken.profileId, req.body.song)

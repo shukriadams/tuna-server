@@ -5,7 +5,7 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
             updated = false,
             constants = require(_$+'types/constants')
 
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
 
@@ -124,7 +124,7 @@ describe('sources/dropbox/helper/swapCodeForToken', ()=>{
             updated = false,
             constants = require(_$+'types/constants')
 
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
 

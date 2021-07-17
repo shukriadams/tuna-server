@@ -17,13 +17,12 @@ Module.prototype.require = function(){
 
 module.exports = {
     
-    add : (path, mod)=>{
+    add (path, mod){
         modules[path] = mod
     },
     
-    clear : ()=>{
+    clear (){
         modules = {}
     }
 
 }
-

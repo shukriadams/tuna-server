@@ -5,13 +5,13 @@ describe('helpers/bruteforce/clear', function(){
         let removed = false,
             ctx = require(_$t+'testcontext')
             
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             remove (key){ 
                 removed = true
             } 
         })
 
-        const bruteforce = require(_$+'helpers/bruteForce'),
+        const bruteforce = require(_$+'lib/bruteForce'),
             options = {
                 request : {
                     connection : {

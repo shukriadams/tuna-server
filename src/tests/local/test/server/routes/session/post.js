@@ -4,7 +4,7 @@ describe('route/session/post', async(ctx)=>{
         
         let ctx = require(_$t+'testcontext'),
             RouteTester = require(_$t+'helpers/routeTester'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             actualUsername,
             actualPassword,
             route = require(_$+'routes/session'),
@@ -14,12 +14,12 @@ describe('route/session/post', async(ctx)=>{
         routeTester.req.body.browserUID = 'myid'
 
         // disable brute force check
-        ctx.inject.object(_$+'helpers/bruteForce', {
+        ctx.inject.object(_$+'lib/bruteForce', {
             process (){ }, // do nothing
             clear (){ } // do nothing
         }) 
         
-        ctx.inject.object(_$+'helpers/content', {
+        ctx.inject.object(_$+'lib/content', {
             build (profileId, authTokenId){
                 return { someUserContent : '............', profileId, authTokenId } 
             }
@@ -54,7 +54,7 @@ describe('route/session/post', async(ctx)=>{
      */
     it('route/session/post::unhappy::forced error', async () => {
         const ctx = require(_$t+'testcontext')
-        ctx.inject.object(_$+'helpers/bruteForce', {
+        ctx.inject.object(_$+'lib/bruteForce', {
             process (){ 
                 throw 'whatever'
             } 
@@ -62,7 +62,7 @@ describe('route/session/post', async(ctx)=>{
 
         const constants = require(_$+'types/constants'),
             route = require(_$+'routes/session'),
-            RouteTester = require(_$t+'helpers/routeTester'),
+            RouteTester = require(_$t+'lib/routeTester'),
             routeTester = await new RouteTester(route)
             
         await routeTester.post('/v1/session')

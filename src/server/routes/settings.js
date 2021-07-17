@@ -2,7 +2,7 @@ module.exports ={
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
 
         /**
          * 
@@ -14,7 +14,7 @@ module.exports ={
                 let sourceProvider = require(_$+'sources/provider'),
                     constants = require(_$+'types/constants'),
                     fs = require('fs-extra'),
-                    settings = require(_$+'helpers/settings'),
+                    settings = require(_$+'lib/settings'),
                     source = sourceProvider.getSource(),
                     versionfile = { version : '0.0.0'}
 
@@ -30,6 +30,7 @@ module.exports ={
                     canConnectLastFM : !!settings.lastFmApiKey,
                     version : versionfile.version,
                     verbose : settings.verbose,
+                    enableBrowserCaching : settings.enableBrowserCaching,
                     sourceLabel : source.getLabel()
                 })
 

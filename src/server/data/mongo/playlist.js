@@ -34,7 +34,7 @@ module.exports = {
      */
     async create(playlist){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             newPlaylist = await mongoCommon.create(`${settings.mongoCollectionPrefix}playlists`, this.denormalize(playlist))
 
         return this.normalize(newPlaylist)
@@ -46,7 +46,7 @@ module.exports = {
      */
     async delete(id){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         return await mongoCommon.delete(`${settings.mongoCollectionPrefix}playlists`, id)
     },
@@ -57,7 +57,7 @@ module.exports = {
      */
     async update(playlist){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             writePlaylist = this.denormalize(playlist)
         
         await mongoCommon.update(`${settings.mongoCollectionPrefix}playlists`, playlist.id, writePlaylist)
@@ -70,7 +70,7 @@ module.exports = {
     async getForProfile(profileId){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}playlists`, { profileId }),
             results = []
 
@@ -86,7 +86,7 @@ module.exports = {
      */
     async deleteForProfile(profileId){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         return await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}playlists`, { profileId })
     },
@@ -98,7 +98,7 @@ module.exports = {
     async getById(id){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             record = await mongoCommon.findById(`${settings.mongoCollectionPrefix}playlists`, id)
 
         return record ? this.normalize(record) : null

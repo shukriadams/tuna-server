@@ -13,7 +13,7 @@ describe('cache/profiles/create', async()=>{
         })
         
         // capture call to cache
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             add (key, json){
                 actualProfile = JSON.parse(json)
             }

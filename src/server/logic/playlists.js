@@ -4,10 +4,9 @@ module.exports = {
      *
      */
     async create(playlist, profileId){
-        const 
-            Exception = require(_$+'types/exception'),
+        const Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             playlistsCache = require(_$+'cache/playlist')
 
         if (settings.demoMode)
@@ -33,10 +32,9 @@ module.exports = {
      *
      */
     async update(playlist){
-        const 
-            Exception = require(_$+'types/exception'),
+        const Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             playlistsCache = require(_$+'cache/playlist')
 
         if (settings.demoMode)
@@ -63,7 +61,7 @@ module.exports = {
      */
     async delete(playlistId, profileId){
         const playlistsCache = require(_$+'cache/playlist'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
             
         if (settings.demoMode)
             return            
@@ -87,6 +85,7 @@ module.exports = {
      */
     async getAll(profileId){
         const playlistsCache = require(_$+'cache/playlist')
+        
         return await playlistsCache.getAll(profileId)
     }
 

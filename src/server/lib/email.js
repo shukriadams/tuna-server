@@ -1,7 +1,6 @@
 module.exports = {
     send : async function(to, subject, body){
-        const   
-            settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             nodemailer = require('nodemailer')
 
         if (!settings.smtpHost)

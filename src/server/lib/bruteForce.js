@@ -6,12 +6,11 @@ module.exports = {
      * Has no return type
      */
     async process(options){
-        const 
-            Exception = require(_$+'types/exception'),
+        const Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             timebelt = require('timebelt'),
-            cache = require(_$+'helpers/cache'),
-            jsonHelper = require(_$+'helpers/json')
+            cache = require(_$+'lib/cache'),
+            jsonHelper = require(_$+'lib/json')
 
         // brute forcing relies on caching to store state
         if (!cache.isEnabled)
@@ -19,7 +18,7 @@ module.exports = {
 
         // get cache value
         let ip = options.request.connection.remoteAddress,
-            key = `${options.route}_${ip}`
+            key = `${options.route}_${ip}`,
             now = new Date().getTime(),
             createNew = false,
             record = jsonHelper.parse(await cache.get(key))
@@ -61,8 +60,7 @@ module.exports = {
     },
 
     async clear(options){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             ip = options.request.connection.remoteAddress,
             key = `${options.route}_${ip}`
 

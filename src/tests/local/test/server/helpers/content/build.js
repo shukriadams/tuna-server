@@ -21,7 +21,7 @@ describe('helpers/content/build', function(){
             } 
         })
 
-        const contentHelper = require(_$+'helpers/content'),
+        const contentHelper = require(_$+'lib/content'),
             content = await contentHelper.build('profileId', 'authTokenId', 'playlists, profile')
 
         ctx.assert.equal(content.playlists, 'some-playlist')
@@ -38,7 +38,7 @@ describe('helpers/content/build', function(){
             } 
         })
 
-        const contentHelper = require(_$+'helpers/content'),
+        const contentHelper = require(_$+'lib/content'),
             constants = require(_$+'types/constants'),
             exception = await ctx.assert.throws(async() => await contentHelper.build('profileId', 'authTokenId', 'playlists') )
 

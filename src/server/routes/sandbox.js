@@ -2,8 +2,8 @@ module.exports = {
 
     bind(app){
 
-        const settings = require(_$+'helpers/settings'),
-            jsonHelper = require(_$+'helpers/json')
+        const settings = require(_$+'lib/settings'),
+            jsonHelper = require(_$+'lib/json')
 
         // prevent binding of dev routes if not explicitly enabled in settings
         if (!settings.sandboxMode)
@@ -12,11 +12,11 @@ module.exports = {
         /**
          * Fakes 1st stage of Oauth flow for dropbox.
          */    
-        app.get('/v1/sandbox/dropboxAuthenticate', async function (req, res) {
+        app.get('/v1/sandbox/dropboxAuthenticate', async (req, res)=> {
             __log.info(`ROUTE:/v1/sandbox/dropboxAuthenticate`)
 
             try {
-                const settings = require(_$+'helpers/settings'),
+                const settings = require(_$+'lib/settings'),
                     state = req.query.state || ''
 
                 res.redirect(`${settings.siteUrl}/v1/oauth/dropbox?state=${state}&code=placeholder`)
@@ -29,7 +29,7 @@ module.exports = {
         /**
          * Fakes 2nd stage of Oauth flow for dropbox.
          */    
-        app.post('/v1/sandbox/dropboxTokenSwap', async function (req, res) {
+        app.post('/v1/sandbox/dropboxTokenSwap', async (req, res)=>{
             __log.info(`ROUTE:/v1/sandbox/dropboxTokenSwap`)
 
             try {
@@ -50,7 +50,7 @@ module.exports = {
          * simulates search api, always returns single result, equal to the file name being searched for
          */
         app.post('/v1/sandbox/dropbox/find/:query', async (req, res) =>{
-            __log.info(`ROUTE:/v1/sandbox/dropbox/find/:query`)
+            __log.info(`ROUTE:/v1/sandbox/dropbox/find/${req.params.query}`)
 
             try {
                 res.json({
@@ -67,12 +67,12 @@ module.exports = {
 
 
         app.post('/v1/sandbox/dropbox/getTemporaryPath/:path', async (req, res)=>{
-            __log.info(`ROUTE:/v1/sandbox/dropbox/getTemporaryPath/:path`)
+            __log.info(`ROUTE:/v1/sandbox/dropbox/getTemporaryPath/${req.params.path}`)
 
             try {
                 const fsUtils = require('madscience-fsUtils'),
                     urljoin = require('urljoin'),
-                    settings = require(_$+'helpers/settings'),                
+                    settings = require(_$+'lib/settings'),                
                     files = await fsUtils.readFilesUnderDir(settings.musicSandboxFolder, false, '.mp3')
 
                 if (!files.length)
@@ -94,7 +94,7 @@ module.exports = {
          * streams a random file
          */
         app.get('/v1/sandbox/dropbox/stream/:file', async (req, res) =>{
-            __log.info(`ROUTE:/v1/sandbox/dropbox/stream/:file`)
+            __log.info(`ROUTE:/v1/sandbox/dropbox/stream/${req.params.file}`)
 
             try {
                 const fs = require('fs'),
@@ -102,9 +102,9 @@ module.exports = {
 
                 // This will wait until we know the readable stream is actually valid before piping
                 readStream.on('open', ()=>{
-                    // This just pipes the read stream to the response object (which goes to the client)
                     readStream.pipe(res)
                 })
+
             } catch(ex){
                 jsonHelper.returnException(res, ex)
             }
@@ -115,7 +115,7 @@ module.exports = {
          * simulates search/find api
          */
         app.post('/v1/sandbox/dropbox/getfile/:file', async (req, res) =>{
-            __log.info(`ROUTE:/v1/sandbox/dropbox/getfile/:file`)
+            __log.info(`ROUTE:/v1/sandbox/dropbox/getfile/${req.params.file}`)
 
             try {
                 let fs = require('fs'),
@@ -139,11 +139,11 @@ module.exports = {
         /**
          * Fakes 1st stage of Oauth flow for nextcloud.
          */    
-        app.get('/v1/sandbox/nextcloudAuthenticate', async function (req, res) {
+        app.get('/v1/sandbox/nextcloudAuthenticate', async (req, res)=> {
             __log.info(`ROUTE:/v1/sandbox/nextcloudAuthenticate`)
 
             try {
-                const settings = require(_$+'helpers/settings'),
+                const settings = require(_$+'lib/settings'),
                     state = req.query.state || ''
 
                 res.redirect(`${settings.siteUrl}/v1/oauth/nextcloud?state=${state}&code=placeholder`)
@@ -156,7 +156,7 @@ module.exports = {
         /**
          * Fakes 2nd stage of Oauth flow for nextcloud.
          */    
-        app.post('/v1/sandbox/nextcloudTokenSwap', async function (req, res) {
+        app.post('/v1/sandbox/nextcloudTokenSwap', async (req, res)=> {
             __log.info(`ROUTE:/v1/sandbox/nextcloudTokenSwap`)
 
             try {
@@ -178,7 +178,7 @@ module.exports = {
          * simulates search/find api
          */
         app.get('/v1/sandbox/nextcloud/getfile/:file', async (req, res) =>{
-            __log.info(`ROUTE:/v1/sandbox/nextcloud/getfile/:file`)
+            __log.info(`ROUTE:/v1/sandbox/nextcloud/getfile/${req.params.file}`)
 
             try {
                 let fs = require('fs'),
@@ -208,7 +208,7 @@ module.exports = {
          * simulates search api, always returns single result
          */
         app.post('/v1/sandbox/nextcloud/find/:query', async (req, res) =>{
-            __log.info(`ROUTE:/v1/sandbox/nextcloud/find/:query`)
+            __log.info(`ROUTE:/v1/sandbox/nextcloud/find/${req.params.query}`)
 
             res.send(`<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns" xmlns:nc="http://nextcloud.org/ns">
                 <d:response>
@@ -277,12 +277,12 @@ module.exports = {
         /**
          * Fakes 1st stage of Oauth flow for lastfm.
          */
-        app.get('/v1/sandbox/lastfmAuthenticate', async function (req, res) {
+        app.get('/v1/sandbox/lastfmAuthenticate', async (req, res)=>{
             __log.info(`ROUTE:/v1/sandbox/lastfmAuthenticate`)
 
             try {
         
-                const settings = require(_$+'helpers/settings'),
+                const settings = require(_$+'lib/settings'),
                     authToken = req.query.session
             
                 res.redirect(`${settings.siteUrl}/v1/oauth/lastfm?token=placeholder&session=${authToken}`)
@@ -296,7 +296,7 @@ module.exports = {
         /**
          * Fakes 2nd stage of Oauth flow for lastfm.
          */  
-        app.get('/v1/sandbox/lastfmTokenSwap', async function (req, res) {
+        app.get('/v1/sandbox/lastfmTokenSwap', async (req, res)=>{
             __log.info(`ROUTE:/v1/sandbox/lastfmTokenSwap`)
 
             try {
@@ -319,7 +319,7 @@ module.exports = {
         /**
          * 
          */
-        app.post('/v1/sandbox/lastfmScrobble', async function(req, res){
+        app.post('/v1/sandbox/lastfmScrobble', async (req, res)=>{
             __log.info(`ROUTE:/v1/sandbox/lastfmScrobble`)
 
             try {

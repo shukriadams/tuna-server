@@ -13,12 +13,12 @@ describe('sources/importerBase/_finish', ()=>{
                 artist : 'the-artist'
             }
 
-        ctx.inject.object(_$+'helpers/debounce', (key, interval, callback)=>{
+        ctx.inject.object(_$+'lib/debounce', (key, interval, callback)=>{
             // call immediately 
             callback()
         })
 
-        ctx.inject.object(_$+'helpers/socket', {
+        ctx.inject.object(_$+'lib/socket', {
             send(){ }
         })
         

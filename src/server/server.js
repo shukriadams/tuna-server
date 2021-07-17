@@ -2,15 +2,17 @@ let Express = require('express'), // 160ms
     fs = require('fs-extra'),   // 77ms
     path = require('path'),     // 0ms
     bodyParser = require('body-parser'),    // 7ms
-    pathingHelper = require(_$+'helpers/pathing'),
-    cache = require(_$+'helpers/cache'),
-    daemon = require(_$+'helpers/daemon'),
-    settings = require(_$+'helpers/settings'),
+    pathingHelper = require(_$+'lib/pathing'),
+    cache = require(_$+'lib/cache'),
+    daemonManager = require(_$+'daemon/manager'),
+    settings = require(_$+'lib/settings'),
     profilesLogic = require(_$+'logic/profiles'),
-    interprocess = require(_$+'helpers/interprocess'),
-    mongoHelper = require(_$+'helpers/mongo'),
-    socketHelper = require(_$+'helpers/socket'),
+    interprocess = require(_$+'lib/interprocess'),
+    mongoHelper = require(_$+'lib/mongo'),
+    socketHelper = require(_$+'lib/socket'),
     sourceProvider = require(_$+'sources/provider'),
+    routesHelper = require(_$+'lib/routes'),
+    chaosHelper = require(_$+'lib/chaos'),
     express = null
 
 module.exports = {
@@ -35,6 +37,7 @@ module.exports = {
             await cache.flush()
     
         sourceProvider.validateSettings()
+        chaosHelper.bind()
         
         if (settings.enableCrossProcessScripts)
             interprocess.initialize()
@@ -42,7 +45,6 @@ module.exports = {
         // ensure mongo structures, this is required on first load
         mongoHelper.initialize()
 
-        daemon.start()
 
         socketHelper.initialize(httpServer)
 
@@ -58,26 +60,10 @@ module.exports = {
         express.use(bodyParser.urlencoded({ extended: false }))
         express.use(bodyParser.json({ limit : settings.maxJsonResponseSize }))
         
-        let defaultRoute = null
-            routeFiles = await fs.promises.readdir(path.join(__dirname, 'routes'))
+        await routesHelper.bindRoutes(express)
 
-        for (let routeFile of routeFiles){
-
-            const name = routeFile.match(/(.*).js/).pop()
-                routes = require(`./routes/${name}`)
-
-            if (name === 'default'){
-                defaultRoute = routes
-                continue
-            }
-
-            await routes.bind(express)
-        }
-
-        // finally, load default route. This must be bound last because its pattern works
-        // as a catchall for anything that isn't caught by a more specific fixed pattern.
-        if (defaultRoute)
-            await defaultRoute.bind(express)
+        // start daemon after route binding, daemon can rely on routes
+        daemonManager.startAll()
 
     }
 }

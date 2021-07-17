@@ -3,7 +3,7 @@ describe('mongo/common/update', async()=>{
     it('mongo/common/update::happy::update record', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection(){
                 return {
                     done(){ },
@@ -26,7 +26,7 @@ describe('mongo/common/update', async()=>{
     it('mongo/common/update::unhappy::returns query error', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection(){
                 return {
                     done(){ },
@@ -53,7 +53,7 @@ describe('mongo/common/update', async()=>{
         const ctx = require(_$t+'testcontext')
         
         // replace call to mongo
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection (){
                 throw 'whatever'
             }

@@ -4,13 +4,13 @@ describe('route/content', async()=>{
         
         let ctx = require(_$t+'testcontext'),
             route = require(_$+'routes/content'),
-            RouteTester = require(_$t+'helpers/routeTester'),
+            RouteTester = require(_$t+'lib/routeTester'),
             routeTester = await new RouteTester(route)
 
         routeTester.authenticate()
         routeTester.req.query.token = 5829
 
-        ctx.inject.object(_$+'helpers/content', {
+        ctx.inject.object(_$+'lib/content', {
             build () { 
                 return { myproperty: 5631 } 
             }
@@ -22,7 +22,7 @@ describe('route/content', async()=>{
 
 
     it('route/content/all::unhappy::auth failure', async ()=>{
-        const authedRouteTest = require(_$t+'helpers/authedRouteTester')
+        const authedRouteTest = require(_$t+'lib/authedRouteTester')
         await authedRouteTest(_$+'routes/content', 'get', '/v1/content/all/:requestedContent')
     })
 })

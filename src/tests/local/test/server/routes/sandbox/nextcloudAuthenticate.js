@@ -2,10 +2,10 @@ describe('route/sandbox/nextcloudAuthenticate', async(ctx)=>{
     
     it('route/sandbox/nextcloudAuthenticate::happy::route directs', async () => {
         const ctx = require(_$t+'testcontext'),
-            RouteTester = require(_$t+'helpers/routeTester')
+            RouteTester = require(_$t+'lib/routeTester')
 
         // enable sandbox mode to allow sandbox route binding
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
 

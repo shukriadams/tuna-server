@@ -1,9 +1,8 @@
 module.exports = {
 
     methodSignature(parameters){
-        const 
-            crypto = require('crypto'),
-            settings = require(_$+'helpers/settings')
+        const crypto = require('crypto'),
+            settings = require(_$+'lib/settings')
 
         // sort parameters alphabetically
         let sortedParameters = [],
@@ -28,7 +27,7 @@ module.exports = {
     },
 
     getOauthUrl(authTokenId){
-        const settings = require(_$+'helpers/settings')
+        const settings = require(_$+'lib/settings')
         
         if (settings.sandboxMode)
             return `${settings.siteUrl}/v1/sandbox/lastfmAuthenticate?&session=${authTokenId}`
@@ -38,12 +37,11 @@ module.exports = {
 
     /* sends message to last fm about current playing song.  */
     async nowPlaying(profile, song){
-        const 
-            request = require('request'),
+        const request = require('request'),
             xmlreader = require('xmlreader'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             log = require(_$+'logic/log'),
-            cache = require(_$+'helpers/cache'),
+            cache = require(_$+'lib/cache'),
             PlaySession = require(_$+'types/playSession')
 
         return new Promise(async (resolve, reject) => {
@@ -69,21 +67,20 @@ module.exports = {
                         sk : profile.scrobbleToken,
                         api_key : settings.lastFmApiKey
                     },
-                    signature = this.methodSignature(parameters)
-
-                let options = {
-                    url : 'http://ws.audioscrobbler.com/2.0/',
-                    method : 'POST',
-                    form : {
-                        method : 'track.updateNowPlaying',
-                        artist : song.artist.trim(),
-                        album : song.album.trim(),
-                        track : song.name.trim(),
-                        sk : profile.scrobbleToken,
-                        api_key : settings.lastFmApiKey,
-                        api_sig : signature
+                    signature = this.methodSignature(parameters),
+                    options = {
+                        url : 'http://ws.audioscrobbler.com/2.0/',
+                        method : 'POST',
+                        form : {
+                            method : 'track.updateNowPlaying',
+                            artist : song.artist.trim(),
+                            album : song.album.trim(),
+                            track : song.name.trim(),
+                            sk : profile.scrobbleToken,
+                            api_key : settings.lastFmApiKey,
+                            api_sig : signature
+                        }
                     }
-                }
 
                 request(options, (err, response, body) => {
                     if (err)
@@ -114,11 +111,10 @@ module.exports = {
     },
 
     async scrobble(profile, song, startedPlayingUnixTime){
-        const 
-            request = require('request'),
+        const request = require('request'),
             xmlreader = require('xmlreader'),
             urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             log = require(_$+'logic/log')
 
         return new Promise((resolve, reject) => {
@@ -131,22 +127,21 @@ module.exports = {
                     sk : profile.scrobbleToken,
                     api_key : settings.lastFmApiKey
                 },
-                signature = this.methodSignature(parameters)
-
-            let options = {
-                url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/lastfmScrobble') : 'http://ws.audioscrobbler.com/2.0/',
-                method : 'POST',
-                form : {
-                    method : 'track.scrobble',
-                    artist : song.artist.trim(),
-                    album : song.album.trim(),
-                    track : song.name.trim(),
-                    timestamp : startedPlayingUnixTime,
-                    sk : profile.scrobbleToken,
-                    api_key : settings.lastFmApiKey,
-                    api_sig : signature
+                signature = this.methodSignature(parameters),
+                options = {
+                    url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/lastfmScrobble') : 'http://ws.audioscrobbler.com/2.0/',
+                    method : 'POST',
+                    form : {
+                        method : 'track.scrobble',
+                        artist : song.artist.trim(),
+                        album : song.album.trim(),
+                        track : song.name.trim(),
+                        timestamp : startedPlayingUnixTime,
+                        sk : profile.scrobbleToken,
+                        api_key : settings.lastFmApiKey,
+                        api_sig : signature
+                    }
                 }
-            }
 
             request(options, (err, response, body) => {
                 if (err)
@@ -170,11 +165,10 @@ module.exports = {
     },
 
     async swapCodeForToken(profileId, sessionToken){
-        const 
-            crypto = require('crypto'),
+        const crypto = require('crypto'),
             urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings'),
-            xmlHelper = require(_$+'helpers/xml'),
+            settings = require(_$+'lib/settings'),
+            xmlHelper = require(_$+'lib/xml'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
             requestNative = require('request-promise-native')
@@ -196,11 +190,11 @@ module.exports = {
                 apiSignature = crypto.createHash('md5').update(apiSignature, 'utf8').digest('hex')
 
                 let options = {
-                    url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/lastfmTokenSwap') : `http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${settings.lastFmApiKey}&token=${sessionToken}&api_sig=${apiSignature}`,
-                    method : 'GET'
-                }
+                        url : settings.sandboxMode ? urljoin(settings.siteUrl, '/v1/sandbox/lastfmTokenSwap') : `http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${settings.lastFmApiKey}&token=${sessionToken}&api_sig=${apiSignature}`,
+                        method : 'GET'
+                    },
+                    key = null
 
-                let key = null
                 try {
                     let body = await requestNative(options),
                         xml = await xmlHelper.toDoc(body)

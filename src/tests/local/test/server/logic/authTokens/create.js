@@ -41,7 +41,7 @@ describe('logic/authTokens/create', async()=>{
             actualDeletedId
 
         // lower amount so we can trigger cleanup logic
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             maxSessionsPerUser : 0
         })
 

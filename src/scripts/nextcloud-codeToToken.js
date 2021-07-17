@@ -1,7 +1,6 @@
 (async ()=>{
 
-    const 
-        send = require('./sendCommand'),
+    const send = require('./sendCommand'),
         process = require('process'),
         minimist = require('minimist'),
         argv = minimist(process.argv.slice(2))

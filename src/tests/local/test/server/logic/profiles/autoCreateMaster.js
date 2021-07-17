@@ -7,7 +7,7 @@ describe('logic/profiles/autoCreateMaster', async()=>{
         let logic = require(_$+'logic/profiles')
 
         // need to have both of these defined for autocreate to work
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             masterUsername : 'bob',
             masterDefaultPassword : 'bobword'
         })

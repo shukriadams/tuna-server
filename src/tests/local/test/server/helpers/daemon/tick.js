@@ -2,7 +2,7 @@ describe('helpers/daemon/tick', function(){
 
     it('helpers/daemon/tick::happy::ticks', async () => {
         let ctx = require(_$t+'testcontext'),
-            settings = require( _$+'helpers/settings'),
+            settings = require( _$+'lib/settings'),
             sources = {}
 
             sources[settings.musicSource] = {}
@@ -29,7 +29,7 @@ describe('helpers/daemon/tick', function(){
             }
         })
 
-        const daemon = require(_$+'helpers/daemon')
+        const daemon = require(_$+'lib/daemon')
         await daemon.tick()
     })
 
@@ -40,7 +40,7 @@ describe('helpers/daemon/tick', function(){
     */
     it('helpers/daemon/tick::unhappy::import exception', async () => {
         let ctx = require(_$t+'testcontext'),
-            settings = require( _$+'helpers/settings'),
+            settings = require( _$+'lib/settings'),
             sources = {}
 
         sources[settings.musicSource] = {}
@@ -68,7 +68,7 @@ describe('helpers/daemon/tick', function(){
             }
         })
 
-        const daemon = require(_$+'helpers/daemon')
+        const daemon = require(_$+'lib/daemon')
         await daemon.tick()
     })
 
@@ -78,7 +78,7 @@ describe('helpers/daemon/tick', function(){
     */
    it('helpers/daemon/tick::unhappy::import exception 2', async () => {
         let ctx = require(_$t+'testcontext'),
-            settings = require( _$+'helpers/settings'),
+            settings = require( _$+'lib/settings'),
             sources = {}
 
         sources[settings.musicSource] = {}
@@ -89,7 +89,7 @@ describe('helpers/daemon/tick', function(){
             } 
         })
 
-        const daemon = require(_$+'helpers/daemon')
+        const daemon = require(_$+'lib/daemon')
         await daemon.tick()
     })
 
@@ -106,7 +106,7 @@ describe('helpers/daemon/tick', function(){
             } 
         })
  
-        const daemon = require(_$+'helpers/daemon')
+        const daemon = require(_$+'lib/daemon')
         await daemon.tick()
     })
 

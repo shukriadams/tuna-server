@@ -15,7 +15,7 @@ describe('helpers/interprocess/intialize', function(){
             } 
         })
         
-        const interprocess = require(_$+'helpers/interprocess')
+        const interprocess = require(_$+'lib/interprocess')
         await interprocess.initialize()
         interprocess.ipc.serve()
 

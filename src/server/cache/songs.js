@@ -5,8 +5,7 @@ module.exports = {
     },
 
     async createMany(songs){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             songsData = require(_$+'data/mongo/songs'),
             songsCount = await songsData.createMany(songs),
         // assumes there is always at least onc song in collection, logic layer ensures this
@@ -19,9 +18,8 @@ module.exports = {
 
 
     async getAll(profileId){
-        const 
-            cache = require(_$+'helpers/cache'),
-            JsonHelper = require(_$+'helpers/json'),
+        const cache = require(_$+'lib/cache'),
+            JsonHelper = require(_$+'lib/json'),
             songsData = require(_$+'data/mongo/songs'),
             key = this._getIdKey(profileId),
             songsJson = await cache.get(key)
@@ -36,8 +34,7 @@ module.exports = {
 
 
     async update(song){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             songsData = require(_$+'data/mongo/songs'),
             key = this._getIdKey(song.profileId)
 
@@ -51,8 +48,7 @@ module.exports = {
 
 
     async deleteForProfile(profileId){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             songsData = require(_$+'data/mongo/songs'),
             key = this._getIdKey(profileId)
 
@@ -62,8 +58,7 @@ module.exports = {
 
     
     async delete(song){
-        const
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             songsData = require(_$+'data/mongo/songs'),
             key = this._getIdKey(song.profileId)
 

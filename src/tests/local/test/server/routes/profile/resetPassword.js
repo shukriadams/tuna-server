@@ -3,7 +3,7 @@ describe('route/profiles/resetPassword', async(ctx)=>{
     it('route/profiles/resetpassword::happy::request a password reset if not logged in', async () => {
         
         let ctx = require(_$t+'testcontext'),
-            RouteTester = require(_$t+'helpers/routeTester'),
+            RouteTester = require(_$t+'lib/routeTester'),
             actualPassword,
             actualKey,
             actualProfileId,
@@ -15,7 +15,7 @@ describe('route/profiles/resetPassword', async(ctx)=>{
         routeTester.req.query.key = 'abcd'
         
         // disable brute force check
-        ctx.inject.object(_$+'helpers/bruteForce', {
+        ctx.inject.object(_$+'lib/bruteForce', {
             process (){ }, // do nothing
             clear (){ } // do nothing
         }) 
@@ -54,7 +54,7 @@ describe('route/profiles/resetPassword', async(ctx)=>{
             actualCurrentPassword
 
         // disable brute force check
-        ctx.inject.object(_$+'helpers/bruteForce', {
+        ctx.inject.object(_$+'lib/bruteForce', {
             process (){ }, // do nothing
             clear (){ } // do nothing
         }) 

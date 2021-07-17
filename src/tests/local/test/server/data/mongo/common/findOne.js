@@ -7,7 +7,7 @@ describe('mongo/common/findOne', async()=>{
         const ctx = require(_$t+'testcontext')
         
         // replace call to mongo
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 throw 'whatever'
             }
@@ -26,7 +26,7 @@ describe('mongo/common/findOne', async()=>{
         const ctx = require(_$t+'testcontext')
         
         // replace call to mongo
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 return {
                     collection : {

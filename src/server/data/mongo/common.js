@@ -4,7 +4,7 @@ module.exports = {
      *
      */    
     async create(collection, record){
-        const mongoHelper = require(_$+'helpers/mongo'),
+        const mongoHelper = require(_$+'lib/mongo'),
             constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception')
 
@@ -31,7 +31,7 @@ module.exports = {
     },
 
     async createMany(collection, records){
-        const mongoHelper = require(_$+'helpers/mongo')
+        const mongoHelper = require(_$+'lib/mongo')
 
         return new Promise(async (resolve, reject) => {
             try {
@@ -52,7 +52,7 @@ module.exports = {
     },
 
     async update(collection, id, record){
-        const mongoHelper = require(_$+'helpers/mongo'),
+        const mongoHelper = require(_$+'lib/mongo'),
             ObjectID = require('mongodb').ObjectID
 
         return new Promise(async (resolve, reject) => {
@@ -75,7 +75,7 @@ module.exports = {
     },
 
     async delete (collection, id){
-        const mongoHelper = require(_$+'helpers/mongo'),
+        const mongoHelper = require(_$+'lib/mongo'),
             ObjectID = require('mongodb').ObjectID
 
         return new Promise(async (resolve, reject) => {
@@ -99,7 +99,7 @@ module.exports = {
     },
     
     async deleteMany(collection, query){
-        const mongoHelper = require(_$+'helpers/mongo')
+        const mongoHelper = require(_$+'lib/mongo')
 
         return new Promise(async (resolve, reject) => {
     
@@ -120,8 +120,29 @@ module.exports = {
         })
     },
 
+    async aggregate(collection, query){
+        const mongoHelper = require(_$+'lib/mongo')
+
+        return new Promise(async (resolve, reject) => {
+            try {
+                const db = await mongoHelper.getCollection(collection)
+    
+                db.collection.aggregate(query).toArray((err, docs) => {
+                    if (err)
+                        return reject(err)
+    
+                    db.done()
+                    resolve(docs)
+                })
+    
+            } catch (ex){
+                reject(ex)
+            }
+        })
+    },
+
     async find(collection, query){
-        const mongoHelper = require(_$+'helpers/mongo')
+        const mongoHelper = require(_$+'lib/mongo')
 
         return new Promise(async (resolve, reject) => {
             try {
@@ -156,7 +177,7 @@ module.exports = {
     },
 
     async findOne(collection, query){
-        const mongoHelper = require(_$+'helpers/mongo')
+        const mongoHelper = require(_$+'lib/mongo')
 
         return new Promise(async (resolve, reject) => {
     

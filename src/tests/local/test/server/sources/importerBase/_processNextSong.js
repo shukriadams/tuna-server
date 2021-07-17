@@ -13,13 +13,13 @@ describe('sources/importerBase/_processNextSong', ()=>{
             ctx = require(_$t+'testcontext')
 
         
-        ctx.inject.object(_$+'helpers/debounce', {
+        ctx.inject.object(_$+'lib/debounce', {
             debounce (key, interval, callback){
                 callback()
             }
         })
         
-        ctx.inject.object(_$+'helpers/socket', {
+        ctx.inject.object(_$+'lib/socket', {
             send(){ }
         })
         
@@ -63,13 +63,13 @@ describe('sources/importerBase/_processNextSong', ()=>{
             ctx = require(_$t+'testcontext')
 
         
-        ctx.inject.object(_$+'helpers/debounce', {
+        ctx.inject.object(_$+'lib/debounce', {
             debounce (key, interval, callback){
                 callback()
             }
         })
         
-        ctx.inject.object(_$+'helpers/socket', {
+        ctx.inject.object(_$+'lib/socket', {
             send(){ }
         })
         

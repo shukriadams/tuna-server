@@ -95,7 +95,7 @@ Tuna needs to know what music you've got in your Dropbox or NextCloud drive. To 
 
 Tuna is a single-user system. It will automatically create a user for you. Once you log in, it is strongly recommended that you change your password. If you lose your password you can reset it from the command line with 
 
-    docker exec -it tuna-server bash -c "cd /usr/tuna/scripts && node set --password YOURNEWPASSWORD"
+    docker exec -it tuna-server bash -c "cd /usr/tuna/scripts && node password --new YOURNEWPASSWORD"
 
 ## Advanced 
 

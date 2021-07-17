@@ -24,8 +24,7 @@ module.exports = {
      * in some other way.
      */
     async authenticateTokenString(token){
-        const
-            Exception = require(_$+'types/exception'),
+        const Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             authTokenLogic = require(_$+'logic/authToken')
 

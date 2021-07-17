@@ -4,8 +4,7 @@ module.exports = {
      *
      */
     async createMany(songs){
-        const 
-            constants = require(_$+'types/constants'),
+        const constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
             songsCache = require(_$+'cache/songs')
 
@@ -74,10 +73,9 @@ module.exports = {
      * Presents a way to update song from client using JSON string.
      */
     async persistSong(songRawJson, profileId){
-        const 
-            constants = require(_$+'types/constants'),
+        const constants = require(_$+'types/constants'),
             Exception = require(_$+'types/exception'),
-            JsonHelper = require(_$+'helpers/json'),
+            JsonHelper = require(_$+'lib/json'),
             songJson = JsonHelper.parse(songRawJson),
             // we check ownership implicitly by fetching song id in scope of current profile
             song = await this.getById(songJson.id, profileId)
@@ -98,8 +96,7 @@ module.exports = {
      */
     async getSongUrl(songId, profileId, authTokenId){
         // dont make member, causes cross-import tangle
-        const 
-            constants = require(_$+'types/constants'),
+        const constants = require(_$+'types/constants'),
             sourceProvider = require(_$+'sources/provider'),
             Exception = require(_$+'types/exception'),
             profileLogic = require(_$+'logic/profiles'),
@@ -121,10 +118,9 @@ module.exports = {
      * 
      */
     async getById(songId, profileId){
-        const songsCache = require(_$+'cache/songs')
-
-        // we fetch all songs for user because content is cached at the user level
-        const songs = await songsCache.getAll(profileId)
+        const songsCache = require(_$+'cache/songs'),
+            songs = await songsCache.getAll(profileId)
+            
         if (!songs.length)
             return null
 

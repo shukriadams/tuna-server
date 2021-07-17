@@ -6,7 +6,7 @@ describe('sources/importerBase/inProgress', ()=>{
     it('sources/importerBase/inProgress::happy::gets progress', async () => {
         const ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             get(){ 
                 return {}
             }
@@ -26,7 +26,7 @@ describe('sources/importerBase/inProgress', ()=>{
     it('sources/importerBase/inProgress::happy::no progress', async () => {
         const ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             get(){ 
                 return null
             }

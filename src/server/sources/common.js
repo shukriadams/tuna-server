@@ -11,8 +11,8 @@ module.exports = {
      * profile : profile object
      */
     async isRemoteNewer(profile){
-        const settings = require(_$+'helpers/settings'),
-            jsonHelper = require(_$+'helpers/json'),
+        const settings = require(_$+'lib/settings'),
+            jsonHelper = require(_$+'lib/json'),
             constants = require(_$+'types/constants'),
             sourceProvider = require(_$+'sources/provider'),
             source = sourceProvider.getSource(),

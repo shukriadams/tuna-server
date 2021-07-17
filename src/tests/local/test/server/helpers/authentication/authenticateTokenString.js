@@ -9,7 +9,7 @@ describe('helpers/authentication/authenticateToken', function(){
             } 
         })
 
-        const authentication = require(_$+'helpers/authentication'),
+        const authentication = require(_$+'lib/authentication'),
              token = await authentication.authenticateTokenString('my-token')
 
         ctx.assert.equal(token.foo, 'bar')
@@ -21,7 +21,7 @@ describe('helpers/authentication/authenticateToken', function(){
     it('helpers/authentication/authenticateToken::unhappy::no token string', async () => {
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants'),
-            authentication = require(_$+'helpers/authentication'),
+            authentication = require(_$+'lib/authentication'),
             exception = await ctx.assert.throws(async () => await authentication.authenticateTokenString(/* no string here */) )
 
         ctx.assert.equal(exception.code, constants.ERROR_INVALID_USER_OR_SESSION)
@@ -41,7 +41,7 @@ describe('helpers/authentication/authenticateToken', function(){
             } 
         })
 
-        const authentication = require(_$+'helpers/authentication'),
+        const authentication = require(_$+'lib/authentication'),
              exception = await ctx.assert.throws(async () => await authentication.authenticateTokenString('my-token'))
 
         ctx.assert.equal(exception.code, constants.ERROR_INVALID_USER_OR_SESSION)

@@ -4,7 +4,7 @@ describe('sources/provider/getImporter', ()=>{
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             musicSource : constants.SOURCES_DROPBOX
         })
 
@@ -19,7 +19,7 @@ describe('sources/provider/getImporter', ()=>{
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             musicSource : constants.SOURCES_NEXTCLOUD
         })
 
@@ -34,7 +34,7 @@ describe('sources/provider/getImporter', ()=>{
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
 
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             musicSource : constants.SOURCES_S3
         })
 
@@ -48,7 +48,7 @@ describe('sources/provider/getImporter', ()=>{
     it('sources/provider/getImporter::unhappy::handles invalid source', async () => {
         const ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             musicSource : 'an-invalid-source'
         })
 

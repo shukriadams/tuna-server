@@ -3,7 +3,7 @@ describe('mongo/common/deleteMany', async()=>{
     it('mongo/common/deleteMany::happy::deletes records', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 return {
                     done(){ },
@@ -26,7 +26,7 @@ describe('mongo/common/deleteMany', async()=>{
     it('mongo/common/deleteMany::unhappy::returns query error', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 return {
                     done(){ },
@@ -53,7 +53,7 @@ describe('mongo/common/deleteMany', async()=>{
         const ctx = require(_$t+'testcontext')
         
         // replace call to mongo
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 throw 'whatever'
             }

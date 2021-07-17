@@ -14,7 +14,7 @@ describe('route/oauth/lastfm', async()=>{
         })
 
         // capture actual used profile and code
-        ctx.inject.object(_$+'helpers/lastfm', {
+        ctx.inject.object(_$+'lib/lastfm', {
             swapCodeForToken(profileId, code){ 
                 actualProfileId = profileId
                 actualCode = code

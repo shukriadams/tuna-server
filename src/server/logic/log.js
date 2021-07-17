@@ -8,8 +8,7 @@ module.exports = {
     async create (content, context, profileId = null){
 
         // need to require here, if require in header pulls in self and recurses to death
-        const 
-            logType = require(_$+'types/log'),
+        const logType = require(_$+'types/log'),
             log = require(_$+'data/mongo/log'),
             record = Object.assign(
                 logType.new(), 

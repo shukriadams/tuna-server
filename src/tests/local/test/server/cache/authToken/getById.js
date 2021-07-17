@@ -4,7 +4,7 @@ describe('cache/authTokens/getById', async(ctx)=>{
         const ctx = require(_$t+'testcontext')
         
         // capture call to cache
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             get (){
                 return JSON.stringify({ foo: 'bar' })
             }
@@ -30,7 +30,7 @@ describe('cache/authTokens/getById', async(ctx)=>{
         })
 
         // capture call to cache
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             add (key, authToken){
                 cachedAuthToken = JSON.parse(authToken)
             },

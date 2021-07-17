@@ -1,5 +1,4 @@
-const 
-    customEnv = require('custom-env'),          // 4ms
+const customEnv = require('custom-env'),          // 4ms
     process = require('process'),               // 1ms
     constants = require(_$+'types/constants'),
     settings = {
@@ -14,6 +13,7 @@ const
 
         // must always be set. will be automatically lowercased and trimmed when used
         masterUsername : null,
+
         // must be set when starting server, this will be the master password. Can be removed after starting the server
         // as it is not used again, unless you delete your user from the database. It is considered good practice to change
         // your password after setting it this way, so the password you use for realsies has never been written as plain text.
@@ -21,8 +21,10 @@ const
 
         // this must be set - 
         mongoConnectionString : 'mongodb://admin:secret@127.0.0.1:27017',
+
         // name of the database on Mongo server, don't change unless you really need to write to a different db
         mongoDBName : 'tuna',
+
         // if you're going to share a mongo database with other apps or Tuna instances (such as if running on Mongo Atlas), you can prevent
         // collision by setting this value to 'mytuna' or similar, which will be prefixed to all Tuna tables and indexes for this instance
         mongoCollectionPrefix : '',
@@ -33,9 +35,16 @@ const
 
         // interval the internal daemon runs at
         daemonInterval : '* * * * *',
-        
+
+        //
+        importInterval : '* * * * *',
+
+        // midnight
+        eventLogPurgeInterval : '0 0 * * *', 
+
         // number of times to rety a standard external integration on error
         retriesOnConnectError : 3,
+
         // milliseconds to wait before retrying after error
         retryOnErrorWait : 200,
 
@@ -69,6 +78,7 @@ const
         // if true loads js from bundle file. If false, main.js will load first
         // which will cascade load all other files.
         isJSBundled : true,
+
         // number of songs per bulk insert into database 
         importInsertBlockSize : 100,
         debounceInterval : 500, // millseconds per import update socket push
@@ -85,6 +95,7 @@ const
 
         dropboxAppId : null,
         dropboxAppSecret : null,
+
         // if set, and if system source is set to "dropbox", dropbox integration will be created automatically 
         dropboxOauthToken : null,
 
@@ -130,8 +141,11 @@ const
         emailVerificationDeadlineHours : 12,
 
         // enable for noisy logging
-        verbose : false
+        verbose : false,
+        
+        enableBrowserCaching : true,
 
+        enableChaos : false
     }
 
 
@@ -140,7 +154,7 @@ if (!process.env['IGNORE_DEV_ENV'])
     customEnv.env() 
 
 // override defaults with env variables
-for (let property in settings){
+for (const property in settings){
     if (!process.env[property])
         continue
 

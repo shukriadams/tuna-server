@@ -8,7 +8,7 @@ module.exports = {
          * Oauth "catchers" - receives incoming oauth redirects from external sites, exchanges oauth codes for tokens, then
          * redirects to local pages to complete oauth flow.
          */
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
 
         /**
          * Starts music source oauth flow
@@ -16,9 +16,9 @@ module.exports = {
         app.get('/v1/oauth/source/start', async (req, res)=>{
             __log.info(`ROUTE:/v1/oauth/source/start`)
            
-            let authHelper = require(_$+'helpers/authentication'),
+            let authHelper = require(_$+'lib/authentication'),
                 sourceProvider = require(_$+'sources/provider'),
-                settings = require(_$+'helpers/settings'),
+                settings = require(_$+'lib/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token),
                 url = sourceProvider.getSource().getOauthUrl(authToken.id)
 
@@ -38,9 +38,9 @@ module.exports = {
         app.get('/v1/oauth/lastfm/start', async (req, res)=>{
             __log.info(`ROUTE:/v1/oauth/lastfm/start`)
 
-            const authHelper = require(_$+'helpers/authentication'),
-                lastFmHelper = require(_$+'helpers/lastfm'),
-                settings = require(_$+'helpers/settings'),
+            const authHelper = require(_$+'lib/authentication'),
+                lastFmHelper = require(_$+'lib/lastfm'),
+                settings = require(_$+'lib/settings'),
                 authToken = await authHelper.authenticateTokenString(req.query.token)
 
             if (settings.demoMode)
@@ -66,7 +66,7 @@ module.exports = {
                     Exception = require(_$+'types/exception'),
                     nextCloudHelper = require(_$+'sources/nextcloud/helper'),
                     authTokenLogic = require(_$+'logic/authToken'),
-                    settings = require(_$+'helpers/settings'),
+                    settings = require(_$+'lib/settings'),
                     code = req.query.code,
                     state = (req.query.state || '').split('_'),
                     authTokenId = state.length > 1 ? state[0] : null,
@@ -108,7 +108,7 @@ module.exports = {
                     Exception = require(_$+'types/exception'),
                     dropboxHelper = require(_$+'sources/dropbox/helper'),
                     authTokenLogic = require(_$+'logic/authToken'),
-                    settings = require(_$+'helpers/settings'),
+                    settings = require(_$+'lib/settings'),
                     code = req.query.code,
                     state = (req.query.state || '').split('_'),
                     authTokenId = state.length > 1 ? state[0] : null,
@@ -146,11 +146,11 @@ module.exports = {
             try {
                 // todo : ensure referrer is localhost or lastfm.com
             
-                const lastFmHelper = require(_$+'helpers/lastfm'),
+                const lastFmHelper = require(_$+'lib/lastfm'),
                     constants = require(_$+'types/constants'),
                     Exception = require(_$+'types/exception'),
                     authTokenLogic = require(_$+'logic/authToken'),
-                    settings = require(_$+'helpers/settings'),
+                    settings = require(_$+'lib/settings'),
                     scrobbleToken = req.query.token,
                     authTokenId = req.query.session,
                     authToken = await authTokenLogic.getById(authTokenId)

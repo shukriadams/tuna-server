@@ -4,7 +4,7 @@ module.exports = {
 
     async bind(app) {
 
-        let jsonHelper = require(_$+'helpers/json'),
+        let jsonHelper = require(_$+'lib/json'),
             indexTemplate = null
 
         /**
@@ -18,7 +18,7 @@ module.exports = {
                 const Handlebars = require('handlebars'),
                     path = require('path'),
                     fs = require('fs'),
-                    settings = require(_$+'helpers/settings'),
+                    settings = require(_$+'lib/settings'),
                     model = {
                         isJSBundled : settings.isJSBundled,
                         minModifier : settings.useMinifiedAssets ? '.min' : ''

@@ -11,12 +11,12 @@
 global._$ = `${__dirname}/server/`
 global.__log = {
     info(data){
-        const settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             logger = require('winston-wrapper').instance(settings.logPath)
         logger.info.info(data)
     },
     error(data){
-        const settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             logger = require('winston-wrapper').instance(settings.logPath)
         logger.error.error(data)
     }
@@ -32,7 +32,7 @@ const Stopwatch = require('statman-stopwatch'),
 stopwatch.start()
 
 const tunaServer = require(_$+'server'),          // 2000ms
-    settings = require(_$+'helpers/settings'); // 12ms
+    settings = require(_$+'lib/settings'); // 12ms
 
 (async ()=>{
     try {

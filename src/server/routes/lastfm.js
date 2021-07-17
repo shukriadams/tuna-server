@@ -2,7 +2,7 @@ module.exports = {
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
 
         /**
          * Removes lastfm integration
@@ -10,8 +10,8 @@ module.exports = {
         app.delete('/v1/lastfm', async function (req, res) {
             __log.info(`ROUTE:/v1/lastfm`)
             try {
-                const authHelper = require(_$+'helpers/authentication'),
-                    contentHelper = require(_$+'helpers/content'),
+                const authHelper = require(_$+'lib/authentication'),
+                    contentHelper = require(_$+'lib/content'),
                     profileLogic = require(_$+'logic/profiles'),
                     authToken = await authHelper.authenticate(req)
 

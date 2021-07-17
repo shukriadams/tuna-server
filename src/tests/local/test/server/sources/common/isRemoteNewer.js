@@ -2,7 +2,7 @@ describe('sources/common/isRemoteNewer', ()=>{
     
     it('sources/common/isRemoteNewer::happy::returns true', async () => {
         const ctx = require(_$t+'testcontext'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             // set up profile with valid source, with old last import
             profile = { sources : {} }
         

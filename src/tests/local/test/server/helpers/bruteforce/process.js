@@ -4,7 +4,7 @@ describe('helpers/bruteforce/process', function(){
         let result,
             ctx = require(_$t+'testcontext')
        
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             isEnabled : true,
             // return null for a hitherto unprocessed key
             get (){ 
@@ -15,7 +15,7 @@ describe('helpers/bruteforce/process', function(){
             } 
         })
 
-        const bruteforce = require(_$+'helpers/bruteForce'),
+        const bruteforce = require(_$+'lib/bruteForce'),
             options = {
                 request : {
                     connection : {
@@ -37,7 +37,7 @@ describe('helpers/bruteforce/process', function(){
         let result,
             ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             isEnabled : true,
             // return record, but set its date far back for it to have timed out
             get (){ 
@@ -53,7 +53,7 @@ describe('helpers/bruteforce/process', function(){
             } 
         })
 
-        const bruteforce = require(_$+'helpers/bruteForce'),
+        const bruteforce = require(_$+'lib/bruteForce'),
             options = {
                 period: 10,
                 request : {
@@ -75,7 +75,7 @@ describe('helpers/bruteforce/process', function(){
         let result,
             ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             isEnabled : true,
             // return record, set it to locked out, but set its date far back for it to have expired
             get (){ 
@@ -91,7 +91,7 @@ describe('helpers/bruteforce/process', function(){
             } 
         })
 
-        const bruteforce = require(_$+'helpers/bruteForce'),
+        const bruteforce = require(_$+'lib/bruteForce'),
             options = {
                 period: 10,
                 cooldown: 10,
@@ -116,7 +116,7 @@ describe('helpers/bruteforce/process', function(){
         let result,
             ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             isEnabled : true,
             // return record, set its date to current
             get (){ 
@@ -131,7 +131,7 @@ describe('helpers/bruteforce/process', function(){
             } 
         })
 
-        const bruteforce = require(_$+'helpers/bruteForce'),
+        const bruteforce = require(_$+'lib/bruteForce'),
             options = {
                 period: 10,
                 cooldown: 10,
@@ -157,7 +157,7 @@ describe('helpers/bruteforce/process', function(){
         let result,
             ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             isEnabled : true,
             // return record, set its date to current
             get (){ 
@@ -172,7 +172,7 @@ describe('helpers/bruteforce/process', function(){
             } 
         })
 
-        const bruteforce = require(_$+'helpers/bruteForce'),
+        const bruteforce = require(_$+'lib/bruteForce'),
             options = {
                 period: 10,
                 cooldown: 10,
@@ -197,7 +197,7 @@ describe('helpers/bruteforce/process', function(){
         const ctx = require(_$t+'testcontext'),
             constants = require(_$+'types/constants')
         
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             isEnabled : true,
             // return record, set it to locked out, set date to now so lockout is still active
             get (){ 
@@ -212,7 +212,7 @@ describe('helpers/bruteforce/process', function(){
             } 
         })
 
-        const bruteforce = require(_$+'helpers/bruteForce'),
+        const bruteforce = require(_$+'lib/bruteForce'),
             options = {
                 period: 10,
                 cooldown: 10,

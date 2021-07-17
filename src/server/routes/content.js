@@ -2,7 +2,7 @@ module.exports = {
 
     bind(app){
         
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
 
         /**
          * Gets a user's content, based on requestedContent. This is a , separted string. Note, tdoes not return songs, as that can crash the
@@ -12,8 +12,8 @@ module.exports = {
             __log.info(`ROUTE:/v1/content/all/${req.params.requestedContent}`)
 
             try {
-                const authHelper = require(_$+'helpers/authentication'),
-                    contentHelper = require(_$+'helpers/content'),
+                const authHelper = require(_$+'lib/authentication'),
+                    contentHelper = require(_$+'lib/content'),
                     authToken = await authHelper.authenticate(req),
                     requestedContent = req.params.requestedContent ? req.params.requestedContent.split(',') : [],
                     content = await contentHelper.build(authToken.profileId, authToken.id,  requestedContent)
@@ -34,8 +34,8 @@ module.exports = {
 
             try {
                 
-                const authHelper = require(_$+'helpers/authentication'),
-                    settings = require(_$+'helpers/settings'),
+                const authHelper = require(_$+'lib/authentication'),
+                    settings = require(_$+'lib/settings'),
                     songsLogic = require(_$+'logic/songs'),
                     authToken = await authHelper.authenticate(req),
                     index = req.query.page ? parseInt(req.query.page) : 0,

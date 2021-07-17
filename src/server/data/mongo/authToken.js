@@ -38,7 +38,7 @@ module.exports = {
      */    
     async create(record){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             newRecord = await mongoCommon.create(`${settings.mongoCollectionPrefix}authTokens`, this.denormalize(record))
 
         return this.normalize(newRecord)
@@ -50,7 +50,7 @@ module.exports = {
      */
     async delete (id){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         await mongoCommon.delete(`${settings.mongoCollectionPrefix}authTokens`, id)
     },
@@ -58,7 +58,7 @@ module.exports = {
     
     async deleteForProfile (profileId){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}authTokens`, { profileId })
     },
@@ -69,7 +69,7 @@ module.exports = {
      */
     async deleteForContext(profileId, context){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}authTokens`, {     
             $and: [ 
@@ -86,7 +86,7 @@ module.exports = {
     async getForProfile(profileId){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}authTokens`, { profileId }),
             results = []
 
@@ -103,7 +103,7 @@ module.exports = {
     async getById(id){
         const 
             mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             record = await mongoCommon.findById(`${settings.mongoCollectionPrefix}authTokens`, id)
 
         return record ? this.normalize(record) : null

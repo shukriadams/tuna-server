@@ -3,7 +3,7 @@ describe('mongo/common/createMany', async()=>{
     it('mongo/common/createMany::happy::create record id', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 return {
                     done(){ },
@@ -25,7 +25,7 @@ describe('mongo/common/createMany', async()=>{
     it('mongo/common/createMany::unhappy::returns query error', async () => {
         const ctx = require(_$t+'testcontext')
         
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 return {
                     done(){ },
@@ -52,7 +52,7 @@ describe('mongo/common/createMany', async()=>{
         const ctx = require(_$t+'testcontext')
         
         // replace call to mongo
-        ctx.inject.object(_$+'helpers/mongo', {
+        ctx.inject.object(_$+'lib/mongo', {
             getCollection : ()=>{
                 throw 'whatever'
             }

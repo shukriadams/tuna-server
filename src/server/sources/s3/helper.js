@@ -5,7 +5,7 @@ module.exports = {
      */
     async downloadAsString(sourceIntegration, profileId, path){
         const s3utils = require('madscience-s3helper').utils,
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
             
         try{
             return await s3utils.getStringFile({ accessKeyId : settings.s3key, secretAccessKey : settings.s3secret, endpoint : settings.s3host }, settings.s3bucket, path )
@@ -32,9 +32,8 @@ module.exports = {
      * Gets a link to streamable source. In the case of s3, we stream from our own API, which in turn retrieves the file from s3.
      */
     async getFileLink(sources, path, authToken){
-        const
-            urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings')
+        const urljoin = require('urljoin'),
+            settings = require(_$+'lib/settings')
 
         return urljoin(settings.siteUrl, `/v1/stream/${authToken}/${Buffer.from(path).toString('base64')}`)
     },
@@ -48,8 +47,8 @@ module.exports = {
         const s3utils = require('madscience-s3helper').utils,
             urljoin = require('urljoin'),
             request = require('request'),
-            errorHelper = require(_$+'helpers/error'),
-            settings = require(_$+'helpers/settings')
+            errorHelper = require(_$+'lib/error'),
+            settings = require(_$+'lib/settings')
 
         try {
             if (settings.sandboxMode)
@@ -65,8 +64,9 @@ module.exports = {
             }
 
         } catch (exception){
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                's3 access',
                 `Unexpected error fetching media stream`, 
                 constants.ERROR_DEFAULT, 
                 { exception, profileId, mediaPath })

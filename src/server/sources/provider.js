@@ -1,8 +1,7 @@
 module.exports = {
 
     validateSettings (){
-        const 
-            settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')
 
@@ -13,8 +12,7 @@ module.exports = {
     },
 
     getImporter (){
-        const 
-            settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')
         
@@ -31,8 +29,7 @@ module.exports = {
     },
 
     getSource (){
-        const 
-            settings = require(_$+'helpers/settings'),
+        const settings = require(_$+'lib/settings'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants')
                 

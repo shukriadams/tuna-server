@@ -1,11 +1,10 @@
 module.exports = {
 
     async create(profileId, browserUID, userAgent){
-        const 
-            Exception = require(_$+'types/exception'),
+        const Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             AuthToken = require(_$+'types/authToken'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             cache = require(_$+'cache/authToken'),
             authToken = AuthToken.new()
     
@@ -43,12 +42,14 @@ module.exports = {
     
     async getForProfile(profileId){
         const cache = require(_$+'cache/authToken')
+        
         return await cache.getForProfile(profileId)
     },
 
 
     async getById(key){
         const cache = require(_$+'cache/authToken')
+
         if (!key || key === 'null') // string null check if workaround for shitty stuff that should be properly fixed in frontend
             return null
 
@@ -61,6 +62,7 @@ module.exports = {
      */
     async deleteForProfile (profileId){
         const cache = require(_$+'cache/authToken')
+
         await cache.deleteForProfile(profileId)
     }
     

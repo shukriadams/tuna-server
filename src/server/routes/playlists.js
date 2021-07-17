@@ -2,7 +2,7 @@ module.exports = {
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
 
         /**
          * Creates/updates playlist, returns updated usercontent
@@ -11,8 +11,8 @@ module.exports = {
             __log.info(`ROUTE:/v1/playlists`)
 
             try {
-                const authHelper = require(_$+'helpers/authentication'),
-                    contentHelper = require(_$+'helpers/content'),
+                const authHelper = require(_$+'lib/authentication'),
+                    contentHelper = require(_$+'lib/content'),
                     playlistLogic = require(_$+'logic/playlists'),
                     authToken = await authHelper.authenticate(req),
                     playlist = req.body
@@ -38,8 +38,8 @@ module.exports = {
             __log.info(`ROUTE:/v1/playlists/:${req.params.playlistId}`)
 
             try {
-                const authHelper = require(_$+'helpers/authentication'),
-                    contentHelper = require(_$+'helpers/content'),
+                const authHelper = require(_$+'lib/authentication'),
+                    contentHelper = require(_$+'lib/content'),
                     playlistLogic = require(_$+'logic/playlists'),
                     authToken = await authHelper.authenticate(req),
                     playlistId = decodeURIComponent(req.params.playlistId)

@@ -6,9 +6,8 @@ module.exports = {
     
 
     async create(playlist){
-        const 
-            playlistsData = require(_$+'data/mongo/playlist'),
-            cache = require(_$+'helpers/cache'),
+        const playlistsData = require(_$+'data/mongo/playlist'),
+            cache = require(_$+'lib/cache'),
             newPlaylist = await playlistsData.create(playlist),
             key = this._getKey(newPlaylist.profileId)
     
@@ -18,9 +17,8 @@ module.exports = {
    
     
     async getAll(profileId){
-        let 
-            JsonHelper = require(_$+'helpers/json'),
-            cache = require(_$+'helpers/cache'),
+        let JsonHelper = require(_$+'lib/json'),
+            cache = require(_$+'lib/cache'),
             playlistsData = require(_$+'data/mongo/playlist'),
             key = this._getKey(profileId),
             playlists = await cache.get(key)
@@ -35,8 +33,7 @@ module.exports = {
 
 
     async update(playlist){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             playlistsData = require(_$+'data/mongo/playlist')
 
         await playlistsData.update(playlist)
@@ -45,8 +42,7 @@ module.exports = {
     
 
     async delete(playlistId, profileId){
-        const 
-            cache = require(_$+'helpers/cache'),
+        const cache = require(_$+'lib/cache'),
             playlistsData = require(_$+'data/mongo/playlist')
 
         await playlistsData.delete(playlistId)
@@ -55,8 +51,7 @@ module.exports = {
     
     
     async deleteAll(profileId){
-        const 
-            cache = require(_$+'helpers/cache'),        
+        const cache = require(_$+'lib/cache'),        
             playlistsData = require(_$+'data/mongo/playlist')
 
         await playlistsData.deleteForProfile(profileId)

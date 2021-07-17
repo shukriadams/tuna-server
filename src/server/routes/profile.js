@@ -2,7 +2,7 @@ module.exports = {
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
 
         /**
          * Updates a profile
@@ -11,9 +11,9 @@ module.exports = {
             __log.info(`ROUTE:/v1/profile`)
 
             try {
-                const authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'lib/authentication'),
                     profileLogic = require(_$+'logic/profiles'),
-                    contentHelper = require(_$+'helpers/content'),
+                    contentHelper = require(_$+'lib/content'),
                     authToken = await authHelper.authenticate(req),
                     profileData = Object.assign({ id : authToken.profileId }, req.body)
 
@@ -35,10 +35,10 @@ module.exports = {
             __log.info(`ROUTE:/v1/profile/resetPassword`)
 
             try {
-                let authHelper = require(_$+'helpers/authentication'),
-                    bruteForce = require(_$+'helpers/bruteForce'),
+                let authHelper = require(_$+'lib/authentication'),
+                    bruteForce = require(_$+'lib/bruteForce'),
                     profileLogic = require(_$+'logic/profiles'),
-                    settings = require(_$+'helpers/settings'),
+                    settings = require(_$+'lib/settings'),
                     route = 'profile/resetPassword',
                     key = req.query.key,
                     currentPassword = req.query.currentPassword,
@@ -76,9 +76,9 @@ module.exports = {
             __log.info(`ROUTE:/v1/profile/source`)
 
             try {
-                const authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'lib/authentication'),
                     profileLogic = require(_$+'logic/profiles'),
-                    contentHelper = require(_$+'helpers/content'),
+                    contentHelper = require(_$+'lib/content'),
                     authToken = await authHelper.authenticate(req)
             
                 await profileLogic.deleteSource(authToken.profileId)

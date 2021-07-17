@@ -35,7 +35,8 @@ module.exports = class {
         while(attempts < this._retries){
             try {
                 const result = await httputils.post(...args),
-                passed = await this.onResult(result)
+                    passed = await this.onResult(result)
+                    
                 if (passed)
                     return result
 

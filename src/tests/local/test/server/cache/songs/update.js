@@ -13,7 +13,7 @@ describe('cache/songs/update', async()=>{
         })
         
         // capture call to cache
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             remove (){
                 called = true
             }

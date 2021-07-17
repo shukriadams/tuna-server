@@ -11,7 +11,7 @@ describe('sources/dropbox/helper/getOauthUrl', ()=>{
     it('sources/dropbox/helper/getOauthUrl::happy::gets url in sandbox mode', async () => {
         const ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/settings', {
+        ctx.inject.object(_$+'lib/settings', {
             sandboxMode : true
         })
 

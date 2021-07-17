@@ -7,6 +7,8 @@
   },
   "scripts": {
     "start": "node index",
+    "debug": "node --inspect=0.0.0.0:48003 index",
+    "break": "node --inspect-brk=0.0.0.0:48003 index",
     "build": "npm run sass",
     "dev": "node ./build/dev.js",
     "sass": "node ./build/build-all-sass && minify ./public/css/style.css > ./public/css/style.min.css",

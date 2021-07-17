@@ -31,7 +31,7 @@ module.exports = {
 
     async create(record){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             newRecord = await mongoCommon.create(`${settings.mongoCollectionPrefix}profiles`, this.denormalize(record))
 
         return this.normalize(newRecord)
@@ -39,7 +39,7 @@ module.exports = {
     
     async getById(id){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             record = await mongoCommon.findById(`${settings.mongoCollectionPrefix}profiles`, id)
         
         return record ? this.normalize(record) : null
@@ -47,7 +47,7 @@ module.exports = {
     
     async getAll(){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}profiles`, { }),
             results = []
 
@@ -59,7 +59,7 @@ module.exports = {
     
     async getByIdentifier(identifier){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             record = await mongoCommon.findOne(`${settings.mongoCollectionPrefix}profiles`, { identifier })
 
         return record ? this.normalize(record) : null
@@ -67,7 +67,7 @@ module.exports = {
     
     async getByPasswordResetKey(key){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             record = await mongoCommon.findOne(`${settings.mongoCollectionPrefix}profiles`, { passwordResetKey : key })
 
         return record ? this.normalize(record) : null
@@ -75,7 +75,7 @@ module.exports = {
     
     async update(profile){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             writeProfile = this.denormalize(profile)
         
         await mongoCommon.update(`${settings.mongoCollectionPrefix}profiles`, profile.id, writeProfile)
@@ -83,7 +83,7 @@ module.exports = {
     
     async delete(profile){
         const mongoCommon = require(_$+'data/mongo/common')
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
             
         return await mongoCommon.delete(`${settings.mongoCollectionPrefix}profiles`, profile.id)
     }

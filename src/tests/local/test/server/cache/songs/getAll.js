@@ -23,7 +23,7 @@ describe('cache/songs/getAll', async()=>{
         const ctx = require(_$t+'testcontext')
         
         // force cache to return value
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             get (){
                 return JSON.stringify({ id : 'some-id4' })
             }

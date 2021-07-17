@@ -5,7 +5,7 @@ describe('helpers/interprocess/conMessage', function(){
             emitted = false,
             called = false
 
-        ctx.inject.object(_$+'helpers/interprocess', {
+        ctx.inject.object(_$+'lib/interprocess', {
             changePassword(){
                 called = true
             },            
@@ -18,7 +18,7 @@ describe('helpers/interprocess/conMessage', function(){
             }
         })
 
-        const interprocess = require(_$+'helpers/interprocess')
+        const interprocess = require(_$+'lib/interprocess')
         await interprocess.onMessage({ name : 'password-change' })
 
         ctx.assert.true(emitted)
@@ -30,7 +30,7 @@ describe('helpers/interprocess/conMessage', function(){
             called = false,
             emitted = false
 
-        ctx.inject.object(_$+'helpers/interprocess', {
+        ctx.inject.object(_$+'lib/interprocess', {
             nextcloudCodeToToken(){
                 called = true
             },
@@ -43,7 +43,7 @@ describe('helpers/interprocess/conMessage', function(){
             }
         })
 
-        const interprocess = require(_$+'helpers/interprocess')
+        const interprocess = require(_$+'lib/interprocess')
         await interprocess.onMessage({ name : 'nextcloud-codeToToken' })
 
         ctx.assert.true(emitted)

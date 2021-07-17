@@ -19,7 +19,7 @@ describe('logic/songs/nowPlaying', async(ctx)=>{
         })
 
         // update on lastfm
-        ctx.inject.object(_$+'helpers/lastfm', {
+        ctx.inject.object(_$+'lib/lastfm', {
             nowPlaying (){
                 return 'updated-on-last-fm'
             }

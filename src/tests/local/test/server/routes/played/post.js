@@ -3,7 +3,7 @@ describe('route/played/get', async()=>{
     it('route/played/post::happy::registers a play', async () => {
         const ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/playMetrics', {
+        ctx.inject.object(_$+'lib/playMetrics', {
             played (){ 
                 return 654
             }

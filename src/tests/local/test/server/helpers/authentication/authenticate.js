@@ -4,7 +4,7 @@ describe('helpers/authentication/authenticate', ()=>{
         const ctx = require(_$t+'testcontext')
 
         // completely bypass all logic in this, we just want the input back
-        ctx.inject.object(_$+'helpers/authentication', {
+        ctx.inject.object(_$+'lib/authentication', {
             authenticateTokenString (token){ 
                 return token
             } 
@@ -15,7 +15,7 @@ describe('helpers/authentication/authenticate', ()=>{
                     return 'bearer my-token'
                 }
             },
-            authentication = require(_$+'helpers/authentication'),
+            authentication = require(_$+'lib/authentication'),
             token = await authentication.authenticate(req)
 
         ctx.assert.equal(token, 'my-token')
@@ -28,7 +28,7 @@ describe('helpers/authentication/authenticate', ()=>{
         const ctx = require(_$t+'testcontext')
         
         // completely bypass all logic in this, we just want the input back
-        ctx.inject.object(_$+'helpers/authentication', {
+        ctx.inject.object(_$+'lib/authentication', {
             authenticateTokenString (token){ 
                 return token
             } 
@@ -39,7 +39,7 @@ describe('helpers/authentication/authenticate', ()=>{
                     return 'a badly formed header'
                 }
             },
-            authentication = require(_$+'helpers/authentication'),
+            authentication = require(_$+'lib/authentication'),
             token = await authentication.authenticate(req)
 
         ctx.assert.equal(token, 'a badly formed header')

@@ -2,7 +2,7 @@ describe('logic/profiles/songsHashValid', async(ctx)=>{
 
     it('logic/profiles/songsHashValid::happy::songs hash are valid', async () => {
         let ctx = require(_$t+'testcontext'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             profile = {
                 sources : {}
             }

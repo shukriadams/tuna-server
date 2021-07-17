@@ -23,13 +23,13 @@ describe('logic/songs/scrobble', async(ctx)=>{
         })
 
         // call to lastfm
-        ctx.inject.object(_$+'helpers/lastfm', {
+        ctx.inject.object(_$+'lib/lastfm', {
             scrobble (){
                 calls++
             }
         })
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             // cleans up after scrobbling
             remove(){
                 calls++
@@ -79,7 +79,7 @@ describe('logic/songs/scrobble', async(ctx)=>{
             }
         })
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             // return nothing to trigger exception
             get (){
                 return null
@@ -104,7 +104,7 @@ describe('logic/songs/scrobble', async(ctx)=>{
             }
         })
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             // return other song to trigger exception
             get (){
                 return {
@@ -141,7 +141,7 @@ describe('logic/songs/scrobble', async(ctx)=>{
             }
         })
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             // song must already be registered as playing in cache
             get (){
                 return {
@@ -178,7 +178,7 @@ describe('logic/songs/scrobble', async(ctx)=>{
             }
         })
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             // song must already be registered as playing in cache
             get (){
                 return {
@@ -213,7 +213,7 @@ describe('logic/songs/scrobble', async(ctx)=>{
             }
         })
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             // song must already be registered as playing in cache
             get (){
                 return {

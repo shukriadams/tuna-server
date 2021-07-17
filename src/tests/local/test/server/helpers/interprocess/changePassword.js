@@ -12,7 +12,7 @@ describe('helpers/interprocess/changePassword', function(){
             } 
         })
         
-        const interprocess = require(_$+'helpers/interprocess'),
+        const interprocess = require(_$+'lib/interprocess'),
             result = await interprocess.changePassword({})
 
         ctx.assert.includes(result, 'Password updated')

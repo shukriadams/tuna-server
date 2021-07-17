@@ -71,7 +71,7 @@ module.exports = {
 
         try {
             return JSON.parse(raw)
-        }catch (ex){
+        } catch (ex){
             throw new Exception({
                 errorCode : constants.ERROR_INVALID_ARGUMENT,
                 log : 'invalid JSON string',

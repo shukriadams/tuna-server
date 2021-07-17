@@ -3,8 +3,7 @@ let _io = null
 module.exports = {
 
     initialize(expressServer){
-        const
-            Socketio = require('socket.io'),
+        const Socketio = require('socket.io'),
             authTokenLogic = require(_$+'logic/authToken')
 
         _io = Socketio(expressServer)

@@ -5,13 +5,12 @@ module.exports = {
      */
     async build(profileId, authTokenId, contentRequired){
         const crypto = require('crypto'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             playlistsLogic = require(_$+'logic/playlists'),
             profileLogic = require(_$+'logic/profiles'),
             Exception = require(_$+'types/exception'),
             constants = require(_$+'types/constants'),
             Session = require(_$+'types/session'),
-            eventLogLogic = require(_$+'logic/eventLog'),
             profile = await profileLogic.getById(profileId)
 
         if (!profile)

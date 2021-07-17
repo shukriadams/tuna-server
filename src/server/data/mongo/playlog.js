@@ -30,7 +30,7 @@ module.exports = {
 
     async create(record){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             newRecord = await mongoCommon.create(`${settings.mongoCollectionPrefix}playlogs`, this.denormalize(record))
 
         return this.normalize(newRecord)
@@ -38,7 +38,7 @@ module.exports = {
     
     async page(page, pageSize){
         let mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             records = await mongoCommon.find(`${settings.mongoCollectionPrefix}playlogs`, { }),
             results = []
 
@@ -52,7 +52,7 @@ module.exports = {
     
     async deleteAll(profileId){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
             
         return await mongoCommon.deleteMany(`${settings.mongoCollectionPrefix}playlogs`, profileId)
     },
@@ -62,7 +62,7 @@ module.exports = {
      */
     async delete(id){
         const mongoCommon = require(_$+'data/mongo/common'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         return await mongoCommon.delete(`${settings.mongoCollectionPrefix}playlogs`, id)
     }

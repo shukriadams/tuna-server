@@ -1,4 +1,4 @@
-const requireMock = require(_$t+'helpers/require')
+const requireMock = require(_$+'lib/require')
 
 class ExpressShim{
     
@@ -100,13 +100,13 @@ module.exports = class RouteTester{
 
         // need to override both profilelogic and content helper as they can both be used to generated content
         const profileLogic = require(_$+'logic/profiles'),
-            contentHelper = require(_$+'helpers/content'),
+            contentHelper = require(_$+'lib/content'),
             clonedeep = require('lodash.clonedeep'),
             profileLogicClone = clonedeep(profileLogic),
             contentHelperClone = clonedeep(contentHelper)
 
         contentHelperClone.build =()=>{ return userContent }
-        requireMock.add(_$+'helpers/content', contentHelperClone)
+        requireMock.add(_$+'lib/content', contentHelperClone)
 
         profileLogicClone.buildUserContent =()=>{ return userContent }
         requireMock.add(_$+'logic/profiles', profileLogicClone)

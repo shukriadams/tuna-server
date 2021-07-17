@@ -3,8 +3,8 @@ module.exports = {
     async downloadAsString(sourceIntegration, profileId, path){
         let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
-            settings = require(_$+'helpers/settings'),
-            errorHelper = require(_$+'helpers/error'),
+            settings = require(_$+'lib/settings'),
+            errorHelper = require(_$+'lib/error'),
             constants = require(_$+'types/constants'),
             url = settings.sandboxMode ? urljoin(settings.siteUrl, `/v1/sandbox/nextcloud/getfile/.tuna.json`) : urljoin(settings.nextCloudHost, `remote.php/dav/files/${sourceIntegration.userId}/${path}`),
             response = null
@@ -16,8 +16,9 @@ module.exports = {
                     'Authorization' : `Bearer ${sourceIntegration.accessToken}`
                 }})
         } catch (exception) {
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'nextcloud access',
                 `Attempting to get "${path}" threw http error.`, 
                 constants.ERROR_DEFAULT, 
                 { exception, path })
@@ -25,8 +26,9 @@ module.exports = {
 
         // todo : explicitly handle not-found
         if (response.raw.statusCode !== 200)
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'nextcloud access',
                 `Attempting to get "${path}" returned status code ${response.raw.statusCode}.`, 
                 constants.ERROR_DEFAULT, 
                 { response, path })
@@ -42,7 +44,7 @@ module.exports = {
 
     getOauthUrl (authTokenId){
         const urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         if (settings.sandboxMode)
             return urljoin(settings.siteUrl, `/v1/sandbox/nextcloudAuthenticate?state=${authTokenId}_TARGETPAGE`)
@@ -58,10 +60,10 @@ module.exports = {
         let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
-            settings = require(_$+'helpers/settings'),
+            settings = require(_$+'lib/settings'),
             profileLogic = require(_$+'logic/profiles'),
-            jsonHelper = require(_$+'helpers/json'),
-            errorHelper = require(_$+'helpers/error'),
+            jsonHelper = require(_$+'lib/json'),
+            errorHelper = require(_$+'lib/error'),
             timebelt = require('timebelt'),
             profile = await profileLogic.getById(profileId), 
             source = profile.sources[constants.SOURCES_NEXTCLOUD],
@@ -84,8 +86,9 @@ module.exports = {
                     hasExpired  = true
 
             } catch(exception) {
-                return errorHelper.throwUnexpectedError(
+                throw await errorHelper.unexpectedError(
                     profileId, 
+                    'nextcloud access',
                     `Unexpected error doing token check`, 
                     constants.ERROR_DEFAULT, 
                     { exception })
@@ -114,8 +117,9 @@ module.exports = {
 
         // Well that was unexpected
         if (content.error)
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'nextcloud access',
                 `Unexpected error doing token check`, 
                 constants.ERROR_DEFAULT, 
                 { error : content.error })
@@ -129,14 +133,19 @@ module.exports = {
     },
 
 
+    /**
+     * 
+     * @param {*} profileId 
+     * @param {*} code 
+     */
     async swapCodeForToken(profileId, code){
         let urljoin = require('urljoin'),
             httputils = require('madscience-httputils'),
             constants = require(_$+'types/constants'),
-            settings = require(_$+'helpers/settings'),
-            errorHelper = require(_$+'helpers/error'),
+            settings = require(_$+'lib/settings'),
+            errorHelper = require(_$+'lib/error'),
             profileLogic = require(_$+'logic/profiles'),
-            jsonHelper = require(_$+'helpers/json'),
+            jsonHelper = require(_$+'lib/json'),
             NextCloudSource = require(_$+'types/nextcloudSource'),
             url = `${settings.nextCloudHost}${settings.nextCloudTokenExchangeUrl}`
 
@@ -150,8 +159,9 @@ module.exports = {
             swapResult = jsonHelper.parse(tokenSwap.body)
 
         if (swapResult.error)
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'nextcloud access',
                 `Token swap failed - you should redo your Nextcloud authorization`, 
                 constants.ERROR_INVALID_SOURCE_INTEGRATION, 
                 { swapResult })        
@@ -178,15 +188,16 @@ module.exports = {
         const urljoin = require('urljoin'),
             request = require('request'),
             constants = require(_$+'types/constants'),
-            errorHelper = require(_$+'helpers/error'),
-            settings = require(_$+'helpers/settings'),
+            errorHelper = require(_$+'lib/error'),
+            settings = require(_$+'lib/settings'),
             profileLogic = require(_$+'logic/profiles'),
             profile = await profileLogic.getById(profileId),
             source = profile.sources[constants.SOURCES_NEXTCLOUD]
 
         if (source.status !== constants.SOURCE_CONNECTION_STATUS_WORKING)
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'nextcloud access',
                 `Unexpected error doing token check`, 
                 constants.ERROR_INVALID_SOURCE_INTEGRATION, 
                 { source, profile, mediaPath })        
@@ -204,8 +215,9 @@ module.exports = {
                 }}).pipe(res)
     
         } catch (exception){
-            return errorHelper.throwUnexpectedError(
+            throw await errorHelper.unexpectedError(
                 profileId, 
+                'nextcloud access',
                 `Unexpected error doing token check`, 
                 constants.ERROR_INVALID_SOURCE_INTEGRATION, 
                 { exception, profileId, mediaPath })   
@@ -220,7 +232,7 @@ module.exports = {
      */
     async getFileLink(sources, path, authToken){
         const urljoin = require('urljoin'),
-            settings = require(_$+'helpers/settings')
+            settings = require(_$+'lib/settings')
 
         return urljoin(settings.siteUrl, `/v1/stream/${authToken}/${Buffer.from(path).toString('base64')}`)
     }

@@ -4,7 +4,7 @@ describe('sources/importerBase/start', ()=>{
         let ctx = require(_$t+'testcontext'),
             called = false
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             add(){ }
         })
 
@@ -45,7 +45,7 @@ describe('sources/importerBase/start', ()=>{
     it('sources/importerBase/start::unhappy::throws error', async () => {
         let ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             add(){ }
         })
 
@@ -75,7 +75,7 @@ describe('sources/importerBase/start', ()=>{
     it('sources/importerBase/start::unhappy::import in progress', async () => {
         let ctx = require(_$t+'testcontext')
 
-        ctx.inject.object(_$+'helpers/cache', {
+        ctx.inject.object(_$+'lib/cache', {
             add(){ }
         })
 

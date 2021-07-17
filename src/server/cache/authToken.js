@@ -9,9 +9,8 @@ module.exports = {
      * 
      */
     async create(record){
-        const 
-            authTokenData = require(_$+'data/mongo/authToken'),
-            cache = require(_$+'helpers/cache'),
+        const authTokenData = require(_$+'data/mongo/authToken'),
+            cache = require(_$+'lib/cache'),
             authToken = await authTokenData.create(record),
             key = this._getIdKey(authToken.id)
 
@@ -35,10 +34,9 @@ module.exports = {
      */
     async getById(tokenId){
         // try to get authoken from cache
-        const 
-            authTokenData = require(_$+'data/mongo/authToken'),
-            cache = require(_$+'helpers/cache'),
-            JsonHelper = require(_$+'helpers/json'),
+        const authTokenData = require(_$+'data/mongo/authToken'),
+            cache = require(_$+'lib/cache'),
+            JsonHelper = require(_$+'lib/json'),
             key = this._getIdKey(tokenId),
             authTokenJson = await cache.get(key)
 
@@ -58,7 +56,7 @@ module.exports = {
      */
     async delete(id){
         const authTokenData = require(_$+'data/mongo/authToken'),
-            cache = require(_$+'helpers/cache')
+            cache = require(_$+'lib/cache')
 
         await cache.remove(this._getIdKey(id))
         await authTokenData.delete(id)

@@ -4,7 +4,7 @@ const
     Song = require(_$+'types/song'),
     songsLogic = require(_$+'logic/songs'),
     playlistLogic = require(_$+'logic/playlists'),    
-    debounce = require(_$+'helpers/debounce').debounce
+    debounce = require(_$+'lib/debounce').debounce
 
 /**
  * Imports song data from source platform like nextcloud, dropbox etc. This process consists of multiple steps. It exposes which step it's on, 
@@ -18,14 +18,14 @@ class Importer {
      * authTokenId can be null
      */
     constructor(profileId, authTokenId){
-        const settings = require(_$+'helpers/settings')
+        const settings = require(_$+'lib/settings')
 
         // MUST be set by overriding class, egs, constants.SOURCES_NEXTCLOUD
-        this.socketHelper = require(_$+'helpers/socket')
+        this.socketHelper = require(_$+'lib/socket')
         this.httputils = require('madscience-httputils')
         this.log = require(_$+'logic/log')
-        this.cache = require(_$+'helpers/cache')
-        this.settings = require(_$+'helpers/settings')
+        this.cache = require(_$+'lib/cache')
+        this.settings = require(_$+'lib/settings')
         this.profileLogic = require(_$+'logic/profiles')
         this.profileId = profileId
         this.authTokenId = authTokenId

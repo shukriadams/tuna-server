@@ -2,7 +2,7 @@ module.exports = {
 
     bind(app){
 
-        const jsonHelper = require(_$+'helpers/json')
+        const jsonHelper = require(_$+'lib/json')
             
 
         /**
@@ -12,7 +12,7 @@ module.exports = {
             __log.info(`ROUTE:/v1/song/${req.params.id}`)
 
             try {
-                const authHelper = require(_$+'helpers/authentication'),
+                const authHelper = require(_$+'lib/authentication'),
                     songsLogic = require(_$+'logic/songs'),
                     authToken = await authHelper.authenticate(req),
                     url = await songsLogic.getSongUrl(req.params.id, authToken.profileId, authToken.id)

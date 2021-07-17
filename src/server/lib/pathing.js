@@ -5,8 +5,7 @@ module.exports = {
      * or from server.js in the express folder.
      */
     getExpressPath(){
-        let 
-            expressPath,
+        let expressPath,
             process = require('process')
 
         // if running from grunt, working directory is gruntfile's, force down into express folder
@@ -14,8 +13,7 @@ module.exports = {
             expressPath = process.cwd()
 
         // let node go first, as it needs to override mocha
-        if (process.env.JUSTPLAYITGRUNT || process.env.JUSTPLAYITMOCHA){
-        } else if (process.env.COMPARINATORNODE) {
+        if (process.env.COMPARINATORNODE) {
             expressPath = expressPath.replace(/\\/g, '/') // convert path to unix
 
             let parts = expressPath.split('/')

@@ -5,6 +5,7 @@
  */
 import Dexie from 'dexie'
 import debug from './../misc/debug'
+import appSettings from './../appSettings/appSettings'
 
 export default class BlobStore {
 
@@ -57,11 +58,12 @@ export default class BlobStore {
      *
      */
     add(key, data, callback) {
-        this._db.records.put({
-            key: key,
-            data: data,
-            created : new Date()
-        })
+        if (appSettings.enableBrowserCaching)
+            this._db.records.put({
+                key: key,
+                data: data,
+                created : new Date()
+            })
 
         if (callback)
             callback( this._toUrl(data))
